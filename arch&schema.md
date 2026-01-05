@@ -207,6 +207,93 @@ NGO_Followers [icon: users, color: yellow] {
   followed_at timestamp
 }
 
+Donations [icon: dollar-sign, color: green] {
+  donation_id uuid pk
+  donor_id uuid
+  ngo_id uuid
+  amount decimal
+  currency string
+  payment_method enum('CARD','UPI','BANK_TRANSFER','CRYPTO','OTHER')
+  transaction_id string
+  status enum('PENDING','COMPLETED','FAILED','REFUNDED')
+  anonymous boolean
+  message text
+  donated_at timestamp
+}
+
+Events [icon: calendar, color: blue] {
+  event_id uuid pk
+  ngo_id uuid
+  title string
+  description text
+  event_type enum('FUNDRAISER','VOLUNTEER_DRIVE','AWARENESS','COMMUNITY','OTHER')
+  start_time timestamp
+  end_time timestamp
+  location text
+  latitude decimal
+  longitude decimal
+  max_attendees int
+  status enum('UPCOMING','ONGOING','COMPLETED','CANCELLED')
+  created_at timestamp
+}
+
+Event_Registrations [icon: check-circle, color: lightblue] {
+  registration_id uuid pk
+  event_id uuid
+  user_id uuid
+  status enum('REGISTERED','ATTENDED','CANCELLED','NO_SHOW')
+  registered_at timestamp
+}
+
+Resources [icon: package, color: brown] {
+  resource_id uuid pk
+  ngo_id uuid
+  resource_type enum('FOOD','MEDICAL','CLOTHING','EQUIPMENT','FUNDS','OTHER')
+  name string
+  quantity int
+  unit string
+  status enum('AVAILABLE','LOW','OUT_OF_STOCK')
+  updated_at timestamp
+}
+
+Resource_Requests [icon: git-pull-request, color: orange] {
+  resource_request_id uuid pk
+  requesting_ngo uuid
+  providing_ngo uuid
+  resource_id uuid
+  quantity_requested int
+  status enum('PENDING','APPROVED','REJECTED','FULFILLED')
+  created_at timestamp
+}
+
+Volunteer_Assignments [icon: user-plus, color: cyan] {
+  assignment_id uuid pk
+  volunteer_id uuid
+  request_id uuid
+  ngo_id uuid
+  status enum('ASSIGNED','ACCEPTED','IN_PROGRESS','COMPLETED','CANCELLED')
+  assigned_at timestamp
+  completed_at timestamp
+}
+
+Achievements [icon: award, color: gold] {
+  achievement_id uuid pk
+  user_id uuid
+  achievement_type enum('VOLUNTEER_HOURS','DONATIONS','EVENTS_ATTENDED','REQUESTS_RESOLVED','OTHER')
+  description text
+  earned_at timestamp
+}
+
+Reports [icon: flag, color: red] {
+  report_id uuid pk
+  reported_by uuid
+  entity_type enum('USER','NGO','POST','COMMENT','REQUEST')
+  entity_id uuid
+  reason text
+  status enum('PENDING','REVIEWED','RESOLVED','DISMISSED')
+  created_at timestamp
+}
+
 // define relationships
 ngos.created_by > users.user_id
 NGO_Members.ngo_id > ngos.ngo_id
@@ -237,6 +324,20 @@ Post_Comments.post_id > NGO_Posts.post_id
 Post_Comments.user_id > users.user_id
 NGO_Followers.ngo_id > ngos.ngo_id
 NGO_Followers.user_id > users.user_id
+Donations.donor_id > users.user_id
+Donations.ngo_id > ngos.ngo_id
+Events.ngo_id > ngos.ngo_id
+Event_Registrations.event_id > Events.event_id
+Event_Registrations.user_id > users.user_id
+Resources.ngo_id > ngos.ngo_id
+Resource_Requests.requesting_ngo > ngos.ngo_id
+Resource_Requests.providing_ngo > ngos.ngo_id
+Resource_Requests.resource_id > Resources.resource_id
+Volunteer_Assignments.volunteer_id > Volunteers.volunteer_id
+Volunteer_Assignments.request_id > Help_Requests.request_id
+Volunteer_Assignments.ngo_id > ngos.ngo_id
+Achievements.user_id > users.user_id
+Reports.reported_by > users.user_id
 ```
 
 ---
@@ -572,6 +673,141 @@ Comprehensive action logging for compliance.
 
 ---
 
+### Domain 9: Donations & Fundraising
+
+#### `Donations`
+Financial contributions from donors to NGOs.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `donation_id` | UUID | Primary key |
+| `donor_id` | UUID | FK → users.user_id |
+| `ngo_id` | UUID | FK → ngos.ngo_id |
+| `amount` | DECIMAL | Donation amount |
+| `currency` | STRING | Currency code (INR, USD, etc.) |
+| `payment_method` | ENUM | CARD, UPI, BANK_TRANSFER, CRYPTO, OTHER |
+| `transaction_id` | STRING | Payment gateway transaction ID |
+| `status` | ENUM | PENDING, COMPLETED, FAILED, REFUNDED |
+| `anonymous` | BOOLEAN | Hide donor identity in public view |
+| `message` | TEXT | Optional message from donor |
+| `donated_at` | TIMESTAMP | Donation timestamp |
+
+---
+
+### Domain 10: Events & Registrations
+
+#### `Events`
+Events organized by NGOs (fundraisers, volunteer drives, awareness campaigns).
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `event_id` | UUID | Primary key |
+| `ngo_id` | UUID | FK → ngos.ngo_id |
+| `title` | STRING | Event title |
+| `description` | TEXT | Event description |
+| `event_type` | ENUM | FUNDRAISER, VOLUNTEER_DRIVE, AWARENESS, COMMUNITY, OTHER |
+| `start_time` | TIMESTAMP | Event start date/time |
+| `end_time` | TIMESTAMP | Event end date/time |
+| `location` | TEXT | Event venue/address |
+| `latitude` | DECIMAL | Venue latitude |
+| `longitude` | DECIMAL | Venue longitude |
+| `max_attendees` | INT | Maximum capacity |
+| `status` | ENUM | UPCOMING, ONGOING, COMPLETED, CANCELLED |
+| `created_at` | TIMESTAMP | Event creation time |
+
+#### `Event_Registrations`
+User registrations for events.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `registration_id` | UUID | Primary key |
+| `event_id` | UUID | FK → Events.event_id |
+| `user_id` | UUID | FK → users.user_id |
+| `status` | ENUM | REGISTERED, ATTENDED, CANCELLED, NO_SHOW |
+| `registered_at` | TIMESTAMP | Registration timestamp |
+
+---
+
+### Domain 11: Resource Management
+
+#### `Resources`
+Inventory of resources held by NGOs.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `resource_id` | UUID | Primary key |
+| `ngo_id` | UUID | FK → ngos.ngo_id |
+| `resource_type` | ENUM | FOOD, MEDICAL, CLOTHING, EQUIPMENT, FUNDS, OTHER |
+| `name` | STRING | Resource name |
+| `quantity` | INT | Available quantity |
+| `unit` | STRING | Unit of measurement |
+| `status` | ENUM | AVAILABLE, LOW, OUT_OF_STOCK |
+| `updated_at` | TIMESTAMP | Last update timestamp |
+
+#### `Resource_Requests`
+Requests for resources between NGOs.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `resource_request_id` | UUID | Primary key |
+| `requesting_ngo` | UUID | FK → ngos.ngo_id (requester) |
+| `providing_ngo` | UUID | FK → ngos.ngo_id (provider) |
+| `resource_id` | UUID | FK → Resources.resource_id |
+| `quantity_requested` | INT | Quantity needed |
+| `status` | ENUM | PENDING, APPROVED, REJECTED, FULFILLED |
+| `created_at` | TIMESTAMP | Request timestamp |
+
+---
+
+### Domain 12: Volunteer Operations
+
+#### `Volunteer_Assignments`
+Tracks volunteer assignments to help requests.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `assignment_id` | UUID | Primary key |
+| `volunteer_id` | UUID | FK → Volunteers.volunteer_id |
+| `request_id` | UUID | FK → Help_Requests.request_id |
+| `ngo_id` | UUID | FK → ngos.ngo_id |
+| `status` | ENUM | ASSIGNED, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED |
+| `assigned_at` | TIMESTAMP | Assignment timestamp |
+| `completed_at` | TIMESTAMP | Completion timestamp |
+
+---
+
+### Domain 13: Gamification & Achievements
+
+#### `Achievements`
+User achievements and badges for engagement.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `achievement_id` | UUID | Primary key |
+| `user_id` | UUID | FK → users.user_id |
+| `achievement_type` | ENUM | VOLUNTEER_HOURS, DONATIONS, EVENTS_ATTENDED, REQUESTS_RESOLVED, OTHER |
+| `description` | TEXT | Achievement description |
+| `earned_at` | TIMESTAMP | Achievement earned timestamp |
+
+---
+
+### Domain 14: Moderation & Reports
+
+#### `Reports`
+Content/user reports for moderation.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `report_id` | UUID | Primary key |
+| `reported_by` | UUID | FK → users.user_id |
+| `entity_type` | ENUM | USER, NGO, POST, COMMENT, REQUEST |
+| `entity_id` | UUID | ID of reported entity |
+| `reason` | TEXT | Report reason/description |
+| `status` | ENUM | PENDING, REVIEWED, RESOLVED, DISMISSED |
+| `created_at` | TIMESTAMP | Report timestamp |
+
+---
+
 ## Relationship Diagram
 
 ```
@@ -583,46 +819,66 @@ users ─────────────────┬──────�
    │                   │                  │                 │                │
    ▼                   ▼                  ▼                 ▼                ▼
 Volunteers       NGO_Members        Help_Requests     Audit_Logs      Notifications
-                       │                  │
-                       ▼                  ▼
-                     ngos ◄──────── assigned_ngo
-                       │
-          ┌────────────┼────────────┬────────────────┐
-          ▼            ▼            ▼                ▼
-    NGO_Profiles   NGO_Posts   Missing_Persons   NGO_Followers
-          │            │            │
-          │            ▼            ▼
-          │      NGO_Post_Media  Face_Embeddings
-          │            │
-          │     ┌──────┴──────┬─────────────┐
-          │     ▼             ▼             ▼
-          │  Post_Likes  Post_Views  Post_Comments
-          │
-          └───────────────────────────────────────────────────────────────────┐
-                                                                              │
-Help_Requests ───────► Media ◄─────── Face_Embeddings                        │
-                                                                              │
-Chats ──────┬─────────► Messages                                             │
-            │                                                                 │
-            ▼                                                                 │
-    Chat_Participants ◄─────────────────────────────────────────── users ◄───┘
+   │                   │                  │                                   │
+   │                   │                  │                                   │
+   ▼                   ▼                  ▼                                   │
+Volunteer_        ngos ◄──────── assigned_ngo                                │
+Assignments        │                                                         │
+                   │                                                         │
+      ┌────────────┼────────────┬────────────────┬────────────┬─────────────┐
+      ▼            ▼            ▼                ▼            ▼             │
+NGO_Profiles   NGO_Posts   Missing_Persons  NGO_Followers  Events        │
+      │            │            │                            │             │
+      │            ▼            ▼                            ▼             │
+      │      NGO_Post_Media  Face_Embeddings          Event_Registrations │
+      │            │                                                       │
+      │     ┌──────┴──────┬─────────────┐                                  │
+      │     ▼             ▼             ▼                                  │
+      │  Post_Likes  Post_Views  Post_Comments                             │
+      │                                                                    │
+      └────────────────────────────────────────────────────────────────────┤
+                                                                           │
+Help_Requests ───────► Media ◄─────── Face_Embeddings                     │
+                                                                           │
+Chats ──────┬─────────► Messages                                          │
+            │                                                              │
+            ▼                                                              │
+    Chat_Participants ◄──────────────────────────────────────── users ◄───┘
+            
+ngos ───────► Donations ◄─────── users (donor_id)
+  │
+  ├──────► Resources ◄─────── Resource_Requests
+  │
+  └──────► Events ◄─────── Event_Registrations ◄─────── users
+
+users ───────► Achievements
+  │
+  └──────► Reports (reported_by)
 ```
 
 ---
 
 ## Access Control Matrix
 
-| Entity | NGO Admin | NGO Coordinator | Volunteer | Public User |
-|--------|-----------|-----------------|-----------|-------------|
-| Users (own) | Full | Full | Full | None |
-| NGO Profile | Full | Read/Update | Read | Read (if public) |
-| NGO Posts | Full | Create/Update | Read | Read (if public) |
-| Help Requests | Full | Full | Create/Read | Read |
-| Volunteers | Read | Read | Own only | None |
-| Chats | Participate | Participate | Participate | None |
-| Missing Persons | Full | Full | Read | Read |
-| Face Embeddings | Request | None | None | None |
-| Audit Logs | Read (own org) | None | None | None |
+| Entity | NGO Admin | NGO Coordinator | Volunteer | Public User | Donor |
+|--------|-----------|-----------------|-----------|-------------|-------|
+| Users (own) | Full | Full | Full | None | Full |
+| NGO Profile | Full | Read/Update | Read | Read (if public) | Read |
+| NGO Posts | Full | Create/Update | Read | Read (if public) | Read |
+| Help Requests | Full | Full | Create/Read | Read | Read |
+| Volunteers | Read | Read | Own only | None | None |
+| Chats | Participate | Participate | Participate | None | None |
+| Missing Persons | Full | Full | Read | Read | Read |
+| Face Embeddings | Request | None | None | None | None |
+| Audit Logs | Read (own org) | None | None | None | None |
+| Donations | Full (org) | Read (org) | None | None | Own only |
+| Events | Full | Create/Update | Read | Read (if public) | Read |
+| Event Registrations | Read (org) | Read (org) | Own only | None | Own only |
+| Resources | Full | Full | Read | None | None |
+| Resource Requests | Full | Create/Update | None | None | None |
+| Volunteer Assignments | Full | Full | Own only | None | None |
+| Achievements | Read | Read | Own only | None | Own only |
+| Reports | Moderate | Create | Create | Create | Create |
 
 ---
 
