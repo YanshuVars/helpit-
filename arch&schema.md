@@ -59,6 +59,22 @@ Volunteers [icon: user-check, color: lightblue] {
   verified boolean
 }
 
+Volunteer_Profiles [icon: user, color: lightblue] {
+  profile_id uuid pk
+  volunteer_id uuid
+  username string
+  bio text
+  profile_image_url text
+  cover_image_url text
+  social_links text
+  badges text
+  total_hours int
+  total_tasks_completed int
+  is_public boolean
+  created_at timestamp
+  updated_at timestamp
+}
+
 Help_Requests [icon: alert-triangle, color: red] {
   request_id uuid pk
   title string
@@ -299,6 +315,7 @@ ngos.created_by > users.user_id
 NGO_Members.ngo_id > ngos.ngo_id
 NGO_Members.user_id > users.user_id
 Volunteers.user_id > users.user_id
+Volunteer_Profiles.volunteer_id > Volunteers.volunteer_id
 Help_Requests.created_by > users.user_id
 Help_Requests.assigned_ngo > ngos.ngo_id
 Media.request_id > Help_Requests.request_id
@@ -467,6 +484,25 @@ Registered volunteers with skills and location.
 | `latitude` | DECIMAL | Current/home latitude |
 | `longitude` | DECIMAL | Current/home longitude |
 | `verified` | BOOLEAN | Verification status |
+
+#### `Volunteer_Profiles`
+Extended public profile for volunteers.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `profile_id` | UUID | Primary key |
+| `volunteer_id` | UUID | FK → Volunteers.volunteer_id |
+| `username` | STRING | Unique public handle |
+| `bio` | TEXT | Personal bio/about |
+| `profile_image_url` | TEXT | Profile picture URL |
+| `cover_image_url` | TEXT | Cover image URL |
+| `social_links` | TEXT | JSON of social media links |
+| `badges` | TEXT | JSON of earned badges |
+| `total_hours` | INT | Total volunteer hours logged |
+| `total_tasks_completed` | INT | Number of tasks completed |
+| `is_public` | BOOLEAN | Public visibility flag |
+| `created_at` | TIMESTAMP | Profile creation time |
+| `updated_at` | TIMESTAMP | Last update time |
 
 ---
 
@@ -867,6 +903,7 @@ users ───────► Achievements
 | NGO Posts | Full | Create/Update | Read | Read (if public) | Read |
 | Help Requests | Full | Full | Create/Read | Read | Read |
 | Volunteers | Read | Read | Own only | None | None |
+| Volunteer Profiles | Read | Read | Full (own) | Read (if public) | Read |
 | Chats | Participate | Participate | Participate | None | None |
 | Missing Persons | Full | Full | Read | Read | Read |
 | Face Embeddings | Request | None | None | None | None |
