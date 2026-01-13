@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Volunteer Opportunities - Helpit</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bottom-sheet {
+            box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.1), 0 -8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111318] dark:text-gray-100 min-h-screen flex flex-col">
+<!-- Fixed Top Bar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center px-4 py-3 justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl font-bold">volunteer_activism</span>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-tight">Opportunities</h2>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined text-xl">search</span>
+</button>
+</div>
+<!-- Segmented Control -->
+<div class="px-4 pb-3">
+<div class="flex h-10 w-full items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-gray-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-[#616e89] dark:text-gray-400 text-sm font-semibold transition-all">
+<span class="truncate">List View</span>
+<input checked="" class="invisible w-0" name="view_toggle" type="radio" value="List"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-gray-700 has-[:checked]:shadow-sm has-[:checked]:text-primary text-[#616e89] dark:text-gray-400 text-sm font-semibold transition-all">
+<span class="truncate">Map View</span>
+<input class="invisible w-0" name="view_toggle" type="radio" value="Map"/>
+</label>
+</div>
+</div>
+<!-- Horizontal Filter Chips -->
+<div class="flex gap-2 px-4 pb-3 overflow-x-auto hide-scrollbar">
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-1 rounded-full bg-primary text-white px-4">
+<span class="text-xs font-semibold">Near Me</span>
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-1 rounded-full bg-gray-100 dark:bg-gray-800 text-[#111318] dark:text-gray-300 px-4 border border-gray-200 dark:border-gray-700">
+<span class="text-xs font-medium">Urgency</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-1 rounded-full bg-gray-100 dark:bg-gray-800 text-[#111318] dark:text-gray-300 px-4 border border-gray-200 dark:border-gray-700">
+<span class="text-xs font-medium">Category</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-1 rounded-full bg-gray-100 dark:bg-gray-800 text-[#111318] dark:text-gray-300 px-4 border border-gray-200 dark:border-gray-700">
+<span class="text-xs font-medium">Duration</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+</header>
+<!-- Main Content: Scrollable List -->
+<main class="flex-1 mt-[160px] mb-[80px] px-4">
+<div class="flex items-center justify-between mb-4">
+<p class="text-sm text-[#616e89] dark:text-gray-400 font-medium tracking-wide">24 OPPORTUNITIES NEARBY</p>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">tune</span>
+                Filters
+            </button>
+</div>
+<!-- Card 1: Urgent Food Distribution -->
+<div class="mb-4 @container">
+<div class="flex flex-col items-stretch justify-start rounded-xl @xl:flex-row shadow-sm bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 overflow-hidden">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover relative" data-alt="Volunteer group distributing food boxes in city" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBHAl03iyP4XQz4ciuyHJEwhFyRpl9e8weiaHr7a4Lmq3KUG_MJr2B2mHNMbU6gpk5L2XuwvR1_DtoPjNZ086z92wi8UGZ9yNoGeWJZ99wkWEqv7qVGHfpExQUmCdu543kKJFwPowKpZYybDQ90vnkEdkPXN_OGaofhDhFgy55NYxQs6skgE_yiko3Y-eyIqQ6rXEtkxChjXkLTCL9L9aNm6RMwpQT3Uub6z8UxBwxaqZD6AUqc2BuG1EKlm3Chzm6_9DD47sv9siY");'>
+<div class="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-wider shadow-lg">Urgent</div>
+<div class="absolute bottom-3 right-3 bg-black/50 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">location_on</span> 1.2 km
+                    </div>
+</div>
+<div class="flex w-full grow flex-col items-stretch justify-center gap-1 p-4">
+<p class="text-primary text-[11px] font-bold uppercase tracking-widest">FOOD SECURITY</p>
+<h3 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-tight">Weekend Food Distribution Helper</h3>
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-medium mb-3">Global Relief NGO • Community Center</p>
+<div class="flex items-center gap-3 justify-between mt-auto">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<div class="size-6 rounded-full border-2 border-white dark:border-gray-900 bg-gray-200 bg-cover" data-alt="Volunteer profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDJpcGhK-1sBhdAQQu3sD8JmK-wZ5Mi5WWR-c0wkZaycPXSfVGPdt0JICe5jimhAWwDc_vMVCNOxl2bDWXiucMXg-1xLL4mrlCQ-07fh9RoM5VRQ-1QnEFWdB3Yp-vImaGio15r49UBlbzInWhJQb9ZGLVWDbLsGMVCkZEPy6RWV4yAFGzB7z7xQRsDuynx81S30y582PKSHoZGGJRJzEFNyvxnkX9QqcLI40gUuatnMH7J5fPGkFGzOLzlGqP7Sy2EIx0NRWSEI2E')"></div>
+<div class="size-6 rounded-full border-2 border-white dark:border-gray-900 bg-gray-200 bg-cover" data-alt="Volunteer profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2nmLtk3sYt3ZXh-0IbrGc93uzxb4jWADW0p6kG7IKjqBrRkIsf30ZL0z__cKXOfE7-yMY6p1PZF9n7FZCSmxNaPRekS2KqLpaO6gjU74prodrfHi9wSBj-gI6Ucm3FjGx6sosjFnwxX0fXSHFD0tmICajjpKduMfstpUYFif7FgHNnWKKPI9m9gSUKxAHPdADVu5fhzB4SwnD-XYO7IYrfhNcJwUHpchkPX54UgQWOaUKAUuy0jHxoRDDXuZWq-vMz-xz6_mdi-Q')"></div>
+<div class="size-6 rounded-full border-2 border-white dark:border-gray-900 bg-primary flex items-center justify-center text-[8px] text-white font-bold">+5</div>
+</div>
+<span class="text-xs text-gray-500 dark:text-gray-500 font-medium">Attending</span>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 hover:bg-primary/90 transition-colors">
+                            Apply
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Social/Elderly Care -->
+<div class="mb-4 @container">
+<div class="flex flex-col items-stretch justify-start rounded-xl @xl:flex-row shadow-sm bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 overflow-hidden">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover relative" data-alt="Volunteer talking to senior person in garden" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAkdNbDY1UCO8S3KKkFziSvrPav1Yrzt6daG6thGk5bIi_CsMQNsHV8ulT-rkG6waqYSpGRYzGJoLGoRR53hwQjg3BqylW6gbJAez6RCNRkb9b9HxAvytcX3r4g3G1Wan_wRpZKbsDMjc6KhkBkgZ1HILYSYj8Gzv1aDfr_R227OjARfrB9xrxr6RAiWVytlcGPdAZB0KCWoMCrrwZcqGxlOrrbE_q-62hs2aPHTHIJ0L0nP9wiM4wRzOx1CoRedJIn0MVb7Bb9V1U");'>
+<div class="absolute bottom-3 right-3 bg-black/50 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">location_on</span> 4.5 km
+                    </div>
+</div>
+<div class="flex w-full grow flex-col items-stretch justify-center gap-1 p-4">
+<p class="text-green-600 text-[11px] font-bold uppercase tracking-widest">SOCIAL CARE</p>
+<h3 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-tight">Elderly Care Companion Visit</h3>
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-medium mb-3">Helping Hands • Oak Creek Home</p>
+<div class="flex items-center gap-3 justify-between mt-auto">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-gray-400">Duration</span>
+<span class="text-xs font-bold text-gray-700 dark:text-gray-300">2-3 Hours</span>
+</div>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 transition-colors">
+                            Apply
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: Animal Shelter -->
+<div class="mb-4 @container">
+<div class="flex flex-col items-stretch justify-start rounded-xl @xl:flex-row shadow-sm bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 overflow-hidden">
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover relative" data-alt="Volunteer playing with dogs at a shelter" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBly2zIow_3VIFOPkgMvHaa4e5kPzARmVvDOHpx-zOzHUlb_mvq-EkDSH-po73at-bsdnLdb794fpSWzso0bOnmOXN5WOxQu2YDIybCYLmttsM2g06o7MPcyAAzXrhK2ZHz112GjP3VJoLMu--okjgPrkiEiDcHVUBnwyWijYG5ZK4PTvlaun-SqDhxKruxL_mxtXWmcfZB_Y8w8wxcmIzJClaDXyB4CKOUWHBCf0cTyfBK5tn9mLjZJ4Q9wN7HfeUSE-F58g7n1kI");'>
+<div class="absolute bottom-3 right-3 bg-black/50 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">location_on</span> 3.1 km
+                    </div>
+</div>
+<div class="flex w-full grow flex-col items-stretch justify-center gap-1 p-4">
+<p class="text-orange-500 text-[11px] font-bold uppercase tracking-widest">ANIMAL WELFARE</p>
+<h3 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-tight">Dog Walker &amp; Shelter Support</h3>
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-medium mb-3">City Animal Rescue • North Shelter</p>
+<div class="flex items-center gap-3 justify-between mt-auto">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-gray-400">Slots</span>
+<span class="text-xs font-bold text-gray-700 dark:text-gray-300">4 Left</span>
+</div>
+</div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 transition-colors">
+                            Apply
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Filter Bottom Sheet (Mock - Hidden or Partially visible for the layout) -->
+<div class="fixed bottom-0 left-0 right-0 z-[60] bg-white dark:bg-gray-900 bottom-sheet rounded-t-3xl border-t border-gray-100 dark:border-gray-800 transition-transform transform translate-y-full">
+<div class="w-12 h-1 bg-gray-300 dark:bg-gray-700 rounded-full mx-auto mt-3 mb-6"></div>
+<div class="px-6 pb-10">
+<h3 class="text-xl font-bold mb-6">Filters</h3>
+<!-- Distance Slider -->
+<div class="mb-8">
+<div class="flex justify-between mb-4">
+<span class="text-sm font-bold">Distance Radius</span>
+<span class="text-sm text-primary font-bold">15 km</span>
+</div>
+<input class="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary" type="range"/>
+</div>
+<!-- Categories -->
+<div class="mb-8">
+<span class="text-sm font-bold block mb-4">Category</span>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">All</span>
+<span class="px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-bold border border-transparent">Education</span>
+<span class="px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-bold border border-transparent">Health</span>
+<span class="px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-xs font-bold border border-transparent">Environment</span>
+</div>
+</div>
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30">
+                Show 12 Results
+            </button>
+</div>
+</div>
+<!-- Fixed Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 flex items-center justify-around py-2 pb-6 px-2">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined font-variation-fill" style="font-variation-settings: 'FILL' 1">explore</span>
+<span class="text-[10px] font-bold">Explore</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-[10px] font-bold">My Tasks</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[10px] font-bold">Messages</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</button>
+</nav>
+<!-- Map FAB (Floating Action Button) - used in mobile to toggle maps if List view -->
+<button class="fixed bottom-24 right-6 size-14 rounded-full bg-primary text-white shadow-xl flex items-center justify-center z-40 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-2xl">map</span>
+</button>
+</body></html>

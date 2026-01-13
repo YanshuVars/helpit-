@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Team Member Management</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen text-[#111318] dark:text-white">
+<!-- Top Navigation Bar -->
+<div class="sticky top-0 z-50 flex items-center bg-white dark:bg-background-dark border-b border-gray-100 dark:border-gray-800 px-4 h-16 justify-between">
+<div class="flex items-center gap-2">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-tight">Team Members</h2>
+</div>
+<div class="flex items-center">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</div>
+<main class="max-w-md mx-auto pb-20">
+<!-- Search Section -->
+<div class="px-4 py-4">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full shadow-sm">
+<div class="text-[#616e89] flex border-none bg-white dark:bg-gray-800 items-center justify-center pl-4 rounded-l-xl border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111318] dark:text-white focus:outline-0 focus:ring-0 border-none bg-white dark:bg-gray-800 focus:border-none h-full placeholder:text-[#616e89] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Search staff members" value=""/>
+</div>
+</label>
+</div>
+<!-- Management Card Container -->
+<div class="mx-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
+<!-- Card Header with Primary Action -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 gap-4 border-b border-gray-50 dark:border-gray-800">
+<h3 class="text-lg font-bold leading-tight tracking-tight">Staff List</h3>
+<button class="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-bold text-sm transition-colors hover:bg-blue-700">
+<span class="material-symbols-outlined text-lg">person_add</span>
+<span>Invite Member</span>
+</button>
+</div>
+<!-- Member List (Table-like adaptation) -->
+<div class="divide-y divide-gray-50 dark:divide-gray-800">
+<!-- Member Row 1: Admin / Active -->
+<div class="flex items-center gap-4 px-4 py-4 justify-between hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<div class="flex items-center gap-3 overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 shrink-0 border border-gray-100 dark:border-gray-700" data-alt="Professional portrait of Sarah Jenkins" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAkkyVaUV4oR8D0tMHqAzbtCPrg26MsgvpVxJXsBfexZmWGPXkiELvT9_RSnVhTJ9HFHhHnGM8PJtTV1ow_ptdq-fRpgmz3IA-7tSkclZEENZS2ziZxdJ6vQRRbgDhoJkXrejn9sR_mo5LwTvaI6FduszyR57LaYCAKXMfYbmbntHN8b7NF4PzEKkizxiNEQKoalK8qjiHgSTKw2wS5r6ofjnhJ1Ig6xhn5l2aWvA-dh2LSMxpxDIdRvAOZDVGUeQz-ij9bRfVEtcI");'>
+</div>
+<div class="flex flex-col justify-center min-w-0">
+<p class="text-[#111318] dark:text-white text-sm font-semibold leading-tight truncate">Sarah Jenkins</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal leading-normal truncate">sarah.j@helpit.org</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1.5 shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">Admin</span>
+<div class="flex items-center gap-1">
+<div class="size-1.5 rounded-full bg-green-500"></div>
+<span class="text-xs font-medium text-green-600">Active</span>
+</div>
+</div>
+</div>
+<!-- Member Row 2: Coordinator / Active -->
+<div class="flex items-center gap-4 px-4 py-4 justify-between hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<div class="flex items-center gap-3 overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 shrink-0 border border-gray-100 dark:border-gray-700" data-alt="Professional portrait of Marcus Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWZXxQf9FWy1KfkCMS1gV_gr-2KNhYvyAsfnH5oDrquvYuh8BEK31a6bQAE-dy7PE7qFUNCWl649QtVdR2a3GvLQ7ORQlLwanUFSNf2lUlGfH20brtWu-0HYbH7rWVJideWJjWD3k4f4Ss-gDh0cNnSbt2aEf4ch34wGgw6eYpo_NP17gVBDQzK1y9_3c-79SEBu9St_PvYYUzjRhVmZ21PPTvaEvDt3ihTsa2HgTm9WhqNXPKKxbYaA1b8thCfmp5jQgnkrawNpo");'>
+</div>
+<div class="flex flex-col justify-center min-w-0">
+<p class="text-[#111318] dark:text-white text-sm font-semibold leading-tight truncate">Marcus Chen</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal leading-normal truncate">m.chen@helpit.org</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1.5 shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-[10px] font-bold uppercase tracking-wider">Coordinator</span>
+<div class="flex items-center gap-1">
+<div class="size-1.5 rounded-full bg-green-500"></div>
+<span class="text-xs font-medium text-green-600">Active</span>
+</div>
+</div>
+</div>
+<!-- Member Row 3: Coordinator / Pending -->
+<div class="flex items-center gap-4 px-4 py-4 justify-between hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<div class="flex items-center gap-3 overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 shrink-0 border border-gray-100 dark:border-gray-700" data-alt="Placeholder profile for Elena Rodriguez" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCKx3elB3r_zcY_gIscKsrgkd5qGBOPzZjicJ0hS21aOPTnI5-eSaWUQ0Sonu6-7uGzlr2zyAvv5wpLboAyaKoKEAB5HO6K6jtuSO0aI2jozZE9CmUXVcVmzTzjs8nX1PlbMg13cCGTlf3XErHp_CxOmnVHw8-oRGcV113mp_zG6yMWOvPjPFzxoVGdvWkMncohER-1o8hHEKQeo5MeLTReu53TUgwZrhk1NwgmN-Bpxbtmzd9-jLUM6FdUEWvpz9ak0-8UjZABHH4");'>
+</div>
+<div class="flex flex-col justify-center min-w-0">
+<p class="text-[#111318] dark:text-white text-sm font-semibold leading-tight truncate">Elena Rodriguez</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal leading-normal truncate">elena.r@helpit.org</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1.5 shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-[10px] font-bold uppercase tracking-wider">Coordinator</span>
+<div class="flex items-center gap-1">
+<div class="size-1.5 rounded-full bg-orange-500"></div>
+<span class="text-xs font-medium text-orange-600">Pending</span>
+</div>
+</div>
+</div>
+<!-- Member Row 4: Coordinator / Active -->
+<div class="flex items-center gap-4 px-4 py-4 justify-between hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<div class="flex items-center gap-3 overflow-hidden">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 shrink-0 border border-gray-100 dark:border-gray-700" data-alt="Professional portrait of David Kim" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC3U98vNEEJSWAJjgV8tGxAfO7TCWPbkAPZYOSZiJyDJ6NfoyURfic12bBVrELd9TPapbm4rqVc0AgFOeW1FF1_YZexq366V1v7wJDt2i1Ci1Evmd0CkVabUEBlpWJn54KhqTC4jlExlbThyxG5UjD7zQAgYgjJR1maAxaCeom1Gd3GIL1wGaaO2mq59XyOrznX3uu7EbbtRwoNWZBkcGL_RyNy250HKJInzpYpuz3QRnY-3bsWCZUvTUSJDgiBit80H6z0t1bUybQ");'>
+</div>
+<div class="flex flex-col justify-center min-w-0">
+<p class="text-[#111318] dark:text-white text-sm font-semibold leading-tight truncate">David Kim</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal leading-normal truncate">david.k@helpit.org</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1.5 shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-[10px] font-bold uppercase tracking-wider">Coordinator</span>
+<div class="flex items-center gap-1">
+<div class="size-1.5 rounded-full bg-green-500"></div>
+<span class="text-xs font-medium text-green-600">Active</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Pagination/Info -->
+<div class="px-4 py-3 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center text-xs text-[#616e89] dark:text-gray-400">
+<span>Showing 4 members</span>
+<button class="font-bold text-primary hover:underline">View All</button>
+</div>
+</div>
+<!-- Role Descriptions (Subtle context for the user) -->
+<div class="mt-8 px-4">
+<h4 class="text-xs font-bold text-[#616e89] uppercase tracking-widest mb-3">About Roles</h4>
+<div class="space-y-3">
+<div class="flex gap-3">
+<div class="flex size-6 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-sm">shield</span>
+</div>
+<p class="text-xs text-[#616e89] leading-relaxed">
+<span class="font-bold text-[#111318] dark:text-white">Admins</span> can manage team members, access billing, and modify organization settings.
+                    </p>
+</div>
+<div class="flex gap-3">
+<div class="flex size-6 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+<span class="material-symbols-outlined text-sm">groups</span>
+</div>
+<p class="text-xs text-[#616e89] leading-relaxed">
+<span class="font-bold text-[#111318] dark:text-white">Coordinators</span> can manage projects and volunteer assignments but cannot edit organization settings.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Navigation Bar (iOS style bottom tab bar) -->
+<div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 h-16 px-6 flex items-center justify-between z-50">
+<div class="flex flex-col items-center gap-1 text-[#616e89]">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px]">Dashboard</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px]">Team</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-[#616e89]">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px]">Schedule</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-[#616e89]">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px]">Settings</span>
+</div>
+</div>
+</body></html>

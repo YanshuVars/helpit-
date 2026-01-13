@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donation Receipt Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .receipt-card {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
+<!-- Top Navigation Bar -->
+<nav class="flex items-center bg-white dark:bg-background-dark p-4 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-10">
+<div class="text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Donation Receipt</h2>
+</nav>
+<main class="flex-1 p-4 max-w-md mx-auto w-full">
+<!-- Receipt Content Card -->
+<div class="bg-white dark:bg-gray-900 rounded-xl receipt-card overflow-hidden">
+<!-- NGO Header -->
+<div class="p-6 text-center border-b border-dashed border-gray-200 dark:border-gray-700">
+<div class="mx-auto mb-4 w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">volunteer_activism</span>
+</div>
+<h4 class="text-[#111318] dark:text-white text-xl font-bold leading-normal">Helpit NGO</h4>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-bold leading-normal tracking-wider uppercase mt-1">Official Receipt</p>
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-normal mt-2">123 Charity Lane, Building 4<br/>San Francisco, CA 94103</p>
+<div class="mt-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-symbols-outlined text-sm mr-1">verified</span> Verified 80G Status
+                </div>
+</div>
+<!-- Amount Section -->
+<div class="py-8 text-center">
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-medium">Total Donation Amount</p>
+<h1 class="text-[#111318] dark:text-white tracking-tight text-[40px] font-bold leading-tight pt-2">$100.00</h1>
+<p class="text-primary text-sm font-medium mt-1">Thank you for your generosity!</p>
+</div>
+<!-- Details Section -->
+<div class="px-6 pb-8 space-y-4">
+<div class="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-800">
+<span class="text-[#616e89] dark:text-gray-400 text-sm">Receipt Number</span>
+<span class="text-[#111318] dark:text-white text-sm font-semibold">REC-2023-8842</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-800">
+<span class="text-[#616e89] dark:text-gray-400 text-sm">Date</span>
+<span class="text-[#111318] dark:text-white text-sm font-semibold">Oct 24, 2023</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-800">
+<span class="text-[#616e89] dark:text-gray-400 text-sm">Donor Name</span>
+<span class="text-[#111318] dark:text-white text-sm font-semibold">Alex Johnson</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-800">
+<span class="text-[#616e89] dark:text-gray-400 text-sm">Tax ID / PAN</span>
+<span class="text-[#111318] dark:text-white text-sm font-semibold">ABCDE1234F</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-800">
+<span class="text-[#616e89] dark:text-gray-400 text-sm">Payment Mode</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400 text-base">credit_card</span>
+<span class="text-[#111318] dark:text-white text-sm font-semibold">Apple Pay</span>
+</div>
+</div>
+</div>
+<!-- Legal Footer -->
+<div class="bg-gray-50 dark:bg-gray-800/50 p-6">
+<p class="text-[#616e89] dark:text-gray-400 text-[11px] leading-relaxed text-center">
+                    This is a computer-generated receipt and does not require a physical signature.
+                    Registration No: 123456789. All donations are tax-exempt under Section 80G status.
+                    Helpit NGO is a registered non-profit organization.
+                </p>
+</div>
+</div>
+<!-- Decorative "Paper Hole" effect for the receipt feel -->
+<div class="flex justify-between px-8 -mt-2">
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+<div class="w-4 h-4 rounded-full bg-background-light dark:bg-background-dark"></div>
+</div>
+</main>
+<!-- Bottom Actions -->
+<div class="p-6 bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 safe-area-bottom">
+<div class="flex flex-col gap-3 max-w-md mx-auto">
+<button class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-white font-bold transition-all hover:bg-blue-700">
+<span class="material-symbols-outlined">download</span>
+<span>Download PDF</span>
+</button>
+<button class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary/10 px-4 py-4 text-primary font-bold transition-all hover:bg-primary/20">
+<span class="material-symbols-outlined">mail</span>
+<span>Email Receipt</span>
+</button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donor Dashboard - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#111318] dark:text-white antialiased">
+<!-- Fixed Top Bar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-[#dbdee6] dark:border-gray-800">
+<div class="flex items-center p-4 justify-between max-w-md mx-auto">
+<div class="flex items-center gap-2">
+<div class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">person_heart</span>
+</div>
+<h1 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-tight">Helpit</h1>
+</div>
+<div class="flex items-center gap-1">
+<button class="flex items-center justify-center rounded-full w-10 h-10 bg-transparent text-[#111318] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-20 pb-24 max-w-md mx-auto px-4 space-y-6">
+<!-- Welcome Section -->
+<section>
+<h2 class="text-2xl font-bold">Hi, Alex! 👋</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400">Your contributions are making a difference.</p>
+</section>
+<!-- Stats Section (Impact Card) -->
+<section class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-gray-900 border border-[#dbdee6] dark:border-gray-800 shadow-sm">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-lg">volunteer_activism</span>
+<p class="text-sm font-medium">Donated</p>
+</div>
+<p class="text-2xl font-bold leading-tight">$1,250</p>
+<p class="text-[#07883d] text-xs font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                    +15% this month
+                </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-gray-900 border border-[#dbdee6] dark:border-gray-800 shadow-sm">
+<div class="flex items-center gap-2 text-orange-500">
+<span class="material-symbols-outlined text-lg">groups</span>
+<p class="text-sm font-medium">Impacted</p>
+</div>
+<p class="text-2xl font-bold leading-tight">42</p>
+<p class="text-[#07883d] text-xs font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                    +2 lives
+                </p>
+</div>
+</section>
+<!-- Followed NGOs (Horizontal List) -->
+<section>
+<div class="flex justify-between items-center mb-3">
+<h3 class="text-lg font-bold tracking-tight">Followed NGOs</h3>
+<button class="text-primary text-sm font-semibold">See all</button>
+</div>
+<div class="flex overflow-x-auto gap-4 pb-2 hide-scrollbar">
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-primary p-0.5">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" data-alt="Eco-friendly nature conservation organization logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBN1GhlsQFnfRiQjapGOthQrxWq2YUSj6FRqnkY3OLI8QFO_EdzfoqogOqaRBZ1pU2ozkYxe1nALKrHFHYX6IIpwKdWAJCwfMXy-B0Koi2BMyllOfLG6JvnuqFkc32qMmSAJQlcoUEdmgl8Ya47TMq1OaY13KITG0PacY7OFISKLZ79Z-FiT8eJcGa8WrcVpIPPu4tD_f3KfhHzWO3ca4WC9D3lNkM_7b-LMnBgH_LM7pJN76DwRrFG1LiWj3b0VIXgCqB0LSjluss");'></div>
+</div>
+<span class="text-xs font-medium text-center truncate w-16">GreenEarth</span>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-transparent p-0.5">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" data-alt="Education for underprivileged children organization logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDt0-S0vk0_z8kuYQ4gClS0-avARsn7_Wi0iDrKHgUr1eQTaypNqw74J6ImAZzc-V-LyIn_IGK-0kF9JfwUAwpiPQWsZAtN8KRrSiWqPUkTgEwq9IKkJDT56iZNElWse2SoeLvW78CdcGkJu4-UleLRKOMlmw_8SGEz0bDsAmJNQvl__nFnbP3V6SjYmDkFpVVazl8UbBUGvdxvOIOhOUg-PmtkFVsH6J0WJJGE8yhxtTEwkUqs7dey1zpczZWqPzFPOjPSCNT3srY");'></div>
+</div>
+<span class="text-xs font-medium text-center truncate w-16">EduChild</span>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-transparent p-0.5">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" data-alt="Clean water access project organization logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAWixPUgzD9Ts0SA-Z5CajeCFFWuY1i6bVdjf54lMcuNqhurA1vIfUJ_upnuEoFJtogjzwJ_lAHMwzQMZC9pnDoqVLITwRV1wmd3FY1ht56uY2Qt1pQ5d4oHNI1IADj26Qj5lmBtIFu5o83A6xGCKIjSRg0LQTfSGvyabSSmCFiql2zHXP0HWBHAQT87Md922XqqFNCNbR3qf7DNPOOYCl2z228hiq9ByHkTf2KE_94oZ-chz87KpiSnZGu2bYt6tO2FNkO2afkFE");'></div>
+</div>
+<span class="text-xs font-medium text-center truncate w-16">WaterRefill</span>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-transparent p-0.5">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full" data-alt="Wildlife rescue and care center logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCJD2qKA2oNBdKg0gpN-qCqv3kJr5A65JYKnKJ79NEDtpyZaIVfjeYwHKyzR7WunF6vQAMHNyv8gdmzS4l3aW64N1yGEAGY24nIPlLL6bvC8AJQB_O0fxoJl-OC5gRonJAR8a0HB-yDec5KUQFQ62NveFIlVOU9UbaXy0XxNL0snwC25mfA6oi-blBzgKqRaiu8S_UZi_YarU7pbaKkLsRaBK9BsZWM6tDCniFdiGyNuMwgIpHpbLLYve_zdaoGtcw4UKKl2IWE-OM");'></div>
+</div>
+<span class="text-xs font-medium text-center truncate w-16">AnimalCare</span>
+</div>
+<div class="flex flex-col items-center gap-2 shrink-0">
+<button class="w-16 h-16 rounded-full border-2 border-dashed border-[#dbdee6] flex items-center justify-center text-gray-400">
+<span class="material-symbols-outlined">add</span>
+</button>
+<span class="text-xs font-medium text-center truncate w-16">Discover</span>
+</div>
+</div>
+</section>
+<!-- Recent Activity (Timeline Style) -->
+<section class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="text-lg font-bold tracking-tight">Recent Activity</h3>
+</div>
+<div class="space-y-4 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#dbdee6] dark:before:bg-gray-800">
+<!-- Activity Item 1 -->
+<div class="relative pl-12">
+<div class="absolute left-4 top-1 w-4 h-4 rounded-full bg-primary border-4 border-white dark:border-background-dark z-10"></div>
+<div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-[#dbdee6] dark:border-gray-800 shadow-sm">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold text-sm">Donation Confirmed</h4>
+<span class="text-[10px] font-medium text-gray-400">2h ago</span>
+</div>
+<p class="text-sm text-gray-600 dark:text-gray-300">Your monthly donation of <span class="font-semibold text-primary">$50</span> was sent to <span class="font-semibold">GreenEarth</span>.</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="relative pl-12">
+<div class="absolute left-4 top-1 w-4 h-4 rounded-full bg-orange-500 border-4 border-white dark:border-background-dark z-10"></div>
+<div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-[#dbdee6] dark:border-gray-800 shadow-sm">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold text-sm">Project Milestone</h4>
+<span class="text-[10px] font-medium text-gray-400">Yesterday</span>
+</div>
+<p class="text-sm text-gray-600 dark:text-gray-300"><span class="font-semibold">EduChild</span> reached their goal of building 5 new classrooms in Kenya!</p>
+<div class="mt-2 h-24 w-full rounded-lg bg-cover bg-center" data-alt="Classroom with children smiling in Kenya" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB248QEF-fukHYsSSegpMseHYSLcgx3hqk0ZvRySGuPAu32NNsMhHTgrS2L98XB_mtzax_cDMqb-gtsPfgt4362p06BWO9IhBzFDZ3-qv1ekJS_PZIzb0q9peDpik6dMtYyTbh1ST5453LMjr9VngrhBYZDP7gA6aZiac6-PHfDSzNdsrHeMDZo4DGQag9lvKyUs7-1dwxagYgV8KtTSQXufKpi5YjYuJ72gu1-MyC6VU-ytR_OK_M50dVkfYZrwd7nRQtldDcMiSs");'></div>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="relative pl-12">
+<div class="absolute left-4 top-1 w-4 h-4 rounded-full bg-green-500 border-4 border-white dark:border-background-dark z-10"></div>
+<div class="bg-white dark:bg-gray-900 p-4 rounded-xl border border-[#dbdee6] dark:border-gray-800 shadow-sm">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold text-sm">New Update</h4>
+<span class="text-[10px] font-medium text-gray-400">Oct 24</span>
+</div>
+<p class="text-sm text-gray-600 dark:text-gray-300"><span class="font-semibold">WaterRefill</span> shared a progress video for the Nile project.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-[#dbdee6] dark:border-gray-800 pb-safe">
+<div class="flex items-center justify-around h-16 max-w-md mx-auto px-4">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-semibold">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-medium">Discover</span>
+</button>
+<div class="relative -top-4">
+<button class="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/30 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-medium text-gray-400">Donate</span>
+</div>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] font-medium">Activity</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+</nav>
+<!-- Bottom spacing for iOS home indicator -->
+<div class="h-6 bg-white dark:bg-background-dark fixed bottom-0 w-full z-[49]"></div>
+</body></html>

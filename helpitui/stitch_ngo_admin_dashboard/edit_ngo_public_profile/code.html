@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Edit NGO Public Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+            },
+            fontFamily: {
+              "display": ["Public Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center justify-between px-4 py-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#111418] dark:text-white cursor-pointer">arrow_back_ios</span>
+<h2 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-tight">Public Profile</h2>
+</div>
+<button class="text-primary font-bold text-base hover:opacity-80 transition-opacity">Save</button>
+</div>
+<!-- Tabs Component -->
+<div class="flex border-b border-gray-100 dark:border-gray-800 px-4">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-3 pt-4 flex-1" href="#">
+<p class="text-sm font-bold tracking-wide">Basic Info</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-[#617589] pb-3 pt-4 flex-1" href="#">
+<p class="text-sm font-bold tracking-wide">Media</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-[#617589] pb-3 pt-4 flex-1" href="#">
+<p class="text-sm font-bold tracking-wide">Socials</p>
+</a>
+</div>
+</header>
+<main class="max-w-md mx-auto pb-20">
+<!-- Profile Branding Section -->
+<section class="bg-white dark:bg-background-dark py-6 mb-2">
+<div class="flex flex-col items-center gap-4">
+<div class="relative group">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-28 w-28 ring-4 ring-primary/10" data-alt="Modern minimalist NGO circular logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBox1aqALRWqw61yl_5N-7Yo-N-64OtSy4YKmG_tak8V7FW75CB6JQbVtsTOwd-zJmh4VY8OirH1U6reajPk0aukxdk63c1p8QZa9hdKwKQtqfxOxbLQyeDrS_fcU_pbXjn1FqEBG0S4JFfkKHEaf9h40xqCRfs23bNj5p3Q_3GzZQc-GJSgntitEa8-isVDYnb7CfSO7ZuOR-drDnaF1hXBPeVfAyfvQcDsndP2yvzmyUsUOKRvSeeZo-TkDNe4eVsUZ4Uisbm1Gc");'>
+</div>
+<div class="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full border-2 border-white dark:border-background-dark">
+<span class="material-symbols-outlined text-sm block">edit</span>
+</div>
+</div>
+<div class="text-center">
+<h3 class="text-[#111418] dark:text-white text-xl font-bold">Helpit Foundation</h3>
+<p class="text-[#617589] text-sm font-normal">Registered Non-profit Org</p>
+</div>
+</div>
+</section>
+<!-- General Info Form -->
+<section class="space-y-1">
+<h3 class="text-[#111418] dark:text-white text-base font-bold px-4 py-4">General Information</h3>
+<!-- TextField: Org Name -->
+<div class="px-4 py-2">
+<label class="flex flex-col w-full">
+<p class="text-[#111418] dark:text-gray-300 text-sm font-semibold pb-2">Organization Name</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 focus:border-primary focus:ring-1 focus:ring-primary h-12 p-4 text-base" placeholder="Enter NGO name" value="Helpit Foundation"/>
+</label>
+</div>
+<!-- TextField: About Area -->
+<div class="px-4 py-2">
+<label class="flex flex-col w-full">
+<div class="flex justify-between items-center pb-2">
+<p class="text-[#111418] dark:text-gray-300 text-sm font-semibold">About Us</p>
+<span class="text-xs text-gray-400">145/500</span>
+</div>
+<textarea class="form-textarea flex w-full rounded-lg text-[#111418] dark:text-white border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 focus:border-primary focus:ring-1 focus:ring-primary min-h-[120px] p-4 text-base leading-relaxed" placeholder="Describe your mission and impact...">Dedicated to providing clean water and nutritional support to underprivileged communities across the globe since 2015.</textarea>
+</label>
+</div>
+<!-- SectionHeader: Engagement -->
+<h3 class="text-[#111418] dark:text-white text-base font-bold px-4 pt-8 pb-2">Call to Action</h3>
+<!-- Donation Message -->
+<div class="px-4 py-2">
+<label class="flex flex-col w-full">
+<p class="text-[#111418] dark:text-gray-300 text-sm font-semibold pb-2">Donation Button Message</p>
+<input class="form-input flex w-full rounded-lg text-[#111418] dark:text-white border border-[#dbe0e6] dark:border-gray-700 bg-white dark:bg-gray-900 focus:border-primary focus:ring-1 focus:ring-primary h-12 p-4 text-base" placeholder="e.g. Help us feed 100 children" value="Support our clean water initiative"/>
+</label>
+</div>
+</section>
+<!-- Social Links Preview (Teaser for 3rd tab) -->
+<section class="mt-6 mb-10">
+<h3 class="text-[#111418] dark:text-white text-base font-bold px-4 py-4 flex items-center justify-between">
+                Social Links
+                <span class="text-primary text-xs font-semibold cursor-pointer">Edit All</span>
+</h3>
+<div class="px-4 space-y-3">
+<div class="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-100 dark:border-gray-800">
+<div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-600">
+<span class="material-symbols-outlined text-lg">camera_alt</span>
+</div>
+<div class="flex-1">
+<p class="text-xs text-gray-400 font-medium">Instagram</p>
+<p class="text-sm text-[#111418] dark:text-white">instagram.com/helpit_org</p>
+</div>
+<span class="material-symbols-outlined text-gray-300">chevron_right</span>
+</div>
+<div class="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-100 dark:border-gray-800">
+<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-lg">alternate_email</span>
+</div>
+<div class="flex-1">
+<p class="text-xs text-gray-400 font-medium">X (formerly Twitter)</p>
+<p class="text-sm text-[#111418] dark:text-white">x.com/helpit_impact</p>
+</div>
+<span class="material-symbols-outlined text-gray-300">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Footer Actions -->
+<div class="px-4 pb-12">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 hover:brightness-110 active:scale-[0.98] transition-all">
+                Update Public Profile
+            </button>
+<button class="w-full mt-3 text-[#617589] font-semibold py-2">
+                Discard Changes
+            </button>
+</div>
+</main>
+<!-- iOS Home Indicator Overlay -->
+<div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-gray-300 dark:bg-gray-700 rounded-full opacity-50 pointer-events-none"></div>
+</body></html>

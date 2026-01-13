@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Role Selection - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .role-card-active {
+            border: 2px solid #2463eb;
+            background-color: rgba(36, 99, 235, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between">
+<div class="text-[#111318] dark:text-white flex size-12 shrink-0 items-center cursor-pointer" data-icon="ArrowBack">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Registration</h2>
+</header>
+<!-- Progress Indicator -->
+<div class="flex w-full flex-row items-center justify-center gap-3 py-4">
+<div class="h-2 w-8 rounded-full bg-primary"></div>
+<div class="h-2 w-2 rounded-full bg-[#dbdee6] dark:bg-gray-700"></div>
+<div class="h-2 w-2 rounded-full bg-[#dbdee6] dark:bg-gray-700"></div>
+</div>
+<main class="flex-1 px-4 max-w-md mx-auto w-full">
+<!-- Headline Section -->
+<div class="text-center py-6">
+<h1 class="text-[#111318] dark:text-white tracking-tight text-[28px] font-bold leading-tight pb-2">How will you use Helpit?</h1>
+<p class="text-[#616e89] dark:text-gray-400 text-base font-normal leading-normal">Select the profile that best describes your needs.</p>
+</div>
+<!-- Role Cards Container -->
+<div class="flex flex-col gap-4 mt-2">
+<!-- Individual Card -->
+<div class="group cursor-pointer flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm border-2 border-transparent hover:border-primary transition-all active:scale-[0.98]">
+<div class="flex flex-[2_2_0px] flex-col gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1 text-primary">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-tight">Individual</p>
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-normal leading-normal">I'm looking for support or resources</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Select</span>
+</button>
+</div>
+<div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-xl flex-shrink-0" data-alt="Abstract blue person silhouette graphic" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBt_It46i8kK_BV0SRqMpiKOyR_cr495auQp7zRUXP0ekINICa9SZJE_syIxjwo6caKYTFNQwwdpMI2kfhMbVW-TrIuCxi0BCxz3mvnbjQidoq5CkY1jgdAsYXw_VbRDToGmrGr_HKnHhh2y5J_Cs1axhRVHFJz49YS4Ce-VA7tkDFvzguBT0cRmxCi0-z3neYEhoX8F8ACEZDMZFi3zSjn08HvmkbIaYmfASQe2BKpHETgoVWsinOnEvqETGddo8PGttFTynh4Vos");'></div>
+</div>
+<!-- Volunteer Card -->
+<div class="group cursor-pointer flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm border-2 border-transparent hover:border-primary transition-all active:scale-[0.98]">
+<div class="flex flex-[2_2_0px] flex-col gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1 text-primary">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-tight">Volunteer</p>
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-normal leading-normal">I want to offer my time and skills</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-[#f0f1f4] dark:bg-gray-700 text-[#111318] dark:text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Select</span>
+</button>
+</div>
+<div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-xl flex-shrink-0" data-alt="Hands holding a heart icon pattern" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-4NrihEuAosPnXsgpaum_Y1YKjigN3XwmH9cWO9cmxayHgRy_6RBa9DNwMHGBRHrw2b8zNZlOkBrC_vs9uElBDzj6Wa6E4DRydTqM-LL7ZxQkNlBTUgddD_bBqDGBksXy8_d8CnxDsKQHVR4aXL9uZNJYFanNhPxYYanBeukOKsDStXmFS012UI0lYS5QwqzdcIWS8b1EaVCbLMJNjzPFsX144HQKBEwJExxqeRD4BHN3XeWIYhVMtUGhJHza3ObzyWvjE7OHoVo");'></div>
+</div>
+<!-- NGO Card -->
+<div class="group cursor-pointer flex items-stretch justify-between gap-4 rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm border-2 border-transparent hover:border-primary transition-all active:scale-[0.98]">
+<div class="flex flex-[2_2_0px] flex-col gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 mb-1 text-primary">
+<span class="material-symbols-outlined">corporate_fare</span>
+</div>
+<p class="text-[#111318] dark:text-white text-lg font-bold leading-tight">NGO</p>
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-normal leading-normal">We are an organization managing programs</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-[#f0f1f4] dark:bg-gray-700 text-[#111318] dark:text-white text-sm font-medium leading-normal w-fit">
+<span class="truncate">Select</span>
+</button>
+</div>
+<div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-xl flex-shrink-0" data-alt="Modern office building architectural abstract" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuARxMsM8P4DUqw3OYLr2N295nW_fa0EQQPFxBDuZiXJpkVn6GobtJ9pEfMj-F_Mogf_eGnmRNYtruPgBtZpprL3GDjbHXGwSSN1Arzr3BR6M8Vds74myrCL68CbyZsXBPXIuFdeI6KGH9Bh4PhzeunF6g3l3QPwjzrEaelVfR3wZQ3-v6TYknvWwwGK_r2tXJ7CTY6z7hOhiXSftjz-nxEkzDLLy3RVAT2jHdJ3XH7AkA8YcBAKF0zGFlMhJEDWD-sNZoeP-bySOjk");'></div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Area -->
+<footer class="p-6 mt-auto">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg active:bg-blue-700 transition-colors">
+            Continue
+        </button>
+<p class="text-center text-sm text-[#616e89] dark:text-gray-400 mt-4">
+            Already have an account? <a class="text-primary font-semibold" href="#">Log in</a>
+</p>
+<div class="h-5"></div>
+</footer>
+</body></html>

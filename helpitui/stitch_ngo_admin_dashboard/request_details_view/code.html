@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-30 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center p-4 justify-between gap-4">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-tight truncate max-w-[180px]">Emergency Food Supply</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                    High Urgency
+                </span>
+</div>
+</div>
+<!-- Tabs -->
+<div class="px-4 overflow-x-auto hide-scrollbar">
+<div class="flex gap-8 border-b border-slate-200 dark:border-slate-800">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-3 pt-2" href="#">
+<p class="text-sm font-bold leading-normal tracking-tight">Overview</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2" href="#">
+<p class="text-sm font-bold leading-normal tracking-tight">Location</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2" href="#">
+<p class="text-sm font-bold leading-normal tracking-tight">Media</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2" href="#">
+<p class="text-sm font-bold leading-normal tracking-tight">Comments</p>
+</a>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- Status Chip -->
+<div class="px-4 py-4">
+<div class="inline-flex items-center gap-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30 px-3 py-1">
+<div class="size-2 rounded-full bg-emerald-500"></div>
+<p class="text-emerald-700 dark:text-emerald-400 text-xs font-semibold">Open Status</p>
+</div>
+</div>
+<!-- Description Section -->
+<section class="mb-6">
+<h2 class="text-slate-900 dark:text-white text-xl font-bold px-4 pb-2">Description</h2>
+<p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed px-4">
+                Request for emergency food supply for 50 families in the downtown area. High priority due to recent flooding in the Riverside district. Most families require non-perishable goods, clean water, and infant formula.
+            </p>
+</section>
+<!-- Details Grid -->
+<section class="px-4 space-y-4">
+<div class="bg-white dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+<h3 class="font-bold text-slate-800 dark:text-slate-200">Required Items</h3>
+</div>
+<div class="flex flex-wrap gap-2">
+<div class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-2">
+<span class="text-sm font-medium">50x Food Packs</span>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-2">
+<span class="text-sm font-medium">100x Water Gallons</span>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-2">
+<span class="text-sm font-medium">20x Baby Kits</span>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined text-primary">person_pin_circle</span>
+<h3 class="font-bold text-slate-800 dark:text-slate-200">Point of Contact</h3>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-sm font-semibold">Sarah Jenkins</p>
+<p class="text-xs text-slate-500">Community Coordinator</p>
+</div>
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+</div>
+</div>
+</div>
+<div class="relative h-48 w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+<img alt="Map view of Riverside District" class="w-full h-full object-cover" data-alt="Map view of the riverside district downtown" data-location="Riverside, Downtown" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGTtj2BiqYWTTNxSuiqG5a6_26XZUt6ZYkuaXipzvHFmHZlhWTmxMKhmRZnIlqytfaXA__P9OHOsSURkqbp0iSfJYtVGoR7kxun1PeYHgnZlXsH4E0j2urOENxSvXpQdHKoVGiYo7qwrwO_nwu2hgM0LQsAu2yBlXfx3biBGdHng02TjuMRvPRvhLNpeDQgBQxR-3U9td77ipQMKEog-xMak6XoM0mOcm8SwB_LNgMPBpWszZQ308KIqpmXdAs3ibn1iecFHO6d20"/>
+<div class="absolute inset-0 bg-black/10"></div>
+<div class="absolute bottom-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm p-2 rounded-lg shadow-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">location_on</span>
+<span class="text-xs font-bold">242 Riverside Ave, Sector 4</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Bar -->
+<footer class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 pb-8 z-40">
+<div class="max-w-xl mx-auto flex gap-3">
+<button class="flex-1 flex items-center justify-center gap-2 h-14 rounded-xl border-2 border-primary text-primary font-bold transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">sync_alt</span>
+                Update Status
+            </button>
+<button class="flex-[1.5] flex items-center justify-center gap-2 h-14 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/30 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">person_add</span>
+                Assign Volunteer
+            </button>
+</div>
+</footer>
+</body></html>

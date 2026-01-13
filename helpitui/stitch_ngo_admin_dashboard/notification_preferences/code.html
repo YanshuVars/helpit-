@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notification Preferences</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen text-[#181111] dark:text-white">
+<div class="max-w-[430px] mx-auto min-h-screen flex flex-col pb-10">
+<!-- TopAppBar -->
+<div class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-200 dark:border-gray-800">
+<div class="text-[#181111] dark:text-white flex size-12 shrink-0 items-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<h2 class="text-[#181111] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Notification Preferences</h2>
+</div>
+<div class="px-4 mt-4">
+<!-- Section: Email Notifications -->
+<div class="mb-6">
+<h3 class="text-[#181111] dark:text-white/70 text-sm font-bold leading-tight tracking-wider uppercase px-2 pb-3 pt-4">Email Notifications</h3>
+<div class="bg-white dark:bg-[#2d1a1a] rounded-xl overflow-hidden shadow-sm">
+<!-- New Donations -->
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between border-b border-gray-50 dark:border-gray-800 last:border-0">
+<div class="flex flex-col justify-center">
+<p class="text-[#181111] dark:text-white text-base font-medium leading-normal line-clamp-1">New Donations</p>
+<p class="text-[#896161] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Get notified when you receive a new donation</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#f4f0f0] dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-200">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+<!-- Help Request Updates -->
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between border-b border-gray-50 dark:border-gray-800 last:border-0">
+<div class="flex flex-col justify-center">
+<p class="text-[#181111] dark:text-white text-base font-medium leading-normal line-clamp-1">Help Request Updates</p>
+<p class="text-[#896161] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Updates on requests you have supported</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#f4f0f0] dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-200">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+<!-- Direct Messages -->
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between border-b border-gray-50 dark:border-gray-800 last:border-0">
+<div class="flex flex-col justify-center">
+<p class="text-[#181111] dark:text-white text-base font-medium leading-normal line-clamp-1">Direct Messages</p>
+<p class="text-[#896161] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Notifications for new messages from donors</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#f4f0f0] dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-200">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Push Notifications -->
+<div class="mb-6">
+<h3 class="text-[#181111] dark:text-white/70 text-sm font-bold leading-tight tracking-wider uppercase px-2 pb-3 pt-4">Push Notifications</h3>
+<div class="bg-white dark:bg-[#2d1a1a] rounded-xl overflow-hidden shadow-sm">
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between border-b border-gray-50 dark:border-gray-800 last:border-0">
+<div class="flex flex-col justify-center">
+<p class="text-[#181111] dark:text-white text-base font-medium leading-normal line-clamp-1">New Donations</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#f4f0f0] dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-200">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between border-b border-gray-50 dark:border-gray-800 last:border-0">
+<div class="flex flex-col justify-center">
+<p class="text-[#181111] dark:text-white text-base font-medium leading-normal line-clamp-1">Help Request Updates</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#f4f0f0] dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-200">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between border-b border-gray-50 dark:border-gray-800 last:border-0">
+<div class="flex flex-col justify-center">
+<p class="text-[#181111] dark:text-white text-base font-medium leading-normal line-clamp-1">Direct Messages</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#f4f0f0] dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-200">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: In-app Notifications -->
+<div class="mb-6">
+<h3 class="text-[#181111] dark:text-white/70 text-sm font-bold leading-tight tracking-wider uppercase px-2 pb-3 pt-4">In-app Notifications</h3>
+<div class="bg-white dark:bg-[#2d1a1a] rounded-xl overflow-hidden shadow-sm">
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between border-b border-gray-50 dark:border-gray-800 last:border-0">
+<div class="flex flex-col justify-center">
+<p class="text-[#181111] dark:text-white text-base font-medium leading-normal line-clamp-1">All Activity</p>
+<p class="text-[#896161] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Summary of all updates within the app</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#f4f0f0] dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-200">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between border-b border-gray-50 dark:border-gray-800 last:border-0">
+<div class="flex flex-col justify-center">
+<p class="text-[#181111] dark:text-white text-base font-medium leading-normal line-clamp-1">Support Recommendations</p>
+<p class="text-[#896161] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Personalized help requests based on your history</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#f4f0f0] dark:bg-gray-700 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all duration-200">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Information Footer -->
+<div class="px-2 mt-2">
+<p class="text-[#896161] dark:text-gray-400 text-xs font-normal leading-normal">
+                    You can manage these settings at any time. Turning off notifications may cause you to miss urgent help requests or messages from donors.
+                </p>
+</div>
+</div>
+<!-- Footer Action (Optional iOS Style) -->
+<div class="mt-8 px-4">
+<button class="w-full bg-primary/10 dark:bg-primary/20 text-primary py-4 rounded-xl font-bold transition-colors hover:bg-primary/20">
+                Restore Default Settings
+            </button>
+</div>
+</div>
+</body></html>

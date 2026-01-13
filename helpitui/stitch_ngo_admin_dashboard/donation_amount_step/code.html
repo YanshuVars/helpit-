@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Donation Amount Step</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-slate-200 dark:bg-slate-900 font-display min-h-screen flex items-center justify-center">
+<!-- Phone Mockup Wrapper -->
+<div class="relative w-full max-w-[430px] h-[932px] bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden flex flex-col">
+<!-- Status Bar Space (Mock) -->
+<div class="h-12 w-full flex justify-between items-center px-8">
+<span class="text-sm font-semibold dark:text-white">9:41</span>
+<div class="flex gap-1.5">
+<span class="material-symbols-outlined text-sm dark:text-white">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-sm dark:text-white">wifi</span>
+<span class="material-symbols-outlined text-sm dark:text-white">battery_full</span>
+</div>
+</div>
+<!-- Main Content (Bottom Sheet Style) -->
+<div class="flex-1 flex flex-col">
+<!-- Bottom Sheet Container (Elevated Look) -->
+<div class="mt-auto bg-white dark:bg-[#1c2230] rounded-t-xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] flex flex-col h-[90%]">
+<!-- BottomSheetHandle -->
+<div class="flex h-6 w-full items-center justify-center">
+<div class="h-1.5 w-12 rounded-full bg-[#dbdee6] dark:bg-gray-700"></div>
+</div>
+<!-- Header & Close -->
+<div class="flex justify-end px-4 pt-2">
+<button class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<!-- ProfileHeader -->
+<div class="flex px-6 pb-2">
+<div class="flex w-full flex-col gap-4">
+<div class="flex gap-4 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-16 w-16 border-2 border-primary/10" data-alt="Modern logo for Helpit NGO with heart icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDU7UCzq2mopHoenvMcehb29glzSgbBcyy1IAzXkpOV-JJoSaQW68h8c-XoRSwG3-Rl7O4TvN-dJ4WBE5BHMZbYEzLyh5QfQRUukOgMSavy4NVewXKrbEb5bR7uhv-CZKlaj-s3q9t66l1R548nT4HJ1Md5lyTQ7eP75-6bmCawUlV_hDQ6A-eP4W4mal-B5By6SoNLQOcjH7riqZLYapCYFsjXJSLWdn_rw7lyrQiBkBEt3WoVongavQtk5x7VmjpNhruhMZob7OA");'>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111318] dark:text-white text-xl font-bold leading-tight tracking-tight">Helpit NGO</p>
+<p class="text-[#616e89] dark:text-gray-400 text-sm font-medium">Step 1: Choose Amount</p>
+</div>
+</div>
+</div>
+</div>
+<!-- PageIndicators -->
+<div class="flex w-full flex-row items-center justify-center gap-2 py-4">
+<div class="h-1.5 w-8 rounded-full bg-primary"></div>
+<div class="h-1.5 w-4 rounded-full bg-[#dbdee6] dark:bg-gray-700"></div>
+<div class="h-1.5 w-4 rounded-full bg-[#dbdee6] dark:bg-gray-700"></div>
+</div>
+<!-- Selection Area -->
+<div class="flex-1 overflow-y-auto px-6">
+<!-- HeadlineText -->
+<h3 class="text-[#111318] dark:text-white tracking-tight text-2xl font-bold leading-tight pt-4 pb-1">Support our mission</h3>
+<p class="text-[#616e89] dark:text-gray-400 text-sm mb-6">Select an amount to help us provide clean water and education to communities in need.</p>
+<!-- SegmentedButtons (Preset Grid Style) -->
+<div class="grid grid-cols-3 gap-3 mb-6">
+<label class="relative flex h-20 flex-col items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 cursor-pointer transition-all">
+<input class="absolute opacity-0" name="donation_amount" type="radio" value="500"/>
+<span class="text-sm font-semibold text-gray-500 dark:text-gray-400">USD</span>
+<span class="text-lg font-bold text-[#111318] dark:text-white">500</span>
+</label>
+<label class="relative flex h-20 flex-col items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 cursor-pointer transition-all">
+<input checked="" class="absolute opacity-0" name="donation_amount" type="radio" value="1000"/>
+<span class="text-sm font-semibold text-gray-500 dark:text-gray-400">USD</span>
+<span class="text-lg font-bold text-[#111318] dark:text-white">1,000</span>
+<div class="absolute -top-2 px-2 py-0.5 bg-primary text-[10px] text-white rounded-full font-bold uppercase tracking-wider">Popular</div>
+</label>
+<label class="relative flex h-20 flex-col items-center justify-center rounded-xl border-2 border-transparent bg-gray-50 dark:bg-gray-800/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5 cursor-pointer transition-all">
+<input class="absolute opacity-0" name="donation_amount" type="radio" value="2500"/>
+<span class="text-sm font-semibold text-gray-500 dark:text-gray-400">USD</span>
+<span class="text-lg font-bold text-[#111318] dark:text-white">2,500</span>
+</label>
+</div>
+<!-- Custom Amount Input -->
+<div class="mb-6">
+<label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Custom Amount</label>
+<div class="relative group">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-gray-400">$</span>
+<input class="w-full bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 rounded-xl py-4 pl-8 pr-4 text-lg font-bold focus:ring-2 focus:ring-primary focus:border-primary dark:text-white transition-all" placeholder="Other amount" type="number"/>
+</div>
+</div>
+<!-- Frequency Toggle Card -->
+<div class="p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 flex items-center justify-between mb-8">
+<div class="flex gap-3 items-center">
+<div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<div>
+<p class="text-sm font-bold text-gray-900 dark:text-white">Monthly Donation</p>
+<p class="text-xs text-gray-500">I want to give this every month</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<!-- CTA Footer -->
+<div class="p-6 border-t border-gray-100 dark:border-gray-800">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                        Continue to Payment
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<p class="text-center text-[10px] text-gray-400 mt-4 px-6">
+                        By continuing, you agree to our Terms of Service and Privacy Policy. All donations are tax deductible.
+                    </p>
+</div>
+<!-- iOS Home Indicator -->
+<div class="pb-2 flex justify-center">
+<div class="h-1.5 w-32 rounded-full bg-gray-200 dark:bg-gray-800"></div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

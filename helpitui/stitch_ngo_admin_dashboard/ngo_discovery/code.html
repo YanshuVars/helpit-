@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab {
+            font-variation-settings: 'FILL' 1;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<title>NGO Discovery</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-gray-100">
+<!-- Fixed Top Bar Container -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center justify-between px-4 pt-4 pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">volunteer_activism</span>
+<h1 class="text-xl font-bold tracking-tight">Helpit</h1>
+</div>
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<!-- SearchBar Component -->
+<div class="px-4 py-2">
+<label class="flex flex-col min-w-40 h-11 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-gray-100 dark:bg-gray-800">
+<div class="text-gray-500 dark:text-gray-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:outline-0 focus:ring-0 h-full placeholder:text-gray-500 text-sm font-normal leading-normal px-3" placeholder="Search NGOs, missions or cities" value=""/>
+<div class="flex items-center pr-2">
+<button class="p-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700">
+<span class="material-symbols-outlined text-lg">tune</span>
+</button>
+</div>
+</div>
+</label>
+</div>
+<!-- Tabs Component -->
+<div class="pb-1">
+<div class="flex overflow-x-auto px-4 gap-6 no-scrollbar">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-3 flex-shrink-0" href="#">
+<p class="text-xs font-bold uppercase tracking-wider">All</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-gray-500 dark:text-gray-400 pb-3 pt-3 flex-shrink-0" href="#">
+<p class="text-xs font-bold uppercase tracking-wider">Disaster</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-gray-500 dark:text-gray-400 pb-3 pt-3 flex-shrink-0" href="#">
+<p class="text-xs font-bold uppercase tracking-wider">Education</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-gray-500 dark:text-gray-400 pb-3 pt-3 flex-shrink-0" href="#">
+<p class="text-xs font-bold uppercase tracking-wider">Health</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-gray-500 dark:text-gray-400 pb-3 pt-3 flex-shrink-0" href="#">
+<p class="text-xs font-bold uppercase tracking-wider">Climate</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-gray-500 dark:text-gray-400 pb-3 pt-3 flex-shrink-0" href="#">
+<p class="text-xs font-bold uppercase tracking-wider">Poverty</p>
+</a>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="pt-44 pb-24 px-4">
+<!-- Section Header -->
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-semibold">Featured NGOs</h2>
+<span class="text-primary text-sm font-medium">View map</span>
+</div>
+<!-- ImageGrid Component (NGO Cards) -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Card 1 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-center bg-no-repeat bg-cover rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800" data-alt="Volunteer helping people during a disaster relief mission" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCA01CLrp4I1Ra2PtkGVey-JhLaNhj1OzsePADDAQFpMgj08RXoWlyX9s1Chf1C7V8A_uwkFVet_AmIQo9NMgOhRb8CivNVvIOVnIHIWuHSJdUZYuXBuYbADjFTpN0ZO-O9-kTdTBtgD0CxAevNrx3EABZF-Lm0ryWP8jaZmSQVpqVUv8Dlgpjgh0PH8Om01EWHbL1L-aO4HT4VD38Px2VDUoQjT5w2zT2xfcKEfCbsoAqEej9rqjLDDqswMW-cON6L6YMfoMG0Ccw");'>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 p-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-red-500 text-lg">favorite</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
+<span class="px-2 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold uppercase">Verified</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight truncate">Red Cross</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">category</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium">Disaster Relief</p>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">location_on</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs truncate">Geneva, Switzerland</p>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-center bg-no-repeat bg-cover rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800" data-alt="Children in a classroom learning with books" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBe_ovCivfNr33ki5F4qwT8HptZVB3STYXaoBnDYHpEGzZwJ_NzTl3Oshw_-_VyMh7NaUxI_dsRr-yxbI4yqCyVZdS8oi1oLF50tR7rDZlCpkF4s3gahvkQEoCYlVa3zzesPY0aQ-pENhIOAEME82zuW_AjdkVvPhI113RZpVK_gXPE-WyKWzIX8KUQjPxQU9WD-X1lCZ_GM-oBrdkm-g6uTlJqWi6iF9YeUtrqU7CKaIDnztBhqkozahu_QQwoZw5kwKec6uBTww4");'>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 p-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-gray-400 text-lg">favorite</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight truncate">Room to Read</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">category</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium">Education</p>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">location_on</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs truncate">San Francisco, USA</p>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-center bg-no-repeat bg-cover rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800" data-alt="Medical professional treating a patient in a clinic" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAervCE86R0watAngHV0BLOof9orK3prVRimJ8JtsBJn4HhXlbIQzAYm5j7az7JfupndtdQDSuQ4iUxKD6qqd_nvn7zSZi3Kg1IOi7vSOV7FC4mrsR-CgHkPiGocX346Zc4JF_w0GTcMVq-RBaYT9FPf4T80DkP0hqX6LEXxj9d1AaWi6L7jlskrLUn3wdI6WGaWvcyoCgOw4DRIR5xmbYwtUyu-lLr6emP0MGf3zH7xKiRuW2DaUT7PHiCwvwUUGHU3F6O2VhJHFc");'>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 p-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-gray-400 text-lg">favorite</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight truncate">MSF International</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">category</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium">Healthcare</p>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">location_on</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs truncate">Paris, France</p>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-center bg-no-repeat bg-cover rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800" data-alt="Panda logo or nature conservation imagery" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBAI4kxiJhHgqozTlydt0DXoV0bMWHZ6W5RhyICzIy6sHxZBayI4IJORVBJ9tzWIy3AkIy-BUN2PEnxrrqamaZz4_N5HTbtGd6_P7cwxUMEChdE3Ct6ghdoOPLNijUDr3O9Dhu1lMf4OAHenUUVAK5gCdIFNlqYEWmB32tI0McFjFieh4aikt6NjVvbkyvCq4BvBvCxWFx0gXo8oQ5F3k810H8DlsdQQrgxVJk5az2LRUNPFosXBd8kgD7OmopL2DZGJVaeetZ_4S0");'>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 p-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-gray-400 text-lg">favorite</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
+<span class="px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold uppercase">Eco-Certified</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight truncate">WWF</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">category</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium">Environment</p>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">location_on</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs truncate">Gland, Switzerland</p>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-center bg-no-repeat bg-cover rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800" data-alt="Happy children playing together in a group" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQdnQIXNaZnAmztUaJS-aAGzo_STZuZ7aAcWb4-kK4Y8reeb17i2i_fAdNS7a4xW0_uTnD9tgbK6IxdoWbycXncpMnHH8xqyixeoOykD5c_GxQpj4wMvacF74SXnaID8GepkBXb53OOZ3EKOgnhtJv6EuuugkCpiPFEzij9q-HWKRlO1ilFSq6jAnZ0QYup8kWLbiePyDOUU-rQgAv8T30BKCagB4pqQ_JMaa1kgRqpCfkt24p7Y51dTv4X0LnaW1_DGGBBCpV2SY");'>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 p-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-gray-400 text-lg">favorite</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight truncate">UNICEF</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">category</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium">Child Protection</p>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">location_on</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs truncate">New York, USA</p>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="flex flex-col gap-2 group cursor-pointer">
+<div class="relative w-full aspect-[4/5] bg-center bg-no-repeat bg-cover rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800" data-alt="Emergency shelter tents in a humanitarian crisis area" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCRt-T5m-2MOkZ9vaAE52ymHSoiKVouWLoxEsk5K5HKTskCu0-BJbrGZlKcY_vIS0UoJwpfUU0Iq4Y9X2fxJIa5gzOboAh_3j1-4cIbEK_HhhIuEIVZoqWhIQTv-DbOhcZpKVvrZhqL-YEVPi5Jhaf0OdJVOucUmTL8Bzo0IyBS6ij__ZWm0Vy2qiXeIosaacndUQYKglwPXIVEDmm5t6kLXadNB9btAUR0dLNLLI_ubpMcZGVFvtyPrG51HhOnMGgaEKjd3QSBt4w");'>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 p-1.5 rounded-full shadow-sm">
+<span class="material-symbols-outlined text-gray-400 text-lg">favorite</span>
+</div>
+</div>
+<div class="px-1">
+<p class="text-gray-900 dark:text-white text-base font-semibold leading-tight truncate">Save the Children</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">category</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs font-medium">Crisis Support</p>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gray-400">location_on</span>
+<p class="text-gray-500 dark:text-gray-400 text-xs truncate">London, UK</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Component -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 pb-safe shadow-lg">
+<div class="flex items-center justify-around h-20 px-4">
+<a class="flex flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined active-tab text-[28px]">explore</span>
+<p class="text-[10px] font-bold uppercase tracking-wide">Discover</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" href="#">
+<span class="material-symbols-outlined text-[28px]">favorite</span>
+<p class="text-[10px] font-bold uppercase tracking-wide">Donations</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" href="#">
+<span class="material-symbols-outlined text-[28px]">insights</span>
+<p class="text-[10px] font-bold uppercase tracking-wide">Impact</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" href="#">
+<span class="material-symbols-outlined text-[28px]">account_circle</span>
+<p class="text-[10px] font-bold uppercase tracking-wide">Profile</p>
+</a>
+</div>
+</nav>
+</body></html>

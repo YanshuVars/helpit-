@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit NGO - Messages</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .ios-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111318] dark:text-white min-h-screen">
+<div class="max-w-[480px] mx-auto bg-white dark:bg-background-dark min-h-screen flex flex-col relative shadow-2xl">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-20 bg-white/80 dark:bg-background-dark/80 ios-blur pt-4 px-4 pb-2">
+<div class="flex items-center justify-between mb-2">
+<button class="text-primary font-medium text-lg flex items-center">
+                    Edit
+                </button>
+<div class="flex gap-4">
+<button class="text-primary">
+<span class="material-symbols-outlined">camera_alt</span>
+</button>
+<button class="text-primary">
+<span class="material-symbols-outlined">edit_square</span>
+</button>
+</div>
+</div>
+<h1 class="text-3xl font-bold tracking-tight mb-3">Messages</h1>
+<!-- Search Bar Component -->
+<div class="pb-2">
+<label class="flex flex-col min-w-40 h-10 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#616e89] flex border-none bg-gray-100 dark:bg-gray-800 items-center justify-center pl-3 rounded-l-lg" data-icon="search">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-gray-100 dark:bg-gray-800 focus:ring-0 h-full placeholder:text-[#616e89] dark:placeholder:text-gray-400 px-2 rounded-r-lg text-base font-normal" placeholder="Search" value=""/>
+</div>
+</label>
+</div>
+</header>
+<!-- Filter Chips Component -->
+<div class="flex gap-2 px-4 py-2 overflow-x-auto hide-scrollbar sticky top-[148px] z-10 bg-white dark:bg-background-dark border-b border-gray-100 dark:border-gray-800">
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary text-white px-4">
+<p class="text-sm font-medium">All</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-4">
+<p class="text-sm font-medium">Unread</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-4">
+<p class="text-sm font-medium text-red-500">Urgent</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-4">
+<p class="text-sm font-medium">Logistics</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-4">
+<p class="text-sm font-medium">Medical</p>
+</div>
+</div>
+<!-- Chat List Section -->
+<main class="flex-1 pb-24">
+<!-- Chat Item: Swipe Hint Variant -->
+<div class="relative overflow-hidden group">
+<!-- Archive Action Background (revealed on swipe) -->
+<div class="absolute inset-0 bg-blue-500 flex items-center justify-end px-6 text-white">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined">archive</span>
+<span class="text-[10px] font-bold">Archive</span>
+</div>
+</div>
+<!-- Foreground Chat Item (offset to show hint) -->
+<div class="relative flex items-center gap-4 bg-white dark:bg-background-dark px-4 min-h-[84px] py-3 -translate-x-12 transition-transform duration-300">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border border-gray-100 dark:border-gray-700" data-alt="Emergency Response Team profile icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD5uppa3cpzkzE53S3bDNnpZMH8ew0htrehL8H-VweOISkpsGS7QO27pU25vTYXvsbMfgJs3Xdyrrtj_Ri7MhIlonC0sS6zoxa1VV0L_VAhpKij6Wul4rdKoNFLL3dXHhQF5uDOtzm13tZaucizHJtTauFuL_07gR4dNLbro_8EwjD4qTA84y1zdZRS-t40H8-BFk-kmVo49qTWPXkLEkncTRIgkaKCtz8volmFAHZ3qfxQJeKfxpCezt63if5DkPvYYdngCilsfto");'></div>
+<div class="absolute bottom-0 right-0 size-4 rounded-full bg-green-500 border-2 border-white dark:border-background-dark"></div>
+</div>
+<div class="flex flex-col justify-center flex-1 min-w-0 border-b border-gray-100 dark:border-gray-800 pb-3">
+<div class="flex justify-between items-baseline mb-0.5">
+<p class="text-[#111318] dark:text-white text-[17px] font-semibold leading-none truncate">Emergency Response Team</p>
+<p class="text-primary text-xs font-medium">10:45 AM</p>
+</div>
+<div class="flex justify-between items-start gap-2">
+<p class="text-[#616e89] dark:text-gray-400 text-[15px] font-normal leading-tight line-clamp-2">The medical supplies have arrived at sector 4. Please confirm receipt.</p>
+<div class="shrink-0 flex items-center justify-center bg-primary rounded-full min-w-[20px] h-5 px-1.5 mt-1">
+<span class="text-white text-[11px] font-bold">3</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Standard Chat Item -->
+<div class="flex items-center gap-4 bg-white dark:bg-background-dark px-4 min-h-[84px] py-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border border-gray-100 dark:border-gray-700" data-alt="Volunteer Sarah Jenkins avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD2519UsdUVyfV03Y6E7U4uI34klZ86_D1RW3EzGmo-vCKUAoshBBjrM2JMBg5_7GzOAX_6faXLjg6NW1aNCKo15DysJNJIzW-UsuB_u-cHSZ0JPUS-tUM0BtGQpFj7QPMQrFcRExln9SpBiqNtkBUgK82XRlu9TAKmZNwQbDLksok7CT_5zbiI1I-tgsSSOLEK3TUEvtkD0E3XHoaHnSKJryWDmz1XFdkXgwg4EiTsx9mbkgogDBi_X37iKo5OzwYvRK9JzN1hwgY");'></div>
+<div class="flex flex-col justify-center flex-1 min-w-0 border-b border-gray-100 dark:border-gray-800 pb-3">
+<div class="flex justify-between items-baseline mb-0.5">
+<p class="text-[#111318] dark:text-white text-[17px] font-semibold leading-none truncate">Sarah Jenkins (Volunteer)</p>
+<p class="text-[#616e89] dark:text-gray-500 text-xs">9:12 AM</p>
+</div>
+<div class="flex justify-between items-start">
+<p class="text-[#616e89] dark:text-gray-400 text-[15px] font-normal leading-tight line-clamp-2">I'm available for the afternoon shift at the warehouse.</p>
+</div>
+</div>
+</div>
+<!-- Urgent Chat Item -->
+<div class="flex items-center gap-4 bg-white dark:bg-background-dark px-4 min-h-[84px] py-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border border-gray-100 dark:border-gray-700" data-alt="Logistics Hub icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCptqcI8fpQt04usn5H1atfwEO0PIjfKZur08fEmIkDus2A4GzkvWA1eVlIHWdKM3hqm4R1WAXjrUATgHa5L2lmR8O6JIW_YnUAuIdyR4fglr7tiUa-JczzLu5USsnu6JCcBiIY1MUeo4nY62YKCrh9Zl_QUWlGAhGMhdcgWhITdNTVLfG-KRB4bgBbTxQmGh9392ipdjoGEhHY4AV0YtJf8oIoJgdg7FF4jd-36k6snVuDBB_2jbdTmbHnoJ0Qd4N8OF0KK8gaALo");'></div>
+<div class="flex flex-col justify-center flex-1 min-w-0 border-b border-gray-100 dark:border-gray-800 pb-3">
+<div class="flex justify-between items-baseline mb-0.5">
+<div class="flex items-center gap-1.5 truncate">
+<span class="size-2 rounded-full bg-red-500 shrink-0"></span>
+<p class="text-[#111318] dark:text-white text-[17px] font-semibold leading-none truncate">Logistics Main Hub</p>
+</div>
+<p class="text-[#616e89] dark:text-gray-500 text-xs">Yesterday</p>
+</div>
+<div class="flex justify-between items-start">
+<p class="text-[#616e89] dark:text-gray-400 text-[15px] font-normal leading-tight line-clamp-2">Roadblock reported on M1 highway. Rerouting delivery trucks...</p>
+<div class="shrink-0 flex items-center justify-center bg-primary rounded-full min-w-[20px] h-5 px-1.5 mt-1">
+<span class="text-white text-[11px] font-bold">1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group Chat Item -->
+<div class="flex items-center gap-4 bg-white dark:bg-background-dark px-4 min-h-[84px] py-3">
+<div class="flex h-14 w-14 shrink-0 relative">
+<div class="absolute top-0 right-0 bg-center bg-no-repeat aspect-square bg-cover rounded-full h-9 w-9 border-2 border-white dark:border-background-dark" data-alt="Team member 1" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCf0kDgynIy-iXP1qbGtLwAc92iN2zrA91X79jVPX5TiE2qpTNWJSgYbXK2z7euDFzB8YS-NQR-STUYz1DufvwiG71M_0oowe0DnBfu3df3ee6fphGPuGjgS96yos2cJoI3dcrYc8326eKQiJOv-YtETe-t9vDt4ImHg-sCEOure_GCEUzzvY8LbELa_GPlCS3mfhEG3Vv2ZIKguif8RSSE_pCAUabepbEftzKrOOHVA1IeJHJLGodUOuIf-mzuuF11YCGXOhR51iA");'></div>
+<div class="absolute bottom-0 left-0 bg-center bg-no-repeat aspect-square bg-cover rounded-full h-9 w-9 border-2 border-white dark:border-background-dark" data-alt="Team member 2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwJEteq8zyU4HFGAcwF7qx6AlIv1Gaz5KYI7cK2-RBiAAnR6rIPAo-Gevz25m1Z62_Beit2Aql8W9HAmYPtp_sDaxUScJhQvl-4GHNlrk_LArI3A1ibH1nereibXZR1UThPYDHxXtClyrZUM8tiho23IrAH3gamn05nGzav2FT0SmNrWQdB7_KinWa8DbrXrG5G-5EyYU_fhbraEy7JdTB83ZaUcjCXi4YqQwSSMI0uoFEvbygjUObhYFs8aIWlNnRSteeedOlwiA");'></div>
+</div>
+<div class="flex flex-col justify-center flex-1 min-w-0 border-b border-gray-100 dark:border-gray-800 pb-3">
+<div class="flex justify-between items-baseline mb-0.5">
+<p class="text-[#111318] dark:text-white text-[17px] font-semibold leading-none truncate">Medical Field Team B</p>
+<p class="text-[#616e89] dark:text-gray-500 text-xs">Tuesday</p>
+</div>
+<div class="flex justify-between items-start">
+<p class="text-[#616e89] dark:text-gray-400 text-[15px] font-normal leading-tight line-clamp-2"><span class="font-medium text-[#111318] dark:text-white">Marcus:</span> We've set up the tent near the stadium entrance.</p>
+</div>
+</div>
+</div>
+<!-- Another Chat Item -->
+<div class="flex items-center gap-4 bg-white dark:bg-background-dark px-4 min-h-[84px] py-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border border-gray-100 dark:border-gray-700" data-alt="Dr. Aris Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCtBkhBo55wR05Lk6kgrB_y0q29943XpvjkEY6gZxItOPL5M1XEU9rwDVVmrfuqQV4iniqNO95Za9vcWCc3WPVlDvUbO9RCXPa0xgzDogMCr8SjM5dHWEq5jjWewp-QY44FUt9KzoudPj0w-vgv2aWgPDwEHNapugVIFZ8ANbE9twynOEENX_A0q-wz-ACRZXC1USZRNR9hSNhHbO7ftbvFqfLjraiD_6oOIfuNGpQbZYoSiRZPf-jRgF4UAYGaK_R__cy1nEcdwds");'></div>
+<div class="flex flex-col justify-center flex-1 min-w-0 border-b border-gray-100 dark:border-gray-800 pb-3">
+<div class="flex justify-between items-baseline mb-0.5">
+<p class="text-[#111318] dark:text-white text-[17px] font-semibold leading-none truncate">Dr. Aris (Coordinator)</p>
+<p class="text-[#616e89] dark:text-gray-500 text-xs">Monday</p>
+</div>
+<div class="flex justify-between items-start">
+<p class="text-[#616e89] dark:text-gray-400 text-[15px] font-normal leading-tight line-clamp-2">Please review the updated vaccination schedule for next week.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (iOS style) -->
+<nav class="fixed bottom-0 w-full max-w-[480px] bg-white/95 dark:bg-background-dark/95 ios-blur border-t border-gray-200 dark:border-gray-800 pt-2 pb-8 px-6 flex justify-between items-center z-30">
+<button class="flex flex-col items-center gap-1 text-[#616e89] dark:text-gray-500">
+<span class="material-symbols-outlined text-[28px]">dashboard</span>
+<span class="text-[10px] font-medium">Status</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#616e89] dark:text-gray-500">
+<span class="material-symbols-outlined text-[28px]">call</span>
+<span class="text-[10px] font-medium">Calls</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#616e89] dark:text-gray-500">
+<span class="material-symbols-outlined text-[28px]">explore</span>
+<span class="text-[10px] font-medium">Map</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<div class="relative">
+<span class="material-symbols-outlined text-[28px] fill-current">chat_bubble</span>
+<span class="absolute -top-1 -right-1 size-4 bg-red-500 border-2 border-white dark:border-background-dark rounded-full"></span>
+</div>
+<span class="text-[10px] font-bold">Chats</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#616e89] dark:text-gray-500">
+<span class="material-symbols-outlined text-[28px]">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</button>
+</nav>
+<!-- iOS Home Bar Indicator -->
+<div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-black/20 dark:bg-white/20 rounded-full z-40"></div>
+</div>
+</body></html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donation History List</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden max-w-[430px] mx-auto bg-white dark:bg-background-dark shadow-2xl">
+<!-- TopAppBar -->
+<div class="sticky top-0 z-10 flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="text-[#111318] dark:text-white flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Donation History</h2>
+</div>
+<!-- SearchBar -->
+<div class="px-4 py-3 bg-white dark:bg-background-dark">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full">
+<div class="text-[#616e89] flex border-none bg-[#f0f1f4] dark:bg-gray-800 items-center justify-center pl-4 rounded-l-xl border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111318] dark:text-white focus:outline-0 focus:ring-0 border-none bg-[#f0f1f4] dark:bg-gray-800 focus:border-none h-full placeholder:text-[#616e89] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Search NGO or date" value=""/>
+</div>
+</label>
+</div>
+<!-- Filters (Chips) -->
+<div class="flex gap-3 px-4 py-2 overflow-x-auto no-scrollbar bg-white dark:bg-background-dark">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/10 border border-primary/20 px-4">
+<p class="text-primary text-sm font-semibold leading-normal">All Time</p>
+<span class="material-symbols-outlined text-primary text-[18px]">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0f1f4] dark:bg-gray-800 px-4">
+<p class="text-[#111318] dark:text-gray-300 text-sm font-medium leading-normal">NGO Type</p>
+<span class="material-symbols-outlined text-[#111318] dark:text-gray-300 text-[18px]">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#f0f1f4] dark:bg-gray-800 px-4">
+<p class="text-[#111318] dark:text-gray-300 text-sm font-medium leading-normal">Category</p>
+<span class="material-symbols-outlined text-[#111318] dark:text-gray-300 text-[18px]">keyboard_arrow_down</span>
+</button>
+</div>
+<!-- Scrollable List -->
+<div class="flex flex-col gap-1 p-2 bg-background-light dark:bg-background-dark min-h-screen">
+<!-- Card 1 -->
+<div class="p-2">
+<div class="flex items-center justify-between gap-4 rounded-lg bg-white dark:bg-gray-900 p-4 shadow-sm border border-gray-50 dark:border-gray-800 cursor-pointer active:scale-[0.98] transition-transform">
+<div class="size-14 bg-center bg-no-repeat bg-cover rounded-lg flex-shrink-0" data-alt="Save the Children organization logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChzdRfUzxSbEUAO2JB_2SGwkaDe-XWKWGIsGEl1jH-AZQT3pI8C6TgNOSeSWqBO3Q3XqyB4CY0p01D1L7T0USlWMnyZk_3Iv5hP7BTWJTd9CEvcjZQQpvHyvCkbWp493cxMCqGxQP1vubdNFVlklwE-70cFT5VIZBOL8Sq7-3OL6JxgFgwPuXqQtbdSPTkcAc6K7Vcgv4A0qYLnTUgKau2HM3h4oTjc3E39nVLKIEmDMphs8zrFnxeShFE7XgKEOOlahEbnqCcp5w");'></div>
+<div class="flex flex-col gap-0.5 flex-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-[10px] font-bold text-green-700 dark:text-green-400 uppercase tracking-wider">Completed</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-bold leading-tight">Save the Children</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal">Oct 12, 2023 • Charity</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<p class="text-primary text-lg font-bold leading-tight">$50.00</p>
+<span class="material-symbols-outlined text-gray-300 dark:text-gray-600">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="p-2">
+<div class="flex items-center justify-between gap-4 rounded-lg bg-white dark:bg-gray-900 p-4 shadow-sm border border-gray-50 dark:border-gray-800 cursor-pointer active:scale-[0.98] transition-transform">
+<div class="size-14 bg-center bg-no-repeat bg-cover rounded-lg flex-shrink-0" data-alt="World Wildlife Fund panda logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD6cC3gOHnejg14H4QzbzwsOVsuyYODIMOVI8akMYoWTv4sMsgMl9wNGsZX66gnKTWA1OEwBFLvoG36v5G4JxhrokDW7YU1A-TuEheokxg0GeEOrpJsM3uhNwUQ2JwmjRrEbnJDDXrtpvDrf9_cjFDxwgtrOUpsApY6as08u4RsHSekQa2LVI1hqJKBWq7T4A25ie6heGUEIeZe-3DqiQJaiAxgBQOtO5b-Kj2bs81aofCSnZKXjMq5YcSVSVbcHMeFBIVE2UJVucc");'></div>
+<div class="flex flex-col gap-0.5 flex-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-[10px] font-bold text-green-700 dark:text-green-400 uppercase tracking-wider">Completed</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-bold leading-tight">World Wildlife Fund</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal">Sep 28, 2023 • Wildlife</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<p class="text-primary text-lg font-bold leading-tight">$25.00</p>
+<span class="material-symbols-outlined text-gray-300 dark:text-gray-600">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="p-2">
+<div class="flex items-center justify-between gap-4 rounded-lg bg-white dark:bg-gray-900 p-4 shadow-sm border border-gray-50 dark:border-gray-800 cursor-pointer active:scale-[0.98] transition-transform">
+<div class="size-14 bg-center bg-no-repeat bg-cover rounded-lg flex-shrink-0" data-alt="Red Cross humanitarian logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAth2LH91gXGedKu5GN-HjNB-k96hfCgX8KTtSAdBCyGl3m3ZIAi2iu07RORhzdbgFYBKvLpoxBGV6cjxJX3L7DJCcAjTExBZJfeVgLnBdM5miaUH7PxOhAs4lkWADjEeplSZxCTend8YCy2NZ36SU4vxSOsgLU3eOsLtnT6Ej0mNtO1Md42cp_-qoc7Y3AS5Q-VEgFFFIKRotEgYI4fiCOACEpBmSVPHRG6fcQ76koQLT1nwCaCBQq2iSQmS3bEL2ORrMmx3XisA8");'></div>
+<div class="flex flex-col gap-0.5 flex-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-[10px] font-bold text-green-700 dark:text-green-400 uppercase tracking-wider">Completed</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-bold leading-tight">American Red Cross</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal">Sep 15, 2023 • Disaster Relief</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<p class="text-primary text-lg font-bold leading-tight">$100.00</p>
+<span class="material-symbols-outlined text-gray-300 dark:text-gray-600">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="p-2">
+<div class="flex items-center justify-between gap-4 rounded-lg bg-white dark:bg-gray-900 p-4 shadow-sm border border-gray-50 dark:border-gray-800 cursor-pointer active:scale-[0.98] transition-transform">
+<div class="size-14 bg-center bg-no-repeat bg-cover rounded-lg flex-shrink-0" data-alt="Charity Water logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAfV7ZC_wyulIXmDyclrctvyMPw1nAL7B9O19b3Qu1BnWwAWvpq1CKRA9ac74z3RZu2CqrvqB4WPENz4d2vNZCnjHIIrBGlfijcghTIqt-ehekAKC4g6w_jW4uot5CV9ohT2dLVr_ytJ8aqQCXJ_2lFHsJ0ywFceqwRPcDRB5lEu0Nfd6hXBgFbMBZ0DHXo_V0Q0VZMVSHltZox80PlZaPJtp5HAC_urSiBu3KC9JWKqYeYsESk39mFuB-kD3m0BkP61hnwFJh_qdU");'></div>
+<div class="flex flex-col gap-0.5 flex-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-[10px] font-bold text-green-700 dark:text-green-400 uppercase tracking-wider">Completed</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-bold leading-tight">Charity: Water</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal">Aug 30, 2023 • Clean Water</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<p class="text-primary text-lg font-bold leading-tight">$15.00</p>
+<span class="material-symbols-outlined text-gray-300 dark:text-gray-600">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="p-2">
+<div class="flex items-center justify-between gap-4 rounded-lg bg-white dark:bg-gray-900 p-4 shadow-sm border border-gray-50 dark:border-gray-800 cursor-pointer active:scale-[0.98] transition-transform">
+<div class="size-14 bg-center bg-no-repeat bg-cover rounded-lg flex-shrink-0" data-alt="Feeding America logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD0Bm5EZZ0FWj374pAxc0PhY6XsZyKKj8HkRNNrYwFuLbUkypmlgqHgnIDAJeL0aF-y7yjhpq4VpKHOJ_Jf9z58EFSZufw2SONNEMqfUYJaKzcdpCZ04E3RBU1FUlNP6Q_9PYUdLnLI2JEYE12OpzzHotdpR_32Q10Num5sSZ_LE6X09aWL-dah-iAa2SuWPVIGaV5ptruEyXKOnypp4o9W6eOuDZPeCkAvrKjcZ1Mtq8g__fkFGxOPDF858Ek-y4eZr3UxkWBD4W4");'></div>
+<div class="flex flex-col gap-0.5 flex-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-[10px] font-bold text-green-700 dark:text-green-400 uppercase tracking-wider">Completed</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-bold leading-tight">Feeding America</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal">Aug 12, 2023 • Hunger Relief</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<p class="text-primary text-lg font-bold leading-tight">$40.00</p>
+<span class="material-symbols-outlined text-gray-300 dark:text-gray-600">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Pagination/End of list indicator -->
+<div class="flex flex-col items-center justify-center py-10 opacity-40">
+<span class="material-symbols-outlined text-4xl mb-2">volunteer_activism</span>
+<p class="text-sm font-medium">You've reached the end of your history</p>
+<p class="text-xs">Thank you for your generosity!</p>
+</div>
+</div>
+<!-- Bottom Safety Area -->
+<div class="h-10 bg-background-light dark:bg-background-dark"></div>
+</div>
+</body></html>

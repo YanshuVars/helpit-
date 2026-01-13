@@ -366,10 +366,15 @@ Reports.reported_by > users.user_id
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                              FRONTEND LAYER                                  │
-│                     Flutter (FlutterFlow → Pure Flutter)                    │
-│         ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               │
-│         │   NGO App    │  │ Volunteer App│  │  Donor App   │               │
-│         └──────────────┘  └──────────────┘  └──────────────┘               │
+│  ┌─────────────────────────────────┐  ┌─────────────────────────────────┐  │
+│  │         WEB APP (Next.js)        │  │    ANDROID APP (React Native)   │  │
+│  │  • Server-Side Rendering         │  │  • Native Android Experience    │  │
+│  │  • App Router                    │  │  • Shared Components            │  │
+│  │  • Tailwind CSS                  │  │  • Offline Support              │  │
+│  │  • TypeScript                    │  │  • Push Notifications           │  │
+│  └─────────────────────────────────┘  └─────────────────────────────────┘  │
+│                                                                              │
+│  User Types: Individual | Volunteer | NGO                                   │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼

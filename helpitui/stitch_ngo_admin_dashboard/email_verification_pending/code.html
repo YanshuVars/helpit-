@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>Email Verification Pending</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="flex flex-col min-h-screen max-w-[480px] mx-auto bg-white dark:bg-black overflow-x-hidden">
+<!-- Header Spacer for iOS Notch -->
+<div class="h-12 w-full"></div>
+<!-- Main Illustration Section -->
+<div class="flex w-full grow bg-white dark:bg-black @container p-8">
+<div class="w-full flex flex-col items-center justify-center">
+<div class="w-full max-w-[280px] aspect-square rounded-full bg-primary/10 flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-primary" style="font-size: 120px;">
+                        mark_email_unread
+                    </span>
+</div>
+</div>
+</div>
+<!-- Headline -->
+<div class="relative flex flex-col bg-white dark:bg-black">
+<h1 class="text-[#181111] dark:text-white tracking-tight text-[32px] font-bold leading-tight px-6 text-center pb-2 pt-4">
+                Check your inbox
+            </h1>
+</div>
+<!-- Body Text -->
+<div class="relative flex flex-col bg-white dark:bg-black">
+<p class="text-[#4e3a3a] dark:text-gray-300 text-base font-normal leading-relaxed pb-8 pt-2 px-8 text-center">
+                We've sent a verification link to <span class="font-bold text-[#181111] dark:text-white">sarah.j@example.com</span>. Please click the link to activate your Helpit account and start making an impact.
+            </p>
+</div>
+<!-- Timer Component (Adjusted for resend context) -->
+<div class="relative flex flex-col bg-white dark:bg-black px-8">
+<div class="flex items-center justify-center gap-2 py-4">
+<p class="text-[#181111] dark:text-gray-400 text-sm font-normal">Resend available in</p>
+<div class="flex gap-1 items-center">
+<div class="flex h-8 items-center justify-center rounded-lg px-2 bg-background-light dark:bg-primary/20">
+<p class="text-primary text-sm font-bold leading-tight">00:59</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Primary Action Button -->
+<div class="relative flex flex-col bg-white dark:bg-black px-6 py-4">
+<div class="flex flex-col gap-3">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 w-full bg-primary text-white text-base font-bold leading-normal tracking-wide shadow-lg shadow-primary/20">
+<span class="truncate">Open Mail App</span>
+</button>
+<!-- Secondary/Disabled Button -->
+<button class="flex min-w-[84px] cursor-not-allowed items-center justify-center overflow-hidden rounded-xl h-14 px-5 w-full bg-background-light dark:bg-white/5 text-[#a19595] text-base font-bold leading-normal">
+<span class="truncate">Resend link</span>
+</button>
+</div>
+</div>
+<!-- Support Link -->
+<div class="relative flex flex-col bg-white dark:bg-black pb-12">
+<p class="text-[#a19595] text-sm font-normal leading-normal px-8 text-center pt-4">
+                Can't find the email? Check your spam folder or <a class="text-primary font-bold" href="#">Contact Support</a>
+</p>
+</div>
+<!-- iOS Home Indicator Spacer -->
+<div class="h-8 w-full"></div>
+</div>
+</body></html>

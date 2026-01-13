@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donor Details Form</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .ios-toggle:checked + .ios-toggle-label {
+            background-color: #2463eb;
+        }
+        .ios-toggle:checked + .ios-toggle-label::after {
+            transform: translateX(1.25rem);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display transition-colors duration-300">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-gray-100 dark:border-gray-800 px-4 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-bold text-gray-900 dark:text-white leading-tight">Donor Details</h1>
+</div>
+<div class="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
+            Step 2 of 3
+        </div>
+</header>
+<!-- Content Area -->
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- Page Indicator -->
+<div class="flex w-full flex-row items-center justify-center gap-3 py-6">
+<div class="h-1.5 w-8 rounded-full bg-primary/20"></div>
+<div class="h-1.5 w-12 rounded-full bg-primary"></div>
+<div class="h-1.5 w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+</div>
+<!-- Headline -->
+<div class="px-4">
+<h2 class="text-gray-900 dark:text-white text-2xl font-bold leading-tight tracking-tight">Personal Information</h2>
+<p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Please provide details for your tax-deductible receipt.</p>
+</div>
+<!-- Form Fields -->
+<div class="mt-6 space-y-2">
+<!-- Full Name -->
+<div class="px-4">
+<label class="flex flex-col w-full">
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium pb-2 ml-1">Full Name</p>
+<input class="form-input flex w-full rounded-xl text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-primary/20 focus:border-primary h-14 placeholder:text-gray-400 p-4 text-base transition-all" placeholder="Enter your legal name" type="text"/>
+</label>
+</div>
+<!-- Email -->
+<div class="px-4">
+<label class="flex flex-col w-full">
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium pb-2 ml-1">Email Address</p>
+<input class="form-input flex w-full rounded-xl text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-primary/20 focus:border-primary h-14 placeholder:text-gray-400 p-4 text-base transition-all" placeholder="john@example.com" type="email"/>
+</label>
+</div>
+<!-- Phone -->
+<div class="px-4">
+<label class="flex flex-col w-full">
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium pb-2 ml-1">Phone Number</p>
+<div class="relative">
+<input class="form-input flex w-full rounded-xl text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-primary/20 focus:border-primary h-14 placeholder:text-gray-400 p-4 text-base transition-all" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+</label>
+</div>
+<!-- PAN Number -->
+<div class="px-4 pt-4">
+<div class="p-4 rounded-2xl bg-primary/5 border border-primary/10">
+<label class="flex flex-col w-full">
+<div class="flex justify-between items-center pb-2">
+<p class="text-gray-900 dark:text-white text-sm font-semibold ml-1">PAN Number</p>
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary px-2 py-0.5 bg-primary/10 rounded">Required for 80G</span>
+</div>
+<input class="form-input flex w-full rounded-xl text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-primary/20 focus:border-primary h-14 placeholder:text-gray-400 p-4 text-base uppercase transition-all" placeholder="ABCDE1234F" type="text"/>
+<p class="text-gray-500 dark:text-gray-400 text-xs mt-2 ml-1 leading-relaxed">
+                            A valid PAN is mandatory to issue a tax-deductible certificate under Section 80G of the Income Tax Act.
+                        </p>
+</label>
+</div>
+</div>
+<!-- Anonymous Toggle -->
+<div class="px-4 pt-6">
+<div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-gray-600 dark:text-gray-400">
+<span class="material-symbols-outlined">visibility_off</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-900 dark:text-white">Donate Anonymously</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">Hide your identity from the public</p>
+</div>
+</div>
+<div class="relative inline-block w-11 h-6 align-middle select-none transition duration-200 ease-in">
+<input class="ios-toggle absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer hidden" id="anonymous" name="anonymous" type="checkbox"/>
+<label class="ios-toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 dark:bg-gray-600 cursor-pointer transition-colors duration-200 ease-in after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all" for="anonymous"></label>
+</div>
+</div>
+</div>
+<!-- Optional Message -->
+<div class="px-4 pt-4">
+<label class="flex flex-col w-full">
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium pb-2 ml-1">Message for NGO (Optional)</p>
+<textarea class="form-textarea flex w-full rounded-xl text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-primary/20 focus:border-primary min-h-[100px] placeholder:text-gray-400 p-4 text-base resize-none transition-all" placeholder="Say something encouraging..."></textarea>
+</label>
+</div>
+</div>
+</main>
+<!-- Sticky Footer Button -->
+<footer class="fixed bottom-0 left-0 right-0 p-4 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg border-t border-gray-100 dark:border-gray-800">
+<div class="max-w-md mx-auto flex flex-col gap-3">
+<div class="flex justify-between items-center px-1">
+<span class="text-gray-500 dark:text-gray-400 text-sm">Donation Amount</span>
+<span class="text-gray-900 dark:text-white font-bold text-lg">$250.00</span>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                Continue to Payment
+                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</footer>
+</body></html>

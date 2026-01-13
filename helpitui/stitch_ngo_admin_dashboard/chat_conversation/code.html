@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Chat Conversation - Helpit NGO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chat-scroll {
+            height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<!-- Top Navigation Bar -->
+<div class="sticky top-0 z-50 flex items-center bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 p-4 pb-2 justify-between">
+<div class="flex items-center gap-3">
+<div class="text-[#111318] dark:text-white flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 shrink-0 border border-gray-100" data-alt="professional portrait of a smiling volunteer coordinator" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBbO8PWiKaMAav6EpmUNecmzU2hB-t-51MccIMJqfaSfCbmqn4yhSsxThV2MDpIhgd2v1bOu_jMpE1a6Yto7Fv8NpdYHMon1G1yQ-bbP1q-dvP0rjxchCb1q40HqvObNRY4T0pxMR3zBTA7pOINmx8mVRxmprz3UDonaZIxPjYHH545haDKtLiE5dix6P5bgwb7ZB-8wC8hDZ90a4ubDUbQVwaLVp1TS3saArLJzxcmebnxufLC7YtybZ-1-UQE92_x7ow-wDv8edg");'></div>
+<div class="flex flex-col">
+<h2 class="text-[#111318] dark:text-white text-base font-bold leading-tight tracking-[-0.015em]">Sarah - Volunteer Coordinator</h2>
+<p class="text-green-500 text-xs font-medium leading-normal">Active now</p>
+</div>
+</div>
+</div>
+<div class="flex w-12 items-center justify-end">
+<button class="flex cursor-pointer items-center justify-center rounded-xl h-10 w-10 bg-transparent text-[#111318] dark:text-white">
+<span class="material-symbols-outlined">info</span>
+</button>
+</div>
+</div>
+<!-- Message Thread Container -->
+<div class="chat-scroll flex flex-col p-4 space-y-2">
+<!-- Date Separator -->
+<div class="flex justify-center my-4">
+<span class="text-[#616e89] dark:text-slate-400 text-xs font-semibold uppercase tracking-wider bg-gray-200/50 dark:bg-slate-800 px-3 py-1 rounded-full">Yesterday</span>
+</div>
+<!-- Received Message -->
+<div class="flex items-end gap-2 max-w-[85%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 mb-1" data-alt="Sarah portrait icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAtEGL5Fl0uj_7ZUPiz0vofNegY9h_XAKLhgItrbPsbQD2d0D1CwkZfXcPo_5E_dNoiFuIIlMFcnesIrW84qRD4S0MFFVT6OsnbNCmbc6v1HSi70suM1qBCTKSmQDLbXASYI8EKfR3JQGZ6NDvUV4CdkrXRKodaCcxiqnpZm4JRL9xued8xc6w9gmxcDTvtd2W-yXkq5WeroYXumd6H-pMSBcOfraDZ9HyyQ_2xzAMK_SKBg8deI5SwBYS3n7g4agaYbziIKEbdJhI");'></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="rounded-2xl rounded-bl-none px-4 py-3 bg-white dark:bg-slate-800 text-[#111318] dark:text-slate-100 shadow-sm border border-gray-100 dark:border-slate-700">
+<p class="text-[15px] leading-relaxed">Hi there! I'm here to help you with the registration process for the food drive. Do you have any questions?</p>
+</div>
+<p class="text-[#616e89] dark:text-slate-500 text-[10px] ml-1">10:45 AM</p>
+</div>
+</div>
+<!-- Sent Message -->
+<div class="flex items-end gap-2 self-end max-w-[85%] justify-end">
+<div class="flex flex-col gap-1 items-end">
+<div class="rounded-2xl rounded-br-none px-4 py-3 bg-primary text-white shadow-sm">
+<p class="text-[15px] leading-relaxed">Hello Sarah! Yes, I was wondering what documents are required for the application?</p>
+</div>
+<div class="flex items-center gap-1 mr-1">
+<p class="text-[#616e89] dark:text-slate-500 text-[10px]">10:46 AM</p>
+<span class="material-symbols-outlined text-primary text-[14px]">done_all</span>
+</div>
+</div>
+</div>
+<!-- Date Separator -->
+<div class="flex justify-center my-4">
+<span class="text-[#616e89] dark:text-slate-400 text-xs font-semibold uppercase tracking-wider bg-gray-200/50 dark:bg-slate-800 px-3 py-1 rounded-full">Today</span>
+</div>
+<!-- Received Message -->
+<div class="flex items-end gap-2 max-w-[85%]">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 mb-1" data-alt="Sarah portrait icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB45NX8qs0rT0dZPcJDSRz1tYT2iKy3xTgAea5TLc6V-jV2AjxO65nqEYoFWrgTmTKkCcjda8BQqXqAREQ2L0hUVGfmjNia_YJeBpiB28bR9XOTEGPKHmmLVkKf-jvGzNPW3NZEom90S7_-_wi7eQNWkYfhn-eZDlGIqG6d93VpBa0_z2SD4LxJLIGzf_AZ3LziRLUjdT7bGufemv59yubkKX3b30SbaYdMi17fYQJMGhMR4ojEYGT2Rsa4YqvcVmeVj1BmsiDjWgQ");'></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="rounded-2xl rounded-bl-none px-4 py-3 bg-white dark:bg-slate-800 text-[#111318] dark:text-slate-100 shadow-sm border border-gray-100 dark:border-slate-700">
+<p class="text-[15px] leading-relaxed">You'll just need a photo ID and proof of residence. I've attached a PDF with the full list below!</p>
+</div>
+<p class="text-[#616e89] dark:text-slate-500 text-[10px] ml-1">09:12 AM</p>
+</div>
+</div>
+<!-- Attachment Received -->
+<div class="flex items-end gap-2 max-w-[85%]">
+<div class="w-8 shrink-0"></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="rounded-2xl px-3 py-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 flex items-center gap-3 w-full cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-750 transition-colors">
+<div class="bg-red-50 dark:bg-red-900/30 p-2 rounded-lg">
+<span class="material-symbols-outlined text-red-500">picture_as_pdf</span>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-sm font-semibold truncate dark:text-slate-200">Required_Docs.pdf</span>
+<span class="text-xs text-gray-500">1.2 MB • PDF</span>
+</div>
+</div>
+<p class="text-[#616e89] dark:text-slate-500 text-[10px] ml-1">09:12 AM</p>
+</div>
+</div>
+<!-- Sent Message (Typing Indicator/Placeholder) -->
+<div class="flex items-end gap-2 self-end max-w-[85%] justify-end">
+<div class="flex flex-col gap-1 items-end">
+<div class="rounded-2xl rounded-br-none px-4 py-3 bg-primary text-white shadow-sm">
+<p class="text-[15px] leading-relaxed">Perfect, thank you! I'll prepare those now.</p>
+</div>
+<div class="flex items-center gap-1 mr-1">
+<p class="text-[#616e89] dark:text-slate-500 text-[10px]">09:15 AM</p>
+<span class="material-symbols-outlined text-primary text-[14px]">done_all</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Input Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 p-3 pb-8 md:pb-3">
+<div class="flex items-center gap-2 max-w-4xl mx-auto">
+<button class="flex items-center justify-center w-10 h-10 text-primary hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+<div class="flex-1 relative">
+<input class="w-full bg-gray-100 dark:bg-slate-800 border-none rounded-full px-4 py-2.5 text-[15px] focus:ring-2 focus:ring-primary/50 text-[#111318] dark:text-white placeholder:text-gray-500" placeholder="Type a message..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+<span class="material-symbols-outlined text-[20px]">sticky_note_2</span>
+</button>
+</div>
+<button class="flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full shadow-md hover:bg-blue-600 active:scale-95 transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</body></html>

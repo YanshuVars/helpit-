@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>App Settings - Helpit NGO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .ios-list-row:active {
+            background-color: rgba(0,0,0,0.05);
+        }
+        .dark .ios-list-row:active {
+            background-color: rgba(255,255,255,0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen pb-24">
+<!-- Fixed Top Bar -->
+<div class="sticky top-0 z-50 w-full bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="text-[#111318] dark:text-white flex size-12 shrink-0 items-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</div>
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Settings</h2>
+</div>
+</div>
+<!-- Main Content -->
+<main class="max-w-md mx-auto">
+<!-- Profile Header -->
+<div class="flex p-4 mt-2">
+<div class="flex w-full flex-col gap-4">
+<div class="flex gap-4 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-20 w-20 border-2 border-primary/20" data-alt="Profile photo of Alex Coordinator" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBYHKq7RUa9958KqmvMQ9rUJhrMrpIp4X3VJkel9O0LitFMYPUMsC5u_JgdgBgsp1-8fWTXyJZ_-dJQbWKjRwpfVxd_mVpbfoIQyEFgfb4hHBqEWYy6zogmXoI2MyzPFMs2-JAfvF8z5e0zXYx8JszFvgPuQ_utfj9qjwLfnYp8nJ6kov2NU8VLyybydGhFN_rqrW8qSWIwio1Vb41Gs-vL_XBvcRkPM5HRYzwJ7kLbPgbC0tLA_RypOvgK-EfxEid1XNIyXlz4gNQ");'>
+</div>
+<div class="flex flex-col">
+<p class="text-[#111318] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">Alex Coordinator</p>
+<p class="text-primary text-sm font-medium leading-normal">Helpit NGO Coordination</p>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal">Member since Oct 2023</p>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 mb-4 mt-2">
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2 ml-1">General</p>
+<div class="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
+<!-- Account -->
+<div class="ios-list-row flex items-center gap-4 px-4 py-4 justify-between border-b border-gray-50 dark:border-gray-800 cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-medium leading-normal flex-1">Account</p>
+</div>
+<div class="shrink-0 text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<!-- Privacy -->
+<div class="ios-list-row flex items-center gap-4 px-4 py-4 justify-between border-b border-gray-50 dark:border-gray-800 cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">shield_person</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-medium leading-normal flex-1">Privacy</p>
+</div>
+<div class="shrink-0 text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<!-- Notifications -->
+<div class="ios-list-row flex items-center gap-4 px-4 py-4 justify-between cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">notifications</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-medium leading-normal flex-1">Notifications</p>
+</div>
+<div class="shrink-0 flex items-center gap-2">
+<span class="text-xs text-gray-400">Enabled</span>
+<span class="material-symbols-outlined text-gray-400">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 mb-4">
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-2 ml-1">Support</p>
+<div class="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800">
+<!-- Help & FAQ -->
+<div class="ios-list-row flex items-center gap-4 px-4 py-4 justify-between border-b border-gray-50 dark:border-gray-800 cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">help_center</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-medium leading-normal flex-1">Help &amp; FAQ</p>
+</div>
+<div class="shrink-0 text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<!-- About -->
+<div class="ios-list-row flex items-center gap-4 px-4 py-4 justify-between cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-lg bg-primary/10 shrink-0 size-10">
+<span class="material-symbols-outlined">info</span>
+</div>
+<p class="text-[#111318] dark:text-white text-base font-medium leading-normal flex-1">About Helpit</p>
+</div>
+<div class="shrink-0 text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="px-4 mt-8">
+<button class="w-full flex items-center justify-center gap-2 bg-white dark:bg-gray-900 text-red-600 dark:text-red-400 font-semibold py-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </button>
+<p class="text-center text-[#616e89] dark:text-gray-500 text-xs mt-6 mb-12">Version 2.4.1 (Build 882)</p>
+</div>
+</main>
+<!-- Fixed Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 px-6 py-3 flex justify-between items-center z-50">
+<div class="flex flex-col items-center gap-1 text-gray-400">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Dashboard</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-gray-400">
+<span class="material-symbols-outlined">volunteer_activism</span>
+<span class="text-[10px] font-medium">Missions</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-gray-400">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-medium">Map</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-[10px] font-bold">Settings</span>
+</div>
+</nav>
+</body></html>

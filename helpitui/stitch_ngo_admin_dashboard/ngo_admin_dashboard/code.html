@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit NGO Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#111318] dark:text-gray-100 min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center p-4 justify-between max-w-md mx-auto">
+<div class="flex items-center gap-2">
+<div class="text-primary flex size-10 items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-2xl">person_heart</span>
+</div>
+<h2 class="text-[#111318] dark:text-white text-xl font-bold leading-tight tracking-tight">Helpit</h2>
+</div>
+<div class="flex items-center gap-2">
+<button class="relative flex size-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-[#111318] dark:text-white">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-md mx-auto px-4 py-6 space-y-6">
+<!-- Quick Actions Horizontal Scroll -->
+<section>
+<h3 class="text-[#111318] dark:text-white text-lg font-bold leading-tight mb-3">Quick Actions</h3>
+<div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary text-white px-4 shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-xl">add_circle</span>
+<span class="text-sm font-semibold leading-normal">Create Request</span>
+</button>
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[#111318] dark:text-white px-4 shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-xl">calendar_add_on</span>
+<span class="text-sm font-semibold leading-normal">Create Event</span>
+</button>
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-[#111318] dark:text-white px-4 shadow-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-xl">file_download</span>
+<span class="text-sm font-semibold leading-normal">Export Report</span>
+</button>
+</div>
+</section>
+<!-- Stats Grid -->
+<section>
+<h3 class="text-[#111318] dark:text-white text-lg font-bold leading-tight mb-3">Performance</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="flex items-center justify-between">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">Active Requests</p>
+<span class="material-symbols-outlined text-primary text-xl">pending_actions</span>
+</div>
+<p class="text-[#111318] dark:text-white tracking-tight text-3xl font-bold leading-tight">24</p>
+<p class="text-[#07883d] text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                        +5% this week
+                    </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="flex items-center justify-between">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">Volunteers</p>
+<span class="material-symbols-outlined text-primary text-xl">groups</span>
+</div>
+<p class="text-[#111318] dark:text-white tracking-tight text-3xl font-bold leading-tight">158</p>
+<p class="text-[#07883d] text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                        +12% this week
+                    </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="flex items-center justify-between">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">Donations</p>
+<span class="material-symbols-outlined text-primary text-xl">payments</span>
+</div>
+<p class="text-[#111318] dark:text-white tracking-tight text-3xl font-bold leading-tight">$4,200</p>
+<p class="text-[#07883d] text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                        +8% this week
+                    </p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="flex items-center justify-between">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-medium leading-normal">Events</p>
+<span class="material-symbols-outlined text-primary text-xl">event_available</span>
+</div>
+<p class="text-[#111318] dark:text-white tracking-tight text-3xl font-bold leading-tight">3</p>
+<p class="text-gray-500 text-xs font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">remove</span>
+                        No change
+                    </p>
+</div>
+</div>
+</section>
+<!-- Recent Activity -->
+<section>
+<div class="flex items-center justify-between mb-3">
+<h3 class="text-[#111318] dark:text-white text-lg font-bold leading-tight">Recent Activity</h3>
+<button class="text-primary text-sm font-semibold">View all</button>
+</div>
+<div class="rounded-xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+<div class="divide-y divide-gray-100 dark:divide-gray-700">
+<!-- Activity Item 1 -->
+<div class="flex items-start gap-4 p-4">
+<div class="size-10 shrink-0 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">person_add</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-[#111318] dark:text-white">John Doe joined as a volunteer</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Assigned to Local Kitchen Project</p>
+<p class="text-[10px] text-gray-400 uppercase mt-1">2m ago</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-start gap-4 p-4">
+<div class="size-10 shrink-0 rounded-full bg-orange-50 dark:bg-orange-900/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-500">priority_high</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-[#111318] dark:text-white">Food Drive marked as Urgent</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Updated by Admin Sarah</p>
+<p class="text-[10px] text-gray-400 uppercase mt-1">15m ago</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex items-start gap-4 p-4">
+<div class="size-10 shrink-0 rounded-full bg-green-50 dark:bg-green-900/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-green-500">paid</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-[#111318] dark:text-white">Donation received: $50.00</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Anonymous donor via Stripe</p>
+<p class="text-[10px] text-gray-400 uppercase mt-1">1h ago</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-background-dark/90 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 pb-safe">
+<div class="max-w-md mx-auto flex items-center justify-around h-20 px-4">
+<button class="flex flex-col items-center justify-center gap-1 text-primary">
+<span class="material-symbols-outlined font-variation-fill">dashboard</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Requests</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Volunteers</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Messages</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-gray-400 dark:text-gray-500">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">More</span>
+</button>
+</div>
+</nav>
+</body></html>

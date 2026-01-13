@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-slate-200 dark:bg-slate-900 flex justify-center items-end min-h-screen">
+<!-- Screen Backdrop / Simulation of iOS background -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-0"></div>
+<!-- iOS Bottom Sheet Modal -->
+<div class="relative z-10 w-full max-w-md bg-white dark:bg-background-dark rounded-t-xl shadow-2xl overflow-hidden animate-slide-up">
+<!-- BottomSheetHandle Component -->
+<div class="flex flex-col items-stretch bg-white dark:bg-background-dark border-b border-gray-100 dark:border-gray-800">
+<button class="flex h-6 w-full items-center justify-center">
+<div class="h-1.5 w-10 rounded-full bg-[#dbdee6] dark:bg-gray-700"></div>
+</button>
+</div>
+<!-- SectionHeader Component -->
+<div class="px-4 py-2 flex items-center justify-between bg-white dark:bg-background-dark">
+<div class="w-8"></div> <!-- Spacer for centering -->
+<h4 class="text-[#111318] dark:text-white text-base font-bold leading-normal tracking-tight">Assign Volunteer</h4>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<div class="p-4 bg-background-light dark:bg-gray-900/50">
+<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Recommended Matches</p>
+</div>
+<!-- Scrollable List Content -->
+<div class="max-h-[70vh] overflow-y-auto pb-8 bg-white dark:bg-background-dark">
+<!-- ListItem 1: Sarah Jenkins -->
+<div class="flex gap-4 bg-white dark:bg-background-dark px-4 py-4 justify-between border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<div class="flex items-start gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border border-gray-100 dark:border-gray-700" data-alt="Professional portrait of Sarah Jenkins smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBpUPOIskX4W8uHlO6FLHeG_VMPewji0TnrTLXDYZoW9Ss3lpxNNjUsn03pj8OuXlLPXalaONT6OzR24ju9lkgnqjns7-r9LLEG7D8pHsZhMLvKrhcL-RU4e1CmOywD1Vv5M1txXSR_NHrQAsxJfkAt6SK2kI4MGfyUGeYxIpWtdmF0Co8YiSVEPAPJzI6iucqSLqkkklX9uwBjq2ZMhfkZ1s9a16ki_-ncBFvLIDmRKEjF1QbHD9Mb7qT1dBDk70J3NE53RgeHss4");'>
+</div>
+<div class="absolute bottom-0 right-0 h-3.5 w-3.5 bg-green-500 border-2 border-white dark:border-background-dark rounded-full"></div>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-[#111318] dark:text-white text-base font-semibold leading-tight">Sarah Jenkins</p>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-[14px] text-primary">verified</span>
+<p class="text-primary text-xs font-bold leading-normal">98% Match</p>
+</div>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">near_me</span>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal leading-normal">1.2 km away</p>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-semibold leading-normal shadow-sm active:scale-95 transition-transform">
+<span>Assign</span>
+</button>
+</div>
+</div>
+<!-- ListItem 2: Michael Chen -->
+<div class="flex gap-4 bg-white dark:bg-background-dark px-4 py-4 justify-between border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<div class="flex items-start gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border border-gray-100 dark:border-gray-700" data-alt="Portrait of Michael Chen" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTB9rELyTopBwlDGFoxwSVZqroivw4d0nITeSgdGH8GM5IGfenF3Ht5t4MuxpwZKD3cvvJyizzAnlsCb16K58opKUebAgZ5l8hgF4N8ajF99Rh5wEVLLzwuB10hIT9USXSZOathv_Upr7d89qVWBmcakPGCrQMsIza6R5KTQdipGJZb0DV7ruGd2XJz43uQ2m28ifnEnCruYCvf59xnaiLkB2ZoUay21aPz7XXM1HOKu-aHYNjdJ3ITT7kvy-SHhundQUhtKhUr0g");'>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-[#111318] dark:text-white text-base font-semibold leading-tight">Michael Chen</p>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-[14px] text-primary">verified</span>
+<p class="text-primary text-xs font-bold leading-normal">92% Match</p>
+</div>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">near_me</span>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal leading-normal">3.5 km away</p>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light text-sm font-semibold leading-normal active:scale-95 transition-transform">
+<span>Assign</span>
+</button>
+</div>
+</div>
+<!-- ListItem 3: Elena Rodriguez -->
+<div class="flex gap-4 bg-white dark:bg-background-dark px-4 py-4 justify-between border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<div class="flex items-start gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border border-gray-100 dark:border-gray-700" data-alt="Portrait of Elena Rodriguez" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBzTdKhpwMHHIV3skVHm2SEpKrb9RUwwzdSP_RZqaqTJ005D7JIQZYL9m3q6sFyhOCLIYG1TcRAuUQ8xHIEo98AsPJNnFOryu6Qq4TNagxqMfvrF5ccax0fGWzbkPXi6YvTrmzSCHrpk7q_hNYh1UvrMCdw6Kiq4uL3jvTVkd0a6KqprJow7f9taPmsLXTu8XY1ND-ITpj5EgSTPW4ZAigIv-at2MeXt1lqjk9owMYp0K_uZSoztA8cvVMSIsw-Eq2buVXYfN07jlA");'>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-[#111318] dark:text-white text-base font-semibold leading-tight">Elena Rodriguez</p>
+<div class="flex items-center gap-1.5 mt-1">
+<p class="text-primary text-xs font-bold leading-normal">89% Match</p>
+</div>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">near_me</span>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal leading-normal">0.8 km away</p>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light text-sm font-semibold leading-normal active:scale-95 transition-transform">
+<span>Assign</span>
+</button>
+</div>
+</div>
+<!-- Additional Volunteer -->
+<div class="flex gap-4 bg-white dark:bg-background-dark px-4 py-4 justify-between border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+<div class="flex items-start gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border border-gray-100 dark:border-gray-700" data-alt="Portrait of Marcus Thorne" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDCOYPTkVqd0EVHT_A3QSO7N7kKBuMSghEFu1l5uz36IaTp-Tng685Qpd9LcGYK2JagmqTqRbRvAJkid-VVHDu3ouyJufwVL3cKwJ0AYDy9HFwlnmi9Y5RJ7Zt4t3ZNLEOGRO-R8lP1m1j2QCg-BFp37AMjvpRjFjEq0ErEsvTBKsit4yUom8h297MsTdKPt6leoQxhWFAXPo-bItI4BZcExndRvKCU3HpxgFW0e934YsqEWQMOno2BNpuaL7HO5bpoLkeSNt4CKZU");'>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-[#111318] dark:text-white text-base font-semibold leading-tight">Marcus Thorne</p>
+<div class="flex items-center gap-1.5 mt-1">
+<p class="text-primary text-xs font-bold leading-normal">85% Match</p>
+</div>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-gray-400">near_me</span>
+<p class="text-[#616e89] dark:text-gray-400 text-xs font-normal leading-normal">2.4 km away</p>
+</div>
+</div>
+</div>
+<div class="shrink-0 flex items-center">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light text-sm font-semibold leading-normal active:scale-95 transition-transform">
+<span>Assign</span>
+</button>
+</div>
+</div>
+<!-- iOS Safe Area Spacer -->
+<div class="h-10 bg-white dark:bg-background-dark"></div>
+</div>
+</div>
+</body></html>
