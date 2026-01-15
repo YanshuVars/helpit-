@@ -1,0 +1,268 @@
+/* Google Fonts - must come first */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Tailwind CSS */
+@import "tailwindcss";
+
+/* Design Tokens - LIGHT MODE ONLY (as per designs) */
+:root {
+  /* Colors */
+  --primary: #2463eb;
+  --primary-hover: #1d4ed8;
+  --background-light: #f6f6f8;
+  --background-dark: #111621;
+  --foreground: #111318;
+  --foreground-muted: #616e89;
+  --border: #dbdee6;
+  --border-dark: #374151;
+
+  /* Semantic Colors */
+  --success: #07883d;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+
+  /* Spacing Design Tokens */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 40px;
+
+  /* Page Layout */
+  --page-padding-x: 20px;
+  --section-gap: 28px;
+  --card-padding: 20px;
+  --bottom-nav-height: 72px;
+
+  /* Touch Targets */
+  --touch-target-min: 44px;
+  --touch-target-lg: 56px;
+
+  /* Force light mode */
+  --background: var(--background-light);
+  color-scheme: light;
+}
+
+/* Tailwind Theme Overrides */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--foreground-muted);
+  --color-border: var(--border);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --font-sans: 'Inter', sans-serif;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: 'Inter', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--background-light);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsive Container - Works on all screen sizes */
+.app-container {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--background-light);
+}
+
+/* On larger screens, center with max-width and add shadow */
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 430px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Hide scrollbars utility */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Safe area padding for iOS */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Chat scroll container */
+.chat-scroll {
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+
+/* Responsive bottom nav positioning */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--bottom-nav-height);
+}
+
+@media (min-width: 768px) {
+  .bottom-nav {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 430px;
+  }
+}
+
+/* Responsive top bar positioning */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+/* Custom scrollbar for desktop */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGE CONTENT UTILITIES - Consistent Spacing System
+═══════════════════════════════════════════════════════════════ */
+
+/* Main page content wrapper - use in layouts */
+.page-content {
+  padding-left: var(--page-padding-x);
+  padding-right: var(--page-padding-x);
+  padding-top: var(--spacing-xl);
+  padding-bottom: calc(var(--bottom-nav-height) + 16px);
+}
+
+/* Section spacing - consistent gaps between sections */
+.section-spacing {
+  margin-bottom: var(--section-gap);
+}
+
+/* Section with header and content */
+.section-header {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Card consistent padding */
+.card-spacing {
+  padding: var(--card-padding);
+}
+
+/* Grid/List gaps */
+.content-gap {
+  gap: var(--spacing-md);
+}
+
+/* Smaller gaps for compact layouts */
+.content-gap-sm {
+  gap: var(--spacing-sm);
+}
+
+/* Page title spacing */
+.page-title {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Full-bleed sections (for horizontal scrollers) */
+.full-bleed {
+  margin-left: calc(-1 * var(--page-padding-x));
+  margin-right: calc(-1 * var(--page-padding-x));
+  padding-left: var(--page-padding-x);
+  padding-right: var(--page-padding-x);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STAT CARD - Locked icon sizing for consistent layout
+═══════════════════════════════════════════════════════════════ */
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 120px;
+  padding: var(--card-padding);
+  gap: var(--spacing-sm);
+  border-radius: 1rem;
+  background: white;
+  border: 1px solid #f3f4f6;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card .stat-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  font-size: 22px;
+}
+
+.stat-card .stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--foreground-muted);
+}
+
+.stat-card .stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOUCH TARGETS - Minimum sizes for accessibility
+═══════════════════════════════════════════════════════════════ */
+
+.touch-target {
+  min-height: var(--touch-target-min);
+}
+
+.touch-target-lg {
+  min-height: var(--touch-target-lg);
+}
