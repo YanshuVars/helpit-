@@ -1,4 +1,5 @@
 import { PageHeader } from "@/components/ui/PageHeader";
+import Link from "next/link";
 
 export default function VolunteerOpportunitiesPage() {
     const opportunities = [
@@ -23,6 +24,10 @@ export default function VolunteerOpportunitiesPage() {
                 <button className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 whitespace-nowrap min-h-[44px]">Nearby</button>
                 <button className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 whitespace-nowrap min-h-[44px]">Urgent</button>
                 <button className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 whitespace-nowrap min-h-[44px]">My Skills</button>
+                <Link href="/volunteer/opportunities/map" className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 whitespace-nowrap min-h-[44px] flex items-center gap-1">
+                    <span className="material-symbols-outlined text-lg">map</span>
+                    Map
+                </Link>
             </div>
 
             {/* Opportunities List */}

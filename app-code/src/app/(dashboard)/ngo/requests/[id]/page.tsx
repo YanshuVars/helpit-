@@ -98,10 +98,10 @@ export default function RequestDetailPage() {
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-3 sticky bottom-24 bg-[var(--background-light)] pt-4">
-                <button className="flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-200 bg-white font-semibold text-sm">
+                <Link href={`/ngo/requests/${request.id}/edit`} className="flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-200 bg-white font-semibold text-sm">
                     <span className="material-symbols-outlined text-lg">edit</span>
                     Edit
-                </button>
+                </Link>
                 <button className="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-500 text-white font-semibold text-sm">
                     <span className="material-symbols-outlined text-lg">check_circle</span>
                     Mark Resolved

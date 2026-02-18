@@ -1,4 +1,5 @@
 import { PageHeader } from "@/components/ui/PageHeader";
+import Link from "next/link";
 
 export default function VolunteerProfilePage() {
     return (
@@ -12,7 +13,7 @@ export default function VolunteerProfilePage() {
                 </div>
                 <h2 className="text-xl font-bold">Alex Johnson</h2>
                 <p className="text-sm text-gray-500">@alexvolunteer</p>
-                <button className="mt-3 text-[var(--primary)] text-sm font-semibold min-h-[44px]">Edit Profile</button>
+                <Link href="/volunteer/profile/edit" className="mt-3 text-[var(--primary)] text-sm font-semibold min-h-[44px]">Edit Profile</Link>
             </div>
 
             {/* Stats */}

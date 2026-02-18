@@ -1,0 +1,19 @@
+﻿
+> app-code@0.1.0 lint
+> eslint
+
+
+C:\Users\Shubh Varshney\helpit\app-code\src\app\(dashboard)\ngo\requests\[id]\edit\page.tsx
+  21:43  warning  'params' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shubh Varshney\helpit\app-code\src\app\layout.tsx
+  38:9  warning  Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+C:\Users\Shubh Varshney\helpit\app-code\src\components\ui\AppShell.tsx
+  3:21  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Shubh Varshney\helpit\app-code\src\components\ui\TopBar.tsx
+  26:12  warning  'isCommandPaletteOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Γ£û 4 problems (0 errors, 4 warnings)
+
