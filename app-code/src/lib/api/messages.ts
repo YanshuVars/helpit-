@@ -58,7 +58,8 @@ export async function getUserChats() {
 
     if (error) throw error;
 
-    return data.map((item: { chat: Chat; last_read_at: string }) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as any[]).map((item: { chat: Chat; last_read_at: string }) => ({
         ...item.chat,
         last_read_at: item.last_read_at,
     }));
@@ -135,7 +136,8 @@ export async function getOrCreateDirectChat(otherUserId: string) {
             .single();
 
         if (existingChat) {
-            return existingChat.chat as Chat;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return (existingChat.chat as unknown) as Chat;
         }
     }
 
@@ -326,7 +328,8 @@ export async function getTotalUnreadCount() {
     let totalUnread = 0;
 
     for (const chat of chats) {
-        const chatData = chat.chat as { last_message_at: string | null };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const chatData = (chat.chat as unknown) as { last_message_at: string | null };
         if (!chatData?.last_message_at) continue;
 
         if (!chat.last_read_at || new Date(chatData.last_message_at) > new Date(chat.last_read_at)) {
@@ -374,8 +377,8 @@ export function subscribeToUserChats(
 ) {
     const supabase = createClient();
 
-    const channel = supabase
-        .channel(`user-chats:${userId}`)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const channel = (supabase.channel(`user-chats:${userId}`) as any)
         .on(
             'postgres_changes',
             {
@@ -423,7 +426,8 @@ export function subscribeToTypingIndicators(
         .on('presence', { event: 'sync' }, () => {
             const state = channel.presenceState();
             Object.entries(state).forEach(([userId, presences]) => {
-                const presenceList = presences as Array<{ is_typing: boolean }>;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const presenceList = presences as unknown as Array<{ is_typing: boolean }>;
                 if (presenceList.length > 0) {
                     onTypingUpdate(userId, presenceList[0].is_typing);
                 }

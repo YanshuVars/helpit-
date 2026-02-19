@@ -1,138 +1,305 @@
-import Link from "next/link";
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import { formatDistanceToNow, formatCurrency } from '@/lib/utils';
+
+interface NGODashboardData {
+    ngo: {
+        id: string;
+        name: string;
+        total_requests: number;
+        total_volunteers: number;
+        total_donations: number;
+        total_events: number;
+    } | null;
+    stats: {
+        activeRequests: number;
+        pendingDonations: number;
+        upcomingEvents: number;
+    };
+    recentActivity: Array<{
+        id: string;
+        type: 'request' | 'donation' | 'volunteer' | 'event';
+        title: string;
+        description: string;
+        created_at: string;
+    }>;
+}
 
 export default function NGODashboardPage() {
+    const [data, setData] = useState<NGODashboardData | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchDashboardData() {
+            const supabase = createClient();
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                setLoading(false);
+                return;
+            }
+
+            const { data: membership } = await supabase
+                .from('ngo_members')
+                .select('ngo_id')
+                .eq('user_id', session.user.id)
+                .single();
+
+            if (!membership) {
+                setLoading(false);
+                return;
+            }
+
+            const ngoId = membership.ngo_id;
+
+            const { data: ngoData } = await supabase
+                .from('ngos')
+                .select('*')
+                .eq('id', ngoId)
+                .single();
+
+            const ngo = ngoData;
+
+            const { count: activeRequests } = await supabase
+                .from('requests')
+                .select('*', { count: 'exact', head: true })
+                .eq('ngo_id', ngoId)
+                .eq('status', 'ACTIVE');
+
+            const { count: pendingDonations } = await supabase
+                .from('donations')
+                .select('*', { count: 'exact', head: true })
+                .eq('ngo_id', ngoId)
+                .eq('status', 'PENDING');
+
+            const { count: upcomingEvents } = await supabase
+                .from('events')
+                .select('*', { count: 'exact', head: true })
+                .eq('ngo_id', ngoId)
+                .gte('start_date', new Date().toISOString());
+
+            const { data: recentRequests } = await supabase
+                .from('requests')
+                .select('id, title, status, created_at')
+                .eq('ngo_id', ngoId)
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            const { data: recentDonations } = await supabase
+                .from('donations')
+                .select('id, amount, donor_name, created_at')
+                .eq('ngo_id', ngoId)
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            const activity: NGODashboardData['recentActivity'] = [];
+
+            recentRequests?.forEach(r => {
+                activity.push({
+                    id: `req-${r.id}`,
+                    type: 'request',
+                    title: `New request: ${r.title}`,
+                    description: `Status: ${r.status}`,
+                    created_at: r.created_at,
+                });
+            });
+
+            recentDonations?.forEach(d => {
+                activity.push({
+                    id: `don-${d.id}`,
+                    type: 'donation',
+                    title: `Donation received: ₹${d.amount}`,
+                    description: d.donor_name || 'Anonymous donor',
+                    created_at: d.created_at,
+                });
+            });
+
+            activity.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+            const finalActivity = activity.slice(0, 5);
+
+            setData({
+                ngo: ngo ? {
+                    id: ngo.id,
+                    name: ngo.name,
+                    total_requests: ngo.total_requests || 0,
+                    total_volunteers: ngo.total_volunteers || 0,
+                    total_donations: ngo.total_donations || 0,
+                    total_events: ngo.total_events || 0,
+                } : null,
+                stats: {
+                    activeRequests: activeRequests || 0,
+                    pendingDonations: pendingDonations || 0,
+                    upcomingEvents: upcomingEvents || 0,
+                },
+                recentActivity: finalActivity,
+            });
+            setLoading(false);
+        }
+
+        fetchDashboardData();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-64">
+                <div className="spinner"></div>
+            </div>
+        );
+    }
+
+    if (!data?.ngo) {
+        return (
+            <div className="flex flex-col items-center justify-center p-8 text-center animate-fadeIn">
+                <div className="w-20 h-20 rounded-2xl bg-[var(--primary-50)] flex items-center justify-center mb-4">
+                    <span className="material-symbols-outlined text-4xl text-[var(--primary)]">business</span>
+                </div>
+                <h2 className="text-xl font-bold mb-2">No NGO Found</h2>
+                <p className="text-[var(--foreground-muted)] mb-4">You need to register an NGO to access this dashboard.</p>
+                <Link href="/register/ngo" className="btn btn-primary">
+                    Register NGO
+                </Link>
+            </div>
+        );
+    }
+
+    const getActivityIcon = (type: string) => {
+        switch (type) {
+            case 'request': return 'pending_actions';
+            case 'donation': return 'paid';
+            case 'volunteer': return 'person_add';
+            case 'event': return 'event';
+            default: return 'info';
+        }
+    };
+
+    const getActivityColor = (type: string) => {
+        switch (type) {
+            case 'request': return 'bg-orange-100 text-orange-600';
+            case 'donation': return 'bg-green-100 text-green-600';
+            case 'volunteer': return 'bg-blue-100 text-blue-600';
+            case 'event': return 'bg-purple-100 text-purple-600';
+            default: return 'bg-gray-100 text-gray-600';
+        }
+    };
+
     return (
         <div className="flex flex-col">
-            {/* ═══════════════════════════════════════════════════════════════
-          QUICK ACTIONS SECTION (Hero Zone)
-      ═══════════════════════════════════════════════════════════════ */}
+            {/* Welcome Section */}
+            <div className="mb-6 animate-slideUp">
+                <h1 className="text-2xl font-bold">{data.ngo.name}</h1>
+                <p className="text-[var(--foreground-muted)] text-sm mt-1">Welcome back! Here's your impact overview.</p>
+            </div>
+
+            {/* Quick Actions */}
             <section className="section-spacing">
-                <h3 className="text-[18px] font-bold leading-tight section-header">Quick Actions</h3>
                 <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-1">
                     <Link
                         href="/ngo/requests/create"
-                        className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[var(--primary)] text-white px-5 shadow-sm active:scale-95 transition-transform"
+                        className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[var(--primary)] text-white px-5 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
                     >
                         <span className="material-symbols-outlined text-xl">add_circle</span>
-                        <span className="text-sm font-semibold">Create Request</span>
+                        <span className="text-sm font-semibold">New Request</span>
                     </Link>
-                    <button className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white border border-gray-200 text-[#111318] px-5 shadow-sm active:scale-95 transition-transform">
-                        <span className="material-symbols-outlined text-xl">calendar_add_on</span>
+                    <Link
+                        href="/ngo/events"
+                        className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white border border-[var(--border)] text-[var(--foreground)] px-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                    >
+                        <span className="material-symbols-outlined text-xl">event</span>
                         <span className="text-sm font-semibold">Create Event</span>
-                    </button>
-                    <button className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white border border-gray-200 text-[#111318] px-5 shadow-sm active:scale-95 transition-transform">
-                        <span className="material-symbols-outlined text-xl">file_download</span>
-                        <span className="text-sm font-semibold">Export Report</span>
-                    </button>
+                    </Link>
+                    <Link
+                        href="/ngo/posts"
+                        className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white border border-[var(--border)] text-[var(--foreground)] px-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                    >
+                        <span className="material-symbols-outlined text-xl">campaign</span>
+                        <span className="text-sm font-semibold">Announcement</span>
+                    </Link>
                 </div>
             </section>
 
-            {/* ═══════════════════════════════════════════════════════════════
-          PERFORMANCE STATS (2x2 Grid with Breathing Room)
-      ═══════════════════════════════════════════════════════════════ */}
+            {/* Stats Grid */}
             <section className="section-spacing">
-                <h3 className="text-[18px] font-bold leading-tight section-header">Performance</h3>
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2 rounded-2xl p-5 bg-white border border-gray-100 shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <p className="text-gray-500 text-[13px] font-medium">Active Requests</p>
-                            <span className="material-symbols-outlined text-[var(--primary)] text-xl">pending_actions</span>
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="card p-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="w-10 h-10 rounded-xl bg-[var(--primary-50)] flex items-center justify-center">
+                                <span className="material-symbols-outlined text-[var(--primary)]">pending_actions</span>
+                            </span>
+                            <span className="badge badge-primary">{data.stats.activeRequests} active</span>
                         </div>
-                        <p className="text-[28px] font-bold tracking-tight leading-none">24</p>
-                        <p className="text-[var(--success)] text-[12px] font-semibold flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">trending_up</span>
-                            +5% this week
-                        </p>
+                        <p className="text-2xl font-bold">{data.ngo.total_requests}</p>
+                        <p className="text-sm text-[var(--foreground-muted)]">Total Requests</p>
                     </div>
 
-                    <div className="flex flex-col gap-2 rounded-2xl p-5 bg-white border border-gray-100 shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <p className="text-gray-500 text-[13px] font-medium">Volunteers</p>
-                            <span className="material-symbols-outlined text-[var(--primary)] text-xl">groups</span>
+                    <div className="card p-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-blue-600">groups</span>
+                            </span>
                         </div>
-                        <p className="text-[28px] font-bold tracking-tight leading-none">158</p>
-                        <p className="text-[var(--success)] text-[12px] font-semibold flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">trending_up</span>
-                            +12% this week
-                        </p>
+                        <p className="text-2xl font-bold">{data.ngo.total_volunteers}</p>
+                        <p className="text-sm text-[var(--foreground-muted)]">Volunteers</p>
                     </div>
 
-                    <div className="flex flex-col gap-2 rounded-2xl p-5 bg-white border border-gray-100 shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <p className="text-gray-500 text-[13px] font-medium">Donations</p>
-                            <span className="material-symbols-outlined text-[var(--primary)] text-xl">payments</span>
+                    <div className="card p-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-green-600">payments</span>
+                            </span>
                         </div>
-                        <p className="text-[28px] font-bold tracking-tight leading-none">₹4,200</p>
-                        <p className="text-[var(--success)] text-[12px] font-semibold flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">trending_up</span>
-                            +8% this week
-                        </p>
+                        <p className="text-2xl font-bold">{formatCurrency(data.ngo.total_donations)}</p>
+                        <p className="text-sm text-[var(--foreground-muted)]">Total Raised</p>
                     </div>
 
-                    <div className="flex flex-col gap-2 rounded-2xl p-5 bg-white border border-gray-100 shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <p className="text-gray-500 text-[13px] font-medium">Events</p>
-                            <span className="material-symbols-outlined text-[var(--primary)] text-xl">event_available</span>
+                    <div className="card p-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-purple-600">event</span>
+                            </span>
+                            <span className="badge badge-info">{data.stats.upcomingEvents} upcoming</span>
                         </div>
-                        <p className="text-[28px] font-bold tracking-tight leading-none">3</p>
-                        <p className="text-gray-500 text-[12px] font-semibold flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">remove</span>
-                            No change
-                        </p>
+                        <p className="text-2xl font-bold">{data.ngo.total_events}</p>
+                        <p className="text-sm text-[var(--foreground-muted)]">Events</p>
                     </div>
                 </div>
             </section>
 
-            {/* ═══════════════════════════════════════════════════════════════
-          RECENT ACTIVITY (Section with Clear Header)
-      ═══════════════════════════════════════════════════════════════ */}
+            {/* Recent Activity */}
             <section>
                 <div className="flex items-center justify-between section-header">
-                    <h3 className="text-[18px] font-bold leading-tight">Recent Activity</h3>
-                    <button className="text-[var(--primary)] text-[14px] font-semibold">View all</button>
+                    <h3 className="text-lg font-bold">Recent Activity</h3>
+                    <button className="text-sm font-medium text-[var(--primary)]">View all</button>
                 </div>
 
-                <div className="rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm">
-                    <div className="divide-y divide-gray-100">
-                        {/* Activity Item 1 */}
-                        <div className="flex items-start gap-4 p-4">
-                            <div className="w-10 h-10 shrink-0 rounded-full bg-blue-50 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-[var(--primary)]">person_add</span>
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-[14px] font-semibold text-[#111318]">John Doe joined as a volunteer</p>
-                                <p className="text-[12px] text-gray-500 mt-0.5">Assigned to Local Kitchen Project</p>
-                                <p className="text-[10px] text-gray-400 uppercase mt-1.5">2m ago</p>
-                            </div>
+                <div className="card overflow-hidden">
+                    {data.recentActivity.length === 0 ? (
+                        <div className="p-8 text-center">
+                            <span className="material-symbols-outlined text-4xl text-[var(--foreground-light)] mb-2">inbox</span>
+                            <p className="text-[var(--foreground-muted)]">No recent activity</p>
                         </div>
-
-                        {/* Activity Item 2 */}
-                        <div className="flex items-start gap-4 p-4">
-                            <div className="w-10 h-10 shrink-0 rounded-full bg-orange-50 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-orange-500">priority_high</span>
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-[14px] font-semibold text-[#111318]">Food Drive marked as Urgent</p>
-                                <p className="text-[12px] text-gray-500 mt-0.5">Updated by Admin Sarah</p>
-                                <p className="text-[10px] text-gray-400 uppercase mt-1.5">15m ago</p>
-                            </div>
+                    ) : (
+                        <div className="divide-y divide-[var(--border-light)]">
+                            {data.recentActivity.map((activity) => (
+                                <div key={activity.id} className="flex items-start gap-3 p-4 hover:bg-[var(--background-subtle)] transition-colors">
+                                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${getActivityColor(activity.type)}`}>
+                                        <span className="material-symbols-outlined text-lg">{getActivityIcon(activity.type)}</span>
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-medium text-sm truncate">{activity.title}</p>
+                                        <p className="text-xs text-[var(--foreground-muted)] mt-0.5">{activity.description}</p>
+                                    </div>
+                                    <span className="text-xs text-[var(--foreground-light)] shrink-0">
+                                        {activity.created_at ? formatDistanceToNow(activity.created_at) : 'Just now'}
+                                    </span>
+                                </div>
+                            ))}
                         </div>
-
-                        {/* Activity Item 3 */}
-                        <div className="flex items-start gap-4 p-4">
-                            <div className="w-10 h-10 shrink-0 rounded-full bg-green-50 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-green-500">paid</span>
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-[14px] font-semibold text-[#111318]">Donation received: ₹500</p>
-                                <p className="text-[12px] text-gray-500 mt-0.5">Anonymous donor via Razorpay</p>
-                                <p className="text-[10px] text-gray-400 uppercase mt-1.5">1h ago</p>
-                            </div>
-                        </div>
-                    </div>
+                    )}
                 </div>
             </section>
         </div>
     );
 }
-

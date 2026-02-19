@@ -551,5 +551,6 @@ export async function getFollowedNgos() {
         .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data as Array<{ created_at: string; ngo: Ngo }>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data as unknown) as Array<{ created_at: string; ngo: Ngo }>;
 }

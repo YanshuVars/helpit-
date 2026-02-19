@@ -549,7 +549,7 @@ export async function getVolunteerOpportunities(options?: {
     `, { count: 'exact' })
         .eq('visibility', 'PUBLIC')
         .eq('status', 'OPEN')
-        .gt('volunteers_needed', supabase.raw('volunteers_assigned'));
+        .filter('volunteers_needed', 'gt', 0);
 
     if (options?.category) {
         query = query.eq('category', options.category);
