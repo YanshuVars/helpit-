@@ -1,100 +1,248 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageHeader } from "@/components/ui/PageHeader";
-
-interface Post {
-    id: string;
-    title: string;
-    content: string;
-    author: string;
-    authorAvatar: string;
-    createdAt: string;
-    likes: number;
-    comments: number;
-    isLiked: boolean;
-    image?: string;
-    tags: string[];
-}
+import { createClient } from "@/lib/supabase/client";
+import { PostCard } from "@/components/dashboard/PostCard";
+import { CreatePostModal } from "@/components/dashboard/CreatePostModal";
+import { CommentsModal } from "@/components/dashboard/CommentsModal";
+import { Post, Comment } from "@/types/dashboard";
 
 export default function NGOPostsPage() {
-    const [posts, setPosts] = useState<Post[]>([
-        {
-            id: "p1",
-            title: "Successful Food Distribution Drive",
-            content: "We successfully distributed food packages to over 200 families in the eastern district. Thank you to all our volunteers and donors who made this possible!",
-            author: "Sarah Admin",
-            authorAvatar: "S",
-            createdAt: "2 hours ago",
-            likes: 45,
-            comments: 12,
-            isLiked: false,
-            tags: ["Food Relief", "Success Story"],
-        },
-        {
-            id: "p2",
-            title: "Volunteer Training Session",
-            content: "Join us this Saturday for a volunteer training session on disaster response. All skill levels welcome!",
-            author: "Hope Foundation",
-            authorAvatar: "H",
-            createdAt: "1 day ago",
-            likes: 28,
-            comments: 8,
-            isLiked: true,
-            tags: ["Training", "Volunteers"],
-        },
-        {
-            id: "p3",
-            title: "New Partnership Announcement",
-            content: "We're excited to announce our partnership with HealthFirst NGO to provide better medical support to communities in need.",
-            author: "Sarah Admin",
-            authorAvatar: "S",
-            createdAt: "3 days ago",
-            likes: 67,
-            comments: 23,
-            isLiked: false,
-            tags: ["Partnership", "Healthcare"],
-        },
-    ]);
-
+    const supabase = createClient();
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [newPostTitle, setNewPostTitle] = useState("");
-    const [newPostContent, setNewPostContent] = useState("");
+    const [activeTab, setActiveTab] = useState<"all" | "drafts" | "scheduled">("all");
 
-    const toggleLike = (postId: string) => {
-        setPosts(posts.map(post => {
-            if (post.id === postId) {
-                return {
-                    ...post,
-                    isLiked: !post.isLiked,
-                    likes: post.isLiked ? post.likes - 1 : post.likes + 1
-                };
+    // Comments modal state
+    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+    const [comments, setComments] = useState<Comment[]>([]);
+    const [loadingComments, setLoadingComments] = useState(false);
+
+    // Current user info
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+    const [ngoName, setNgoName] = useState<string>("");
+
+    useEffect(() => {
+        fetchPosts();
+    }, [activeTab]);
+
+    async function fetchPosts() {
+        setLoading(true);
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                setLoading(false);
+                return;
             }
-            return post;
-        }));
-    };
+            setCurrentUserId(user.id);
 
-    const handleCreatePost = () => {
-        if (!newPostTitle.trim() || !newPostContent.trim()) return;
+            // Get NGO ID for the user
+            const { data: ngoData } = await supabase
+                .from("ngo_members")
+                .select("ngo_id")
+                .eq("user_id", user.id)
+                .single();
 
-        const newPost: Post = {
-            id: `p${Date.now()}`,
-            title: newPostTitle,
-            content: newPostContent,
-            author: "Sarah Admin",
-            authorAvatar: "S",
-            createdAt: "Just now",
-            likes: 0,
-            comments: 0,
-            isLiked: false,
-            tags: [],
-        };
+            if (ngoData?.ngo_id) {
+                // Get NGO name separately
+                const { data: ngoInfo } = await supabase
+                    .from("ngos")
+                    .select("name")
+                    .eq("id", ngoData.ngo_id)
+                    .single();
 
-        setPosts([newPost, ...posts]);
-        setNewPostTitle("");
-        setNewPostContent("");
-        setShowCreateModal(false);
-    };
+                setNgoName(ngoInfo?.name || "NGO");
+
+                // Build query
+                let query = supabase
+                    .from("posts")
+                    .select(`
+                        *,
+                        author:users(full_name, avatar_url)
+                    `)
+                    .eq("ngo_id", ngoData.ngo_id);
+
+                // Filter by tab
+                if (activeTab === "drafts") {
+                    query = query.is("published_at", null);
+                } else if (activeTab === "scheduled") {
+                    query = query.not("published_at", "is", null);
+                } else {
+                    query = query.not("published_at", "is", null);
+                }
+
+                const { data: postsData, error } = await query.order("created_at", { ascending: false });
+
+                if (postsData) {
+                    // Check if user liked each post
+                    const postsWithLikes = await Promise.all(
+                        postsData.map(async (post: any) => {
+                            const { data: likeData } = await supabase
+                                .from("post_likes")
+                                .select("id")
+                                .eq("post_id", post.id)
+                                .eq("user_id", user.id)
+                                .single();
+
+                            return {
+                                ...post,
+                                is_liked: !!likeData,
+                            };
+                        })
+                    );
+                    setPosts(postsWithLikes as Post[]);
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching posts:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function toggleLike(postId: string) {
+        if (!currentUserId) return;
+
+        const post = posts.find(p => p.id === postId);
+        if (!post) return;
+
+        try {
+            if (post.is_liked) {
+                // Unlike
+                await supabase
+                    .from("post_likes")
+                    .delete()
+                    .eq("post_id", postId)
+                    .eq("user_id", currentUserId);
+
+                setPosts(posts.map(p =>
+                    p.id === postId
+                        ? { ...p, is_liked: false, likes_count: p.likes_count - 1 }
+                        : p
+                ));
+            } else {
+                // Like
+                await supabase
+                    .from("post_likes")
+                    .insert({ post_id: postId, user_id: currentUserId });
+
+                setPosts(posts.map(p =>
+                    p.id === postId
+                        ? { ...p, is_liked: true, likes_count: p.likes_count + 1 }
+                        : p
+                ));
+            }
+        } catch (error) {
+            console.error("Error toggling like:", error);
+        }
+    }
+
+    async function openCommentsModal(post: Post) {
+        setSelectedPost(post);
+        setLoadingComments(true);
+
+        try {
+            const { data, error } = await supabase
+                .from("post_comments")
+                .select(`
+                    *,
+                    user:users(full_name, avatar_url)
+                `)
+                .eq("post_id", post.id)
+                .order("created_at", { ascending: true });
+
+            if (data) {
+                setComments(data as any[]);
+            }
+        } catch (error) {
+            console.error("Error fetching comments:", error);
+        } finally {
+            setLoadingComments(false);
+        }
+    }
+
+    async function handleAddComment(content: string) {
+        if (!selectedPost || !currentUserId) return;
+
+        try {
+            const { data, error } = await supabase
+                .from("post_comments")
+                .insert({
+                    post_id: selectedPost.id,
+                    user_id: currentUserId,
+                    content: content.trim(),
+                })
+                .select(`
+                    *,
+                    user:users(full_name, avatar_url)
+                `)
+                .single();
+
+            if (error) throw error;
+
+            if (data) {
+                setComments([...comments, data as any]);
+                // Update comments count in the post
+                setPosts(posts.map(p =>
+                    p.id === selectedPost.id
+                        ? { ...p, comments_count: p.comments_count + 1 }
+                        : p
+                ));
+            }
+        } catch (error) {
+            console.error("Error adding comment:", error);
+            alert("Failed to add comment");
+        }
+    }
+
+    async function handleCreatePost(data: { title: string; content: string; post_type: string }) {
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            // Get NGO ID
+            const { data: ngoData } = await supabase
+                .from("ngo_members")
+                .select("ngo_id")
+                .eq("user_id", user.id)
+                .single();
+
+            if (!ngoData?.ngo_id) {
+                alert("You must be an NGO member to create posts");
+                return;
+            }
+
+            const { error } = await supabase.from("posts").insert({
+                ngo_id: ngoData.ngo_id,
+                author_id: user.id,
+                title: data.title,
+                content: data.content,
+                post_type: data.post_type,
+                published_at: new Date().toISOString(),
+            });
+
+            if (error) throw error;
+
+            setShowCreateModal(false);
+            fetchPosts();
+        } catch (error) {
+            console.error("Error creating post:", error);
+            alert("Failed to create post");
+        }
+    }
+
+    if (loading) {
+        return (
+            <div className="space-y-6">
+                <PageHeader title="Posts" showBack fallbackRoute="/ngo" />
+                <div className="flex items-center justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">
@@ -115,137 +263,71 @@ export default function NGOPostsPage() {
 
             {/* Tabs */}
             <div className="flex gap-2">
-                <button className="px-4 py-2 rounded-full text-sm font-semibold bg-[var(--primary)] text-white min-h-[44px]">All Posts</button>
-                <button className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 min-h-[44px]">Drafts</button>
-                <button className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 min-h-[44px]">Scheduled</button>
+                <button
+                    onClick={() => setActiveTab("all")}
+                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${activeTab === "all" ? "bg-[var(--primary)] text-white" : "bg-gray-100"}`}
+                >
+                    All Posts
+                </button>
+                <button
+                    onClick={() => setActiveTab("drafts")}
+                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${activeTab === "drafts" ? "bg-[var(--primary)] text-white" : "bg-gray-100"}`}
+                >
+                    Drafts
+                </button>
+                <button
+                    onClick={() => setActiveTab("scheduled")}
+                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${activeTab === "scheduled" ? "bg-[var(--primary)] text-white" : "bg-gray-100"}`}
+                >
+                    Scheduled
+                </button>
             </div>
 
             {/* Posts List */}
             <div className="space-y-4">
-                {posts.map((post) => (
-                    <div key={post.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                        {/* Post Header */}
-                        <div className="p-4 flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--primary)] to-blue-400 flex items-center justify-center text-white font-bold">
-                                {post.authorAvatar}
-                            </div>
-                            <div className="flex-1">
-                                <p className="font-semibold text-sm">{post.author}</p>
-                                <p className="text-xs text-gray-500">{post.createdAt}</p>
-                            </div>
-                            <button className="p-2 rounded-full hover:bg-gray-100">
-                                <span className="material-symbols-outlined text-gray-400">more_horiz</span>
-                            </button>
-                        </div>
-
-                        {/* Post Content */}
-                        <div className="px-4 pb-3">
-                            <h3 className="font-bold mb-2">{post.title}</h3>
-                            <p className="text-sm text-gray-600 leading-relaxed">{post.content}</p>
-                        </div>
-
-                        {/* Tags */}
-                        {post.tags.length > 0 && (
-                            <div className="px-4 pb-3 flex flex-wrap gap-2">
-                                {post.tags.map((tag) => (
-                                    <span key={tag} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                                        #{tag}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Post Actions */}
-                        <div className="border-t border-gray-100 px-4 py-3 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={() => toggleLike(post.id)}
-                                    className={`flex items-center gap-1 ${post.isLiked ? "text-red-500" : "text-gray-500"}`}
-                                >
-                                    <span className="material-symbols-outlined text-lg">
-                                        {post.isLiked ? "favorite" : "favorite_border"}
-                                    </span>
-                                    <span className="text-sm">{post.likes}</span>
-                                </button>
-                                <button className="flex items-center gap-1 text-gray-500">
-                                    <span className="material-symbols-outlined text-lg">chat_bubble_outline</span>
-                                    <span className="text-sm">{post.comments}</span>
-                                </button>
-                                <button className="flex items-center gap-1 text-gray-500">
-                                    <span className="material-symbols-outlined text-lg">share</span>
-                                </button>
-                            </div>
-                            <button className="flex items-center gap-1 text-gray-500">
-                                <span className="material-symbols-outlined text-lg">bookmark_border</span>
-                            </button>
-                        </div>
+                {posts.length === 0 ? (
+                    <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+                        <span className="material-symbols-outlined text-4xl text-gray-400">article</span>
+                        <p className="text-gray-500 mt-2">No posts yet</p>
+                        <button
+                            onClick={() => setShowCreateModal(true)}
+                            className="mt-4 text-[var(--primary)] font-semibold"
+                        >
+                            Create your first post
+                        </button>
                     </div>
-                ))}
+                ) : (
+                    posts.map((post) => (
+                        <PostCard
+                            key={post.id}
+                            post={post}
+                            currentUserId={currentUserId}
+                            ngoName={ngoName}
+                            onLike={toggleLike}
+                            onComment={openCommentsModal}
+                        />
+                    ))
+                )}
             </div>
+
+            {/* Comments Modal */}
+            {selectedPost && (
+                <CommentsModal
+                    post={selectedPost}
+                    comments={comments}
+                    loading={loadingComments}
+                    currentUserId={currentUserId}
+                    onClose={() => setSelectedPost(null)}
+                    onAddComment={handleAddComment}
+                />
+            )}
 
             {/* Create Post Modal */}
             {showCreateModal && (
-                <>
-                    <div
-                        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
-                        onClick={() => setShowCreateModal(false)}
-                    />
-                    <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl overflow-hidden">
-                        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                            <h2 className="text-lg font-bold">Create Post</h2>
-                            <button
-                                onClick={() => setShowCreateModal(false)}
-                                className="p-2 rounded-full hover:bg-gray-100"
-                            >
-                                <span className="material-symbols-outlined">close</span>
-                            </button>
-                        </div>
-                        <div className="p-4 space-y-4">
-                            <div className="flex flex-col gap-2">
-                                <label className="text-sm font-medium">Title</label>
-                                <input
-                                    type="text"
-                                    value={newPostTitle}
-                                    onChange={(e) => setNewPostTitle(e.target.value)}
-                                    placeholder="Post title..."
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                />
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <label className="text-sm font-medium">Content</label>
-                                <textarea
-                                    value={newPostContent}
-                                    onChange={(e) => setNewPostContent(e.target.value)}
-                                    placeholder="What's on your mind?"
-                                    rows={4}
-                                    className="w-full rounded-xl border border-gray-200 px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                />
-                            </div>
-                            <div className="flex gap-2">
-                                <button className="flex items-center gap-1 px-3 py-2 bg-gray-100 rounded-lg text-sm">
-                                    <span className="material-symbols-outlined text-lg">image</span>
-                                    Photo
-                                </button>
-                                <button className="flex items-center gap-1 px-3 py-2 bg-gray-100 rounded-lg text-sm">
-                                    <span className="material-symbols-outlined text-lg">videocam</span>
-                                    Video
-                                </button>
-                                <button className="flex items-center gap-1 px-3 py-2 bg-gray-100 rounded-lg text-sm">
-                                    <span className="material-symbols-outlined text-lg">tag</span>
-                                    Tag
-                                </button>
-                            </div>
-                        </div>
-                        <div className="p-4 border-t border-gray-100">
-                            <button
-                                onClick={handleCreatePost}
-                                className="w-full bg-[var(--primary)] text-white font-bold py-3 rounded-xl"
-                            >
-                                Publish Post
-                            </button>
-                        </div>
-                    </div>
-                </>
+                <CreatePostModal
+                    onClose={() => setShowCreateModal(false)}
+                    onSubmit={handleCreatePost}
+                />
             )}
         </div>
     );

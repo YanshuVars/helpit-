@@ -58,3 +58,37 @@ export function truncate(str: string, maxLength: number): string {
     if (str.length <= maxLength) return str;
     return str.slice(0, maxLength - 3) + '...';
 }
+
+/**
+ * Format a date to a specific format
+ */
+export function format(date: Date, formatStr: string): string {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    let result = formatStr;
+    result = result.replace('MMMM', months[month]);
+    result = result.replace('MMM', shortMonths[month]);
+    result = result.replace('MM', String(month + 1).padStart(2, '0'));
+    result = result.replace('yyyy', String(year));
+    result = result.replace('yy', String(year).slice(-2));
+    result = result.replace('dd', String(day).padStart(2, '0'));
+    result = result.replace('d', String(day));
+
+    // Time formatting
+    const h12 = hours % 12 || 12;
+    const ampm = hours < 12 ? 'AM' : 'PM';
+    result = result.replace('hh', String(h12).padStart(2, '0'));
+    result = result.replace('h', String(h12));
+    result = result.replace('mm', String(minutes).padStart(2, '0'));
+    result = result.replace('a', ampm.toLowerCase());
+    result = result.replace('A', ampm);
+
+    return result;
+}

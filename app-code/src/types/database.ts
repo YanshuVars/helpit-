@@ -65,6 +65,8 @@ export type ReportStatus = 'PENDING' | 'IN_REVIEW' | 'RESOLVED' | 'DISMISSED';
 
 export type ReportPriority = 'LOW' | 'MEDIUM' | 'HIGH';
 
+export type MissingPersonStatus = 'MISSING' | 'FOUND' | 'DECEASED' | 'CLOSED';
+
 // ============================================
 // TABLE ROW TYPES
 // ============================================
@@ -630,6 +632,99 @@ export interface Achievement {
     earned_at: string;
 }
 
+export interface MissingPerson {
+    id: string;
+
+    // Reporter info
+    reported_by: string | null;
+    ngo_id: string | null;
+
+    // Person details
+    full_name: string;
+    age: number | null;
+    gender: 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY' | null;
+    photo_url: string | null;
+
+    // Physical description
+    height: string | null;
+    build: string | null;
+    hair_color: string | null;
+    eye_color: string | null;
+    distinguishing_marks: string | null;
+
+    // Last known info
+    last_seen_date: string | null;
+    last_seen_location: string | null;
+    last_seen_city: string | null;
+    last_seen_state: string | null;
+    last_seen_coordinates: GeolocationPoint | null;
+
+    // Clothing description
+    clothing_description: string | null;
+
+    // Medical info
+    medical_conditions: string | null;
+    medications: string | null;
+
+    // Status
+    status: MissingPersonStatus;
+
+    // Contact for tips
+    contact_name: string | null;
+    contact_phone: string | null;
+    contact_email: string | null;
+
+    // Verification
+    is_verified: boolean;
+    verified_by: string | null;
+    verified_at: string | null;
+
+    // Resolution
+    resolved_at: string | null;
+    resolution_notes: string | null;
+
+    // Timestamps
+    created_at: string;
+    updated_at: string;
+
+    // Relations
+    reporter?: User;
+    ngo?: Ngo;
+}
+
+export interface MissingPersonSighting {
+    id: string;
+    missing_person_id: string;
+    reported_by: string;
+
+    // Sighting details
+    sighting_date: string;
+    sighting_time: string | null;
+    sighting_location: string | null;
+    sighting_city: string | null;
+    sighting_state: string | null;
+    sighting_coordinates: GeolocationPoint | null;
+
+    // Description
+    description: string | null;
+    person_appearance: string | null;
+
+    // Contact for follow-up
+    contact_phone: string | null;
+    contact_email: string | null;
+
+    // Status
+    is_verified: boolean;
+    verification_notes: string | null;
+
+    created_at: string;
+    updated_at: string;
+
+    // Relations
+    reporter?: User;
+    missing_person?: MissingPerson;
+}
+
 // ============================================
 // HELPER TYPES
 // ============================================
@@ -822,6 +917,16 @@ export interface Database {
                 Insert: Omit<Achievement, 'id' | 'earned_at'>;
                 Update: never;
             };
+            missing_persons: {
+                Row: MissingPerson;
+                Insert: Omit<MissingPerson, 'id' | 'created_at' | 'updated_at' | 'verified_at' | 'resolved_at' | 'verified_by'>;
+                Update: Partial<Omit<MissingPerson, 'id' | 'reported_by' | 'ngo_id'>>;
+            };
+            missing_person_sightings: {
+                Row: MissingPersonSighting;
+                Insert: Omit<MissingPersonSighting, 'id' | 'created_at' | 'updated_at'>;
+                Update: Partial<Omit<MissingPersonSighting, 'id' | 'missing_person_id' | 'reported_by'>>;
+            };
         };
         Views: Record<string, never>;
         Functions: Record<string, never>;
@@ -843,6 +948,7 @@ export interface Database {
             notification_type: NotificationType;
             report_status: ReportStatus;
             report_priority: ReportPriority;
+            missing_person_status: MissingPersonStatus;
         };
     };
 }

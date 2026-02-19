@@ -7,6 +7,11 @@ export * from './requests';
 export * from './donations';
 export * from './messages';
 export * from './notifications';
+export * from './comments';
+export * from './events';
+export * from './missing-persons';
+export * from './reports';
+export * from './audit-logs';
 
 // Re-export types
 export type {
@@ -51,4 +56,7 @@ export type {
     NotificationType,
     ReportStatus,
     ReportPriority,
+    MissingPersonStatus,
+    MissingPerson,
+    MissingPersonSighting,
 } from '@/types/database';
