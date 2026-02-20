@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
     const supabase = createClient();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -64,18 +64,22 @@ export default function VerifyEmailPage() {
     }
 
     function handleOpenEmail() {
-        // Try to open default email client
         const mailtoUrl = `mailto:${email || ""}`;
         window.location.href = mailtoUrl;
     }
 
     return (
-        <div className="flex flex-col min-h-[800px] px-6 py-8 items-center justify-center">
-            <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-                <span className="material-symbols-outlined text-[var(--primary)] text-5xl">mark_email_unread</span>
+        <div style={{ textAlign: 'center' }}>
+            <div style={{
+                width: 64, height: 64, borderRadius: '50%',
+                background: 'var(--color-primary-soft)', margin: '0 auto 20px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+                <span className="material-symbols-outlined" style={{ color: 'var(--color-primary)', fontSize: 32 }}>mark_email_unread</span>
             </div>
-            <h1 className="text-2xl font-bold text-center">Check Your Email</h1>
-            <p className="text-[var(--foreground-muted)] text-sm pt-2 text-center max-w-xs">
+
+            <h1>Check your email</h1>
+            <p className="auth-subtitle" style={{ maxWidth: 320, margin: '0 auto' }}>
                 {email
                     ? `We've sent a verification link to ${email}. Please click the link to verify your account.`
                     : "We've sent a verification link to your email address. Please click the link to verify your account."
@@ -83,52 +87,69 @@ export default function VerifyEmailPage() {
             </p>
 
             {error && (
-                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                <div className="alert alert-error" style={{ marginTop: 16, textAlign: 'left' }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>error</span>
                     {error}
                 </div>
             )}
 
             {resent && (
-                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                <div style={{
+                    marginTop: 16, padding: 12, borderRadius: 'var(--radius-md)',
+                    background: '#E8F5E9', border: '1px solid #A5D6A7',
+                    fontSize: 13, color: '#2E7D32',
+                }}>
                     Verification email resent successfully! Check your inbox.
                 </div>
             )}
 
             {checking && (
-                <div className="mt-4 flex items-center gap-2 text-sm text-gray-500">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--primary)]"></div>
+                <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 13, color: 'var(--color-text-muted)' }}>
+                    <span className="material-symbols-outlined animate-spin" style={{ fontSize: 16 }}>progress_activity</span>
                     Checking verification status...
                 </div>
             )}
 
-            <div className="flex flex-col gap-3 mt-8 w-full max-w-xs">
-                <button
-                    onClick={handleOpenEmail}
-                    className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl"
-                >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 24 }}>
+                <button onClick={handleOpenEmail} className="auth-submit-btn">
                     Open Email App
                 </button>
                 <button
                     onClick={handleResendEmail}
                     disabled={resending || resent}
-                    className="w-full border border-[var(--border)] text-[var(--foreground)] font-semibold py-3 rounded-xl disabled:opacity-50"
+                    className="btn btn-secondary"
+                    style={{ width: '100%', height: 44 }}
                 >
-                    {resending ? "Sending..." : resent ? "Email Resent" : "Resend Verification Email"}
+                    {resending ? "Sending..." : resent ? "Email Resent ✓" : "Resend Verification Email"}
                 </button>
             </div>
 
-            <div className="mt-6">
+            <div style={{ marginTop: 20 }}>
                 <button
                     onClick={() => router.push("/login")}
-                    className="text-sm text-[var(--primary)] font-semibold"
+                    className="auth-link"
+                    style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontWeight: 600 }}
                 >
                     Back to Login
                 </button>
             </div>
 
-            <p className="text-xs text-[var(--foreground-muted)] mt-8 text-center">
-                Didn't receive the email? Check your spam folder or click resend to get a new verification link.
+            <p style={{ fontSize: 11, color: 'var(--color-text-disabled)', marginTop: 20 }}>
+                Didn&apos;t receive the email? Check your spam folder or click resend.
             </p>
         </div>
     );
 }
+
+export default function VerifyEmailPage() {
+    return (
+        <Suspense fallback={
+            <div style={{ textAlign: 'center', padding: '3rem 0' }}>
+                <div className="spinner" />
+            </div>
+        }>
+            <VerifyEmailContent />
+        </Suspense>
+    );
+}
+

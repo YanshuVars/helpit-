@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { PageHeader } from "@/components/ui/PageHeader";
 import { formatCurrency, formatDistanceToNow } from '@/lib/utils';
 
 interface Donation {
@@ -29,24 +29,16 @@ export default function NGODonationsPage() {
             const supabase = createClient();
 
             const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
-                setLoading(false);
-                return;
-            }
+            if (!session) { setLoading(false); return; }
 
-            // Get user's NGO
             const { data: membership } = await supabase
                 .from('ngo_members')
                 .select('ngo_id')
                 .eq('user_id', session.user.id)
                 .single();
 
-            if (!membership) {
-                setLoading(false);
-                return;
-            }
+            if (!membership) { setLoading(false); return; }
 
-            // Get donations
             const { data: donationsData } = await supabase
                 .from('donations')
                 .select('id, amount, donor_name, payment_method, status, created_at')
@@ -64,29 +56,16 @@ export default function NGODonationsPage() {
                 created_at: d.created_at,
             }));
 
-            // Calculate stats
             const totalReceived = donations.reduce((sum, d) => sum + d.amount, 0);
-
-            // This month
             const now = new Date();
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
             const thisMonth = donations
                 .filter(d => new Date(d.created_at) >= startOfMonth)
                 .reduce((sum, d) => sum + d.amount, 0);
-
-            // Unique donors
             const uniqueDonors = new Set(donations.map(d => d.donor_name)).size;
-
-            // Avg donation
             const avgDonation = donations.length > 0 ? Math.round(totalReceived / donations.length) : 0;
 
-            setStats({
-                totalReceived,
-                thisMonth,
-                totalDonors: uniqueDonors,
-                avgDonation,
-            });
-
+            setStats({ totalReceived, thisMonth, totalDonors: uniqueDonors, avgDonation });
             setDonations(donations);
             setLoading(false);
         }
@@ -96,56 +75,64 @@ export default function NGODonationsPage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
+            <div className="dashboard-loading">
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
             </div>
         );
     }
 
+    const statCards = [
+        { label: 'Total Received', value: formatCurrency(stats.totalReceived), icon: 'account_balance', iconBg: '#E8F5E9', iconColor: '#2E7D32' },
+        { label: 'This Month', value: formatCurrency(stats.thisMonth), icon: 'trending_up', iconBg: '#E3F2FD', iconColor: '#1565C0' },
+        { label: 'Donors', value: stats.totalDonors, icon: 'people', iconBg: '#EDE7F6', iconColor: 'var(--color-primary)' },
+        { label: 'Avg Donation', value: formatCurrency(stats.avgDonation), icon: 'analytics', iconBg: '#FFF3E0', iconColor: '#E65100' },
+    ];
+
     return (
-        <div className="flex flex-col gap-6">
-            <PageHeader title="Donations" showBack fallbackRoute="/ngo" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <h1 className="page-title">Donations</h1>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white rounded-xl p-5 min-h-[100px] border border-gray-200">
-                    <p className="text-xs text-gray-500 uppercase">Total Received</p>
-                    <p className="text-2xl font-bold mt-2">{formatCurrency(stats.totalReceived)}</p>
-                </div>
-                <div className="bg-white rounded-xl p-5 min-h-[100px] border border-gray-200">
-                    <p className="text-xs text-gray-500 uppercase">This Month</p>
-                    <p className="text-2xl font-bold mt-2">{formatCurrency(stats.thisMonth)}</p>
-                </div>
-                <div className="bg-white rounded-xl p-5 min-h-[100px] border border-gray-200">
-                    <p className="text-xs text-gray-500 uppercase">Donors</p>
-                    <p className="text-2xl font-bold mt-2">{stats.totalDonors}</p>
-                </div>
-                <div className="bg-white rounded-xl p-5 min-h-[100px] border border-gray-200">
-                    <p className="text-xs text-gray-500 uppercase">Avg Donation</p>
-                    <p className="text-2xl font-bold mt-2">{formatCurrency(stats.avgDonation)}</p>
-                </div>
+            <div className="stat-grid">
+                {statCards.map(stat => (
+                    <div key={stat.label} className="card" style={{ padding: 18 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                            <div style={{
+                                width: 36, height: 36, borderRadius: 8,
+                                background: stat.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ color: stat.iconColor, fontSize: 18 }}>{stat.icon}</span>
+                            </div>
+                            <span style={{ fontSize: 11, color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.5px' }}>{stat.label}</span>
+                        </div>
+                        <div style={{ fontSize: 22, fontWeight: 700 }}>{stat.value}</div>
+                    </div>
+                ))}
             </div>
 
             {/* Recent Donations */}
             <div>
-                <h2 className="font-bold mb-4">Recent Donations</h2>
+                <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>Recent Donations</h2>
                 {donations.length === 0 ? (
-                    <div className="p-8 text-center bg-white rounded-2xl border border-gray-100">
-                        <span className="material-symbols-outlined text-4xl text-gray-300 mb-2">payments</span>
-                        <p className="text-gray-500">No donations yet</p>
+                    <div className="empty-state-container">
+                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>payments</span>
+                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No donations yet</p>
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-4">
-                        {donations.map((donation) => (
-                            <div key={donation.id} className="bg-white rounded-xl p-4 border border-gray-200 flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                                    <span className="material-symbols-outlined text-green-600">payments</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {donations.map(donation => (
+                            <div key={donation.id} className="card" style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <div style={{
+                                    width: 40, height: 40, borderRadius: '50%',
+                                    background: '#E8F5E9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                }}>
+                                    <span className="material-symbols-outlined" style={{ color: '#2E7D32', fontSize: 20 }}>payments</span>
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="font-semibold text-sm truncate">{donation.donor_name}</p>
-                                    <p className="text-xs text-gray-500">{donation.payment_method} • {formatDistanceToNow(donation.created_at)}</p>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <p style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{donation.donor_name}</p>
+                                    <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{donation.payment_method} • {formatDistanceToNow(donation.created_at)}</p>
                                 </div>
-                                <p className="font-bold text-green-600 shrink-0">+{formatCurrency(donation.amount)}</p>
+                                <span style={{ fontWeight: 700, color: '#2E7D32', flexShrink: 0, fontSize: 14 }}>+{formatCurrency(donation.amount)}</span>
                             </div>
                         ))}
                     </div>

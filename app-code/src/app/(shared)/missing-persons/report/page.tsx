@@ -2,321 +2,167 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { missingPersonsApi } from "@/lib/api";
 
 export default function ReportMissingPersonPage() {
     const router = useRouter();
-    const [submitting, setSubmitting] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        full_name: "",
-        age: "",
-        gender: "",
-        photo_url: "",
-        height: "",
-        build: "",
-        hair_color: "",
-        eye_color: "",
-        distinguishing_marks: "",
-        last_seen_date: "",
-        last_seen_location: "",
-        last_seen_city: "",
-        last_seen_state: "",
-        clothing_description: "",
-        medical_conditions: "",
-        contact_name: "",
-        contact_phone: "",
-        contact_email: "",
+        fullName: "", age: "", gender: "", height: "", weight: "",
+        hairColor: "", eyeColor: "", distinguishingFeatures: "",
+        lastSeenDate: "", lastSeenTime: "", lastSeenLocation: "", lastSeenCity: "", lastSeenState: "",
+        clothing: "", circumstances: "",
+        contactName: "", contactPhone: "", contactEmail: "", contactRelation: "",
     });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitting(true);
-
+        setLoading(true);
         try {
-            await missingPersonsApi.create({
-                full_name: formData.full_name,
-                age: formData.age ? parseInt(formData.age) : null,
-                gender: formData.gender as any || null,
-                photo_url: formData.photo_url || null,
-                height: formData.height || null,
-                build: formData.build || null,
-                hair_color: formData.hair_color || null,
-                eye_color: formData.eye_color || null,
-                distinguishing_marks: formData.distinguishing_marks || null,
-                last_seen_date: formData.last_seen_date || null,
-                last_seen_location: formData.last_seen_location || null,
-                last_seen_city: formData.last_seen_city || null,
-                last_seen_state: formData.last_seen_state || null,
-                clothing_description: formData.clothing_description || null,
-                medical_conditions: formData.medical_conditions || null,
-                contact_name: formData.contact_name || null,
-                contact_phone: formData.contact_phone || null,
-                contact_email: formData.contact_email || null,
-            });
-
+            const res = await fetch("/api/missing-persons", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) });
+            if (!res.ok) throw new Error("Failed to submit report");
             alert("Report submitted successfully!");
             router.push("/missing-persons");
-        } catch (error) {
-            console.error("Error submitting report:", error);
-            alert("Failed to submit report. Please try again.");
-        } finally {
-            setSubmitting(false);
-        }
+        } catch (err) { console.error("Error submitting report:", err); alert("Failed to submit report. Please try again."); }
+        finally { setLoading(false); }
     };
 
+    const Section = ({ title, icon, children }: { title: string; icon: string; children: React.ReactNode }) => (
+        <div className="card">
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)", marginBottom: "var(--space-md)" }}>
+                <span className="material-symbols-outlined" style={{ color: "var(--primary)" }}>{icon}</span>
+                <h2 style={{ fontWeight: 600, fontSize: "var(--font-base)" }}>{title}</h2>
+            </div>
+            {children}
+        </div>
+    );
+
     return (
-        <div className="space-y-6 pb-20">
-            <PageHeader
-                title="Report Missing Person"
-                showBack
-                fallbackRoute="/missing-persons"
-            />
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+            {/* Header */}
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
+                <button onClick={() => router.push("/missing-persons")} style={{ border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center" }}>
+                    <span className="material-symbols-outlined" style={{ color: "var(--foreground-muted)" }}>arrow_back</span>
+                </button>
+                <div>
+                    <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Report Missing Person</h1>
+                    <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Provide as much detail as possible</p>
+                </div>
+            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Person Details */}
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                    <h2 className="font-semibold mb-4">Missing Person Details</h2>
-
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Full Name *</label>
-                            <input
-                                type="text"
-                                required
-                                value={formData.full_name}
-                                onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                                className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                placeholder="Enter person's full name"
-                            />
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+                {/* Personal Details */}
+                <Section title="Personal Details" icon="person">
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)" }}>
+                        <div style={{ gridColumn: "1 / -1" }}>
+                            <label className="field-label">Full Name *</label>
+                            <input name="fullName" value={formData.fullName} onChange={handleChange} className="field-input" required placeholder="Enter full name" />
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Age</label>
-                                <input
-                                    type="number"
-                                    value={formData.age}
-                                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="Age"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Gender</label>
-                                <select
-                                    value={formData.gender}
-                                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                >
-                                    <option value="">Select gender</option>
-                                    <option value="MALE">Male</option>
-                                    <option value="FEMALE">Female</option>
-                                    <option value="OTHER">Other</option>
-                                </select>
-                            </div>
-                        </div>
-
                         <div>
-                            <label className="block text-sm font-medium mb-1">Photo URL</label>
-                            <input
-                                type="url"
-                                value={formData.photo_url}
-                                onChange={(e) => setFormData({ ...formData, photo_url: e.target.value })}
-                                className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                placeholder="https://..."
-                            />
+                            <label className="field-label">Age *</label>
+                            <input name="age" type="number" value={formData.age} onChange={handleChange} className="field-input" required placeholder="Age" />
+                        </div>
+                        <div>
+                            <label className="field-label">Gender *</label>
+                            <select name="gender" value={formData.gender} onChange={handleChange} className="field-input" required>
+                                <option value="">Select</option>
+                                <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label className="field-label">Height (cm)</label>
+                            <input name="height" value={formData.height} onChange={handleChange} className="field-input" placeholder="e.g. 165" />
+                        </div>
+                        <div>
+                            <label className="field-label">Weight (kg)</label>
+                            <input name="weight" value={formData.weight} onChange={handleChange} className="field-input" placeholder="e.g. 60" />
                         </div>
                     </div>
-                </div>
+                </Section>
 
                 {/* Physical Description */}
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                    <h2 className="font-semibold mb-4">Physical Description</h2>
-
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Height</label>
-                                <input
-                                    type="text"
-                                    value={formData.height}
-                                    onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="e.g., 5 ft 8 in"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Build</label>
-                                <input
-                                    type="text"
-                                    value={formData.build}
-                                    onChange={(e) => setFormData({ ...formData, build: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="e.g., Slim, Average"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Hair Color</label>
-                                <input
-                                    type="text"
-                                    value={formData.hair_color}
-                                    onChange={(e) => setFormData({ ...formData, hair_color: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="e.g., Black, Brown"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Eye Color</label>
-                                <input
-                                    type="text"
-                                    value={formData.eye_color}
-                                    onChange={(e) => setFormData({ ...formData, eye_color: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="e.g., Black, Brown"
-                                />
-                            </div>
-                        </div>
-
+                <Section title="Physical Description" icon="face">
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)" }}>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Distinguishing Marks</label>
-                            <textarea
-                                value={formData.distinguishing_marks}
-                                onChange={(e) => setFormData({ ...formData, distinguishing_marks: e.target.value })}
-                                className="w-full rounded-xl border border-gray-200 px-4 py-3 resize-none"
-                                rows={2}
-                                placeholder="Scars, tattoos, birthmarks, etc."
-                            />
+                            <label className="field-label">Hair Color</label>
+                            <input name="hairColor" value={formData.hairColor} onChange={handleChange} className="field-input" placeholder="e.g. Black" />
                         </div>
-
                         <div>
-                            <label className="block text-sm font-medium mb-1">Clothing Description</label>
-                            <textarea
-                                value={formData.clothing_description}
-                                onChange={(e) => setFormData({ ...formData, clothing_description: e.target.value })}
-                                className="w-full rounded-xl border border-gray-200 px-4 py-3 resize-none"
-                                rows={2}
-                                placeholder="What was the person wearing?"
-                            />
+                            <label className="field-label">Eye Color</label>
+                            <input name="eyeColor" value={formData.eyeColor} onChange={handleChange} className="field-input" placeholder="e.g. Brown" />
                         </div>
-
-                        <div>
-                            <label className="block text-sm font-medium mb-1">Medical Conditions</label>
-                            <textarea
-                                value={formData.medical_conditions}
-                                onChange={(e) => setFormData({ ...formData, medical_conditions: e.target.value })}
-                                className="w-full rounded-xl border border-gray-200 px-4 py-3 resize-none"
-                                rows={2}
-                                placeholder="Any known medical conditions"
-                            />
+                        <div style={{ gridColumn: "1 / -1" }}>
+                            <label className="field-label">Distinguishing Features</label>
+                            <textarea name="distinguishingFeatures" value={formData.distinguishingFeatures} onChange={handleChange}
+                                className="field-input" style={{ minHeight: 80, resize: "vertical" }} placeholder="Scars, tattoos, marks, etc." />
                         </div>
                     </div>
-                </div>
+                </Section>
 
-                {/* Last Seen Info */}
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                    <h2 className="font-semibold mb-4">Last Seen Information</h2>
-
-                    <div className="space-y-4">
+                {/* Last Seen */}
+                <Section title="Last Seen Information" icon="location_on">
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)" }}>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Last Seen Date</label>
-                            <input
-                                type="date"
-                                value={formData.last_seen_date}
-                                onChange={(e) => setFormData({ ...formData, last_seen_date: e.target.value })}
-                                className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                            />
+                            <label className="field-label">Date *</label>
+                            <input name="lastSeenDate" type="date" value={formData.lastSeenDate} onChange={handleChange} className="field-input" required />
                         </div>
-
                         <div>
-                            <label className="block text-sm font-medium mb-1">Last Seen Location</label>
-                            <input
-                                type="text"
-                                value={formData.last_seen_location}
-                                onChange={(e) => setFormData({ ...formData, last_seen_location: e.target.value })}
-                                className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                placeholder="Specific location/address"
-                            />
+                            <label className="field-label">Time</label>
+                            <input name="lastSeenTime" type="time" value={formData.lastSeenTime} onChange={handleChange} className="field-input" />
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">City</label>
-                                <input
-                                    type="text"
-                                    value={formData.last_seen_city}
-                                    onChange={(e) => setFormData({ ...formData, last_seen_city: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="City"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">State</label>
-                                <input
-                                    type="text"
-                                    value={formData.last_seen_state}
-                                    onChange={(e) => setFormData({ ...formData, last_seen_state: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="State"
-                                />
-                            </div>
+                        <div style={{ gridColumn: "1 / -1" }}>
+                            <label className="field-label">Location / Address *</label>
+                            <input name="lastSeenLocation" value={formData.lastSeenLocation} onChange={handleChange} className="field-input" required placeholder="Address or landmark" />
+                        </div>
+                        <div>
+                            <label className="field-label">City *</label>
+                            <input name="lastSeenCity" value={formData.lastSeenCity} onChange={handleChange} className="field-input" required placeholder="City" />
+                        </div>
+                        <div>
+                            <label className="field-label">State *</label>
+                            <input name="lastSeenState" value={formData.lastSeenState} onChange={handleChange} className="field-input" required placeholder="State" />
+                        </div>
+                        <div style={{ gridColumn: "1 / -1" }}>
+                            <label className="field-label">Clothing Description</label>
+                            <textarea name="clothing" value={formData.clothing} onChange={handleChange}
+                                className="field-input" style={{ minHeight: 60, resize: "vertical" }} placeholder="What was the person wearing?" />
+                        </div>
+                        <div style={{ gridColumn: "1 / -1" }}>
+                            <label className="field-label">Circumstances</label>
+                            <textarea name="circumstances" value={formData.circumstances} onChange={handleChange}
+                                className="field-input" style={{ minHeight: 80, resize: "vertical" }} placeholder="Describe the circumstances of disappearance" />
                         </div>
                     </div>
-                </div>
+                </Section>
 
-                {/* Contact Info */}
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                    <h2 className="font-semibold mb-4">Contact Information</h2>
-
-                    <div className="space-y-4">
+                {/* Contact Information */}
+                <Section title="Contact Information" icon="call">
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)" }}>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Contact Name</label>
-                            <input
-                                type="text"
-                                value={formData.contact_name}
-                                onChange={(e) => setFormData({ ...formData, contact_name: e.target.value })}
-                                className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                placeholder="Your name"
-                            />
+                            <label className="field-label">Contact Name *</label>
+                            <input name="contactName" value={formData.contactName} onChange={handleChange} className="field-input" required placeholder="Your name" />
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Phone</label>
-                                <input
-                                    type="tel"
-                                    value={formData.contact_phone}
-                                    onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="Phone number"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">Email</label>
-                                <input
-                                    type="email"
-                                    value={formData.contact_email}
-                                    onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
-                                    className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                                    placeholder="Email address"
-                                />
-                            </div>
+                        <div>
+                            <label className="field-label">Relation *</label>
+                            <input name="contactRelation" value={formData.contactRelation} onChange={handleChange} className="field-input" required placeholder="e.g. Parent, Sibling" />
+                        </div>
+                        <div>
+                            <label className="field-label">Phone *</label>
+                            <input name="contactPhone" type="tel" value={formData.contactPhone} onChange={handleChange} className="field-input" required placeholder="Phone number" />
+                        </div>
+                        <div>
+                            <label className="field-label">Email</label>
+                            <input name="contactEmail" type="email" value={formData.contactEmail} onChange={handleChange} className="field-input" placeholder="Email address" />
                         </div>
                     </div>
-                </div>
+                </Section>
 
-                {/* Submit Button */}
-                <div className="p-6">
-                    <button
-                        type="submit"
-                        disabled={submitting}
-                        className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl disabled:opacity-50"
-                    >
-                        {submitting ? "Submitting..." : "Submit Report"}
-                    </button>
+                {/* Submit */}
+                <div style={{ display: "flex", gap: "var(--space-md)", justifyContent: "flex-end" }}>
+                    <button type="button" className="btn-secondary" onClick={() => router.push("/missing-persons")}>Cancel</button>
+                    <button type="submit" className="btn-primary" disabled={loading}>{loading ? "Submitting..." : "Submit Report"}</button>
                 </div>
             </form>
         </div>

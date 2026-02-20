@@ -1,65 +1,96 @@
+import React from "react";
+
 interface LoadingSkeletonProps {
-    variant?: "card" | "list" | "profile" | "stats";
+    variant?: "text" | "heading" | "avatar" | "card" | "custom";
+    width?: string | number;
+    height?: string | number;
     count?: number;
+    className?: string;
 }
 
-export function LoadingSkeleton({ variant = "card", count = 1 }: LoadingSkeletonProps) {
-    const items = Array.from({ length: count }, (_, i) => i);
+export function LoadingSkeleton({
+    variant = "text",
+    width,
+    height,
+    count = 1,
+    className = "",
+}: LoadingSkeletonProps) {
+    const variantClass = {
+        text: "skeleton-text",
+        heading: "skeleton-heading",
+        avatar: "skeleton-avatar",
+        card: "skeleton-card",
+        custom: "",
+    };
 
-    if (variant === "stats") {
-        return (
-            <div className="grid grid-cols-2 gap-4">
-                {items.map((i) => (
-                    <div key={i} className="animate-pulse rounded-xl p-5 bg-white border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="h-4 bg-gray-200 rounded w-20"></div>
-                            <div className="h-6 w-6 bg-gray-200 rounded"></div>
-                        </div>
-                        <div className="h-8 bg-gray-200 rounded w-16 mb-2"></div>
-                        <div className="h-3 bg-gray-200 rounded w-24"></div>
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
-    if (variant === "list") {
-        return (
-            <div className="space-y-3">
-                {items.map((i) => (
-                    <div key={i} className="animate-pulse flex items-center gap-4 p-4 rounded-xl bg-white border border-gray-200">
-                        <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
-                        <div className="flex-1">
-                            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                            <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                        </div>
-                        <div className="h-3 bg-gray-200 rounded w-10"></div>
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
-    if (variant === "profile") {
-        return (
-            <div className="animate-pulse flex flex-col items-center py-6">
-                <div className="h-20 w-20 bg-gray-200 rounded-full mb-4"></div>
-                <div className="h-6 bg-gray-200 rounded w-32 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-48"></div>
-            </div>
-        );
-    }
-
-    // Default card variant
     return (
-        <div className="space-y-4">
-            {items.map((i) => (
-                <div key={i} className="animate-pulse rounded-xl p-4 bg-white border border-gray-200">
-                    <div className="h-32 bg-gray-200 rounded-lg mb-3"></div>
-                    <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        <>
+            {Array.from({ length: count }).map((_, i) => (
+                <div
+                    key={i}
+                    className={`skeleton ${variantClass[variant]} ${className}`}
+                    style={{
+                        width: width || (variant === "avatar" ? 40 : undefined),
+                        height: height || (variant === "avatar" ? 40 : undefined),
+                    }}
+                />
+            ))}
+        </>
+    );
+}
+
+/* Pre-composed skeleton patterns for common page sections */
+export function SkeletonStatCards() {
+    return (
+        <div className="stats-grid">
+            {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="card" style={{ padding: 20 }}>
+                    <LoadingSkeleton variant="avatar" width={40} height={40} />
+                    <LoadingSkeleton variant="heading" width="50%" />
+                    <LoadingSkeleton variant="text" width="70%" />
                 </div>
             ))}
         </div>
     );
 }
+
+export function SkeletonTable({ rows = 5, cols = 4 }: { rows?: number; cols?: number }) {
+    return (
+        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+            <table className="data-table">
+                <thead>
+                    <tr>
+                        {Array.from({ length: cols }).map((_, i) => (
+                            <th key={i}>
+                                <LoadingSkeleton variant="text" width="60%" />
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {Array.from({ length: rows }).map((_, ri) => (
+                        <tr key={ri}>
+                            {Array.from({ length: cols }).map((_, ci) => (
+                                <td key={ci}>
+                                    <LoadingSkeleton variant="text" width="80%" />
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+export function SkeletonCardGrid({ count = 6 }: { count?: number }) {
+    return (
+        <div className="card-grid">
+            {Array.from({ length: count }).map((_, i) => (
+                <LoadingSkeleton key={i} variant="card" height={180} />
+            ))}
+        </div>
+    );
+}
+
+export default LoadingSkeleton;

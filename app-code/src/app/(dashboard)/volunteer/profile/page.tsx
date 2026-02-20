@@ -1,22 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PageHeader } from "@/components/ui/PageHeader";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
-interface VolunteerStats {
-    hours: number;
-    tasks: number;
-    ngos: number;
-}
-
-interface Achievement {
-    id: string;
-    title: string;
-    icon: string;
-    description: string;
-}
+interface VolunteerStats { hours: number; tasks: number; ngos: number; }
+interface Achievement { id: string; title: string; icon: string; description: string; }
 
 export default function VolunteerProfilePage() {
     const [user, setUser] = useState<any>(null);
@@ -24,57 +13,28 @@ export default function VolunteerProfilePage() {
     const [achievements, setAchievements] = useState<Achievement[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchProfile();
-    }, []);
+    useEffect(() => { fetchProfile(); }, []);
 
     async function fetchProfile() {
         try {
             const supabase = createClient();
             const { data: { user: authUser } } = await supabase.auth.getUser();
-
             if (!authUser) return;
 
-            // Fetch user details
-            const { data: userData } = await supabase
-                .from("users")
-                .select("*")
-                .eq("id", authUser.id)
-                .single();
-
+            const { data: userData } = await supabase.from("users").select("*").eq("id", authUser.id).single();
             setUser(userData);
 
-            // Fetch stats - Assignments
-            const { data: assignments } = await supabase
-                .from("volunteer_assignments")
-                .select("hours_logged, request:help_requests(ngo_id)")
-                .eq("volunteer_id", authUser.id)
-                .eq("status", "COMPLETED");
+            const { data: assignments } = await supabase.from("volunteer_assignments")
+                .select("hours_logged, request:help_requests(ngo_id)").eq("volunteer_id", authUser.id).eq("status", "COMPLETED");
 
             if (assignments) {
                 const totalHours = assignments.reduce((acc, curr) => acc + (curr.hours_logged || 0), 0);
-                const totalTasks = assignments.length;
-
-                // Count unique NGOs
                 const uniqueNgos = new Set(assignments.map((a: any) => a.request?.ngo_id).filter(Boolean));
-
-                setStats({
-                    hours: totalHours,
-                    tasks: totalTasks,
-                    ngos: uniqueNgos.size
-                });
+                setStats({ hours: totalHours, tasks: assignments.length, ngos: uniqueNgos.size });
             }
 
-            // Fetch achievements
-            const { data: achievementsData } = await supabase
-                .from("achievements")
-                .select("*")
-                .eq("user_id", authUser.id);
-
-            if (achievementsData) {
-                setAchievements(achievementsData as any[]);
-            }
-
+            const { data: achievementsData } = await supabase.from("achievements").select("*").eq("user_id", authUser.id);
+            if (achievementsData) setAchievements(achievementsData as any[]);
         } catch (error) {
             console.error("Error fetching profile:", error);
         } finally {
@@ -84,11 +44,14 @@ export default function VolunteerProfilePage() {
 
     if (loading) {
         return (
-            <div className="flex flex-col gap-6">
-                <PageHeader title="My Profile" showBack fallbackRoute="/volunteer" />
-                <div className="flex items-center justify-center py-20">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div>
+                    <Link href="/volunteer" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span> Back
+                    </Link>
+                    <h1 className="page-title">My Profile</h1>
                 </div>
+                <div className="dashboard-loading"><span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span></div>
             </div>
         );
     }
@@ -96,76 +59,81 @@ export default function VolunteerProfilePage() {
     if (!user) return null;
 
     return (
-        <div className="flex flex-col gap-6">
-            <PageHeader title="My Profile" showBack fallbackRoute="/volunteer" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <div>
+                <Link href="/volunteer" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span> Back
+                </Link>
+                <h1 className="page-title">My Profile</h1>
+            </div>
 
             {/* Profile Header */}
-            <div className="flex flex-col items-center text-center">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[var(--primary)] to-blue-400 flex items-center justify-center text-white text-3xl font-bold mb-4 overflow-hidden">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                <div style={{
+                    width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', marginBottom: 12,
+                    background: 'linear-gradient(135deg, var(--color-primary), #42A5F5)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 28, fontWeight: 700,
+                }}>
                     {user.avatar_url ? (
-                        <img src={user.avatar_url} alt={user.full_name} className="w-full h-full object-cover" />
-                    ) : (
-                        user.full_name?.charAt(0) || "U"
-                    )}
+                        <img src={user.avatar_url} alt={user.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (user.full_name?.charAt(0) || "U")}
                 </div>
-                <h2 className="text-xl font-bold">{user.full_name}</h2>
-                <p className="text-sm text-gray-500">{user.email}</p>
-                <Link href="/volunteer/profile/edit" className="mt-3 text-[var(--primary)] text-sm font-semibold min-h-[44px]">Edit Profile</Link>
+                <h2 style={{ fontSize: 20, fontWeight: 700 }}>{user.full_name}</h2>
+                <p style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>{user.email}</p>
+                <Link href="/volunteer/profile/edit" style={{ marginTop: 8, color: 'var(--color-primary)', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>Edit Profile</Link>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-3">
-                <div className="flex flex-col items-center justify-center p-5 min-h-[100px] bg-white rounded-xl border border-gray-200">
-                    <p className="text-2xl font-bold">{stats.hours}</p>
-                    <p className="text-xs text-gray-500 mt-1">Hours</p>
-                </div>
-                <div className="flex flex-col items-center justify-center p-5 min-h-[100px] bg-white rounded-xl border border-gray-200">
-                    <p className="text-2xl font-bold">{stats.tasks}</p>
-                    <p className="text-xs text-gray-500 mt-1">Tasks</p>
-                </div>
-                <div className="flex flex-col items-center justify-center p-5 min-h-[100px] bg-white rounded-xl border border-gray-200">
-                    <p className="text-2xl font-bold">{stats.ngos}</p>
-                    <p className="text-xs text-gray-500 mt-1">NGOs</p>
-                </div>
+            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+                {[
+                    { label: 'Hours', value: stats.hours },
+                    { label: 'Tasks', value: stats.tasks },
+                    { label: 'NGOs', value: stats.ngos },
+                ].map(s => (
+                    <div key={s.label} className="stat-card" style={{ minHeight: 80 }}>
+                        <div className="stat-card-value">{s.value}</div>
+                        <div className="stat-card-label">{s.label}</div>
+                    </div>
+                ))}
             </div>
 
             {/* Skills */}
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-                <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold">Skills</h3>
-                    <Link href="/volunteer/profile/edit" className="text-[var(--primary)] text-xs font-semibold">Add</Link>
+            <div className="card" style={{ padding: 18 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <h3 style={{ fontWeight: 600, fontSize: 15 }}>Skills</h3>
+                    <Link href="/volunteer/profile/edit" style={{ color: 'var(--color-primary)', fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>Add</Link>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                     {user.skills && user.skills.length > 0 ? (
                         user.skills.map((skill: string) => (
-                            <span key={skill} className="px-3 py-1.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] text-sm font-medium">
-                                {skill}
-                            </span>
+                            <span key={skill} style={{
+                                padding: '4px 12px', borderRadius: 20, background: 'var(--color-primary-bg)',
+                                color: 'var(--color-primary)', fontSize: 12, fontWeight: 500,
+                            }}>{skill}</span>
                         ))
                     ) : (
-                        <p className="text-sm text-gray-400">No skills added yet.</p>
+                        <p style={{ fontSize: 13, color: 'var(--color-text-disabled)' }}>No skills added yet.</p>
                     )}
                 </div>
             </div>
 
-            {/* Achievements Preview */}
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
-                <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold">Achievements</h3>
-                </div>
+            {/* Achievements */}
+            <div className="card" style={{ padding: 18 }}>
+                <h3 style={{ fontWeight: 600, fontSize: 15, marginBottom: 10 }}>Achievements</h3>
                 {achievements.length > 0 ? (
-                    <div className="flex gap-3 overflow-x-auto pb-2">
-                        {achievements.map((achievement) => (
-                            <div key={achievement.id} className="flex flex-col items-center min-w-[80px]">
-                                <div className="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-xl mb-1">
-                                    {achievement.icon || "🏆"}
-                                </div>
-                                <span className="text-[10px] text-center line-clamp-2">{achievement.title}</span>
+                    <div style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 4 }}>
+                        {achievements.map(a => (
+                            <div key={a.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 72, flexShrink: 0 }}>
+                                <div style={{
+                                    width: 44, height: 44, borderRadius: '50%', background: '#FFF8E1',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, marginBottom: 4,
+                                }}>{a.icon || "🏆"}</div>
+                                <span style={{ fontSize: 10, textAlign: 'center', lineHeight: 1.3 }}>{a.title}</span>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="text-sm text-gray-400">No achievements yet. Keep volunteering!</p>
+                    <p style={{ fontSize: 13, color: 'var(--color-text-disabled)' }}>No achievements yet. Keep volunteering!</p>
                 )}
             </div>
         </div>

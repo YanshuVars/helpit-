@@ -142,29 +142,6 @@ export default function NGODashboardPage() {
         fetchDashboardData();
     }, []);
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-64">
-                <div className="spinner"></div>
-            </div>
-        );
-    }
-
-    if (!data?.ngo) {
-        return (
-            <div className="flex flex-col items-center justify-center p-8 text-center animate-fadeIn">
-                <div className="w-20 h-20 rounded-2xl bg-[var(--primary-50)] flex items-center justify-center mb-4">
-                    <span className="material-symbols-outlined text-4xl text-[var(--primary)]">business</span>
-                </div>
-                <h2 className="text-xl font-bold mb-2">No NGO Found</h2>
-                <p className="text-[var(--foreground-muted)] mb-4">You need to register an NGO to access this dashboard.</p>
-                <Link href="/register/ngo" className="btn btn-primary">
-                    Register NGO
-                </Link>
-            </div>
-        );
-    }
-
     const getActivityIcon = (type: string) => {
         switch (type) {
             case 'request': return 'pending_actions';
@@ -175,131 +152,131 @@ export default function NGODashboardPage() {
         }
     };
 
-    const getActivityColor = (type: string) => {
+    const getActivityBg = (type: string) => {
         switch (type) {
-            case 'request': return 'bg-orange-100 text-orange-600';
-            case 'donation': return 'bg-green-100 text-green-600';
-            case 'volunteer': return 'bg-blue-100 text-blue-600';
-            case 'event': return 'bg-purple-100 text-purple-600';
-            default: return 'bg-gray-100 text-gray-600';
+            case 'request': return { bg: '#FFF3E0', color: '#E65100' };
+            case 'donation': return { bg: '#E8F5E9', color: '#2E7D32' };
+            case 'volunteer': return { bg: '#E3F2FD', color: '#1565C0' };
+            case 'event': return { bg: '#EDE7F6', color: '#4527A0' };
+            default: return { bg: '#F5F5F5', color: '#616161' };
         }
     };
 
+    if (loading) {
+        return (
+            <div className="dashboard-loading">
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
+            </div>
+        );
+    }
+
+    if (!data?.ngo) {
+        return (
+            <div className="empty-state-container">
+                <div style={{ width: 56, height: 56, borderRadius: 14, background: 'var(--color-primary-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 28, color: 'var(--color-primary)' }}>business</span>
+                </div>
+                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>No NGO Found</h2>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: 13, marginBottom: 16 }}>You need to register an NGO to access this dashboard.</p>
+                <Link href="/register/ngo" className="btn btn-primary">Register NGO</Link>
+            </div>
+        );
+    }
+
+    const statCards = [
+        { icon: 'pending_actions', iconBg: '#EDE7F6', iconColor: 'var(--color-primary)', value: data.ngo.total_requests, label: 'Total Requests', badge: `${data.stats.activeRequests} active` },
+        { icon: 'groups', iconBg: '#E3F2FD', iconColor: '#1565C0', value: data.ngo.total_volunteers, label: 'Volunteers' },
+        { icon: 'payments', iconBg: '#E8F5E9', iconColor: '#2E7D32', value: formatCurrency(data.ngo.total_donations), label: 'Total Raised' },
+        { icon: 'event', iconBg: '#EDE7F6', iconColor: '#4527A0', value: data.ngo.total_events, label: 'Events', badge: `${data.stats.upcomingEvents} upcoming` },
+    ];
+
     return (
-        <div className="flex flex-col">
-            {/* Welcome Section */}
-            <div className="mb-6 animate-slideUp">
-                <h1 className="text-2xl font-bold">{data.ngo.name}</h1>
-                <p className="text-[var(--foreground-muted)] text-sm mt-1">Welcome back! Here's your impact overview.</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {/* Welcome */}
+            <div>
+                <h1 className="page-title">{data.ngo.name}</h1>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: 14, marginTop: 2 }}>Welcome back! Here&apos;s your impact overview.</p>
             </div>
 
             {/* Quick Actions */}
-            <section className="section-spacing">
-                <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-1">
-                    <Link
-                        href="/ngo/requests/create"
-                        className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[var(--primary)] text-white px-5 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
-                    >
-                        <span className="material-symbols-outlined text-xl">add_circle</span>
-                        <span className="text-sm font-semibold">New Request</span>
-                    </Link>
-                    <Link
-                        href="/ngo/events"
-                        className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white border border-[var(--border)] text-[var(--foreground)] px-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
-                    >
-                        <span className="material-symbols-outlined text-xl">event</span>
-                        <span className="text-sm font-semibold">Create Event</span>
-                    </Link>
-                    <Link
-                        href="/ngo/posts"
-                        className="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-white border border-[var(--border)] text-[var(--foreground)] px-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
-                    >
-                        <span className="material-symbols-outlined text-xl">campaign</span>
-                        <span className="text-sm font-semibold">Announcement</span>
-                    </Link>
-                </div>
-            </section>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <Link href="/ngo/requests/create" className="btn btn-primary" style={{ gap: 6 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add_circle</span>
+                    New Request
+                </Link>
+                <Link href="/ngo/events" className="btn btn-secondary" style={{ gap: 6 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>event</span>
+                    Create Event
+                </Link>
+                <Link href="/ngo/posts" className="btn btn-secondary" style={{ gap: 6 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>campaign</span>
+                    Announcement
+                </Link>
+            </div>
 
             {/* Stats Grid */}
-            <section className="section-spacing">
-                <div className="grid grid-cols-2 gap-3">
-                    <div className="card p-4">
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="w-10 h-10 rounded-xl bg-[var(--primary-50)] flex items-center justify-center">
-                                <span className="material-symbols-outlined text-[var(--primary)]">pending_actions</span>
-                            </span>
-                            <span className="badge badge-primary">{data.stats.activeRequests} active</span>
+            <div className="stat-grid">
+                {statCards.map(stat => (
+                    <div key={stat.label} className="card" style={{ padding: 18 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                            <div style={{
+                                width: 40, height: 40, borderRadius: 10,
+                                background: stat.iconBg,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ color: stat.iconColor, fontSize: 20 }}>{stat.icon}</span>
+                            </div>
+                            {stat.badge && (
+                                <span className="badge badge-info" style={{ fontSize: 11 }}>{stat.badge}</span>
+                            )}
                         </div>
-                        <p className="text-2xl font-bold">{data.ngo.total_requests}</p>
-                        <p className="text-sm text-[var(--foreground-muted)]">Total Requests</p>
+                        <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--color-text-heading)' }}>{stat.value}</div>
+                        <div style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 2 }}>{stat.label}</div>
                     </div>
-
-                    <div className="card p-4">
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-blue-600">groups</span>
-                            </span>
-                        </div>
-                        <p className="text-2xl font-bold">{data.ngo.total_volunteers}</p>
-                        <p className="text-sm text-[var(--foreground-muted)]">Volunteers</p>
-                    </div>
-
-                    <div className="card p-4">
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-green-600">payments</span>
-                            </span>
-                        </div>
-                        <p className="text-2xl font-bold">{formatCurrency(data.ngo.total_donations)}</p>
-                        <p className="text-sm text-[var(--foreground-muted)]">Total Raised</p>
-                    </div>
-
-                    <div className="card p-4">
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-purple-600">event</span>
-                            </span>
-                            <span className="badge badge-info">{data.stats.upcomingEvents} upcoming</span>
-                        </div>
-                        <p className="text-2xl font-bold">{data.ngo.total_events}</p>
-                        <p className="text-sm text-[var(--foreground-muted)]">Events</p>
-                    </div>
-                </div>
-            </section>
+                ))}
+            </div>
 
             {/* Recent Activity */}
-            <section>
-                <div className="flex items-center justify-between section-header">
-                    <h3 className="text-lg font-bold">Recent Activity</h3>
-                    <button className="text-sm font-medium text-[var(--primary)]">View all</button>
+            <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <h2 style={{ fontSize: 16, fontWeight: 700 }}>Recent Activity</h2>
+                    <button className="auth-link" style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 13 }}>View all</button>
                 </div>
 
-                <div className="card overflow-hidden">
+                <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
                     {data.recentActivity.length === 0 ? (
-                        <div className="p-8 text-center">
-                            <span className="material-symbols-outlined text-4xl text-[var(--foreground-light)] mb-2">inbox</span>
-                            <p className="text-[var(--foreground-muted)]">No recent activity</p>
+                        <div style={{ padding: 40, textAlign: 'center' }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>inbox</span>
+                            <p style={{ color: 'var(--color-text-muted)', marginTop: 8, fontSize: 13 }}>No recent activity</p>
                         </div>
                     ) : (
-                        <div className="divide-y divide-[var(--border-light)]">
-                            {data.recentActivity.map((activity) => (
-                                <div key={activity.id} className="flex items-start gap-3 p-4 hover:bg-[var(--background-subtle)] transition-colors">
-                                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${getActivityColor(activity.type)}`}>
-                                        <span className="material-symbols-outlined text-lg">{getActivityIcon(activity.type)}</span>
+                        data.recentActivity.map((activity, i) => {
+                            const colors = getActivityBg(activity.type);
+                            return (
+                                <div key={activity.id} className="list-row" style={{
+                                    display: 'flex', alignItems: 'flex-start', gap: 12, padding: '14px 18px',
+                                    borderBottom: i < data.recentActivity.length - 1 ? '1px solid var(--color-border-subtle)' : 'none',
+                                }}>
+                                    <div style={{
+                                        width: 36, height: 36, borderRadius: 8,
+                                        background: colors.bg, color: colors.color,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                    }}>
+                                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>{getActivityIcon(activity.type)}</span>
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-medium text-sm truncate">{activity.title}</p>
-                                        <p className="text-xs text-[var(--foreground-muted)] mt-0.5">{activity.description}</p>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <p style={{ fontWeight: 500, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{activity.title}</p>
+                                        <p style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 2 }}>{activity.description}</p>
                                     </div>
-                                    <span className="text-xs text-[var(--foreground-light)] shrink-0">
+                                    <span style={{ fontSize: 11, color: 'var(--color-text-disabled)', flexShrink: 0 }}>
                                         {activity.created_at ? formatDistanceToNow(activity.created_at) : 'Just now'}
                                     </span>
                                 </div>
-                            ))}
-                        </div>
+                            );
+                        })
                     )}
                 </div>
-            </section>
+            </div>
         </div>
     );
 }

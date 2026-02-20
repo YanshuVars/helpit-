@@ -54,24 +54,25 @@ export default function IndividualRegisterPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-[800px] px-6 py-8">
-            <div className="flex items-center justify-between pt-2 pb-6">
-                <Link href="/register" className="p-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">arrow_back_ios_new</span>
-                </Link>
-                <h2 className="text-lg font-bold">Individual Signup</h2>
-                <div className="w-10"></div>
-            </div>
+        <>
+            <Link href="/register" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 20, fontSize: 13 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_back</span>
+                Back to role selection
+            </Link>
+
+            <h1>Create Donor Account</h1>
+            <p className="auth-subtitle">Discover NGOs and make donations</p>
 
             {error && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+                <div className="alert alert-error" style={{ marginBottom: 16 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>error</span>
                     {error}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Full Name</label>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div className="form-group">
+                    <label className="field-label">Full Name</label>
                     <input
                         type="text"
                         name="fullName"
@@ -79,66 +80,71 @@ export default function IndividualRegisterPage() {
                         value={formData.fullName}
                         onChange={handleChange}
                         required
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
+                        className="field-input"
                     />
                 </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Email Address</label>
+
+                <div className="form-group">
+                    <label className="field-label">Email Address</label>
                     <input
                         type="email"
                         name="email"
-                        placeholder="Enter your email"
+                        placeholder="name@example.com"
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
+                        className="field-input"
                     />
                 </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Phone Number</label>
+
+                <div className="form-group">
+                    <label className="field-label">Phone Number</label>
                     <input
                         type="tel"
                         name="phone"
-                        placeholder="Enter your phone"
+                        placeholder="Enter your phone (optional)"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
+                        className="field-input"
                     />
                 </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Password</label>
+
+                <div className="form-group">
+                    <label className="field-label">Password</label>
                     <input
                         type="password"
                         name="password"
-                        placeholder="Create a password (min 8 chars)"
+                        placeholder="Min 8 characters"
                         value={formData.password}
                         onChange={handleChange}
                         required
                         minLength={8}
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Confirm Password</label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm your password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        required
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
+                        className="field-input"
                     />
                 </div>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl mt-4 disabled:opacity-60"
-                >
+                <div className="form-group">
+                    <label className="field-label">Confirm Password</label>
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Re-enter your password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        required
+                        className="field-input"
+                    />
+                </div>
+
+                <button type="submit" disabled={loading} className="auth-submit-btn">
                     {loading ? 'Creating Account...' : 'Create Account'}
                 </button>
             </form>
-        </div>
+
+            <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--color-text-muted)', marginTop: 20 }}>
+                Already have an account?{" "}
+                <Link href="/login" className="auth-link" style={{ fontWeight: 600 }}>Sign in</Link>
+            </p>
+        </>
     );
 }

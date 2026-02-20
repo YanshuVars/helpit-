@@ -30,11 +30,11 @@ export function RequestCard({ request }: RequestCardProps) {
     };
 
     return (
-        <Card variant="glass-elevated" padding="none" className="h-full flex flex-col group overflow-hidden">
+        <Card padding="none" className="h-full flex flex-col group overflow-hidden">
             <div className="p-5 flex-1 flex flex-col gap-3">
                 <div className="flex justify-between items-start">
                     <div className="flex gap-2">
-                        <Badge variant="neutral" size="sm">
+                        <Badge variant="default">
                             {request.category.replace("_", " ")}
                         </Badge>
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border ${urgencyColors[request.urgency]}`}>

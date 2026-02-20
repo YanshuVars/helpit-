@@ -18,78 +18,83 @@ const request = {
     ],
 };
 
+const urgencyMap: Record<string, { bg: string; color: string }> = {
+    CRITICAL: { bg: '#FEE2E2', color: '#DC2626' },
+    HIGH: { bg: '#FFF3E0', color: '#E65100' },
+    MEDIUM: { bg: '#FFF8E1', color: '#F57F17' },
+    LOW: { bg: '#E8F5E9', color: '#2E7D32' },
+};
+
 export default function RequestDetailPage() {
+    const uStyle = urgencyMap[request.urgency] || { bg: '#F5F5F5', color: '#616161' };
+
     return (
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {/* Header */}
-            <div className="flex items-center gap-3">
-                <Link href="/ngo/requests" className="p-2 -ml-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">arrow_back</span>
-                </Link>
-                <div className="flex-1">
-                    <h1 className="text-lg font-bold">{request.title}</h1>
-                    <p className="text-xs text-gray-500">Created {request.createdAt}</p>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                <div>
+                    <Link href="/ngo/requests" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span>
+                        Back to requests
+                    </Link>
+                    <h1 className="page-title">{request.title}</h1>
+                    <p style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 2 }}>Created {request.createdAt}</p>
                 </div>
-                <button className="p-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">more_vert</span>
+                <button className="btn btn-secondary" style={{ padding: '6px 10px', minHeight: 0 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>more_vert</span>
                 </button>
             </div>
 
             {/* Status Badges */}
-            <div className="flex gap-2">
-                <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-red-100 text-red-700">
-                    {request.urgency}
-                </span>
-                <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-blue-100 text-blue-700">
-                    {request.status}
-                </span>
-                <span className="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-100 text-gray-600">
-                    {request.category}
-                </span>
+            <div style={{ display: 'flex', gap: 8 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 'var(--radius-full)', background: uStyle.bg, color: uStyle.color }}>{request.urgency}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 'var(--radius-full)', background: '#E3F2FD', color: '#1565C0' }}>{request.status}</span>
+                <span style={{ fontSize: 11, fontWeight: 500, padding: '4px 12px', borderRadius: 'var(--radius-full)', background: 'var(--color-bg-subtle)', color: 'var(--color-text-muted)' }}>{request.category}</span>
             </div>
 
             {/* Description */}
-            <div className="bg-white rounded-xl p-4 border border-gray-200">
-                <h3 className="font-semibold mb-2">Description</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{request.description}</p>
+            <div className="card" style={{ padding: 18 }}>
+                <h3 style={{ fontWeight: 600, marginBottom: 8, fontSize: 14 }}>Description</h3>
+                <p style={{ fontSize: 13, color: 'var(--color-text-body)', lineHeight: 1.6 }}>{request.description}</p>
             </div>
 
             {/* Location */}
-            <div className="bg-white rounded-xl p-4 border border-gray-200">
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[var(--primary)]">location_on</span>
+            <div className="card" style={{ padding: 18 }}>
+                <h3 style={{ fontWeight: 600, marginBottom: 8, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span className="material-symbols-outlined" style={{ color: 'var(--color-primary)', fontSize: 18 }}>location_on</span>
                     Location
                 </h3>
-                <p className="text-sm text-gray-600">{request.location}</p>
-                <div className="h-32 rounded-lg bg-gray-100 mt-3 flex items-center justify-center">
-                    <span className="text-gray-400 text-sm">Map</span>
+                <p style={{ fontSize: 13, color: 'var(--color-text-body)' }}>{request.location}</p>
+                <div style={{ height: 100, borderRadius: 'var(--radius-sm)', background: 'var(--color-bg-subtle)', marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ color: 'var(--color-text-disabled)', fontSize: 13 }}>Map</span>
                 </div>
-                <button className="w-full mt-3 text-[var(--primary)] text-sm font-semibold flex items-center justify-center gap-1">
-                    <span className="material-symbols-outlined text-lg">directions</span>
+                <button className="auth-link" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: 10, width: '100%', border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>directions</span>
                     Get Directions
                 </button>
             </div>
 
             {/* Assigned Volunteers */}
-            <div className="bg-white rounded-xl p-4 border border-gray-200">
-                <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold">Assigned Volunteers ({request.volunteers.length})</h3>
-                    <Link href={`/ngo/requests/${request.id}/assign`} className="text-[var(--primary)] text-sm font-semibold">
-                        + Assign
-                    </Link>
+            <div className="card" style={{ padding: 18 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                    <h3 style={{ fontWeight: 600, fontSize: 14 }}>Assigned Volunteers ({request.volunteers.length})</h3>
+                    <Link href={`/ngo/requests/${request.id}/assign`} className="auth-link" style={{ fontSize: 13, fontWeight: 600 }}>+ Assign</Link>
                 </div>
-                <div className="space-y-3">
-                    {request.volunteers.map((volunteer) => (
-                        <div key={volunteer.id} className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] font-bold">
-                                {volunteer.avatar}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {request.volunteers.map(vol => (
+                        <div key={vol.id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <div style={{
+                                width: 38, height: 38, borderRadius: '50%',
+                                background: 'var(--color-primary-soft)', color: 'var(--color-primary)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontWeight: 700, fontSize: 14,
+                            }}>{vol.avatar}</div>
+                            <div style={{ flex: 1 }}>
+                                <p style={{ fontWeight: 500, fontSize: 13 }}>{vol.name}</p>
+                                <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{vol.status.replace("_", " ")}</p>
                             </div>
-                            <div className="flex-1">
-                                <p className="font-medium text-sm">{volunteer.name}</p>
-                                <p className="text-xs text-gray-500">{volunteer.status.replace("_", " ")}</p>
-                            </div>
-                            <button className="p-1.5 rounded-full hover:bg-gray-100">
-                                <span className="material-symbols-outlined text-gray-400">chat</span>
+                            <button className="btn btn-secondary" style={{ padding: '4px 8px', minHeight: 0 }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--color-text-muted)' }}>chat</span>
                             </button>
                         </div>
                     ))}
@@ -97,13 +102,13 @@ export default function RequestDetailPage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-3 sticky bottom-24 bg-[var(--background-light)] pt-4">
-                <Link href={`/ngo/requests/${request.id}/edit`} className="flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-200 bg-white font-semibold text-sm">
-                    <span className="material-symbols-outlined text-lg">edit</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <Link href={`/ngo/requests/${request.id}/edit`} className="btn btn-secondary" style={{ justifyContent: 'center', gap: 6 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>edit</span>
                     Edit
                 </Link>
-                <button className="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-500 text-white font-semibold text-sm">
-                    <span className="material-symbols-outlined text-lg">check_circle</span>
+                <button className="btn btn-primary" style={{ background: 'var(--color-success)', justifyContent: 'center', gap: 6 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>check_circle</span>
                     Mark Resolved
                 </button>
             </div>

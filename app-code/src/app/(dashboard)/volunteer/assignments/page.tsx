@@ -3,23 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { PageHeader } from "@/components/ui/PageHeader";
 import { formatDistanceToNow } from "@/lib/utils";
 
 interface Assignment {
-    id: string;
-    status: string;
-    hours_spent: number;
-    request: {
-        id: string;
-        title: string;
-        description: string;
-        ngo: {
-            name: string;
-        };
-        scheduled_date: string;
-        location: string;
-    };
+    id: string; status: string; hours_spent: number;
+    request: { id: string; title: string; description: string; ngo: { name: string }; scheduled_date: string; location: string };
 }
 
 type TabType = 'ACTIVE' | 'COMPLETED';
@@ -32,132 +20,95 @@ export default function VolunteerAssignmentsPage() {
     useEffect(() => {
         async function fetchAssignments() {
             const supabase = createClient();
-
             const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
-                setLoading(false);
-                return;
-            }
+            if (!session) { setLoading(false); return; }
 
-            // Get assignments
-            const { data: assignmentsData } = await supabase
-                .from('volunteer_assignments')
-                .select('id, status, hours_spent, request_id')
-                .eq('volunteer_id', session.user.id)
+            const { data: assignmentsData } = await supabase.from('volunteer_assignments')
+                .select('id, status, hours_spent, request_id').eq('volunteer_id', session.user.id)
                 .in('status', activeTab === 'ACTIVE' ? ['ASSIGNED', 'IN_PROGRESS'] : ['COMPLETED'])
                 .order('created_at', { ascending: false });
 
-            // Get request details
             const requestIds = (assignmentsData || []).map(a => a.request_id).filter(Boolean);
-            let requestsData: Record<string, { title: string; description: string; ngo_name: string; scheduled_date: string; location: string }> = {};
-
+            let requestsData: Record<string, any> = {};
             if (requestIds.length > 0) {
-                const { data: requests } = await supabase
-                    .from('requests')
-                    .select('id, title, description, ngo:ngos(name), scheduled_date, location')
-                    .in('id', requestIds);
-
+                const { data: requests } = await supabase.from('requests').select('id, title, description, ngo:ngos(name), scheduled_date, location').in('id', requestIds);
                 (requests || []).forEach(r => {
-                    requestsData[r.id] = {
-                        title: r.title,
-                        description: r.description,
-                        ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO',
-                        scheduled_date: r.scheduled_date,
-                        location: r.location,
-                    };
+                    requestsData[r.id] = { title: r.title, description: r.description, ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO', scheduled_date: r.scheduled_date, location: r.location };
                 });
             }
 
-            const formattedAssignments: Assignment[] = (assignmentsData || []).map(a => ({
-                id: a.id,
-                status: a.status,
-                hours_spent: a.hours_spent,
+            const formatted: Assignment[] = (assignmentsData || []).map(a => ({
+                id: a.id, status: a.status, hours_spent: a.hours_spent,
                 request: {
-                    id: a.request_id,
-                    title: requestsData[a.request_id]?.title || 'Unknown Request',
+                    id: a.request_id, title: requestsData[a.request_id]?.title || 'Unknown Request',
                     description: requestsData[a.request_id]?.description || '',
-                    ngo: {
-                        name: requestsData[a.request_id]?.ngo_name || 'Unknown NGO',
-                    },
+                    ngo: { name: requestsData[a.request_id]?.ngo_name || 'Unknown NGO' },
                     scheduled_date: requestsData[a.request_id]?.scheduled_date || '',
                     location: requestsData[a.request_id]?.location || '',
                 },
             }));
-
-            setAssignments(formattedAssignments);
+            setAssignments(formatted);
             setLoading(false);
         }
-
         fetchAssignments();
     }, [activeTab]);
 
-    const statusStyles: Record<string, string> = {
-        ASSIGNED: "bg-blue-100 text-blue-700",
-        IN_PROGRESS: "bg-purple-100 text-purple-700",
-        COMPLETED: "bg-green-100 text-green-700",
+    const statusStyles: Record<string, { bg: string; text: string }> = {
+        ASSIGNED: { bg: '#E3F2FD', text: '#1565C0' },
+        IN_PROGRESS: { bg: '#F3E5F5', text: '#7B1FA2' },
+        COMPLETED: { bg: 'var(--color-success-bg, #E8F5E9)', text: 'var(--color-success)' },
     };
 
     return (
-        <div className="flex flex-col gap-6">
-            <PageHeader title="My Assignments" showBack fallbackRoute="/volunteer" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div>
+                <Link href="/volunteer" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span> Back
+                </Link>
+                <h1 className="page-title">My Assignments</h1>
+            </div>
 
             {/* Tabs */}
-            <div className="flex gap-2">
-                <button
-                    onClick={() => setActiveTab('ACTIVE')}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${activeTab === 'ACTIVE' ? 'bg-[var(--primary)] text-white' : 'bg-[var(--background-subtle)]'}`}
-                >
-                    Active
-                </button>
-                <button
-                    onClick={() => setActiveTab('COMPLETED')}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${activeTab === 'COMPLETED' ? 'bg-[var(--primary)] text-white' : 'bg-[var(--background-subtle)]'}`}
-                >
-                    Completed
-                </button>
+            <div style={{ display: 'flex', gap: 6 }}>
+                {(['ACTIVE', 'COMPLETED'] as TabType[]).map(tab => (
+                    <button key={tab} onClick={() => setActiveTab(tab)}
+                        className={activeTab === tab ? "tab-pill tab-pill-active" : "tab-pill"}
+                    >{tab === 'ACTIVE' ? 'Active' : 'Completed'}</button>
+                ))}
             </div>
 
             {loading ? (
-                <div className="flex items-center justify-center h-64">
-                    <div className="spinner"></div>
-                </div>
+                <div className="dashboard-loading"><div className="spinner" /></div>
             ) : assignments.length === 0 ? (
-                <div className="flex flex-col items-center justify-center p-8 text-center animate-fadeIn">
-                    <div className="w-16 h-16 rounded-2xl bg-[var(--primary-50)] flex items-center justify-center mb-4">
-                        <span className="material-symbols-outlined text-3xl text-[var(--primary)]">assignment</span>
+                <div className="empty-state-container">
+                    <div style={{ width: 56, height: 56, borderRadius: 16, background: 'var(--color-primary-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 28, color: 'var(--color-primary)' }}>assignment</span>
                     </div>
-                    <h3 className="font-bold mb-1">No {activeTab.toLowerCase()} assignments</h3>
-                    <p className="text-sm text-[var(--foreground-muted)]">
-                        {activeTab === 'ACTIVE'
-                            ? 'Browse opportunities to find new assignments'
-                            : 'Completed assignments will appear here'}
+                    <h3 style={{ fontWeight: 700, marginBottom: 4 }}>No {activeTab.toLowerCase()} assignments</h3>
+                    <p style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>
+                        {activeTab === 'ACTIVE' ? 'Browse opportunities to find new assignments' : 'Completed assignments will appear here'}
                     </p>
                 </div>
             ) : (
-                <div className="flex flex-col gap-4">
-                    {assignments.map((assignment) => (
-                        <Link
-                            key={assignment.id}
-                            href={`/volunteer/assignments/${assignment.id}`}
-                            className="block bg-white rounded-xl p-4 border border-[var(--border-light)] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
-                        >
-                            <div className="flex items-start justify-between mb-2">
-                                <div>
-                                    <h3 className="font-bold">{assignment.request?.title || 'Unknown Request'}</h3>
-                                    <p className="text-xs text-[var(--foreground-muted)]">{assignment.request?.ngo?.name || 'Unknown NGO'}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {assignments.map(a => {
+                        const ss = statusStyles[a.status] || statusStyles.ASSIGNED;
+                        return (
+                            <Link key={a.id} href={`/volunteer/assignments/${a.id}`} className="card-interactive" style={{ padding: 14, textDecoration: 'none' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 6 }}>
+                                    <div>
+                                        <h3 style={{ fontWeight: 700, fontSize: 14 }}>{a.request?.title || 'Unknown Request'}</h3>
+                                        <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{a.request?.ngo?.name || 'Unknown NGO'}</p>
+                                    </div>
+                                    <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 10, background: ss.bg, color: ss.text, whiteSpace: 'nowrap' }}>{a.status.replace("_", " ")}</span>
                                 </div>
-                                <span className={`text-[10px] font-bold px-2 py-1 rounded-full shrink-0 ${statusStyles[assignment.status] || 'bg-gray-100'}`}>
-                                    {assignment.status.replace("_", " ")}
-                                </span>
-                            </div>
-                            <div className="flex items-center gap-1 text-xs text-[var(--foreground-muted)]">
-                                <span className="material-symbols-outlined text-sm">calendar_today</span>
-                                {assignment.request?.scheduled_date
-                                    ? formatDistanceToNow(assignment.request.scheduled_date)
-                                    : 'No date set'}
-                            </div>
-                        </Link>
-                    ))}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--color-text-disabled)' }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>calendar_today</span>
+                                    {a.request?.scheduled_date ? formatDistanceToNow(a.request.scheduled_date) : 'No date set'}
+                                </div>
+                            </Link>
+                        );
+                    })}
                 </div>
             )}
         </div>

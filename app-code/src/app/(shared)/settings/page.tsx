@@ -1,60 +1,68 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signOut } from "@/lib/api/users";
+
+const settingsItems = [
+    { icon: "person", label: "Edit Profile", desc: "Update your personal information", href: "#" },
+    { icon: "notifications", label: "Notifications", desc: "Manage notification preferences", href: "/notifications/settings" },
+    { icon: "lock", label: "Privacy & Security", desc: "Manage privacy and security settings", href: "#" },
+    { icon: "help", label: "Help & Support", desc: "Get help and contact support", href: "#" },
+    { icon: "info", label: "About", desc: "About Helpit platform", href: "#" },
+];
 
 export default function SettingsPage() {
-    return (
-        <div className="space-y-6">
-            <h1 className="text-xl font-bold">Settings</h1>
+    const router = useRouter();
 
-            {/* Profile Section */}
-            <div className="bg-white rounded-xl p-4 border border-gray-200">
-                <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[var(--primary)] to-blue-400 flex items-center justify-center text-white text-2xl font-bold">
-                        A
-                    </div>
-                    <div className="flex-1">
-                        <p className="font-bold text-lg">Alex Johnson</p>
-                        <p className="text-sm text-gray-500">alex@email.com</p>
-                    </div>
-                    <button className="text-[var(--primary)] text-sm font-semibold">Edit</button>
-                </div>
+    const handleLogout = async () => {
+        try {
+            await signOut();
+            router.push("/auth/login");
+        } catch (e) { console.error("Error signing out:", e); }
+    };
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+            {/* Header */}
+            <div>
+                <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Settings</h1>
+                <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Manage your account preferences</p>
             </div>
 
-            {/* Settings Items */}
-            <div className="space-y-3">
-                <Link href="/notifications/settings" className="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200">
-                    <span className="material-symbols-outlined text-gray-600">notifications</span>
-                    <span className="flex-1 font-medium">Notifications</span>
-                    <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                </Link>
-
-                <Link href="/settings/privacy" className="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200">
-                    <span className="material-symbols-outlined text-gray-600">lock</span>
-                    <span className="flex-1 font-medium">Privacy & Security</span>
-                    <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                </Link>
-
-                <Link href="/settings/help" className="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200">
-                    <span className="material-symbols-outlined text-gray-600">help</span>
-                    <span className="flex-1 font-medium">Help & Support</span>
-                    <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                </Link>
-
-                <Link href="/settings/about" className="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200">
-                    <span className="material-symbols-outlined text-gray-600">info</span>
-                    <span className="flex-1 font-medium">About Helpit</span>
-                    <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                </Link>
+            {/* Settings menu */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}>
+                {settingsItems.map((item) => (
+                    <Link key={item.label} href={item.href} style={{ textDecoration: "none", color: "inherit" }}>
+                        <div className="card" style={{
+                            display: "flex", alignItems: "center", gap: "var(--space-md)",
+                            cursor: "pointer", transition: "background 0.15s",
+                        }}>
+                            <div style={{ width: 44, height: 44, borderRadius: "var(--radius-lg)", background: "var(--primary-50)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <span className="material-symbols-outlined" style={{ color: "var(--primary)" }}>{item.icon}</span>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <p style={{ fontWeight: 500, fontSize: "var(--font-sm)" }}>{item.label}</p>
+                                <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{item.desc}</p>
+                            </div>
+                            <span className="material-symbols-outlined" style={{ color: "var(--foreground-light)" }}>chevron_right</span>
+                        </div>
+                    </Link>
+                ))}
             </div>
 
             {/* Logout */}
-            <button className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border border-red-200 text-red-500 font-semibold">
-                <span className="material-symbols-outlined">logout</span>
+            <button onClick={handleLogout}
+                style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--space-sm)",
+                    padding: "var(--space-md)", borderRadius: "var(--radius-lg)",
+                    border: "1px solid var(--color-danger)", background: "transparent",
+                    color: "var(--color-danger)", fontWeight: 500, cursor: "pointer",
+                    transition: "background 0.15s",
+                }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
                 Log Out
             </button>
-
-            <p className="text-center text-xs text-gray-400">
-                Version 1.0.0
-            </p>
         </div>
     );
 }

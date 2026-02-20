@@ -6,6 +6,18 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { signUp } from "@/lib/api/users";
 
+const CATEGORIES = [
+    { value: "EDUCATION", label: "Education" },
+    { value: "MEDICAL", label: "Healthcare" },
+    { value: "ENVIRONMENT", label: "Environment" },
+    { value: "FOOD", label: "Food & Nutrition" },
+    { value: "SHELTER", label: "Shelter" },
+    { value: "EMERGENCY", label: "Disaster Relief" },
+    { value: "CHILD_CARE", label: "Child Care" },
+    { value: "ELDERLY_CARE", label: "Elderly Care" },
+    { value: "OTHER", label: "Other" },
+];
+
 export default function NGORegisterPage() {
     const router = useRouter();
     const [formData, setFormData] = useState({
@@ -102,171 +114,115 @@ export default function NGORegisterPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-[800px] px-6 py-8 overflow-y-auto">
-            <div className="flex items-center justify-between pt-2 pb-6">
-                <Link href="/register" className="p-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">arrow_back_ios_new</span>
-                </Link>
-                <h2 className="text-lg font-bold">NGO Registration</h2>
-                <div className="w-10"></div>
-            </div>
+        <div style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto', paddingRight: 4 }}>
+            <Link href="/register" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 20, fontSize: 13 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_back</span>
+                Back to role selection
+            </Link>
+
+            <h1>Register Your NGO</h1>
+            <p className="auth-subtitle">Set up your organization on Helpit</p>
 
             {error && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+                <div className="alert alert-error" style={{ marginBottom: 16 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>error</span>
                     {error}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Organization Name</label>
-                    <input
-                        type="text"
-                        name="orgName"
-                        placeholder="Enter NGO name"
-                        value={formData.orgName}
-                        onChange={handleChange}
-                        required
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
-                    />
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {/* Organization Info */}
+                <div className="form-section">
+                    <div className="form-section-title">Organization Details</div>
+                    <div className="form-section-subtitle">Basic information about your NGO</div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                        <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <label className="field-label">Organization Name</label>
+                            <input type="text" name="orgName" placeholder="Enter NGO name" value={formData.orgName} onChange={handleChange} required className="field-input" />
+                        </div>
+                        <div className="form-group">
+                            <label className="field-label">Registration Number</label>
+                            <input type="text" name="registrationNumber" placeholder="NGO registration number" value={formData.registrationNumber} onChange={handleChange} required className="field-input" />
+                        </div>
+                        <div className="form-group">
+                            <label className="field-label">Category</label>
+                            <select name="category" value={formData.category} onChange={handleChange} className="field-input">
+                                <option value="">Select category</option>
+                                {CATEGORIES.map(cat => (
+                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Registration Number</label>
-                    <input
-                        type="text"
-                        name="registrationNumber"
-                        placeholder="NGO registration number"
-                        value={formData.registrationNumber}
-                        onChange={handleChange}
-                        required
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Category</label>
-                    <select
-                        name="category"
-                        value={formData.category}
-                        onChange={handleChange}
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4 bg-white"
-                    >
-                        <option value="">Select category</option>
-                        <option value="EDUCATION">Education</option>
-                        <option value="MEDICAL">Healthcare</option>
-                        <option value="ENVIRONMENT">Environment</option>
-                        <option value="FOOD">Food & Nutrition</option>
-                        <option value="SHELTER">Shelter</option>
-                        <option value="EMERGENCY">Disaster Relief</option>
-                        <option value="CHILD_CARE">Child Care</option>
-                        <option value="ELDERLY_CARE">Elderly Care</option>
-                        <option value="OTHER">Other</option>
-                    </select>
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Contact Email</label>
-                    <input
-                        type="email"
-                        name="contactEmail"
-                        placeholder="organization@email.com"
-                        value={formData.contactEmail}
-                        onChange={handleChange}
-                        required
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Contact Phone</label>
-                    <input
-                        type="tel"
-                        name="contactPhone"
-                        placeholder="Enter phone number"
-                        value={formData.contactPhone}
-                        onChange={handleChange}
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">City</label>
-                    <input
-                        type="text"
-                        name="city"
-                        placeholder="City"
-                        value={formData.city}
-                        onChange={handleChange}
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">State</label>
-                    <input
-                        type="text"
-                        name="state"
-                        placeholder="State"
-                        value={formData.state}
-                        onChange={handleChange}
-                        className="w-full h-14 rounded-xl border border-[var(--border)] px-4"
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Address</label>
-                    <textarea
-                        name="address"
-                        placeholder="Full address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        className="w-full h-24 rounded-xl border border-[var(--border)] px-4 py-3 resize-none"
-                    ></textarea>
+
+                {/* Contact */}
+                <div className="form-section">
+                    <div className="form-section-title">Contact Information</div>
+                    <div className="form-section-subtitle">How NGOs and users can reach you</div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                        <div className="form-group">
+                            <label className="field-label">Contact Email</label>
+                            <input type="email" name="contactEmail" placeholder="org@email.com" value={formData.contactEmail} onChange={handleChange} required className="field-input" />
+                        </div>
+                        <div className="form-group">
+                            <label className="field-label">Contact Phone</label>
+                            <input type="tel" name="contactPhone" placeholder="Phone number" value={formData.contactPhone} onChange={handleChange} className="field-input" />
+                        </div>
+                        <div className="form-group">
+                            <label className="field-label">City</label>
+                            <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} className="field-input" />
+                        </div>
+                        <div className="form-group">
+                            <label className="field-label">State</label>
+                            <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} className="field-input" />
+                        </div>
+                        <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                            <label className="field-label">Address</label>
+                            <textarea name="address" placeholder="Full address" value={formData.address} onChange={handleChange} className="field-input field-textarea" rows={2} />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Document Upload */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium pl-1">Verification Documents</label>
-                    <div className="border-2 border-dashed border-[var(--border)] rounded-xl p-6 text-center">
-                        <span className="material-symbols-outlined text-4xl text-[var(--foreground-muted)]">cloud_upload</span>
-                        <p className="text-sm text-[var(--foreground-muted)] mt-2">Upload registration certificate, 80G certificate</p>
-                        <p className="text-xs text-[var(--foreground-muted)] mt-1">(Can be uploaded later from NGO settings)</p>
+                <div className="form-section">
+                    <div className="form-section-title">Verification Documents</div>
+                    <div style={{
+                        border: '2px dashed var(--color-border)',
+                        borderRadius: 'var(--radius-md)',
+                        padding: '24px',
+                        textAlign: 'center',
+                        marginTop: 8,
+                    }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 32, color: 'var(--color-text-muted)' }}>cloud_upload</span>
+                        <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 4 }}>Upload registration certificate, 80G certificate</p>
+                        <p style={{ fontSize: 11, color: 'var(--color-text-disabled)', marginTop: 2 }}>(Can be uploaded later from NGO settings)</p>
                     </div>
                 </div>
 
-                <div className="mt-4 p-4 bg-blue-50 rounded-xl">
-                    <p className="text-sm font-semibold text-blue-700 mb-3">Admin Account Details</p>
-                    <div className="flex flex-col gap-3">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-medium pl-1">Admin Email</label>
-                            <input
-                                type="email"
-                                name="adminEmail"
-                                placeholder="Admin email address"
-                                value={formData.adminEmail}
-                                onChange={handleChange}
-                                required
-                                className="w-full h-14 rounded-xl border border-[var(--border)] px-4 bg-white"
-                            />
+                {/* Admin Account */}
+                <div className="form-section" style={{ background: 'var(--color-primary-soft)', padding: 16, borderRadius: 'var(--radius-md)', border: 'none' }}>
+                    <div className="form-section-title">Admin Account</div>
+                    <div className="form-section-subtitle">Login credentials for the organization admin</div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                        <div className="form-group">
+                            <label className="field-label">Admin Email</label>
+                            <input type="email" name="adminEmail" placeholder="admin@email.com" value={formData.adminEmail} onChange={handleChange} required className="field-input" />
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-medium pl-1">Admin Password</label>
-                            <input
-                                type="password"
-                                name="adminPassword"
-                                placeholder="Create admin password (min 8 chars)"
-                                value={formData.adminPassword}
-                                onChange={handleChange}
-                                required
-                                minLength={8}
-                                className="w-full h-14 rounded-xl border border-[var(--border)] px-4 bg-white"
-                            />
+                        <div className="form-group">
+                            <label className="field-label">Admin Password</label>
+                            <input type="password" name="adminPassword" placeholder="Min 8 characters" value={formData.adminPassword} onChange={handleChange} required minLength={8} className="field-input" />
                         </div>
                     </div>
                 </div>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl mt-4 disabled:opacity-60"
-                >
+                <button type="submit" disabled={loading} className="auth-submit-btn">
                     {loading ? 'Submitting...' : 'Submit for Verification'}
                 </button>
-                <p className="text-xs text-center text-[var(--foreground-muted)]">
+                <p style={{ fontSize: 11, color: 'var(--color-text-muted)', textAlign: 'center' }}>
                     Your application will be reviewed within 2-3 business days
                 </p>
             </form>

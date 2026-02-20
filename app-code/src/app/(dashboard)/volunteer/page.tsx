@@ -3,41 +3,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-
-interface VolunteerAssignment {
-    id: string;
-    status: string;
-    hours_spent: number;
-    request: {
-        id: string;
-        title: string;
-        ngo: {
-            name: string;
-        };
-    };
-}
+import { formatDistanceToNow } from '@/lib/utils';
 
 interface VolunteerDashboardData {
-    user: {
-        id: string;
-        full_name: string;
-        avatar_url: string | null;
-        is_available: boolean;
-    } | null;
-    stats: {
-        hoursContributed: number;
-        tasksCompleted: number;
-        ngosSupported: number;
-    };
-    assignments: VolunteerAssignment[];
-    nearbyRequests: Array<{
-        id: string;
-        title: string;
-        urgency: string;
-        ngo_name: string;
-        location: string;
-        image_url: string | null;
-    }>;
+    user: { full_name: string } | null;
+    stats: { hours: number; tasks: number; ngos: number };
+    isAvailable: boolean;
+    activeAssignments: Array<{ id: string; status: string; request_title: string; ngo_name: string; scheduled_date: string }>;
+    nearbyRequests: Array<{ id: string; title: string; ngo_name: string; urgency: string; location: string }>;
 }
 
 export default function VolunteerDashboardPage() {
@@ -48,111 +21,57 @@ export default function VolunteerDashboardPage() {
     useEffect(() => {
         async function fetchDashboardData() {
             const supabase = createClient();
-
             const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
-                setLoading(false);
-                return;
-            }
+            if (!session) { setLoading(false); return; }
 
-            const { data: userData } = await supabase
-                .from('users')
-                .select('*')
-                .eq('id', session.user.id)
-                .single();
+            const { data: userData } = await supabase.from('users').select('full_name, is_available').eq('id', session.user.id).single();
 
-            if (!userData) {
-                setLoading(false);
-                return;
-            }
+            // Stats
+            const { data: completedAssignments } = await supabase.from('volunteer_assignments')
+                .select('hours_spent, request:requests(ngo_id)').eq('volunteer_id', session.user.id).eq('status', 'COMPLETED');
 
-            setAvailability(userData.is_available || false);
+            const totalHours = (completedAssignments || []).reduce((a, c) => a + (c.hours_spent || 0), 0);
+            const totalTasks = (completedAssignments || []).length;
+            const uniqueNgos = new Set((completedAssignments || []).map((a: any) => a.request?.ngo_id).filter(Boolean));
 
-            const { data: assignments } = await supabase
-                .from('volunteer_assignments')
-                .select('id, status, hours_spent, request_id')
-                .eq('volunteer_id', session.user.id);
+            // Active assignments
+            const { data: activeData } = await supabase.from('volunteer_assignments')
+                .select('id, status, request_id').eq('volunteer_id', session.user.id).in('status', ['ASSIGNED', 'IN_PROGRESS']).order('created_at', { ascending: false }).limit(5);
 
-            // Get request details
-            const requestIds = (assignments || []).map(a => a.request_id).filter(Boolean);
-            let requestsData: Record<string, { title: string; ngo_name: string }> = {};
-
+            const requestIds = (activeData || []).map(a => a.request_id).filter(Boolean);
+            let requestMap: Record<string, any> = {};
             if (requestIds.length > 0) {
-                const { data: requests } = await supabase
-                    .from('requests')
-                    .select('id, title, ngo:ngos(name)')
-                    .in('id', requestIds);
-
-                (requests || []).forEach(r => {
-                    requestsData[r.id] = {
-                        title: r.title,
-                        ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO',
-                    };
-                });
+                const { data: requests } = await supabase.from('requests').select('id, title, ngo:ngos(name), scheduled_date').in('id', requestIds);
+                (requests || []).forEach(r => { requestMap[r.id] = r; });
             }
 
-            const completedAssignments = (assignments || []).filter(a => a.status === 'COMPLETED');
-            const activeAssignments = (assignments || []).filter(a => a.status === 'ACTIVE');
-
-            const hoursContributed = completedAssignments.reduce((sum, a) => sum + (a.hours_spent || 0), 0);
-            const tasksCompleted = completedAssignments.length;
-
-            const { data: memberships } = await supabase
-                .from('ngo_members')
-                .select('ngo_id')
-                .eq('user_id', session.user.id);
-
-            const ngosSupported = memberships?.length || 0;
-
-            const { data: urgentRequests } = await supabase
-                .from('requests')
-                .select('id, title, urgency, image_url, ngo:ngos(name), city')
-                .eq('status', 'ACTIVE')
-                .eq('urgency', 'HIGH')
-                .limit(5);
-
-            const nearbyRequests = (urgentRequests || []).map(r => ({
-                id: r.id,
-                title: r.title,
-                urgency: r.urgency,
-                ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO',
-                location: r.city || 'Location TBD',
-                image_url: r.image_url,
+            const activeAssignments = (activeData || []).map(a => ({
+                id: a.id, status: a.status,
+                request_title: requestMap[a.request_id]?.title || 'Unknown',
+                ngo_name: (requestMap[a.request_id]?.ngo as any)?.name || 'Unknown NGO',
+                scheduled_date: requestMap[a.request_id]?.scheduled_date || '',
             }));
 
+            // Nearby urgent requests
+            const { data: urgentRequests } = await supabase.from('requests')
+                .select('id, title, ngo:ngos(name), urgency, location').eq('status', 'OPEN')
+                .order('created_at', { ascending: false }).limit(3);
+
+            const nearbyRequests = (urgentRequests || []).map(r => ({
+                id: r.id, title: r.title,
+                ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO',
+                urgency: r.urgency || 'NORMAL', location: r.location || '',
+            }));
+
+            setAvailability(userData?.is_available || false);
             setData({
-                user: {
-                    id: userData.id,
-                    full_name: userData.full_name || 'Volunteer',
-                    avatar_url: userData.avatar_url,
-                    is_available: userData.is_available || false,
-                },
-                stats: {
-                    hoursContributed,
-                    tasksCompleted,
-                    ngosSupported,
-                },
-                assignments: activeAssignments.slice(0, 3).map(a => {
-                    const requestInfo = requestsData[a.request_id] || { title: 'Unknown Request', ngo_name: 'Unknown NGO' };
-                    return {
-                        id: a.id,
-                        request: {
-                            id: a.request_id,
-                            title: requestInfo.title,
-                            ngo: {
-                                name: requestInfo.ngo_name,
-                            },
-                            status: a.status,
-                        },
-                        status: a.status,
-                        hours_spent: a.hours_spent || 0,
-                    };
-                }),
-                nearbyRequests,
+                user: { full_name: userData?.full_name || 'Volunteer' },
+                stats: { hours: totalHours, tasks: totalTasks, ngos: uniqueNgos.size },
+                isAvailable: userData?.is_available || false,
+                activeAssignments, nearbyRequests,
             });
             setLoading(false);
         }
-
         fetchDashboardData();
     }, []);
 
@@ -160,175 +79,134 @@ export default function VolunteerDashboardPage() {
         const supabase = createClient();
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return;
-
-        const newAvailability = !availability;
-        setAvailability(newAvailability);
-
-        await supabase
-            .from('users')
-            .update({ is_available: newAvailability })
-            .eq('id', session.user.id);
+        const newVal = !availability;
+        setAvailability(newVal);
+        await supabase.from('users').update({ is_available: newVal }).eq('id', session.user.id);
     };
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
-            </div>
-        );
+        return <div className="dashboard-loading"><span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span></div>;
     }
 
-    if (!data?.user) {
-        return (
-            <div className="flex flex-col items-center justify-center p-8 text-center">
-                <span className="material-symbols-outlined text-6xl text-gray-300 mb-4">volunteer_activism</span>
-                <h2 className="text-xl font-bold mb-2">Welcome, Volunteer!</h2>
-                <p className="text-gray-500 mb-4">Complete your profile to start volunteering.</p>
-                <Link href="/register/volunteer" className="px-6 py-3 bg-[var(--primary)] text-white rounded-xl font-semibold">
-                    Complete Profile
-                </Link>
-            </div>
-        );
-    }
-
+    if (!data?.user) return null;
     const firstName = data.user.full_name.split(' ')[0] || 'Volunteer';
 
+    const statusStyles: Record<string, { bg: string; text: string }> = {
+        ASSIGNED: { bg: '#E3F2FD', text: '#1565C0' },
+        IN_PROGRESS: { bg: '#F3E5F5', text: '#7B1FA2' },
+    };
+
     return (
-        <div className="flex flex-col">
-            {/* Hero: Profile Greeting */}
-            <section className="section-spacing">
-                <div className="flex gap-4 items-center">
-                    <div
-                        className="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-16 w-16 border-2 border-white shadow-md"
-                        style={{ backgroundImage: data.user.avatar_url ? `url("${data.user.avatar_url}")` : 'url("https://via.placeholder.com/64")' }}
-                    ></div>
-                    <div className="flex flex-col justify-center">
-                        <p className="text-[22px] font-bold leading-tight tracking-[-0.02em]">Hello, {firstName}</p>
-                        <p className="text-[#616e89] text-[15px] font-normal mt-1">Ready to make an impact today?</p>
-                    </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+            {/* Greeting + Availability */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                <div>
+                    <h2 style={{ fontSize: 22, fontWeight: 700 }}>Hi, {firstName}! 🙌</h2>
+                    <p style={{ fontSize: 14, color: 'var(--color-text-muted)', marginTop: 4 }}>Ready to make an impact?</p>
                 </div>
-            </section>
+                <button onClick={toggleAvailability} style={{
+                    width: 48, height: 26, borderRadius: 13, border: 'none', cursor: 'pointer',
+                    background: availability ? 'var(--color-success)' : 'var(--color-border)',
+                    position: 'relative', transition: 'background 0.2s',
+                }}>
+                    <span style={{
+                        position: 'absolute', top: 3, width: 20, height: 20, borderRadius: '50%', background: '#fff',
+                        boxShadow: 'var(--shadow-sm)', transition: 'left 0.2s',
+                        left: availability ? 25 : 3,
+                    }} />
+                </button>
+            </div>
 
-            {/* Stats Cards */}
-            <section className="section-spacing">
-                <div className="flex gap-3">
-                    <div className="flex-1 flex flex-col items-start justify-between gap-3 rounded-2xl p-5 min-h-[120px] bg-white shadow-sm border border-gray-100">
-                        <span className="material-symbols-outlined text-[var(--primary)] w-6 h-6 shrink-0 text-[22px]">schedule</span>
-                        <div>
-                            <p className="text-[#616e89] text-[11px] font-semibold uppercase tracking-wider mb-1">Hours</p>
-                            <p className="text-[26px] font-bold tracking-tight leading-none">{data.stats.hoursContributed}</p>
-                        </div>
+            {/* Stats */}
+            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+                {[
+                    { icon: 'schedule', label: 'Hours', value: data.stats.hours, color: 'var(--color-primary)' },
+                    { icon: 'task_alt', label: 'Tasks', value: data.stats.tasks, color: '#E65100' },
+                    { icon: 'apartment', label: 'NGOs', value: data.stats.ngos, color: '#2E7D32' },
+                ].map(s => (
+                    <div key={s.label} className="stat-card">
+                        <span className="material-symbols-outlined" style={{ fontSize: 18, color: s.color, marginBottom: 4 }}>{s.icon}</span>
+                        <div className="stat-card-value">{s.value}</div>
+                        <div className="stat-card-label">{s.label}</div>
                     </div>
-                    <div className="flex-1 flex flex-col items-start justify-between gap-3 rounded-2xl p-5 min-h-[120px] bg-white shadow-sm border border-gray-100">
-                        <span className="material-symbols-outlined text-[var(--primary)] w-6 h-6 shrink-0 text-[22px]">task_alt</span>
-                        <div>
-                            <p className="text-[#616e89] text-[11px] font-semibold uppercase tracking-wider mb-1">Tasks</p>
-                            <p className="text-[26px] font-bold tracking-tight leading-none">{data.stats.tasksCompleted}</p>
-                        </div>
-                    </div>
-                    <div className="flex-1 flex flex-col items-start justify-between gap-3 rounded-2xl p-5 min-h-[120px] bg-white shadow-sm border border-gray-100">
-                        <span className="material-symbols-outlined text-[var(--primary)] w-6 h-6 shrink-0 text-[22px]">volunteer_activism</span>
-                        <div>
-                            <p className="text-[#616e89] text-[11px] font-semibold uppercase tracking-wider mb-1">NGOs</p>
-                            <p className="text-[26px] font-bold tracking-tight leading-none">{data.stats.ngosSupported}</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Availability Toggle */}
-            <section className="section-spacing">
-                <div className="flex items-center justify-between p-5 rounded-2xl bg-white border border-gray-100 shadow-sm">
-                    <div className="flex flex-col gap-1">
-                        <p className="font-bold text-[16px]">Available to help now?</p>
-                        <p className="text-[13px] text-[#616e89]">Coordinators can ping you for urgent tasks</p>
-                    </div>
-                    <button
-                        onClick={toggleAvailability}
-                        className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${availability ? 'bg-[var(--primary)]' : 'bg-gray-300'}`}
-                    >
-                        <span className={`translate-x-5 pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${availability ? 'translate-x-5' : 'translate-x-0'}`}></span>
-                    </button>
-                </div>
-            </section>
+                ))}
+            </div>
 
             {/* Active Assignments */}
-            {data.assignments.length > 0 && (
-                <section className="full-bleed mb-6">
-                    <div className="flex items-center justify-between section-header">
-                        <h2 className="text-[18px] font-bold leading-tight tracking-[-0.015em]">Your Active Tasks</h2>
-                        <Link href="/volunteer/assignments" className="text-[var(--primary)] text-[14px] font-semibold">See All</Link>
-                    </div>
-                    <div className="flex flex-col gap-3 mt-3">
-                        {data.assignments.map(assignment => (
-                            <Link
-                                key={assignment.id}
-                                href={`/volunteer/assignments/${assignment.id}`}
-                                className="flex items-center justify-between p-4 rounded-xl bg-white border border-gray-100 shadow-sm"
-                            >
-                                <div>
-                                    <p className="font-semibold">{assignment.request.title}</p>
-                                    <p className="text-sm text-gray-500">{assignment.request.ngo.name}</p>
-                                </div>
-                                <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                            </Link>
-                        ))}
-                    </div>
-                </section>
-            )}
-
-            {/* Nearby Urgent Requests */}
-            <section className="full-bleed">
-                <div className="flex items-center justify-between section-header">
-                    <h2 className="text-[18px] font-bold leading-tight tracking-[-0.015em]">Nearby Urgent Requests</h2>
-                    <Link href="/volunteer/opportunities" className="text-[var(--primary)] text-[14px] font-semibold">See All</Link>
+            <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700 }}>Active Assignments</h3>
+                    <Link href="/volunteer/assignments" style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-primary)', textDecoration: 'none' }}>See all</Link>
                 </div>
-
-                {data.nearbyRequests.length === 0 ? (
-                    <div className="p-8 text-center bg-white rounded-2xl border border-gray-100">
-                        <span className="material-symbols-outlined text-4xl text-gray-300 mb-2">search_off</span>
-                        <p className="text-gray-500">No urgent requests nearby</p>
+                {data.activeAssignments.length === 0 ? (
+                    <div className="empty-state-container">
+                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>assignment</span>
+                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No active assignments</p>
+                        <Link href="/volunteer/opportunities" className="btn btn-primary" style={{ marginTop: 10, textDecoration: 'none' }}>Find Opportunities</Link>
                     </div>
                 ) : (
-                    <div className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory -mr-5 pr-5">
-                        <div className="flex items-stretch gap-4">
-                            {data.nearbyRequests.map(request => (
-                                <div
-                                    key={request.id}
-                                    className="snap-start flex flex-col rounded-2xl bg-white shadow-sm border border-gray-100 w-[85vw] max-w-[320px] overflow-hidden"
-                                >
-                                    <div className="relative w-full h-[170px] overflow-hidden">
-                                        {request.urgency === 'HIGH' && (
-                                            <div className="absolute top-3 left-3 z-10 bg-red-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
-                                                <span className="material-symbols-outlined text-[14px]">bolt</span> URGENT
-                                            </div>
-                                        )}
-                                        <div
-                                            className="w-full h-full bg-center bg-no-repeat bg-cover"
-                                            style={{ backgroundImage: request.image_url ? `url("${request.image_url}")` : 'url("https://via.placeholder.com/320x170")' }}
-                                        ></div>
-                                    </div>
-                                    <div className="flex flex-col gap-3 p-4">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        {data.activeAssignments.map(a => {
+                            const ss = statusStyles[a.status] || statusStyles.ASSIGNED;
+                            return (
+                                <Link key={a.id} href={`/volunteer/assignments/${a.id}`} className="card-interactive" style={{ padding: 14, textDecoration: 'none' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 4 }}>
                                         <div>
-                                            <p className="text-[16px] font-bold leading-tight">{request.title}</p>
-                                            <div className="flex items-center gap-1.5 mt-2 text-[#616e89]">
-                                                <span className="material-symbols-outlined text-[16px]">location_on</span>
-                                                <span className="text-[13px]">{request.location} • {request.ngo_name}</span>
-                                            </div>
+                                            <h4 style={{ fontWeight: 700, fontSize: 14 }}>{a.request_title}</h4>
+                                            <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{a.ngo_name}</p>
                                         </div>
-                                        <Link
-                                            href="/volunteer/opportunities"
-                                            className="w-full py-3 rounded-xl bg-[var(--primary)] text-white text-[14px] font-bold text-center hover:bg-[var(--primary-hover)] transition-colors"
-                                        >
-                                            Join Now
-                                        </Link>
+                                        <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 10, background: ss.bg, color: ss.text, whiteSpace: 'nowrap' }}>{a.status.replace('_', ' ')}</span>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
+                                    {a.scheduled_date && (
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--color-text-disabled)' }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>calendar_today</span>
+                                            {formatDistanceToNow(a.scheduled_date)}
+                                        </div>
+                                    )}
+                                </Link>
+                            );
+                        })}
                     </div>
                 )}
-            </section>
+            </div>
+
+            {/* Nearby Urgent Requests */}
+            <div>
+                <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>Nearby Requests</h3>
+                {data.nearbyRequests.length === 0 ? (
+                    <div className="empty-state-container">
+                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>explore</span>
+                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No nearby requests right now</p>
+                    </div>
+                ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        {data.nearbyRequests.map(r => (
+                            <div key={r.id} className="card" style={{ padding: 14 }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 6 }}>
+                                    <div>
+                                        <h4 style={{ fontWeight: 700, fontSize: 14 }}>{r.title}</h4>
+                                        <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{r.ngo_name}</p>
+                                    </div>
+                                    <span style={{
+                                        fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 10, whiteSpace: 'nowrap',
+                                        background: r.urgency === 'HIGH' ? '#FFEBEE' : '#FFF8E1',
+                                        color: r.urgency === 'HIGH' ? '#E53935' : '#F9A825',
+                                    }}>{r.urgency}</span>
+                                </div>
+                                {r.location && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--color-text-disabled)', marginBottom: 10 }}>
+                                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>location_on</span>
+                                        {r.location}
+                                    </div>
+                                )}
+                                <Link href={`/volunteer/opportunities`} className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', fontSize: 12, padding: '8px 0', textDecoration: 'none' }}>
+                                    View Details
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

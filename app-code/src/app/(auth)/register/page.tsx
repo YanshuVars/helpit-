@@ -1,73 +1,79 @@
 import Link from "next/link";
 
+const roles = [
+    {
+        href: "/register/individual",
+        icon: "person",
+        iconBg: "#EEE8F9",
+        iconColor: "var(--color-primary)",
+        title: "Individual / Donor",
+        desc: "Discover NGOs and make donations",
+    },
+    {
+        href: "/register/volunteer",
+        icon: "volunteer_activism",
+        iconBg: "#E8F5E9",
+        iconColor: "#059669",
+        title: "Volunteer",
+        desc: "Find opportunities and help NGOs",
+    },
+    {
+        href: "/register/ngo",
+        icon: "business",
+        iconBg: "#FFF3E0",
+        iconColor: "#D97706",
+        title: "NGO / Organization",
+        desc: "Manage your organization and volunteers",
+    },
+];
+
 export default function RegisterPage() {
     return (
-        <div className="flex flex-col min-h-[800px] px-6 py-8">
-            {/* Header */}
-            <div className="flex items-center justify-between pt-2 pb-6">
-                <Link href="/" className="p-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">arrow_back_ios_new</span>
-                </Link>
-                <h2 className="text-lg font-bold">Sign Up</h2>
-                <div className="w-10"></div>
-            </div>
+        <>
+            <h1>Create your account</h1>
+            <p className="auth-subtitle">Choose how you&apos;d like to contribute</p>
 
-            {/* Branding */}
-            <div className="flex flex-col items-center justify-center mt-4">
-                <div className="w-16 h-16 bg-[var(--primary)] rounded-xl flex items-center justify-center shadow-lg mb-6">
-                    <span className="material-symbols-outlined text-white text-4xl">volunteer_activism</span>
-                </div>
-                <h1 className="text-3xl font-bold text-center">Choose Your Role</h1>
-                <p className="text-[var(--foreground-muted)] text-base pt-2 text-center">
-                    How would you like to contribute?
-                </p>
-            </div>
-
-            {/* Role Cards */}
-            <div className="flex flex-col gap-4 mt-10">
-                <Link href="/register/individual" className="flex items-center gap-4 p-5 rounded-xl border border-[var(--border)] hover:border-[var(--primary)] hover:bg-blue-50/50 transition-all group">
-                    <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-                        <span className="material-symbols-outlined text-[var(--primary)] text-2xl">person</span>
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="font-bold text-lg">Individual / Donor</h3>
-                        <p className="text-[var(--foreground-muted)] text-sm">Discover NGOs and make donations</p>
-                    </div>
-                    <span className="material-symbols-outlined text-[var(--foreground-muted)] group-hover:text-[var(--primary)]">chevron_right</span>
-                </Link>
-
-                <Link href="/register/volunteer" className="flex items-center gap-4 p-5 rounded-xl border border-[var(--border)] hover:border-[var(--primary)] hover:bg-blue-50/50 transition-all group">
-                    <div className="w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
-                        <span className="material-symbols-outlined text-green-600 text-2xl">volunteer_activism</span>
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="font-bold text-lg">Volunteer</h3>
-                        <p className="text-[var(--foreground-muted)] text-sm">Find opportunities and help NGOs</p>
-                    </div>
-                    <span className="material-symbols-outlined text-[var(--foreground-muted)] group-hover:text-[var(--primary)]">chevron_right</span>
-                </Link>
-
-                <Link href="/register/ngo" className="flex items-center gap-4 p-5 rounded-xl border border-[var(--border)] hover:border-[var(--primary)] hover:bg-blue-50/50 transition-all group">
-                    <div className="w-14 h-14 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
-                        <span className="material-symbols-outlined text-orange-600 text-2xl">business</span>
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="font-bold text-lg">NGO / Organization</h3>
-                        <p className="text-[var(--foreground-muted)] text-sm">Manage your organization and volunteers</p>
-                    </div>
-                    <span className="material-symbols-outlined text-[var(--foreground-muted)] group-hover:text-[var(--primary)]">chevron_right</span>
-                </Link>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-auto pt-8 pb-4 text-center">
-                <p className="text-[var(--foreground-muted)] text-sm">
-                    Already have an account?{" "}
-                    <Link href="/login" className="text-[var(--primary)] font-bold hover:underline">
-                        Login
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>
+                {roles.map((role) => (
+                    <Link
+                        key={role.href}
+                        href={role.href}
+                        className="card card-interactive"
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 14,
+                            padding: '16px 18px',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        <div style={{
+                            width: 48, height: 48, borderRadius: 10,
+                            background: role.iconBg,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            flexShrink: 0,
+                        }}>
+                            <span className="material-symbols-outlined" style={{ color: role.iconColor, fontSize: 22 }}>
+                                {role.icon}
+                            </span>
+                        </div>
+                        <div style={{ flex: 1 }}>
+                            <div style={{ fontWeight: 600, fontSize: 15, color: 'var(--color-text-heading)' }}>{role.title}</div>
+                            <div style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 2 }}>{role.desc}</div>
+                        </div>
+                        <span className="material-symbols-outlined" style={{ color: 'var(--color-text-muted)', fontSize: 18 }}>
+                            chevron_right
+                        </span>
                     </Link>
-                </p>
+                ))}
             </div>
-        </div>
+
+            <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--color-text-muted)', marginTop: 24 }}>
+                Already have an account?{" "}
+                <Link href="/login" className="auth-link" style={{ fontWeight: 600 }}>
+                    Sign in
+                </Link>
+            </p>
+        </>
     );
 }

@@ -8,51 +8,56 @@ const auditLogs = [
     { id: "5", action: "REQUEST_RESOLVED", actor: "John Coordinator", target: "Medical Supplies", timestamp: "1 week ago" },
 ];
 
-const actionIcons: Record<string, { icon: string; color: string }> = {
-    MEMBER_ADDED: { icon: "person_add", color: "bg-green-100 text-green-600" },
-    REQUEST_CREATED: { icon: "add_circle", color: "bg-blue-100 text-blue-600" },
-    VOLUNTEER_ASSIGNED: { icon: "assignment_ind", color: "bg-purple-100 text-purple-600" },
-    PROFILE_UPDATED: { icon: "edit", color: "bg-orange-100 text-orange-600" },
-    REQUEST_RESOLVED: { icon: "check_circle", color: "bg-green-100 text-green-600" },
+const actionIcons: Record<string, { icon: string; bg: string; color: string }> = {
+    MEMBER_ADDED: { icon: "person_add", bg: "#E8F5E9", color: "#2E7D32" },
+    REQUEST_CREATED: { icon: "add_circle", bg: "#E3F2FD", color: "#1565C0" },
+    VOLUNTEER_ASSIGNED: { icon: "assignment_ind", bg: "#EDE7F6", color: "#4527A0" },
+    PROFILE_UPDATED: { icon: "edit", bg: "#FFF3E0", color: "#E65100" },
+    REQUEST_RESOLVED: { icon: "check_circle", bg: "#E8F5E9", color: "#2E7D32" },
 };
 
 export default function NGOAuditLogPage() {
     return (
-        <div className="space-y-6">
-            <div className="flex items-center gap-3">
-                <Link href="/ngo/settings" className="p-2 -ml-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">arrow_back</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div>
+                <Link href="/ngo/settings" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span>
+                    Back to settings
                 </Link>
-                <h1 className="text-xl font-bold">Audit Log</h1>
+                <h1 className="page-title">Audit Log</h1>
             </div>
 
             {/* Filters */}
-            <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-                <button className="px-3 py-1.5 rounded-full text-xs font-semibold bg-[var(--primary)] text-white whitespace-nowrap">All</button>
-                <button className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 whitespace-nowrap">Members</button>
-                <button className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 whitespace-nowrap">Requests</button>
-                <button className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 whitespace-nowrap">Volunteers</button>
+            <div className="tabs-row">
+                <button className="tab-pill tab-pill-active">All</button>
+                <button className="tab-pill">Members</button>
+                <button className="tab-pill">Requests</button>
+                <button className="tab-pill">Volunteers</button>
             </div>
 
             {/* Log List */}
-            <div className="space-y-3">
-                {auditLogs.map((log) => {
-                    const { icon, color } = actionIcons[log.action] || { icon: "info", color: "bg-gray-100 text-gray-600" };
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {auditLogs.map(log => {
+                    const { icon, bg, color } = actionIcons[log.action] || { icon: "info", bg: "#F5F5F5", color: "#616161" };
                     return (
-                        <div key={log.id} className="bg-white rounded-xl p-4 border border-gray-200">
-                            <div className="flex items-start gap-3">
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${color}`}>
-                                    <span className="material-symbols-outlined">{icon}</span>
+                        <div key={log.id} className="card" style={{ padding: '14px 18px' }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                                <div style={{
+                                    width: 38, height: 38, borderRadius: '50%',
+                                    background: bg, color: color,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>{icon}</span>
                                 </div>
-                                <div className="flex-1">
-                                    <p className="text-sm">
-                                        <span className="font-semibold">{log.actor}</span>
+                                <div style={{ flex: 1 }}>
+                                    <p style={{ fontSize: 13 }}>
+                                        <span style={{ fontWeight: 600 }}>{log.actor}</span>
                                         {" "}
-                                        <span className="text-gray-600">{log.action.replace(/_/g, " ").toLowerCase()}</span>
+                                        <span style={{ color: 'var(--color-text-body)' }}>{log.action.replace(/_/g, " ").toLowerCase()}</span>
                                         {" "}
-                                        <span className="font-semibold">{log.target}</span>
+                                        <span style={{ fontWeight: 600 }}>{log.target}</span>
                                     </p>
-                                    <p className="text-xs text-gray-400 mt-1">{log.timestamp}</p>
+                                    <p style={{ fontSize: 11, color: 'var(--color-text-disabled)', marginTop: 3 }}>{log.timestamp}</p>
                                 </div>
                             </div>
                         </div>

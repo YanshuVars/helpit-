@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { formatCurrency } from "@/lib/utils";
 
+/* ── interfaces ── */
 interface PlatformStats {
     totalUsers: number;
     newUsersThisMonth: number;
@@ -19,194 +20,79 @@ interface PlatformStats {
     openRequests: number;
     resolvedRequests: number;
 }
-
-interface Activity {
-    id: string;
-    type: string;
-    message: string;
-    time: string;
-    status: string;
-}
-
-interface PendingNGO {
-    id: string;
-    name: string;
-    email: string;
-    submitted: string;
-    category: string;
-}
-
-interface TopNGO {
-    id: string;
-    name: string;
-    donations: number;
-    volunteers: number;
-    rating: number;
-}
+interface Activity { id: string; type: string; message: string; time: string; status: string; }
+interface PendingNGO { id: string; name: string; email: string; submitted: string; category: string; }
+interface TopNGO { id: string; name: string; donations: number; volunteers: number; rating: number; }
 
 export default function AdminDashboard() {
     const supabase = createClient();
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState<PlatformStats>({
-        totalUsers: 0,
-        newUsersThisMonth: 0,
-        totalNGOs: 0,
-        activeNGOs: 0,
-        pendingNGOs: 0,
-        totalVolunteers: 0,
-        activeVolunteers: 0,
-        totalDonors: 0,
-        totalDonations: 0,
-        monthlyDonations: 0,
-        openRequests: 0,
-        resolvedRequests: 0,
+        totalUsers: 0, newUsersThisMonth: 0, totalNGOs: 0, activeNGOs: 0,
+        pendingNGOs: 0, totalVolunteers: 0, activeVolunteers: 0, totalDonors: 0,
+        totalDonations: 0, monthlyDonations: 0, openRequests: 0, resolvedRequests: 0,
     });
     const [activities, setActivities] = useState<Activity[]>([]);
     const [pendingNGOs, setPendingNGOs] = useState<PendingNGO[]>([]);
     const [topNGOs, setTopNGOs] = useState<TopNGO[]>([]);
     const [timeRange, setTimeRange] = useState("month");
 
-    useEffect(() => {
-        fetchDashboardData();
-    }, [timeRange]);
+    useEffect(() => { fetchDashboardData(); }, [timeRange]);
 
     async function fetchDashboardData() {
         setLoading(true);
         try {
-            // Get date range for filtering
             const now = new Date();
             let startDate = new Date();
-            if (timeRange === "week") {
-                startDate.setDate(now.getDate() - 7);
-            } else if (timeRange === "month") {
-                startDate.setMonth(now.getMonth() - 1);
-            } else if (timeRange === "quarter") {
-                startDate.setMonth(now.getMonth() - 3);
-            } else {
-                startDate.setFullYear(now.getFullYear() - 1);
-            }
+            if (timeRange === "week") startDate.setDate(now.getDate() - 7);
+            else if (timeRange === "month") startDate.setMonth(now.getMonth() - 1);
+            else if (timeRange === "quarter") startDate.setMonth(now.getMonth() - 3);
+            else startDate.setFullYear(now.getFullYear() - 1);
 
-            // Fetch users count
-            const { count: totalUsers } = await supabase
-                .from("users")
-                .select("*", { count: "exact", head: true });
-
-            // Fetch new users this month
-            const { count: newUsers } = await supabase
-                .from("users")
-                .select("*", { count: "exact", head: true })
-                .gte("created_at", startDate.toISOString());
-
-            // Fetch NGOs
-            const { count: totalNGOs } = await supabase
-                .from("ngos")
-                .select("*", { count: "exact", head: true });
-
-            const { count: activeNGOs } = await supabase
-                .from("ngos")
-                .select("*", { count: "exact", head: true })
-                .eq("verification_status", "VERIFIED");
-
-            const { count: pendingNGOs } = await supabase
-                .from("ngos")
-                .select("*", { count: "exact", head: true })
-                .eq("verification_status", "PENDING");
-
-            // Fetch volunteers (users with VOLUNTEER role)
-            const { count: totalVolunteers } = await supabase
-                .from("user_roles")
-                .select("*", { count: "exact", head: true })
-                .eq("role", "VOLUNTEER");
-
-            // Fetch donors
-            const { count: totalDonors } = await supabase
-                .from("user_roles")
-                .select("*", { count: "exact", head: true })
-                .eq("role", "INDIVIDUAL");
-
-            // Fetch donations
-            const { data: donationsData } = await supabase
-                .from("donations")
-                .select("amount, created_at")
-                .gte("created_at", startDate.toISOString());
-
+            const { count: totalUsers } = await supabase.from("users").select("*", { count: "exact", head: true });
+            const { count: newUsers } = await supabase.from("users").select("*", { count: "exact", head: true }).gte("created_at", startDate.toISOString());
+            const { count: totalNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true });
+            const { count: activeNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true }).eq("verification_status", "VERIFIED");
+            const { count: pendingNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true }).eq("verification_status", "PENDING");
+            const { count: totalVolunteers } = await supabase.from("user_roles").select("*", { count: "exact", head: true }).eq("role", "VOLUNTEER");
+            const { count: totalDonors } = await supabase.from("user_roles").select("*", { count: "exact", head: true }).eq("role", "INDIVIDUAL");
+            const { data: donationsData } = await supabase.from("donations").select("amount, created_at").gte("created_at", startDate.toISOString());
             const totalDonations = donationsData?.reduce((sum, d) => sum + (d.amount || 0), 0) || 0;
-
-            // Fetch monthly donations
-            const monthStart = new Date();
-            monthStart.setDate(1);
-            monthStart.setHours(0, 0, 0, 0);
-            const { data: monthlyData } = await supabase
-                .from("donations")
-                .select("amount")
-                .gte("created_at", monthStart.toISOString());
+            const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
+            const { data: monthlyData } = await supabase.from("donations").select("amount").gte("created_at", monthStart.toISOString());
             const monthlyDonations = monthlyData?.reduce((sum, d) => sum + (d.amount || 0), 0) || 0;
+            const { count: openRequests } = await supabase.from("help_requests").select("*", { count: "exact", head: true }).eq("status", "OPEN");
+            const { count: resolvedRequests } = await supabase.from("help_requests").select("*", { count: "exact", head: true }).eq("status", "RESOLVED");
 
-            // Fetch help requests
-            const { count: openRequests } = await supabase
-                .from("help_requests")
-                .select("*", { count: "exact", head: true })
-                .eq("status", "OPEN");
-
-            const { count: resolvedRequests } = await supabase
-                .from("help_requests")
-                .select("*", { count: "exact", head: true })
-                .eq("status", "RESOLVED");
-
-            // Set stats
             setStats({
-                totalUsers: totalUsers || 0,
-                newUsersThisMonth: newUsers || 0,
-                totalNGOs: totalNGOs || 0,
-                activeNGOs: activeNGOs || 0,
-                pendingNGOs: pendingNGOs || 0,
-                totalVolunteers: totalVolunteers || 0,
+                totalUsers: totalUsers || 0, newUsersThisMonth: newUsers || 0,
+                totalNGOs: totalNGOs || 0, activeNGOs: activeNGOs || 0,
+                pendingNGOs: pendingNGOs || 0, totalVolunteers: totalVolunteers || 0,
                 activeVolunteers: Math.floor((totalVolunteers || 0) * 0.6),
-                totalDonors: totalDonors || 0,
-                totalDonations,
-                monthlyDonations,
-                openRequests: openRequests || 0,
-                resolvedRequests: resolvedRequests || 0,
+                totalDonors: totalDonors || 0, totalDonations, monthlyDonations,
+                openRequests: openRequests || 0, resolvedRequests: resolvedRequests || 0,
             });
 
-            // Fetch pending NGOs
             const { data: pendingData } = await supabase
-                .from("ngos")
-                .select("id, name, email, created_at, category")
-                .eq("verification_status", "PENDING")
-                .order("created_at", { ascending: false })
-                .limit(5);
-
+                .from("ngos").select("id, name, email, created_at, category")
+                .eq("verification_status", "PENDING").order("created_at", { ascending: false }).limit(5);
             if (pendingData) {
                 setPendingNGOs(pendingData.map(n => ({
-                    id: n.id,
-                    name: n.name,
-                    email: n.email,
-                    submitted: formatTimeAgo(n.created_at),
-                    category: n.category || "General",
+                    id: n.id, name: n.name, email: n.email,
+                    submitted: formatTimeAgo(n.created_at), category: n.category || "General",
                 })));
             }
 
-            // Fetch top NGOs by donations
             const { data: topNgoData } = await supabase
-                .from("ngos")
-                .select("id, name, total_donations_received, volunteer_count, rating")
-                .eq("verification_status", "VERIFIED")
-                .order("total_donations_received", { ascending: false })
-                .limit(5);
-
+                .from("ngos").select("id, name, total_donations_received, volunteer_count, rating")
+                .eq("verification_status", "VERIFIED").order("total_donations_received", { ascending: false }).limit(5);
             if (topNgoData) {
                 setTopNGOs(topNgoData.map(n => ({
-                    id: n.id,
-                    name: n.name,
-                    donations: n.total_donations_received || 0,
-                    volunteers: n.volunteer_count || 0,
-                    rating: n.rating || 0,
+                    id: n.id, name: n.name, donations: n.total_donations_received || 0,
+                    volunteers: n.volunteer_count || 0, rating: n.rating || 0,
                 })));
             }
 
-            // Fetch recent activities (from audit logs or use mock for now)
-            // For now, we'll use mock activities
             setActivities([
                 { id: "1", type: "DONATION", message: "Recent donation received", time: "Just now", status: "COMPLETED" },
                 { id: "2", type: "NGO_REGISTERED", message: "New NGO registration", time: "1 hour ago", status: "PENDING" },
@@ -214,7 +100,6 @@ export default function AdminDashboard() {
                 { id: "4", type: "VERIFICATION", message: "NGO verification completed", time: "3 hours ago", status: "COMPLETED" },
                 { id: "5", type: "REQUEST_RESOLVED", message: "Help request resolved", time: "5 hours ago", status: "COMPLETED" },
             ]);
-
         } catch (error) {
             console.error("Error fetching dashboard data:", error);
         } finally {
@@ -223,10 +108,8 @@ export default function AdminDashboard() {
     }
 
     function formatTimeAgo(dateStr: string) {
-        const date = new Date(dateStr);
-        const now = new Date();
-        const diff = now.getTime() - date.getTime();
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const diff = Date.now() - new Date(dateStr).getTime();
+        const days = Math.floor(diff / 86400000);
         if (days === 0) return "Today";
         if (days === 1) return "Yesterday";
         if (days < 7) return `${days} days ago`;
@@ -234,259 +117,171 @@ export default function AdminDashboard() {
         return `${Math.floor(days / 30)} months ago`;
     }
 
-    function getActivityIcon(type: string) {
-        switch (type) {
-            case "DONATION": return "payments";
-            case "NGO_REGISTERED": return "domain_add";
-            case "USER_REPORT": return "flag";
-            case "VERIFICATION": return "verified";
-            case "REQUEST_RESOLVED": return "check_circle";
-            default: return "info";
-        }
-    }
+    const iconMap: Record<string, string> = {
+        DONATION: "payments", NGO_REGISTERED: "domain_add",
+        USER_REPORT: "flag", VERIFICATION: "verified", REQUEST_RESOLVED: "check_circle",
+    };
+    const colorMap: Record<string, string> = {
+        DONATION: "var(--color-success)", NGO_REGISTERED: "var(--primary)",
+        USER_REPORT: "var(--color-danger)", VERIFICATION: "var(--color-info)",
+        REQUEST_RESOLVED: "var(--color-success)",
+    };
 
-    function getActivityColor(type: string) {
-        switch (type) {
-            case "DONATION": return "bg-green-100 text-green-600";
-            case "NGO_REGISTERED": return "bg-purple-100 text-purple-600";
-            case "USER_REPORT": return "bg-red-100 text-red-600";
-            case "VERIFICATION": return "bg-blue-100 text-blue-600";
-            case "REQUEST_RESOLVED": return "bg-green-100 text-green-600";
-            default: return "bg-gray-100 text-gray-600";
-        }
-    }
-
+    /* ── render ── */
     if (loading) {
         return (
-            <div className="space-y-6 pb-8">
-                <div className="flex items-center justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
-                </div>
+            <div style={{ display: "flex", justifyContent: "center", padding: "4rem 0" }}>
+                <div className="spinner" />
             </div>
         );
     }
 
     return (
-        <div className="space-y-6 pb-8">
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Platform Admin</h1>
-                    <p className="text-gray-500 text-sm mt-1">Monitor and manage the Helpit platform</p>
+                    <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700, color: "var(--foreground)" }}>Platform Admin</h1>
+                    <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Monitor and manage the Helpit platform</p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <select
-                        value={timeRange}
-                        onChange={(e) => setTimeRange(e.target.value)}
-                        className="h-10 px-3 rounded-lg border border-gray-200 bg-white text-sm"
-                    >
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-                        <option value="quarter">This Quarter</option>
-                        <option value="year">This Year</option>
-                    </select>
+                <select
+                    value={timeRange} onChange={(e) => setTimeRange(e.target.value)}
+                    className="field-input" style={{ width: "auto", height: 40, fontSize: "var(--font-sm)" }}
+                >
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                </select>
+            </div>
+
+            {/* Stats Grid — 4 cols */}
+            <div className="stat-grid">
+                {[
+                    { icon: "groups", label: "Total Users", value: stats.totalUsers.toLocaleString(), sub: `+${stats.newUsersThisMonth} this month`, subColor: "var(--color-success)" },
+                    { icon: "domain", label: "Active NGOs", value: stats.activeNGOs, sub: `${stats.pendingNGOs} pending`, subColor: "var(--color-warning)" },
+                    { icon: "volunteer_activism", label: "Volunteers", value: stats.totalVolunteers.toLocaleString(), sub: `${stats.activeVolunteers} active`, subColor: "var(--color-success)" },
+                    { icon: "favorite", label: "Donors", value: stats.totalDonors.toLocaleString() },
+                ].map((s) => (
+                    <div key={s.label} className="stat-card">
+                        <span className="material-symbols-outlined" style={{ fontSize: 28, color: "var(--primary)" }}>{s.icon}</span>
+                        <p className="stat-value">{s.value}</p>
+                        <p className="stat-label">{s.label}</p>
+                        {s.sub && <p style={{ fontSize: "var(--font-xs)", color: s.subColor, marginTop: 4 }}>{s.sub}</p>}
+                    </div>
+                ))}
+            </div>
+
+            {/* Financial row — 3 cols */}
+            <div className="stat-grid" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
+                <div className="stat-card">
+                    <p className="stat-value">{formatCurrency(stats.totalDonations)}</p>
+                    <p className="stat-label">Total Donations</p>
+                    <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", marginTop: 4 }}>All time</p>
+                </div>
+                <div className="stat-card">
+                    <p className="stat-value" style={{ color: "var(--color-success)" }}>{formatCurrency(stats.monthlyDonations)}</p>
+                    <p className="stat-label">Monthly Donations</p>
+                    <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", marginTop: 4 }}>This month</p>
+                </div>
+                <div className="stat-card">
+                    <div style={{ display: "flex", gap: "var(--space-lg)", marginBottom: 4 }}>
+                        <div>
+                            <p className="stat-value" style={{ color: "var(--color-warning)" }}>{stats.openRequests}</p>
+                            <p className="stat-label">Open</p>
+                        </div>
+                        <div>
+                            <p className="stat-value" style={{ color: "var(--color-success)" }}>{stats.resolvedRequests}</p>
+                            <p className="stat-label">Resolved</p>
+                        </div>
+                    </div>
+                    <p className="stat-label">Help Requests</p>
                 </div>
             </div>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {/* Total Users */}
-                <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-blue-600">groups</span>
-                        </div>
-                        <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalUsers.toLocaleString()}</p>
-                            <p className="text-xs text-gray-500">Total Users</p>
-                        </div>
-                    </div>
-                    <p className="text-xs text-green-600 mt-2">+{stats.newUsersThisMonth} this month</p>
-                </div>
-
-                {/* Active NGOs */}
-                <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-purple-600">domain</span>
-                        </div>
-                        <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.activeNGOs}</p>
-                            <p className="text-xs text-gray-500">Active NGOs</p>
-                        </div>
-                    </div>
-                    <p className="text-xs text-orange-600 mt-2">{stats.pendingNGOs} pending verification</p>
-                </div>
-
-                {/* Volunteers */}
-                <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-green-600">volunteer_activism</span>
-                        </div>
-                        <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalVolunteers.toLocaleString()}</p>
-                            <p className="text-xs text-gray-500">Volunteers</p>
-                        </div>
-                    </div>
-                    <p className="text-xs text-green-600 mt-2">{stats.activeVolunteers} active</p>
-                </div>
-
-                {/* Donors */}
-                <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-yellow-100 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-yellow-600">favorite</span>
-                        </div>
-                        <div>
-                            <p className="text-2xl font-bold text-gray-900">{stats.totalDonors.toLocaleString()}</p>
-                            <p className="text-xs text-gray-500">Donors</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Financial Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {/* Total Donations */}
-                <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <p className="text-sm text-gray-500">Total Donations</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">{formatCurrency(stats.totalDonations)}</p>
-                    <p className="text-xs text-gray-400 mt-1">All time</p>
-                </div>
-
-                {/* Monthly Donations */}
-                <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <p className="text-sm text-gray-500">Monthly Donations</p>
-                    <p className="text-2xl font-bold text-green-600 mt-1">{formatCurrency(stats.monthlyDonations)}</p>
-                    <p className="text-xs text-gray-400 mt-1">This month</p>
-                </div>
-
-                {/* Requests */}
-                <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                    <p className="text-sm text-gray-500">Help Requests</p>
-                    <div className="flex items-center gap-4 mt-1">
-                        <div>
-                            <p className="text-2xl font-bold text-orange-600">{stats.openRequests}</p>
-                            <p className="text-xs text-gray-400">Open</p>
-                        </div>
-                        <div>
-                            <p className="text-2xl font-bold text-green-600">{stats.resolvedRequests}</p>
-                            <p className="text-xs text-gray-400">Resolved</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Two Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Two-col: Pending Verifications + Recent Activity */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-lg)" }}>
                 {/* Pending Verifications */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                        <h2 className="font-bold text-gray-900">Pending Verifications</h2>
-                        <Link href="/admin/ngos" className="text-sm text-[var(--primary)] font-semibold">
-                            View All
-                        </Link>
+                <div className="card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-md)" }}>
+                        <h2 style={{ fontWeight: 700, fontSize: "var(--font-base)" }}>Pending Verifications</h2>
+                        <Link href="/admin/ngos" className="auth-link" style={{ fontSize: "var(--font-sm)" }}>View All</Link>
                     </div>
-                    <div className="divide-y divide-gray-100">
-                        {pendingNGOs.length === 0 ? (
-                            <div className="p-4 text-center text-gray-500">
-                                No pending verifications
-                            </div>
-                        ) : (
-                            pendingNGOs.map((ngo) => (
-                                <div key={ngo.id} className="p-4 flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                                        <span className="material-symbols-outlined text-purple-600">domain</span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="font-semibold text-sm">{ngo.name}</p>
-                                        <p className="text-xs text-gray-500">{ngo.category} • {ngo.submitted}</p>
-                                    </div>
-                                    <Link
-                                        href={`/admin/ngos?id=${ngo.id}`}
-                                        className="px-3 py-1.5 bg-[var(--primary)] text-white text-xs font-semibold rounded-lg"
-                                    >
-                                        Review
-                                    </Link>
+                    {pendingNGOs.length === 0 ? (
+                        <p style={{ textAlign: "center", color: "var(--foreground-muted)", padding: "var(--space-lg) 0" }}>No pending verifications</p>
+                    ) : (
+                        pendingNGOs.map((ngo) => (
+                            <div key={ngo.id} className="list-row" style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
+                                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--primary-50)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <span className="material-symbols-outlined" style={{ color: "var(--primary)" }}>domain</span>
                                 </div>
-                            ))
-                        )}
-                    </div>
+                                <div style={{ flex: 1 }}>
+                                    <p style={{ fontWeight: 600, fontSize: "var(--font-sm)" }}>{ngo.name}</p>
+                                    <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{ngo.category} • {ngo.submitted}</p>
+                                </div>
+                                <Link href={`/admin/ngos?id=${ngo.id}`} className="btn-primary" style={{ fontSize: "var(--font-xs)", padding: "6px 12px" }}>Review</Link>
+                            </div>
+                        ))
+                    )}
                 </div>
 
                 {/* Recent Activity */}
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                        <h2 className="font-bold text-gray-900">Recent Activity</h2>
-                        <Link href="/admin/audit-logs" className="text-sm text-[var(--primary)] font-semibold">
-                            View All
-                        </Link>
+                <div className="card">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-md)" }}>
+                        <h2 style={{ fontWeight: 700, fontSize: "var(--font-base)" }}>Recent Activity</h2>
+                        <Link href="/admin/audit-logs" className="auth-link" style={{ fontSize: "var(--font-sm)" }}>View All</Link>
                     </div>
-                    <div className="divide-y divide-gray-100">
-                        {activities.map((activity) => (
-                            <div key={activity.id} className="p-4 flex items-start gap-3">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getActivityColor(activity.type)}`}>
-                                    <span className="material-symbols-outlined text-sm">{getActivityIcon(activity.type)}</span>
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-sm text-gray-900">{activity.message}</p>
-                                    <p className="text-xs text-gray-500 mt-0.5">{activity.time}</p>
-                                </div>
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${activity.status === "COMPLETED" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                                    }`}>
-                                    {activity.status}
-                                </span>
+                    {activities.map((a) => (
+                        <div key={a.id} className="list-row" style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-sm)" }}>
+                            <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--primary-50)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 16, color: colorMap[a.type] || "var(--foreground-muted)" }}>{iconMap[a.type] || "info"}</span>
                             </div>
-                        ))}
-                    </div>
+                            <div style={{ flex: 1 }}>
+                                <p style={{ fontSize: "var(--font-sm)" }}>{a.message}</p>
+                                <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{a.time}</p>
+                            </div>
+                            <span className="tab-pill" style={{ fontSize: 10, background: a.status === "COMPLETED" ? "var(--color-success-bg,#DCFCE7)" : "var(--color-warning-bg,#FEF9C3)", color: a.status === "COMPLETED" ? "var(--color-success)" : "var(--color-warning)" }}>
+                                {a.status}
+                            </span>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            {/* Top NGOs */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                    <h2 className="font-bold text-gray-900">Top Performing NGOs</h2>
-                    <Link href="/admin/ngos" className="text-sm text-[var(--primary)] font-semibold">
-                        View All
-                    </Link>
+            {/* Top NGOs table */}
+            <div className="card" style={{ overflow: "hidden", padding: 0 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "var(--space-md) var(--space-lg)" }}>
+                    <h2 style={{ fontWeight: 700, fontSize: "var(--font-base)" }}>Top Performing NGOs</h2>
+                    <Link href="/admin/ngos" className="auth-link" style={{ fontSize: "var(--font-sm)" }}>View All</Link>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500">Rank</th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500">NGO Name</th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500">Total Donations</th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500">Volunteers</th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500">Rating</th>
+                <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                        <thead>
+                            <tr style={{ background: "var(--background-subtle)" }}>
+                                {["Rank", "NGO Name", "Total Donations", "Volunteers", "Rating"].map(h => (
+                                    <th key={h} style={{ textAlign: "left", padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-xs)", fontWeight: 600, color: "var(--foreground-muted)", textTransform: "uppercase" }}>{h}</th>
+                                ))}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {topNGOs.map((ngo, index) => (
-                                <tr key={ngo.id} className="hover:bg-gray-50">
-                                    <td className="px-4 py-3">
-                                        <span className="w-6 h-6 rounded-full bg-[var(--primary)] text-white text-xs font-bold flex items-center justify-center">
-                                            {index + 1}
-                                        </span>
+                        <tbody>
+                            {topNGOs.map((ngo, i) => (
+                                <tr key={ngo.id} style={{ borderTop: "1px solid var(--border-light)" }}>
+                                    <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
+                                        <span style={{ width: 24, height: 24, borderRadius: "50%", background: "var(--primary)", color: "#fff", fontSize: "var(--font-xs)", fontWeight: 700, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
                                     </td>
-                                    <td className="px-4 py-3 font-semibold text-sm">{ngo.name}</td>
-                                    <td className="px-4 py-3 text-sm text-green-600 font-medium">{formatCurrency(ngo.donations)}</td>
-                                    <td className="px-4 py-3 text-sm text-gray-600">{ngo.volunteers}</td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-yellow-500 text-sm">star</span>
-                                            <span className="text-sm font-medium">{ngo.rating.toFixed(1)}</span>
-                                        </div>
+                                    <td style={{ padding: "var(--space-sm) var(--space-md)", fontWeight: 600, fontSize: "var(--font-sm)" }}>{ngo.name}</td>
+                                    <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", color: "var(--color-success)", fontWeight: 500 }}>{formatCurrency(ngo.donations)}</td>
+                                    <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>{ngo.volunteers}</td>
+                                    <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
+                                        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 16, color: "var(--color-warning)" }}>star</span>
+                                            <span style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{ngo.rating.toFixed(1)}</span>
+                                        </span>
                                     </td>
                                 </tr>
                             ))}
                             {topNGOs.length === 0 && (
-                                <tr>
-                                    <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
-                                        No NGO data available
-                                    </td>
-                                </tr>
+                                <tr><td colSpan={5} style={{ padding: "var(--space-xl)", textAlign: "center", color: "var(--foreground-muted)" }}>No NGO data available</td></tr>
                             )}
                         </tbody>
                     </table>

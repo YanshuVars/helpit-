@@ -24,14 +24,14 @@ function SearchFilters() {
     }
 
     return (
-        <Card variant="glass" className="mb-8 p-6">
+        <Card className="mb-8 p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2">
                     <Input
                         placeholder="Search for requests..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        leftIcon={<span className="material-symbols-outlined">search</span>}
+                        icon="search"
                     />
                 </div>
                 <div>
@@ -39,7 +39,7 @@ function SearchFilters() {
                         placeholder="City"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        leftIcon={<span className="material-symbols-outlined">location_on</span>}
+                        icon="location_on"
                     />
                 </div>
                 <div className="flex gap-2">
@@ -58,16 +58,14 @@ function SearchFilters() {
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-sm">expand_more</span>
                     </div>
-                    <Button onClick={handleSearch} variant="primary" size="icon">
-                        <span className="material-symbols-outlined">arrow_forward</span>
-                    </Button>
+                    <Button onClick={handleSearch} variant="primary" size="sm" icon="arrow_forward" />
                 </div>
             </div>
         </Card>
     );
 }
 
-export default function RequestsPage() {
+function RequestsContent() {
     const searchParams = useSearchParams();
     const [requests, setRequests] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
@@ -98,16 +96,7 @@ export default function RequestsPage() {
     }, [category, city]);
 
     return (
-        <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-12 animate-slideDown">
-                <h1 className="text-4xl md:text-5xl font-display font-bold mb-4 text-[var(--foreground)] tracking-tight">
-                    Volunteer <span className="text-gradient">Opportunities</span>
-                </h1>
-                <p className="text-lg text-[var(--foreground-muted)] max-w-2xl mx-auto">
-                    Find meaningful ways to contribute to your community. Browse urgent requests from verified NGOs and make a difference today.
-                </p>
-            </div>
-
+        <>
             <Suspense fallback={<div className="h-20 bg-gray-100 rounded-xl animate-pulse"></div>}>
                 <div className="animate-slideUp stagger-1">
                     <SearchFilters />
@@ -142,6 +131,31 @@ export default function RequestsPage() {
                     <p className="text-[var(--foreground-muted)]">Try adjusting your filters or search terms.</p>
                 </div>
             )}
+        </>
+    );
+}
+
+export default function RequestsPage() {
+    return (
+        <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-12 animate-slideDown">
+                <h1 className="text-4xl md:text-5xl font-display font-bold mb-4 text-[var(--foreground)] tracking-tight">
+                    Volunteer <span className="text-gradient">Opportunities</span>
+                </h1>
+                <p className="text-lg text-[var(--foreground-muted)] max-w-2xl mx-auto">
+                    Find meaningful ways to contribute to your community. Browse urgent requests from verified NGOs and make a difference today.
+                </p>
+            </div>
+
+            <Suspense fallback={
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className="h-64 rounded-2xl bg-gray-100 animate-pulse"></div>
+                    ))}
+                </div>
+            }>
+                <RequestsContent />
+            </Suspense>
         </div>
     );
 }

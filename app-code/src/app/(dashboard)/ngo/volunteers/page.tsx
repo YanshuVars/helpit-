@@ -1,49 +1,58 @@
-import { PageHeader } from "@/components/ui/PageHeader";
+import Link from "next/link";
+
+const volunteers = [
+    { id: "v1", name: "John Doe", skills: ["First Aid", "Driving"], hours: 45, tasks: 12, status: "active" },
+    { id: "v2", name: "Jane Smith", skills: ["Teaching", "Counseling"], hours: 78, tasks: 23, status: "active" },
+    { id: "v3", name: "Mike Wilson", skills: ["Cooking"], hours: 32, tasks: 8, status: "inactive" },
+];
 
 export default function NGOVolunteersPage() {
-    const volunteers = [
-        { id: "v1", name: "John Doe", skills: ["First Aid", "Driving"], hours: 45, tasks: 12, status: "active" },
-        { id: "v2", name: "Jane Smith", skills: ["Teaching", "Counseling"], hours: 78, tasks: 23, status: "active" },
-        { id: "v3", name: "Mike Wilson", skills: ["Cooking"], hours: 32, tasks: 8, status: "inactive" },
-    ];
-
     return (
-        <div className="flex flex-col gap-6">
-            <PageHeader
-                title="Volunteers"
-                showBack
-                fallbackRoute="/ngo"
-                rightAction={<span className="text-sm text-gray-500">{volunteers.length} total</span>}
-            />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h1 className="page-title">Volunteers</h1>
+                <span style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>{volunteers.length} total</span>
+            </div>
 
             {/* Search */}
-            <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                <input type="text" placeholder="Search volunteers..." className="w-full h-12 rounded-xl border border-gray-200 pl-10 pr-4" />
+            <div style={{ position: 'relative' }}>
+                <span className="material-symbols-outlined" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-disabled)', fontSize: 20 }}>search</span>
+                <input type="text" placeholder="Search volunteers..." className="field-input" style={{ paddingLeft: 40 }} />
             </div>
 
             {/* List */}
-            <div className="flex flex-col gap-4">
-                {volunteers.map((v) => (
-                    <div key={v.id} className="bg-white rounded-xl p-4 border border-gray-200">
-                        <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] font-bold text-lg shrink-0">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {volunteers.map(v => (
+                    <div key={v.id} className="card" style={{ padding: '16px 18px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <div style={{
+                                width: 44, height: 44, borderRadius: '50%',
+                                background: 'var(--color-primary-soft)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                color: 'var(--color-primary)', fontWeight: 700, fontSize: 16, flexShrink: 0,
+                            }}>
                                 {v.name.charAt(0)}
                             </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                    <p className="font-semibold truncate">{v.name}</p>
-                                    <span className={`w-2 h-2 rounded-full shrink-0 ${v.status === "active" ? "bg-green-500" : "bg-gray-300"}`}></span>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <span style={{ fontWeight: 600, fontSize: 14 }}>{v.name}</span>
+                                    <span style={{
+                                        width: 7, height: 7, borderRadius: '50%',
+                                        background: v.status === "active" ? 'var(--color-success)' : 'var(--color-text-disabled)',
+                                    }} />
                                 </div>
-                                <p className="text-xs text-gray-500">{v.hours} hrs • {v.tasks} tasks</p>
+                                <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{v.hours} hrs • {v.tasks} tasks</p>
                             </div>
-                            <button className="p-2 rounded-full hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center">
-                                <span className="material-symbols-outlined text-gray-400">chat</span>
+                            <button className="btn btn-secondary" style={{ padding: '6px 10px', minHeight: 0 }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 18, color: 'var(--color-text-muted)' }}>chat</span>
                             </button>
                         </div>
-                        <div className="flex gap-2 mt-3 flex-wrap">
-                            {v.skills.map((skill) => (
-                                <span key={skill} className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">{skill}</span>
+                        <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
+                            {v.skills.map(skill => (
+                                <span key={skill} style={{
+                                    fontSize: 11, padding: '3px 10px', borderRadius: 'var(--radius-full)',
+                                    background: 'var(--color-bg-subtle)', color: 'var(--color-text-muted)',
+                                }}>{skill}</span>
                             ))}
                         </div>
                     </div>
@@ -52,4 +61,3 @@ export default function NGOVolunteersPage() {
         </div>
     );
 }
-

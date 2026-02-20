@@ -2,104 +2,16 @@
 
 import { useState } from "react";
 
-// Mock audit logs data
+/* ── mock data ── */
 const mockAuditLogs = [
-    {
-        id: "1",
-        timestamp: "2026-02-18T12:30:00Z",
-        action: "USER_SUSPENDED",
-        category: "USER_MANAGEMENT",
-        actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" },
-        target: { id: "u8", name: "Meera Joshi", type: "USER" },
-        details: "User suspended for policy violation",
-        ipAddress: "192.168.1.100",
-        userAgent: "Chrome/120.0.0",
-        metadata: { reason: "Spam activities", duration: "30 days" }
-    },
-    {
-        id: "2",
-        timestamp: "2026-02-18T11:45:00Z",
-        action: "NGO_VERIFIED",
-        category: "NGO_MANAGEMENT",
-        actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" },
-        target: { id: "ngo4", name: "Green Earth Initiative", type: "NGO" },
-        details: "NGO verification approved after document review",
-        ipAddress: "192.168.1.100",
-        userAgent: "Chrome/120.0.0",
-        metadata: { documentsReviewed: 5, verificationNotes: "All documents verified" }
-    },
-    {
-        id: "3",
-        timestamp: "2026-02-18T10:15:00Z",
-        action: "DONATION_REFUNDED",
-        category: "DONATION",
-        actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" },
-        target: { id: "don123", name: "Donation #DON-123", type: "DONATION" },
-        details: "Refund processed for failed service delivery",
-        ipAddress: "192.168.1.100",
-        userAgent: "Chrome/120.0.0",
-        metadata: { amount: 5000, reason: "Service not delivered", refundId: "REF-456" }
-    },
-    {
-        id: "4",
-        timestamp: "2026-02-18T09:30:00Z",
-        action: "REPORT_RESOLVED",
-        category: "MODERATION",
-        actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" },
-        target: { id: "rpt5", name: "Report #RPT-005", type: "REPORT" },
-        details: "Report resolved - NGO suspended",
-        ipAddress: "192.168.1.100",
-        userAgent: "Chrome/120.0.0",
-        metadata: { reportType: "NGO_REPORT", action: "SUSPEND_NGO" }
-    },
-    {
-        id: "5",
-        timestamp: "2026-02-17T16:45:00Z",
-        action: "ROLE_CHANGED",
-        category: "USER_MANAGEMENT",
-        actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" },
-        target: { id: "u5", name: "Vikram Singh", type: "USER" },
-        details: "User role changed from VOLUNTEER to NGO_COORDINATOR",
-        ipAddress: "192.168.1.100",
-        userAgent: "Chrome/120.0.0",
-        metadata: { previousRole: "VOLUNTEER", newRole: "NGO_COORDINATOR" }
-    },
-    {
-        id: "6",
-        timestamp: "2026-02-17T14:20:00Z",
-        action: "NGO_SUSPENDED",
-        category: "NGO_MANAGEMENT",
-        actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" },
-        target: { id: "ngo5", name: "Help All Trust", type: "NGO" },
-        details: "NGO suspended due to fraudulent activities",
-        ipAddress: "192.168.1.100",
-        userAgent: "Chrome/120.0.0",
-        metadata: { reason: "Fraudulent activities", reportId: "RPT-004" }
-    },
-    {
-        id: "7",
-        timestamp: "2026-02-17T11:00:00Z",
-        action: "SETTINGS_CHANGED",
-        category: "PLATFORM",
-        actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" },
-        target: { id: "platform", name: "Platform Settings", type: "SETTINGS" },
-        details: "Updated donation minimum amount from ₹100 to ₹200",
-        ipAddress: "192.168.1.100",
-        userAgent: "Chrome/120.0.0",
-        metadata: { setting: "donation_min_amount", oldValue: 100, newValue: 200 }
-    },
-    {
-        id: "8",
-        timestamp: "2026-02-16T15:30:00Z",
-        action: "CONTENT_REMOVED",
-        category: "MODERATION",
-        actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" },
-        target: { id: "post789", name: "Post #789", type: "POST" },
-        details: "Post removed for violating community guidelines",
-        ipAddress: "192.168.1.100",
-        userAgent: "Chrome/120.0.0",
-        metadata: { reason: "Misinformation", authorId: "u10" }
-    },
+    { id: "1", timestamp: "2026-02-18T12:30:00Z", action: "USER_SUSPENDED", category: "USER_MANAGEMENT", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "u8", name: "Meera Joshi", type: "USER" }, details: "User suspended for policy violation", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { reason: "Spam activities", duration: "30 days" } },
+    { id: "2", timestamp: "2026-02-18T11:45:00Z", action: "NGO_VERIFIED", category: "NGO_MANAGEMENT", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "ngo4", name: "Green Earth Initiative", type: "NGO" }, details: "NGO verification approved after document review", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { documentsReviewed: 5, verificationNotes: "All documents verified" } },
+    { id: "3", timestamp: "2026-02-18T10:15:00Z", action: "DONATION_REFUNDED", category: "DONATION", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "don123", name: "Donation #DON-123", type: "DONATION" }, details: "Refund processed for failed service delivery", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { amount: 5000, reason: "Service not delivered", refundId: "REF-456" } },
+    { id: "4", timestamp: "2026-02-18T09:30:00Z", action: "REPORT_RESOLVED", category: "MODERATION", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "rpt5", name: "Report #RPT-005", type: "REPORT" }, details: "Report resolved - NGO suspended", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { reportType: "NGO_REPORT", action: "SUSPEND_NGO" } },
+    { id: "5", timestamp: "2026-02-17T16:45:00Z", action: "ROLE_CHANGED", category: "USER_MANAGEMENT", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "u5", name: "Vikram Singh", type: "USER" }, details: "User role changed from VOLUNTEER to NGO_COORDINATOR", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { previousRole: "VOLUNTEER", newRole: "NGO_COORDINATOR" } },
+    { id: "6", timestamp: "2026-02-17T14:20:00Z", action: "NGO_SUSPENDED", category: "NGO_MANAGEMENT", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "ngo5", name: "Help All Trust", type: "NGO" }, details: "NGO suspended due to fraudulent activities", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { reason: "Fraudulent activities", reportId: "RPT-004" } },
+    { id: "7", timestamp: "2026-02-17T11:00:00Z", action: "SETTINGS_CHANGED", category: "PLATFORM", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "platform", name: "Platform Settings", type: "SETTINGS" }, details: "Updated donation minimum amount from ₹100 to ₹200", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { setting: "donation_min_amount", oldValue: 100, newValue: 200 } },
+    { id: "8", timestamp: "2026-02-16T15:30:00Z", action: "CONTENT_REMOVED", category: "MODERATION", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "post789", name: "Post #789", type: "POST" }, details: "Post removed for violating community guidelines", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { reason: "Misinformation", authorId: "u10" } },
 ];
 
 const categoryFilters = ["ALL", "USER_MANAGEMENT", "NGO_MANAGEMENT", "DONATION", "MODERATION", "PLATFORM"];
@@ -117,203 +29,126 @@ export default function AuditLogsPage() {
         const matchesSearch = log.details.toLowerCase().includes(searchQuery.toLowerCase()) ||
             log.actor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             log.target.name.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesCategory = categoryFilter === "ALL" || log.category === categoryFilter;
-        const matchesAction = actionFilter === "ALL" || log.action === actionFilter;
-        return matchesSearch && matchesCategory && matchesAction;
+        return matchesSearch && (categoryFilter === "ALL" || log.category === categoryFilter) &&
+            (actionFilter === "ALL" || log.action === actionFilter);
     });
 
-    const getCategoryColor = (category: string) => {
-        switch (category) {
-            case "USER_MANAGEMENT": return "bg-blue-100 text-blue-700";
-            case "NGO_MANAGEMENT": return "bg-purple-100 text-purple-700";
-            case "DONATION": return "bg-green-100 text-green-700";
-            case "MODERATION": return "bg-red-100 text-red-700";
-            case "PLATFORM": return "bg-gray-100 text-gray-700";
-            default: return "bg-gray-100 text-gray-700";
-        }
+    const catColor: Record<string, string> = {
+        USER_MANAGEMENT: "var(--color-info)", NGO_MANAGEMENT: "var(--primary)",
+        DONATION: "var(--color-success)", MODERATION: "var(--color-danger)", PLATFORM: "var(--foreground-muted)",
+    };
+    const actionIcon: Record<string, string> = {
+        USER_SUSPENDED: "block", NGO_VERIFIED: "verified", NGO_SUSPENDED: "domain_disabled",
+        ROLE_CHANGED: "admin_panel_settings", DONATION_REFUNDED: "money_off",
+        REPORT_RESOLVED: "task_alt", SETTINGS_CHANGED: "settings", CONTENT_REMOVED: "delete",
     };
 
-    const getActionIcon = (action: string) => {
-        switch (action) {
-            case "USER_SUSPENDED": return "block";
-            case "NGO_VERIFIED": return "verified";
-            case "NGO_SUSPENDED": return "domain_disabled";
-            case "ROLE_CHANGED": return "admin_panel_settings";
-            case "DONATION_REFUNDED": return "money_off";
-            case "REPORT_RESOLVED": return "task_alt";
-            case "SETTINGS_CHANGED": return "settings";
-            case "CONTENT_REMOVED": return "delete";
-            default: return "info";
-        }
-    };
-
-    const formatTimestamp = (timestamp: string) => {
-        const date = new Date(timestamp);
+    const fmtTs = (ts: string) => {
+        const d = new Date(ts);
         return {
-            date: date.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }),
-            time: date.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
+            date: d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }),
+            time: d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }),
         };
     };
 
     return (
-        <div className="space-y-6 pb-8">
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Audit Logs</h1>
-                    <p className="text-gray-500 text-sm mt-1">Track all platform activities and changes</p>
+                    <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Audit Logs</h1>
+                    <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Track all platform activities and changes</p>
                 </div>
-                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 bg-white rounded-xl hover:bg-gray-50">
-                    <span className="material-symbols-outlined text-lg">download</span>
-                    <span className="text-sm font-medium">Export Logs</span>
+                <button className="btn-secondary" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>download</span>Export Logs
                 </button>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white rounded-xl p-4 border border-gray-100">
-                    <p className="text-2xl font-bold text-gray-900">1,234</p>
-                    <p className="text-xs text-gray-500">Total Actions Today</p>
-                </div>
-                <div className="bg-white rounded-xl p-4 border border-gray-100">
-                    <p className="text-2xl font-bold text-blue-600">456</p>
-                    <p className="text-xs text-gray-500">User Management</p>
-                </div>
-                <div className="bg-white rounded-xl p-4 border border-gray-100">
-                    <p className="text-2xl font-bold text-purple-600">234</p>
-                    <p className="text-xs text-gray-500">NGO Management</p>
-                </div>
-                <div className="bg-white rounded-xl p-4 border border-gray-100">
-                    <p className="text-2xl font-bold text-red-600">89</p>
-                    <p className="text-xs text-gray-500">Moderation Actions</p>
-                </div>
+            {/* Stats row */}
+            <div className="stat-grid">
+                {[
+                    { label: "Total Actions Today", value: "1,234" },
+                    { label: "User Management", value: "456", color: "var(--color-info)" },
+                    { label: "NGO Management", value: "234", color: "var(--primary)" },
+                    { label: "Moderation Actions", value: "89", color: "var(--color-danger)" },
+                ].map(s => (
+                    <div key={s.label} className="stat-card">
+                        <p className="stat-value" style={{ color: s.color }}>{s.value}</p>
+                        <p className="stat-label">{s.label}</p>
+                    </div>
+                ))}
             </div>
 
             {/* Filters */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-4">
-                <div className="flex flex-col gap-4">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        {/* Search */}
-                        <div className="flex-1 relative">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                            <input
-                                type="text"
-                                placeholder="Search by actor, target, or details..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full h-10 pl-10 pr-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                            />
-                        </div>
-
-                        {/* Category Filter */}
-                        <select
-                            value={categoryFilter}
-                            onChange={(e) => setCategoryFilter(e.target.value)}
-                            className="h-10 px-3 rounded-xl border border-gray-200 bg-white"
-                        >
-                            {categoryFilters.map((cat) => (
-                                <option key={cat} value={cat}>
-                                    {cat === "ALL" ? "All Categories" : cat.replace("_", " ")}
-                                </option>
-                            ))}
-                        </select>
-
-                        {/* Action Filter */}
-                        <select
-                            value={actionFilter}
-                            onChange={(e) => setActionFilter(e.target.value)}
-                            className="h-10 px-3 rounded-xl border border-gray-200 bg-white"
-                        >
-                            {actionFilters.map((action) => (
-                                <option key={action} value={action}>
-                                    {action === "ALL" ? "All Actions" : action.replace("_", " ")}
-                                </option>
-                            ))}
-                        </select>
+            <div className="card" style={{ display: "flex", flexDirection: "column", gap: "var(--space-md)" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-sm)" }}>
+                    <div style={{ flex: 1, minWidth: 200, position: "relative" }}>
+                        <span className="material-symbols-outlined" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--foreground-light)" }}>search</span>
+                        <input type="text" placeholder="Search by actor, target, or details..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                            className="field-input" style={{ paddingLeft: 40 }} />
                     </div>
-
-                    {/* Date Range */}
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm text-gray-600">From:</label>
-                            <input
-                                type="date"
-                                value={dateFrom}
-                                onChange={(e) => setDateFrom(e.target.value)}
-                                className="h-10 px-3 rounded-xl border border-gray-200"
-                            />
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <label className="text-sm text-gray-600">To:</label>
-                            <input
-                                type="date"
-                                value={dateTo}
-                                onChange={(e) => setDateTo(e.target.value)}
-                                className="h-10 px-3 rounded-xl border border-gray-200"
-                            />
-                        </div>
+                    <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                        {categoryFilters.map(c => <option key={c} value={c}>{c === "ALL" ? "All Categories" : c.replace(/_/g, " ")}</option>)}
+                    </select>
+                    <select value={actionFilter} onChange={(e) => setActionFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                        {actionFilters.map(a => <option key={a} value={a}>{a === "ALL" ? "All Actions" : a.replace(/_/g, " ")}</option>)}
+                    </select>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-md)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <label className="field-label" style={{ marginBottom: 0 }}>From:</label>
+                        <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="field-input" style={{ width: "auto" }} />
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <label className="field-label" style={{ marginBottom: 0 }}>To:</label>
+                        <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="field-input" style={{ width: "auto" }} />
                     </div>
                 </div>
             </div>
 
-            {/* Logs Table */}
-            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timestamp</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actor</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Target</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Details</th>
-                                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">IP</th>
+            {/* Table */}
+            <div className="card" style={{ overflow: "hidden", padding: 0 }}>
+                <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                        <thead>
+                            <tr style={{ background: "var(--background-subtle)" }}>
+                                {["Timestamp", "Action", "Actor", "Target", "Details", "IP"].map(h => (
+                                    <th key={h} style={{ textAlign: "left", padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-xs)", fontWeight: 600, color: "var(--foreground-muted)", textTransform: "uppercase" }}>{h}</th>
+                                ))}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-100">
+                        <tbody>
                             {filteredLogs.map((log) => {
-                                const { date, time } = formatTimestamp(log.timestamp);
+                                const { date, time } = fmtTs(log.timestamp);
+                                const cc = catColor[log.category] || "var(--foreground-muted)";
                                 return (
-                                    <tr
-                                        key={log.id}
-                                        className="hover:bg-gray-50 cursor-pointer"
-                                        onClick={() => setSelectedLog(log)}
-                                    >
-                                        <td className="px-4 py-3">
-                                            <div>
-                                                <p className="text-sm text-gray-900">{date}</p>
-                                                <p className="text-xs text-gray-500">{time}</p>
-                                            </div>
+                                    <tr key={log.id} style={{ borderTop: "1px solid var(--border-light)", cursor: "pointer" }}
+                                        onClick={() => setSelectedLog(log)}>
+                                        <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
+                                            <p style={{ fontSize: "var(--font-sm)" }}>{date}</p>
+                                            <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{time}</p>
                                         </td>
-                                        <td className="px-4 py-3">
-                                            <div className="flex items-center gap-2">
-                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${getCategoryColor(log.category)}`}>
-                                                    <span className="material-symbols-outlined text-sm">{getActionIcon(log.action)}</span>
+                                        <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
+                                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                                <div style={{ width: 32, height: 32, borderRadius: "var(--radius-md)", background: `${cc}20`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                    <span className="material-symbols-outlined" style={{ fontSize: 16, color: cc }}>{actionIcon[log.action] || "info"}</span>
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium text-gray-900">{log.action.replace("_", " ")}</p>
-                                                    <p className="text-xs text-gray-500">{log.category.replace("_", " ")}</p>
+                                                    <p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{log.action.replace(/_/g, " ")}</p>
+                                                    <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{log.category.replace(/_/g, " ")}</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-4 py-3">
-                                            <div>
-                                                <p className="text-sm text-gray-900">{log.actor.name}</p>
-                                                <p className="text-xs text-gray-500">{log.actor.role.replace("_", " ")}</p>
-                                            </div>
+                                        <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
+                                            <p style={{ fontSize: "var(--font-sm)" }}>{log.actor.name}</p>
+                                            <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{log.actor.role.replace(/_/g, " ")}</p>
                                         </td>
-                                        <td className="px-4 py-3">
-                                            <div>
-                                                <p className="text-sm text-gray-900">{log.target.name}</p>
-                                                <p className="text-xs text-gray-500">{log.target.type}</p>
-                                            </div>
+                                        <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
+                                            <p style={{ fontSize: "var(--font-sm)" }}>{log.target.name}</p>
+                                            <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{log.target.type}</p>
                                         </td>
-                                        <td className="px-4 py-3">
-                                            <p className="text-sm text-gray-600 max-w-xs truncate">{log.details}</p>
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            <p className="text-sm text-gray-500 font-mono">{log.ipAddress}</p>
-                                        </td>
+                                        <td style={{ padding: "var(--space-sm) var(--space-md)", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>{log.details}</td>
+                                        <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", fontFamily: "monospace", color: "var(--foreground-muted)" }}>{log.ipAddress}</td>
                                     </tr>
                                 );
                             })}
@@ -322,93 +157,49 @@ export default function AuditLogsPage() {
                 </div>
 
                 {/* Pagination */}
-                <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
-                    <p className="text-sm text-gray-500">
-                        Showing {filteredLogs.length} of {mockAuditLogs.length} logs
-                    </p>
-                    <div className="flex items-center gap-2">
-                        <button className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50" disabled>
-                            Previous
-                        </button>
-                        <button className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">
-                            Next
-                        </button>
+                <div style={{ padding: "var(--space-sm) var(--space-md)", borderTop: "1px solid var(--border-light)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <p style={{ fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>Showing {filteredLogs.length} of {mockAuditLogs.length} logs</p>
+                    <div style={{ display: "flex", gap: "var(--space-sm)" }}>
+                        <button className="btn-secondary" disabled style={{ fontSize: "var(--font-sm)", opacity: 0.5 }}>Previous</button>
+                        <button className="btn-secondary" style={{ fontSize: "var(--font-sm)" }}>Next</button>
                     </div>
                 </div>
             </div>
 
-            {/* Log Detail Modal */}
+            {/* Log detail modal */}
             {selectedLog && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    <div className="fixed inset-0 bg-black/50" onClick={() => setSelectedLog(null)} />
-                    <div className="relative bg-white rounded-2xl w-full max-w-lg p-6 space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-lg font-semibold">Log Details</h2>
-                            <button
-                                onClick={() => setSelectedLog(null)}
-                                className="p-2 rounded-lg hover:bg-gray-100"
-                            >
+                <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+                    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)" }} onClick={() => setSelectedLog(null)} />
+                    <div className="card" style={{ position: "relative", width: "100%", maxWidth: 480, display: "flex", flexDirection: "column", gap: "var(--space-md)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <h2 style={{ fontSize: "var(--font-lg)", fontWeight: 600 }}>Log Details</h2>
+                            <button onClick={() => setSelectedLog(null)} style={{ padding: 8, border: "none", background: "transparent", cursor: "pointer", borderRadius: "var(--radius-md)" }}>
                                 <span className="material-symbols-outlined">close</span>
                             </button>
                         </div>
-
-                        {/* Basic Info */}
-                        <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p className="text-xs text-gray-500">Timestamp</p>
-                                    <p className="text-sm font-medium">
-                                        {formatTimestamp(selectedLog.timestamp).date} at {formatTimestamp(selectedLog.timestamp).time}
-                                    </p>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-gray-500">Category</p>
-                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(selectedLog.category)}`}>
-                                        {selectedLog.category.replace("_", " ")}
-                                    </span>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-gray-500">Actor</p>
-                                    <p className="text-sm font-medium">{selectedLog.actor.name}</p>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-gray-500">Target</p>
-                                    <p className="text-sm font-medium">{selectedLog.target.name}</p>
-                                </div>
-                            </div>
+                        <div style={{ background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", padding: "var(--space-md)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)" }}>
+                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Timestamp</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{fmtTs(selectedLog.timestamp).date} at {fmtTs(selectedLog.timestamp).time}</p></div>
+                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Category</p><span className="tab-pill" style={{ fontSize: "var(--font-xs)", background: `${catColor[selectedLog.category]}20`, color: catColor[selectedLog.category] }}>{selectedLog.category.replace(/_/g, " ")}</span></div>
+                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Actor</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{selectedLog.actor.name}</p></div>
+                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Target</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{selectedLog.target.name}</p></div>
                         </div>
-
-                        {/* Details */}
-                        <div>
-                            <p className="text-xs text-gray-500 mb-1">Action Details</p>
-                            <p className="text-sm bg-gray-50 rounded-xl p-3">{selectedLog.details}</p>
-                        </div>
-
-                        {/* Metadata */}
+                        <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", marginBottom: 4 }}>Action Details</p><p style={{ fontSize: "var(--font-sm)", background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", padding: "var(--space-sm)" }}>{selectedLog.details}</p></div>
                         {selectedLog.metadata && Object.keys(selectedLog.metadata).length > 0 && (
                             <div>
-                                <p className="text-xs text-gray-500 mb-2">Additional Data</p>
-                                <div className="bg-gray-50 rounded-xl p-3 space-y-2">
-                                    {Object.entries(selectedLog.metadata).map(([key, value]) => (
-                                        <div key={key} className="flex justify-between text-sm">
-                                            <span className="text-gray-500">{key}:</span>
-                                            <span className="text-gray-900 font-medium">{String(value)}</span>
+                                <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", marginBottom: 8 }}>Additional Data</p>
+                                <div style={{ background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", padding: "var(--space-sm)" }}>
+                                    {Object.entries(selectedLog.metadata).map(([k, v]) => (
+                                        <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--font-sm)", padding: "4px 0" }}>
+                                            <span style={{ color: "var(--foreground-muted)" }}>{k}:</span>
+                                            <span style={{ fontWeight: 500 }}>{String(v)}</span>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         )}
-
-                        {/* Technical Info */}
-                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-100">
-                            <div>
-                                <p className="text-xs text-gray-500">IP Address</p>
-                                <p className="text-sm font-mono">{selectedLog.ipAddress}</p>
-                            </div>
-                            <div>
-                                <p className="text-xs text-gray-500">User Agent</p>
-                                <p className="text-sm">{selectedLog.userAgent}</p>
-                            </div>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)", paddingTop: "var(--space-md)", borderTop: "1px solid var(--border-light)" }}>
+                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>IP Address</p><p style={{ fontSize: "var(--font-sm)", fontFamily: "monospace" }}>{selectedLog.ipAddress}</p></div>
+                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>User Agent</p><p style={{ fontSize: "var(--font-sm)" }}>{selectedLog.userAgent}</p></div>
                         </div>
                     </div>
                 </div>

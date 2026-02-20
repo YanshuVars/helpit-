@@ -2,17 +2,22 @@ import Link from "next/link";
 
 export default function VerifyEmailSuccessPage() {
     return (
-        <div className="flex flex-col min-h-[800px] px-6 py-8 items-center justify-center">
-            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                <span className="material-symbols-outlined text-green-600 text-5xl">verified</span>
+        <div style={{ textAlign: 'center' }}>
+            <div style={{
+                width: 64, height: 64, borderRadius: '50%',
+                background: '#E8F5E9', margin: '0 auto 20px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+                <span className="material-symbols-outlined icon-filled" style={{ color: 'var(--color-success)', fontSize: 32 }}>verified</span>
             </div>
-            <h1 className="text-2xl font-bold text-center">Email Verified!</h1>
-            <p className="text-[var(--foreground-muted)] text-sm pt-2 text-center max-w-xs">
+
+            <h1>Email Verified!</h1>
+            <p className="auth-subtitle" style={{ maxWidth: 300, margin: '0 auto' }}>
                 Your email has been successfully verified. You can now access all features.
             </p>
 
-            <div className="flex flex-col gap-3 mt-8 w-full max-w-xs">
-                <Link href="/login" className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl text-center">
+            <div style={{ marginTop: 24 }}>
+                <Link href="/login" className="auth-submit-btn" style={{ display: 'block', textAlign: 'center', textDecoration: 'none', lineHeight: '44px' }}>
                     Continue to Login
                 </Link>
             </div>

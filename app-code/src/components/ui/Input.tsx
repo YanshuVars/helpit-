@@ -1,63 +1,139 @@
-"use client";
+import React from "react";
 
-import { InputHTMLAttributes, forwardRef } from "react";
-
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     error?: string;
-    leftIcon?: React.ReactNode;
-    rightIcon?: React.ReactNode;
-    fullWidth?: boolean;
+    icon?: string;
+    helperText?: string;
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-    ({ className = "", label, error, leftIcon, rightIcon, fullWidth = true, ...props }, ref) => {
-        return (
-            <div className={`${fullWidth ? "w-full" : ""} flex flex-col gap-1.5`}>
-                {label && (
-                    <label className="text-sm font-medium text-gray-700 ml-1">
-                        {label}
-                    </label>
+export function Input({
+    label,
+    error,
+    icon,
+    helperText,
+    className = "",
+    id,
+    ...props
+}: InputProps) {
+    const inputId = id || label?.toLowerCase().replace(/\s+/g, "-");
+    return (
+        <div className={`form-group ${className}`}>
+            {label && (
+                <label htmlFor={inputId} className="field-label">
+                    {label}
+                </label>
+            )}
+            <div style={{ position: "relative" }}>
+                {icon && (
+                    <span
+                        className="material-symbols-outlined"
+                        style={{
+                            position: "absolute",
+                            left: 12,
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            fontSize: 16,
+                            color: "var(--color-text-muted)",
+                            pointerEvents: "none",
+                        }}
+                    >
+                        {icon}
+                    </span>
                 )}
-
-                <div className="relative group">
-                    {leftIcon && (
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[var(--primary)] transition-colors">
-                            {leftIcon}
-                        </div>
-                    )}
-
-                    <input
-                        ref={ref}
-                        className={`
-                            h-11 w-full rounded-xl border bg-white/50 backdrop-blur-sm px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400
-                            transition-all duration-200
-                            focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20 focus:border-[var(--primary)]
-                            disabled:cursor-not-allowed disabled:opacity-50
-                            ${leftIcon ? "pl-10" : ""}
-                            ${rightIcon ? "pr-10" : ""}
-                            ${error
-                                ? "border-red-300 focus:ring-red-200 focus:border-red-500"
-                                : "border-gray-200 hover:border-gray-300"
-                            }
-                            ${className}
-                        `}
-                        {...props}
-                    />
-
-                    {rightIcon && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                            {rightIcon}
-                        </div>
-                    )}
-                </div>
-
-                {error && (
-                    <p className="text-xs text-red-500 ml-1 animate-slideDown">{error}</p>
-                )}
+                <input
+                    id={inputId}
+                    className={`field-input ${error ? "error" : ""}`}
+                    style={icon ? { paddingLeft: 36 } : undefined}
+                    {...props}
+                />
             </div>
-        );
-    }
-);
+            {error && <p className="field-error">{error}</p>}
+            {helperText && !error && (
+                <p className="caption" style={{ marginTop: 4 }}>{helperText}</p>
+            )}
+        </div>
+    );
+}
 
-Input.displayName = "Input";
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+    label?: string;
+    error?: string;
+    helperText?: string;
+}
+
+export function Textarea({
+    label,
+    error,
+    helperText,
+    className = "",
+    id,
+    ...props
+}: TextareaProps) {
+    const textareaId = id || label?.toLowerCase().replace(/\s+/g, "-");
+    return (
+        <div className={`form-group ${className}`}>
+            {label && (
+                <label htmlFor={textareaId} className="field-label">
+                    {label}
+                </label>
+            )}
+            <textarea
+                id={textareaId}
+                className={`field-input field-textarea ${error ? "error" : ""}`}
+                {...props}
+            />
+            {error && <p className="field-error">{error}</p>}
+            {helperText && !error && (
+                <p className="caption" style={{ marginTop: 4 }}>{helperText}</p>
+            )}
+        </div>
+    );
+}
+
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+    label?: string;
+    error?: string;
+    options: { value: string; label: string }[];
+    placeholder?: string;
+}
+
+export function Select({
+    label,
+    error,
+    options,
+    placeholder,
+    className = "",
+    id,
+    ...props
+}: SelectProps) {
+    const selectId = id || label?.toLowerCase().replace(/\s+/g, "-");
+    return (
+        <div className={`form-group ${className}`}>
+            {label && (
+                <label htmlFor={selectId} className="field-label">
+                    {label}
+                </label>
+            )}
+            <select
+                id={selectId}
+                className={`field-input ${error ? "error" : ""}`}
+                {...props}
+            >
+                {placeholder && (
+                    <option value="" disabled>
+                        {placeholder}
+                    </option>
+                )}
+                {options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                    </option>
+                ))}
+            </select>
+            {error && <p className="field-error">{error}</p>}
+        </div>
+    );
+}
+
+export default Input;

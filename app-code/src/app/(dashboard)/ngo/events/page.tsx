@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { PageHeader } from "@/components/ui/PageHeader";
 import { createClient } from "@/lib/supabase/client";
 import { format } from "date-fns";
 
@@ -27,6 +26,13 @@ interface Event {
     created_at: string;
 }
 
+const statusColor: Record<string, { bg: string; color: string }> = {
+    UPCOMING: { bg: '#E3F2FD', color: '#1565C0' },
+    ONGOING: { bg: '#E8F5E9', color: '#2E7D32' },
+    COMPLETED: { bg: '#F5F5F5', color: '#616161' },
+    CANCELLED: { bg: '#FEE2E2', color: '#DC2626' },
+};
+
 export default function NGOEventsPage() {
     const supabase = createClient();
     const [events, setEvents] = useState<Event[]>([]);
@@ -35,137 +41,71 @@ export default function NGOEventsPage() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [submitting, setSubmitting] = useState(false);
 
-    // Form state
     const [formData, setFormData] = useState({
-        title: "",
-        description: "",
-        event_type: "VOLUNTEER",
-        start_date: "",
-        end_date: "",
-        start_time: "",
-        end_time: "",
-        venue_name: "",
-        city: "",
-        max_attendees: "",
+        title: "", description: "", event_type: "VOLUNTEER",
+        start_date: "", end_date: "", start_time: "", end_time: "",
+        venue_name: "", city: "", max_attendees: "",
     });
 
-    useEffect(() => {
-        fetchEvents();
-    }, []);
+    useEffect(() => { fetchEvents(); }, []);
 
     async function fetchEvents() {
         setLoading(true);
         try {
             const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                setLoading(false);
-                return;
-            }
+            if (!user) { setLoading(false); return; }
 
-            // Get NGO ID for the user
             const { data: ngoData } = await supabase
-                .from("ngo_members")
-                .select("ngo_id")
-                .eq("user_id", user.id)
-                .eq("role", "ADMIN")
-                .single();
+                .from("ngo_members").select("ngo_id")
+                .eq("user_id", user.id).eq("role", "ADMIN").single();
 
             if (ngoData?.ngo_id) {
-                const { data: eventsData, error } = await supabase
-                    .from("events")
-                    .select("*")
+                const { data: eventsData } = await supabase
+                    .from("events").select("*")
                     .eq("ngo_id", ngoData.ngo_id)
                     .order("start_date", { ascending: true });
-
-                if (eventsData) {
-                    setEvents(eventsData as Event[]);
-                }
+                if (eventsData) setEvents(eventsData as Event[]);
             }
         } catch (error) {
             console.error("Error fetching events:", error);
-        } finally {
-            setLoading(false);
-        }
+        } finally { setLoading(false); }
     }
 
     async function handleCreateEvent(e: React.FormEvent) {
         e.preventDefault();
         setSubmitting(true);
-
         try {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) return;
 
-            // Get NGO ID
             const { data: ngoData } = await supabase
-                .from("ngo_members")
-                .select("ngo_id")
-                .eq("user_id", user.id)
-                .eq("role", "ADMIN")
-                .single();
+                .from("ngo_members").select("ngo_id")
+                .eq("user_id", user.id).eq("role", "ADMIN").single();
 
-            if (!ngoData?.ngo_id) {
-                alert("You must be an NGO admin to create events");
-                return;
-            }
+            if (!ngoData?.ngo_id) { alert("You must be an NGO admin to create events"); return; }
 
             const { error } = await supabase.from("events").insert({
-                ngo_id: ngoData.ngo_id,
-                created_by: user.id,
-                title: formData.title,
-                description: formData.description,
+                ngo_id: ngoData.ngo_id, created_by: user.id,
+                title: formData.title, description: formData.description,
                 event_type: formData.event_type,
-                start_date: formData.start_date,
-                end_date: formData.end_date,
-                start_time: formData.start_time || null,
-                end_time: formData.end_time || null,
-                venue_name: formData.venue_name || null,
-                city: formData.city || null,
+                start_date: formData.start_date, end_date: formData.end_date,
+                start_time: formData.start_time || null, end_time: formData.end_time || null,
+                venue_name: formData.venue_name || null, city: formData.city || null,
                 max_attendees: formData.max_attendees ? parseInt(formData.max_attendees) : null,
-                location_type: "PHYSICAL",
-                status: "UPCOMING",
+                location_type: "PHYSICAL", status: "UPCOMING",
             });
-
             if (error) throw error;
-
             setShowCreateModal(false);
-            setFormData({
-                title: "",
-                description: "",
-                event_type: "VOLUNTEER",
-                start_date: "",
-                end_date: "",
-                start_time: "",
-                end_time: "",
-                venue_name: "",
-                city: "",
-                max_attendees: "",
-            });
+            setFormData({ title: "", description: "", event_type: "VOLUNTEER", start_date: "", end_date: "", start_time: "", end_time: "", venue_name: "", city: "", max_attendees: "" });
             fetchEvents();
         } catch (error) {
             console.error("Error creating event:", error);
             alert("Failed to create event");
-        } finally {
-            setSubmitting(false);
-        }
+        } finally { setSubmitting(false); }
     }
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case "UPCOMING": return "bg-blue-100 text-blue-700";
-            case "ONGOING": return "bg-green-100 text-green-700";
-            case "COMPLETED": return "bg-gray-100 text-gray-700";
-            case "CANCELLED": return "bg-red-100 text-red-700";
-            default: return "bg-gray-100 text-gray-700";
-        }
-    };
-
     const formatEventDate = (dateStr: string) => {
-        try {
-            return format(new Date(dateStr), "MMM dd, yyyy");
-        } catch {
-            return dateStr;
-        }
+        try { return format(new Date(dateStr), "MMM dd, yyyy"); } catch { return dateStr; }
     };
 
     const formatEventTime = (time: string | null) => {
@@ -174,190 +114,142 @@ export default function NGOEventsPage() {
             const [hours, minutes] = time.split(":");
             const hour = parseInt(hours);
             const ampm = hour >= 12 ? "PM" : "AM";
-            const hour12 = hour % 12 || 12;
-            return `${hour12}:${minutes} ${ampm}`;
-        } catch {
-            return time;
-        }
+            return `${hour % 12 || 12}:${minutes} ${ampm}`;
+        } catch { return time; }
     };
 
     const getTimeRange = (event: Event) => {
-        if (event.start_time && event.end_time) {
-            return `${formatEventTime(event.start_time)} - ${formatEventTime(event.end_time)}`;
-        } else if (event.start_time) {
-            return formatEventTime(event.start_time);
-        }
+        if (event.start_time && event.end_time) return `${formatEventTime(event.start_time)} - ${formatEventTime(event.end_time)}`;
+        if (event.start_time) return formatEventTime(event.start_time);
         return "All Day";
     };
 
     if (loading) {
         return (
-            <div className="space-y-6">
-                <PageHeader title="Events" showBack fallbackRoute="/ngo" />
-                <div className="flex items-center justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
-                </div>
+            <div className="dashboard-loading">
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
-            <PageHeader
-                title="Events"
-                showBack
-                fallbackRoute="/ngo"
-                rightAction={
-                    <button
-                        onClick={() => setShowCreateModal(true)}
-                        className="flex items-center gap-1 px-4 py-2 bg-[var(--primary)] text-white text-sm font-semibold rounded-lg"
-                    >
-                        <span className="material-symbols-outlined text-lg">add</span>
-                        Create
-                    </button>
-                }
-            />
-
-            {/* View Toggle */}
-            <div className="flex gap-2">
-                <button
-                    onClick={() => setViewMode("list")}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${viewMode === "list" ? "bg-[var(--primary)] text-white" : "bg-gray-100"}`}
-                >
-                    List View
-                </button>
-                <button
-                    onClick={() => setViewMode("calendar")}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${viewMode === "calendar" ? "bg-[var(--primary)] text-white" : "bg-gray-100"}`}
-                >
-                    Calendar
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h1 className="page-title">Events</h1>
+                <button onClick={() => setShowCreateModal(true)} className="btn btn-primary" style={{ gap: 6 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
+                    Create
                 </button>
             </div>
 
+            {/* View Toggle */}
+            <div className="tabs-row">
+                <button onClick={() => setViewMode("list")} className={`tab-pill ${viewMode === "list" ? "tab-pill-active" : ""}`}>List View</button>
+                <button onClick={() => setViewMode("calendar")} className={`tab-pill ${viewMode === "calendar" ? "tab-pill-active" : ""}`}>Calendar</button>
+            </div>
+
             {viewMode === "list" ? (
-                /* List View */
-                <div className="space-y-4">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                     {events.length === 0 ? (
-                        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-                            <span className="material-symbols-outlined text-4xl text-gray-400">event</span>
-                            <p className="text-gray-500 mt-2">No events yet</p>
-                            <button
-                                onClick={() => setShowCreateModal(true)}
-                                className="mt-4 text-[var(--primary)] font-semibold"
-                            >
-                                Create your first event
-                            </button>
+                        <div className="empty-state-container">
+                            <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>event</span>
+                            <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No events yet</p>
+                            <button onClick={() => setShowCreateModal(true)} className="auth-link" style={{ marginTop: 8, border: 'none', background: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600 }}>Create your first event</button>
                         </div>
                     ) : (
-                        events.map((event) => (
-                            <Link
-                                key={event.id}
-                                href={`/ngo/events/${event.id}`}
-                                className="block bg-white rounded-xl border border-gray-200 overflow-hidden"
-                            >
-                                {/* Event Image Placeholder */}
-                                <div className="h-32 bg-gradient-to-br from-[var(--primary)]/20 to-blue-100 flex items-center justify-center">
-                                    {event.cover_image_url ? (
-                                        <img src={event.cover_image_url} alt={event.title} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <span className="material-symbols-outlined text-4xl text-[var(--primary)]">event</span>
-                                    )}
-                                </div>
-
-                                <div className="p-4">
-                                    <div className="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h3 className="font-bold">{event.title}</h3>
-                                            <p className="text-xs text-gray-500 mt-1">
-                                                {[event.venue_name, event.city].filter(Boolean).join(", ") || "Location TBD"}
-                                            </p>
-                                        </div>
-                                        <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${getStatusColor(event.status)}`}>
-                                            {event.status}
-                                        </span>
+                        events.map(event => {
+                            const sStyle = statusColor[event.status] || { bg: '#F5F5F5', color: '#616161' };
+                            return (
+                                <Link key={event.id} href={`/ngo/events/${event.id}`} className="card card-interactive" style={{ overflow: 'hidden', textDecoration: 'none', padding: 0 }}>
+                                    {/* Cover */}
+                                    <div style={{
+                                        height: 100, background: 'linear-gradient(135deg, var(--color-primary-soft), #BBDEFB)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>
+                                        {event.cover_image_url ? (
+                                            <img src={event.cover_image_url} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        ) : (
+                                            <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-primary)' }}>event</span>
+                                        )}
                                     </div>
-
-                                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                                        <span className="flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-lg">calendar_today</span>
-                                            {formatEventDate(event.start_date)}
-                                        </span>
-                                        <span className="flex items-center gap-1">
-                                            <span className="material-symbols-outlined text-lg">schedule</span>
-                                            {getTimeRange(event)}
-                                        </span>
-                                    </div>
-
-                                    {/* Attendees Progress */}
-                                    {event.max_attendees && (
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                                                <div
-                                                    className="h-full bg-[var(--primary)] rounded-full"
-                                                    style={{ width: `${Math.min((event.current_attendees / event.max_attendees) * 100, 100)}%` }}
-                                                />
+                                    <div style={{ padding: 16 }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+                                            <div>
+                                                <h3 style={{ fontWeight: 600, fontSize: 14 }}>{event.title}</h3>
+                                                <p style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 2 }}>
+                                                    {[event.venue_name, event.city].filter(Boolean).join(", ") || "Location TBD"}
+                                                </p>
                                             </div>
-                                            <span className="text-xs text-gray-500">
-                                                {event.current_attendees}/{event.max_attendees}
+                                            <span style={{
+                                                fontSize: 10, fontWeight: 700,
+                                                padding: '3px 8px', borderRadius: 'var(--radius-full)',
+                                                background: sStyle.bg, color: sStyle.color,
+                                            }}>{event.status}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 12, color: 'var(--color-text-muted)', marginBottom: 8 }}>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                                                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>calendar_today</span>
+                                                {formatEventDate(event.start_date)}
+                                            </span>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                                                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>schedule</span>
+                                                {getTimeRange(event)}
                                             </span>
                                         </div>
-                                    )}
-                                </div>
-                            </Link>
-                        ))
+                                        {event.max_attendees && (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                                <div style={{ flex: 1, height: 6, background: 'var(--color-bg-subtle)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
+                                                    <div style={{ height: '100%', background: 'var(--color-primary)', borderRadius: 'var(--radius-full)', width: `${Math.min((event.current_attendees / event.max_attendees) * 100, 100)}%` }} />
+                                                </div>
+                                                <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{event.current_attendees}/{event.max_attendees}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </Link>
+                            );
+                        })
                     )}
                 </div>
             ) : (
                 /* Calendar View */
-                <div className="bg-white rounded-xl border border-gray-200 p-4">
-                    {/* Calendar Header */}
-                    <div className="flex items-center justify-between mb-4">
-                        <button className="p-2 rounded-full hover:bg-gray-100">
-                            <span className="material-symbols-outlined">chevron_left</span>
+                <div className="card" style={{ padding: 16 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                        <button className="btn btn-secondary" style={{ padding: '4px 8px', minHeight: 0 }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chevron_left</span>
                         </button>
-                        <h3 className="font-bold">{format(new Date(), "MMMM yyyy")}</h3>
-                        <button className="p-2 rounded-full hover:bg-gray-100">
-                            <span className="material-symbols-outlined">chevron_right</span>
+                        <h3 style={{ fontWeight: 700, fontSize: 15 }}>{format(new Date(), "MMMM yyyy")}</h3>
+                        <button className="btn btn-secondary" style={{ padding: '4px 8px', minHeight: 0 }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chevron_right</span>
                         </button>
                     </div>
-
-                    {/* Calendar Grid */}
-                    <div className="grid grid-cols-7 gap-1 text-center mb-2">
-                        {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
-                            <div key={i} className="text-xs font-medium text-gray-500 py-2">
-                                {day}
-                            </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2, textAlign: 'center', marginBottom: 6 }}>
+                        {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+                            <div key={i} style={{ fontSize: 11, fontWeight: 500, color: 'var(--color-text-muted)', padding: 6 }}>{d}</div>
                         ))}
                     </div>
-                    <div className="grid grid-cols-7 gap-1">
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}>
                         {Array.from({ length: 35 }, (_, i) => {
-                            const day = i - 2; // Offset for month start
+                            const day = i - 2;
                             const isCurrentMonth = day >= 1 && day <= 31;
                             const today = new Date().getDate();
-                            const hasEvent = events.some(e => {
-                                const eventDate = new Date(e.start_date);
-                                return eventDate.getDate() === day;
-                            });
+                            const hasEvent = events.some(e => new Date(e.start_date).getDate() === day);
                             return (
-                                <button
-                                    key={i}
-                                    className={`aspect-square flex flex-col items-center justify-center rounded-lg text-sm ${day === today ? "bg-[var(--primary)] text-white" : ""
-                                        } ${hasEvent && day !== today ? "bg-blue-50" : ""} ${!isCurrentMonth ? "text-gray-300" : ""
-                                        }`}
-                                >
+                                <button key={i} style={{
+                                    aspectRatio: '1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                                    borderRadius: 'var(--radius-sm)', fontSize: 13, border: 'none', cursor: 'pointer',
+                                    background: day === today ? 'var(--color-primary)' : hasEvent && day !== today ? 'var(--color-primary-soft)' : 'transparent',
+                                    color: day === today ? '#fff' : !isCurrentMonth ? 'var(--color-text-disabled)' : 'var(--color-text-body)',
+                                }}>
                                     {isCurrentMonth ? day : ""}
-                                    {hasEvent && (
-                                        <span className="w-1 h-1 bg-[var(--primary)] rounded-full mt-0.5" />
-                                    )}
+                                    {hasEvent && <span style={{ width: 4, height: 4, background: day === today ? '#fff' : 'var(--color-primary)', borderRadius: '50%', marginTop: 2 }} />}
                                 </button>
                             );
                         })}
                     </div>
-
-                    {/* Events on Selected Date */}
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                        <h4 className="font-semibold text-sm mb-2">Events this month</h4>
-                        <p className="text-sm text-gray-500">{events.length} event(s)</p>
+                    <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--color-border-subtle)' }}>
+                        <h4 style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Events this month</h4>
+                        <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{events.length} event(s)</p>
                     </div>
                 </div>
             )}
@@ -365,50 +257,32 @@ export default function NGOEventsPage() {
             {/* Create Event Modal */}
             {showCreateModal && (
                 <>
-                    <div
-                        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
-                        onClick={() => setShowCreateModal(false)}
-                    />
-                    <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-                        <div className="p-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white">
-                            <h2 className="text-lg font-bold">Create Event</h2>
-                            <button
-                                onClick={() => setShowCreateModal(false)}
-                                className="p-2 rounded-full hover:bg-gray-100"
-                            >
-                                <span className="material-symbols-outlined">close</span>
+                    <div onClick={() => setShowCreateModal(false)} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} />
+                    <div style={{
+                        position: 'fixed', left: '50%', top: '50%', zIndex: 50,
+                        width: '100%', maxWidth: 480, transform: 'translate(-50%, -50%)',
+                        background: 'var(--color-bg-card)', borderRadius: 'var(--radius-lg)',
+                        boxShadow: 'var(--shadow-lg)', overflow: 'hidden', maxHeight: '90vh', overflowY: 'auto',
+                    }}>
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: 'var(--color-bg-card)', zIndex: 1 }}>
+                            <h2 style={{ fontSize: 16, fontWeight: 700 }}>Create Event</h2>
+                            <button onClick={() => setShowCreateModal(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 4 }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
                             </button>
                         </div>
                         <form onSubmit={handleCreateEvent}>
-                            <div className="p-4 space-y-4">
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm font-medium">Event Title *</label>
-                                    <input
-                                        type="text"
-                                        value={formData.title}
-                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                        placeholder="Enter event title"
-                                        required
-                                        className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                    />
+                            <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
+                                <div className="form-group">
+                                    <label className="field-label">Event Title *</label>
+                                    <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} placeholder="Enter event title" required className="field-input" />
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm font-medium">Description</label>
-                                    <textarea
-                                        value={formData.description}
-                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                        placeholder="Event description..."
-                                        rows={3}
-                                        className="w-full rounded-xl border border-gray-200 px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                    />
+                                <div className="form-group">
+                                    <label className="field-label">Description</label>
+                                    <textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} placeholder="Event description..." rows={3} className="field-input field-textarea" />
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm font-medium">Event Type</label>
-                                    <select
-                                        value={formData.event_type}
-                                        onChange={(e) => setFormData({ ...formData, event_type: e.target.value })}
-                                        className="w-full h-12 rounded-xl border border-gray-200 px-4 bg-white"
-                                    >
+                                <div className="form-group">
+                                    <label className="field-label">Event Type</label>
+                                    <select value={formData.event_type} onChange={e => setFormData({ ...formData, event_type: e.target.value })} className="field-input">
                                         <option value="VOLUNTEER">Volunteer Activity</option>
                                         <option value="FUNDRAISER">Fundraiser</option>
                                         <option value="AWARENESS">Awareness Campaign</option>
@@ -417,85 +291,41 @@ export default function NGOEventsPage() {
                                         <option value="OTHER">Other</option>
                                     </select>
                                 </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-medium">Start Date *</label>
-                                        <input
-                                            type="date"
-                                            value={formData.start_date}
-                                            onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                                            required
-                                            className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                        />
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                                    <div className="form-group">
+                                        <label className="field-label">Start Date *</label>
+                                        <input type="date" value={formData.start_date} onChange={e => setFormData({ ...formData, start_date: e.target.value })} required className="field-input" />
                                     </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-medium">End Date *</label>
-                                        <input
-                                            type="date"
-                                            value={formData.end_date}
-                                            onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                                            required
-                                            className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                        />
+                                    <div className="form-group">
+                                        <label className="field-label">End Date *</label>
+                                        <input type="date" value={formData.end_date} onChange={e => setFormData({ ...formData, end_date: e.target.value })} required className="field-input" />
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-medium">Start Time</label>
-                                        <input
-                                            type="time"
-                                            value={formData.start_time}
-                                            onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
-                                            className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                        />
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                                    <div className="form-group">
+                                        <label className="field-label">Start Time</label>
+                                        <input type="time" value={formData.start_time} onChange={e => setFormData({ ...formData, start_time: e.target.value })} className="field-input" />
                                     </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-medium">End Time</label>
-                                        <input
-                                            type="time"
-                                            value={formData.end_time}
-                                            onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
-                                            className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                        />
+                                    <div className="form-group">
+                                        <label className="field-label">End Time</label>
+                                        <input type="time" value={formData.end_time} onChange={e => setFormData({ ...formData, end_time: e.target.value })} className="field-input" />
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm font-medium">Venue</label>
-                                    <input
-                                        type="text"
-                                        value={formData.venue_name}
-                                        onChange={(e) => setFormData({ ...formData, venue_name: e.target.value })}
-                                        placeholder="Event venue"
-                                        className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                    />
+                                <div className="form-group">
+                                    <label className="field-label">Venue</label>
+                                    <input type="text" value={formData.venue_name} onChange={e => setFormData({ ...formData, venue_name: e.target.value })} placeholder="Event venue" className="field-input" />
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm font-medium">City</label>
-                                    <input
-                                        type="text"
-                                        value={formData.city}
-                                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                                        placeholder="City"
-                                        className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                    />
+                                <div className="form-group">
+                                    <label className="field-label">City</label>
+                                    <input type="text" value={formData.city} onChange={e => setFormData({ ...formData, city: e.target.value })} placeholder="City" className="field-input" />
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm font-medium">Max Attendees</label>
-                                    <input
-                                        type="number"
-                                        value={formData.max_attendees}
-                                        onChange={(e) => setFormData({ ...formData, max_attendees: e.target.value })}
-                                        placeholder="Maximum number of attendees"
-                                        className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                                    />
+                                <div className="form-group">
+                                    <label className="field-label">Max Attendees</label>
+                                    <input type="number" value={formData.max_attendees} onChange={e => setFormData({ ...formData, max_attendees: e.target.value })} placeholder="Maximum number of attendees" className="field-input" />
                                 </div>
                             </div>
-                            <div className="p-4 border-t border-gray-100 sticky bottom-0 bg-white">
-                                <button
-                                    type="submit"
-                                    disabled={submitting}
-                                    className="w-full bg-[var(--primary)] text-white font-bold py-3 rounded-xl disabled:opacity-50"
-                                >
+                            <div style={{ padding: '14px 18px', borderTop: '1px solid var(--color-border-subtle)', position: 'sticky', bottom: 0, background: 'var(--color-bg-card)' }}>
+                                <button type="submit" disabled={submitting} className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', height: 42, fontSize: 14, fontWeight: 700, opacity: submitting ? 0.5 : 1 }}>
                                     {submitting ? "Creating..." : "Create Event"}
                                 </button>
                             </div>

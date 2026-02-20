@@ -1,54 +1,33 @@
 import Link from "next/link";
 
+const settingsItems = [
+    { href: "/ngo/settings/profile", icon: "business", iconBg: "#E3F2FD", iconColor: "var(--color-primary)", title: "Organization Profile", desc: "Edit name, description, logo" },
+    { href: "/ngo/settings/members", icon: "group", iconBg: "#E8F5E9", iconColor: "#2E7D32", title: "Team Members", desc: "Manage admins and coordinators" },
+    { href: "/ngo/settings/audit", icon: "history", iconBg: "#EDE7F6", iconColor: "#4527A0", title: "Audit Log", desc: "View activity history" },
+    { href: "/notifications/settings", icon: "notifications", iconBg: "#FFF3E0", iconColor: "#E65100", title: "Notification Preferences", desc: "Email, push, in-app" },
+];
+
 export default function NGOSettingsPage() {
     return (
-        <div className="space-y-6">
-            <h1 className="text-xl font-bold">Settings</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <h1 className="page-title">Settings</h1>
 
-            <div className="space-y-3">
-                <Link href="/ngo/settings/profile" className="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-[var(--primary)]">business</span>
-                    </div>
-                    <div className="flex-1">
-                        <p className="font-semibold">Organization Profile</p>
-                        <p className="text-xs text-gray-500">Edit name, description, logo</p>
-                    </div>
-                    <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                </Link>
-
-                <Link href="/ngo/settings/members" className="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200">
-                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-green-600">group</span>
-                    </div>
-                    <div className="flex-1">
-                        <p className="font-semibold">Team Members</p>
-                        <p className="text-xs text-gray-500">Manage admins and coordinators</p>
-                    </div>
-                    <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                </Link>
-
-                <Link href="/ngo/settings/audit" className="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200">
-                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-purple-600">history</span>
-                    </div>
-                    <div className="flex-1">
-                        <p className="font-semibold">Audit Log</p>
-                        <p className="text-xs text-gray-500">View activity history</p>
-                    </div>
-                    <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                </Link>
-
-                <Link href="/notifications/settings" className="flex items-center gap-4 bg-white rounded-xl p-4 border border-gray-200">
-                    <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-orange-600">notifications</span>
-                    </div>
-                    <div className="flex-1">
-                        <p className="font-semibold">Notification Preferences</p>
-                        <p className="text-xs text-gray-500">Email, push, in-app</p>
-                    </div>
-                    <span className="material-symbols-outlined text-gray-400">chevron_right</span>
-                </Link>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {settingsItems.map(item => (
+                    <Link key={item.href} href={item.href} className="card card-interactive" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px', textDecoration: 'none' }}>
+                        <div style={{
+                            width: 40, height: 40, borderRadius: '50%',
+                            background: item.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                        }}>
+                            <span className="material-symbols-outlined" style={{ color: item.iconColor, fontSize: 20 }}>{item.icon}</span>
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{ fontWeight: 600, fontSize: 14 }}>{item.title}</p>
+                            <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{item.desc}</p>
+                        </div>
+                        <span className="material-symbols-outlined" style={{ color: 'var(--color-text-disabled)', fontSize: 20 }}>chevron_right</span>
+                    </Link>
+                ))}
             </div>
         </div>
     );

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState, use } from "react";
 
-// Mock request data - in production, this would come from the database
 const mockRequest = {
     id: "1",
     title: "Emergency Food Relief",
@@ -17,6 +16,13 @@ const mockRequest = {
         { id: "1", type: "image", url: "/placeholder.jpg" }
     ]
 };
+
+const urgencyLevels = [
+    { value: "LOW", color: '#2E7D32', bg: '#E8F5E9' },
+    { value: "MEDIUM", color: '#F57F17', bg: '#FFF8E1' },
+    { value: "HIGH", color: '#E65100', bg: '#FFF3E0' },
+    { value: "CRITICAL", color: '#DC2626', bg: '#FEE2E2' },
+];
 
 export default function EditRequestPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
@@ -32,21 +38,14 @@ export default function EditRequestPage({ params }: { params: Promise<{ id: stri
 
     const handleSave = () => {
         setIsSaving(true);
-        // Simulate API call
         setTimeout(() => {
             setIsSaving(false);
-            // In production, redirect to the detail page
             window.history.back();
         }, 1000);
     };
 
     const handleMediaUpload = () => {
-        // In production, this would open a file picker
-        const newMedia = {
-            id: String(Date.now()),
-            type: "image",
-            url: "/placeholder.jpg"
-        };
+        const newMedia = { id: String(Date.now()), type: "image", url: "/placeholder.jpg" };
         setMedia([...media, newMedia]);
     };
 
@@ -55,47 +54,29 @@ export default function EditRequestPage({ params }: { params: Promise<{ id: stri
     };
 
     return (
-        <div className="space-y-6 pb-8">
-            {/* Header */}
-            <div className="flex items-center gap-3">
-                <Link href={`/ngo/requests/${id}`} className="p-2 -ml-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">arrow_back</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20, paddingBottom: 24 }}>
+            <div>
+                <Link href={`/ngo/requests/${id}`} className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span>
+                    Back to request
                 </Link>
-                <h1 className="text-xl font-bold">Edit Request</h1>
+                <h1 className="page-title">Edit Request</h1>
             </div>
 
-            {/* Form */}
-            <div className="space-y-4">
-                {/* Title */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Title *</label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                    />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div className="form-group">
+                    <label className="field-label">Title *</label>
+                    <input type="text" value={title} onChange={e => setTitle(e.target.value)} className="field-input" />
                 </div>
 
-                {/* Description */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Description *</label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        rows={4}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                    />
+                <div className="form-group">
+                    <label className="field-label">Description *</label>
+                    <textarea value={description} onChange={e => setDescription(e.target.value)} rows={4} className="field-input field-textarea" />
                 </div>
 
-                {/* Category */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Category *</label>
-                    <select
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 bg-white"
-                    >
+                <div className="form-group">
+                    <label className="field-label">Category *</label>
+                    <select value={category} onChange={e => setCategory(e.target.value)} className="field-input">
                         <option value="FOOD">Food</option>
                         <option value="MEDICAL">Medical</option>
                         <option value="DISASTER">Disaster Relief</option>
@@ -105,113 +86,93 @@ export default function EditRequestPage({ params }: { params: Promise<{ id: stri
                     </select>
                 </div>
 
-                {/* Urgency Level */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Urgency Level *</label>
-                    <div className="grid grid-cols-4 gap-2">
-                        {["LOW", "MEDIUM", "HIGH", "CRITICAL"].map((level) => (
+                <div className="form-group">
+                    <label className="field-label">Urgency Level *</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                        {urgencyLevels.map(level => (
                             <button
-                                key={level}
+                                key={level.value}
                                 type="button"
-                                onClick={() => setUrgency(level)}
-                                className={`py-2 rounded-xl text-xs font-bold border transition-all ${urgency === level
-                                    ? level === "CRITICAL"
-                                        ? "bg-red-500 text-white border-red-500"
-                                        : level === "HIGH"
-                                            ? "bg-orange-500 text-white border-orange-500"
-                                            : level === "MEDIUM"
-                                                ? "bg-yellow-500 text-white border-yellow-500"
-                                                : "bg-green-500 text-white border-green-500"
-                                    : "bg-white border-gray-200 text-gray-600"
-                                    }`}
+                                onClick={() => setUrgency(level.value)}
+                                style={{
+                                    padding: '8px 4px', borderRadius: 'var(--radius-sm)',
+                                    fontSize: 11, fontWeight: 700,
+                                    border: urgency === level.value ? 'none' : '1px solid var(--color-border)',
+                                    background: urgency === level.value ? level.bg : 'var(--color-bg-card)',
+                                    color: urgency === level.value ? level.color : 'var(--color-text-muted)',
+                                    cursor: 'pointer', transition: 'all 150ms ease',
+                                }}
                             >
-                                {level}
+                                {level.value}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Location */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Location</label>
-                    <input
-                        type="text"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                    />
-                    <div className="h-32 rounded-xl bg-gray-100 flex items-center justify-center">
-                        <span className="text-gray-400 text-sm">Map preview will appear here</span>
+                <div className="form-group">
+                    <label className="field-label">Location</label>
+                    <input type="text" value={location} onChange={e => setLocation(e.target.value)} className="field-input" />
+                    <div style={{ height: 100, borderRadius: 'var(--radius-sm)', background: 'var(--color-bg-subtle)', marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ color: 'var(--color-text-disabled)', fontSize: 13 }}>Map preview will appear here</span>
                     </div>
                 </div>
 
-                {/* Media Upload */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Photos/Videos</label>
-
-                    {/* Existing Media Grid */}
+                <div className="form-group">
+                    <label className="field-label">Photos/Videos</label>
                     {media.length > 0 && (
-                        <div className="grid grid-cols-3 gap-2 mb-3">
-                            {media.map((item) => (
-                                <div key={item.id} className="relative aspect-square rounded-xl bg-gray-100 overflow-hidden group">
-                                    <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-                                        <span className="material-symbols-outlined text-gray-400">image</span>
-                                    </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 10 }}>
+                            {media.map(item => (
+                                <div key={item.id} style={{ position: 'relative', aspectRatio: '1', borderRadius: 'var(--radius-sm)', background: 'var(--color-bg-subtle)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span className="material-symbols-outlined" style={{ color: 'var(--color-text-disabled)' }}>image</span>
                                     <button
                                         onClick={() => removeMedia(item.id)}
-                                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                        style={{
+                                            position: 'absolute', top: 4, right: 4,
+                                            width: 22, height: 22, borderRadius: '50%',
+                                            background: '#DC2626', color: '#fff', border: 'none', cursor: 'pointer',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        }}
                                     >
-                                        <span className="material-symbols-outlined text-sm">close</span>
+                                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>close</span>
                                     </button>
                                 </div>
                             ))}
                         </div>
                     )}
-
-                    {/* Upload Button */}
                     <button
                         type="button"
                         onClick={handleMediaUpload}
-                        className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:bg-gray-50 transition-colors"
+                        style={{
+                            width: '100%', border: '2px dashed var(--color-border)', borderRadius: 'var(--radius-md)',
+                            padding: 24, textAlign: 'center', background: 'none', cursor: 'pointer',
+                        }}
                     >
-                        <span className="material-symbols-outlined text-3xl text-gray-400">add_photo_alternate</span>
-                        <p className="text-sm text-gray-500 mt-2">Tap to upload media</p>
+                        <span className="material-symbols-outlined" style={{ fontSize: 28, color: 'var(--color-text-disabled)' }}>add_photo_alternate</span>
+                        <p style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 4 }}>Tap to upload media</p>
                     </button>
                 </div>
 
-                {/* Visibility */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Visibility</label>
-                    <div className="flex gap-3">
-                        <label className={`flex items-center gap-2 flex-1 p-3 rounded-xl border cursor-pointer transition-all ${visibility === "PUBLIC" ? "border-[var(--primary)] bg-blue-50" : "border-gray-200 hover:bg-gray-50"}`}>
-                            <input
-                                type="radio"
-                                name="visibility"
-                                value="PUBLIC"
-                                checked={visibility === "PUBLIC"}
-                                onChange={(e) => setVisibility(e.target.value)}
-                                className="accent-[var(--primary)]"
-                            />
-                            <span className="text-sm">Public</span>
-                        </label>
-                        <label className={`flex items-center gap-2 flex-1 p-3 rounded-xl border cursor-pointer transition-all ${visibility === "INTERNAL" ? "border-[var(--primary)] bg-blue-50" : "border-gray-200 hover:bg-gray-50"}`}>
-                            <input
-                                type="radio"
-                                name="visibility"
-                                value="INTERNAL"
-                                checked={visibility === "INTERNAL"}
-                                onChange={(e) => setVisibility(e.target.value)}
-                                className="accent-[var(--primary)]"
-                            />
-                            <span className="text-sm">Internal Only</span>
-                        </label>
+                <div className="form-group">
+                    <label className="field-label">Visibility</label>
+                    <div style={{ display: 'flex', gap: 10 }}>
+                        {['PUBLIC', 'INTERNAL'].map(val => (
+                            <label key={val} style={{
+                                flex: 1, display: 'flex', alignItems: 'center', gap: 8,
+                                padding: '10px 14px', borderRadius: 'var(--radius-sm)',
+                                border: visibility === val ? '1.5px solid var(--color-primary)' : '1px solid var(--color-border)',
+                                background: visibility === val ? 'var(--color-primary-soft)' : 'var(--color-bg-card)',
+                                cursor: 'pointer',
+                            }}>
+                                <input type="radio" name="visibility" value={val} checked={visibility === val} onChange={e => setVisibility(e.target.value)} style={{ accentColor: 'var(--color-primary)' }} />
+                                <span style={{ fontSize: 13 }}>{val === 'PUBLIC' ? 'Public' : 'Internal Only'}</span>
+                            </label>
+                        ))}
                     </div>
                 </div>
 
-                {/* Status - Only admins can change status */}
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Status</label>
-                    <select className="w-full h-12 rounded-xl border border-gray-200 px-4 bg-white">
+                <div className="form-group">
+                    <label className="field-label">Status</label>
+                    <select className="field-input">
                         <option value="OPEN">Open</option>
                         <option value="IN_PROGRESS">In Progress</option>
                         <option value="COMPLETED">Completed</option>
@@ -220,28 +181,29 @@ export default function EditRequestPage({ params }: { params: Promise<{ id: stri
                 </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="sticky bottom-24 bg-[var(--background-light)] pt-4 space-y-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl shadow-lg active:scale-[0.98] transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="btn btn-primary"
+                    style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 15, fontWeight: 700, gap: 6, opacity: isSaving ? 0.5 : 1 }}
                 >
                     {isSaving ? (
                         <>
-                            <span className="material-symbols-outlined animate-spin">sync</span>
+                            <span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>sync</span>
                             Saving...
                         </>
                     ) : (
                         <>
-                            <span className="material-symbols-outlined">save</span>
+                            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>save</span>
                             Save Changes
                         </>
                     )}
                 </button>
                 <Link
                     href={`/ngo/requests/${mockRequest.id}`}
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-gray-200 bg-white font-semibold text-sm"
+                    className="btn btn-secondary"
+                    style={{ width: '100%', justifyContent: 'center', textDecoration: 'none' }}
                 >
                     Cancel
                 </Link>

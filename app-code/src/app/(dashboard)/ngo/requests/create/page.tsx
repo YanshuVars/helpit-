@@ -6,39 +6,37 @@ import { useState } from "react";
 export default function CreateRequestPage() {
     const [urgency, setUrgency] = useState("MEDIUM");
 
+    const urgencyLevels = [
+        { value: "LOW", color: '#2E7D32', bg: '#E8F5E9' },
+        { value: "MEDIUM", color: '#F57F17', bg: '#FFF8E1' },
+        { value: "HIGH", color: '#E65100', bg: '#FFF3E0' },
+        { value: "CRITICAL", color: '#DC2626', bg: '#FEE2E2' },
+    ];
+
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center gap-3">
-                <Link href="/ngo/requests" className="p-2 -ml-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">arrow_back</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div>
+                <Link href="/ngo/requests" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span>
+                    Back to requests
                 </Link>
-                <h1 className="text-xl font-bold">Create Help Request</h1>
+                <h1 className="page-title">Create Help Request</h1>
             </div>
 
-            {/* Form */}
-            <div className="space-y-4">
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Title *</label>
-                    <input
-                        type="text"
-                        placeholder="Brief title for the request"
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                    />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div className="form-group">
+                    <label className="field-label">Title *</label>
+                    <input type="text" placeholder="Brief title for the request" className="field-input" />
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Description *</label>
-                    <textarea
-                        placeholder="Detailed description of the help needed..."
-                        rows={4}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50"
-                    />
+                <div className="form-group">
+                    <label className="field-label">Description *</label>
+                    <textarea placeholder="Detailed description of the help needed..." rows={4} className="field-input field-textarea" />
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Category *</label>
-                    <select className="w-full h-12 rounded-xl border border-gray-200 px-4 bg-white">
+                <div className="form-group">
+                    <label className="field-label">Category *</label>
+                    <select className="field-input">
                         <option value="">Select category</option>
                         <option value="FOOD">Food</option>
                         <option value="MEDICAL">Medical</option>
@@ -49,72 +47,74 @@ export default function CreateRequestPage() {
                     </select>
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Urgency Level *</label>
-                    <div className="grid grid-cols-4 gap-2">
-                        {["LOW", "MEDIUM", "HIGH", "CRITICAL"].map((level) => (
+                <div className="form-group">
+                    <label className="field-label">Urgency Level *</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+                        {urgencyLevels.map(level => (
                             <button
-                                key={level}
+                                key={level.value}
                                 type="button"
-                                onClick={() => setUrgency(level)}
-                                className={`py-2 rounded-xl text-xs font-bold border transition-all ${urgency === level
-                                        ? level === "CRITICAL"
-                                            ? "bg-red-500 text-white border-red-500"
-                                            : level === "HIGH"
-                                                ? "bg-orange-500 text-white border-orange-500"
-                                                : level === "MEDIUM"
-                                                    ? "bg-yellow-500 text-white border-yellow-500"
-                                                    : "bg-green-500 text-white border-green-500"
-                                        : "bg-white border-gray-200 text-gray-600"
-                                    }`}
+                                onClick={() => setUrgency(level.value)}
+                                style={{
+                                    padding: '8px 4px', borderRadius: 'var(--radius-sm)',
+                                    fontSize: 11, fontWeight: 700,
+                                    border: urgency === level.value ? 'none' : '1px solid var(--color-border)',
+                                    background: urgency === level.value ? level.bg : 'var(--color-bg-card)',
+                                    color: urgency === level.value ? level.color : 'var(--color-text-muted)',
+                                    cursor: 'pointer', transition: 'all 150ms ease',
+                                }}
                             >
-                                {level}
+                                {level.value}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Location</label>
-                    <input
-                        type="text"
-                        placeholder="Address or location description"
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4"
-                    />
-                    <div className="h-32 rounded-xl bg-gray-100 flex items-center justify-center">
-                        <span className="text-gray-400 text-sm">Map preview will appear here</span>
+                <div className="form-group">
+                    <label className="field-label">Location</label>
+                    <input type="text" placeholder="Address or location description" className="field-input" />
+                    <div style={{ height: 100, borderRadius: 'var(--radius-sm)', background: 'var(--color-bg-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 8 }}>
+                        <span style={{ color: 'var(--color-text-disabled)', fontSize: 13 }}>Map preview will appear here</span>
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Add Photos/Videos</label>
-                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center">
-                        <span className="material-symbols-outlined text-3xl text-gray-400">add_photo_alternate</span>
-                        <p className="text-sm text-gray-500 mt-2">Tap to upload media</p>
+                <div className="form-group">
+                    <label className="field-label">Add Photos/Videos</label>
+                    <div style={{
+                        border: '2px dashed var(--color-border)', borderRadius: 'var(--radius-md)',
+                        padding: 24, textAlign: 'center',
+                    }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 28, color: 'var(--color-text-disabled)' }}>add_photo_alternate</span>
+                        <p style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 4 }}>Tap to upload media</p>
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium">Visibility</label>
-                    <div className="flex gap-3">
-                        <label className="flex items-center gap-2 flex-1 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="visibility" value="PUBLIC" defaultChecked className="accent-[var(--primary)]" />
-                            <span className="text-sm">Public</span>
+                <div className="form-group">
+                    <label className="field-label">Visibility</label>
+                    <div style={{ display: 'flex', gap: 10 }}>
+                        <label style={{
+                            flex: 1, display: 'flex', alignItems: 'center', gap: 8,
+                            padding: '10px 14px', borderRadius: 'var(--radius-sm)',
+                            border: '1px solid var(--color-border)', cursor: 'pointer',
+                        }}>
+                            <input type="radio" name="visibility" value="PUBLIC" defaultChecked style={{ accentColor: 'var(--color-primary)' }} />
+                            <span style={{ fontSize: 13 }}>Public</span>
                         </label>
-                        <label className="flex items-center gap-2 flex-1 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="visibility" value="INTERNAL" className="accent-[var(--primary)]" />
-                            <span className="text-sm">Internal Only</span>
+                        <label style={{
+                            flex: 1, display: 'flex', alignItems: 'center', gap: 8,
+                            padding: '10px 14px', borderRadius: 'var(--radius-sm)',
+                            border: '1px solid var(--color-border)', cursor: 'pointer',
+                        }}>
+                            <input type="radio" name="visibility" value="INTERNAL" style={{ accentColor: 'var(--color-primary)' }} />
+                            <span style={{ fontSize: 13 }}>Internal Only</span>
                         </label>
                     </div>
                 </div>
             </div>
 
-            {/* Submit Button */}
-            <div className="sticky bottom-24 bg-[var(--background-light)] pt-4">
-                <button className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl shadow-lg active:scale-[0.98] transition-transform">
-                    Create Request
-                </button>
-            </div>
+            <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 15, fontWeight: 700 }}>
+                Create Request
+            </button>
         </div>
     );
 }

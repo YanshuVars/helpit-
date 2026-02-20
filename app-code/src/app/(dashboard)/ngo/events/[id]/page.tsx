@@ -2,10 +2,26 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { PageHeader } from "@/components/ui/PageHeader";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { eventsApi } from "@/lib/api";
 import { format } from "@/lib/utils";
+
+const statusColor: Record<string, { bg: string; color: string }> = {
+    UPCOMING: { bg: '#E3F2FD', color: '#1565C0' },
+    ONGOING: { bg: '#E8F5E9', color: '#2E7D32' },
+    COMPLETED: { bg: '#F5F5F5', color: '#616161' },
+    CANCELLED: { bg: '#FEE2E2', color: '#DC2626' },
+};
+
+const eventTypeColor: Record<string, { bg: string; color: string }> = {
+    FUNDRAISER: { bg: '#EDE7F6', color: '#4527A0' },
+    VOLUNTEER_DRIVE: { bg: '#E8F5E9', color: '#2E7D32' },
+    AWARENESS: { bg: '#FFF8E1', color: '#F57F17' },
+    COMMUNITY: { bg: '#E3F2FD', color: '#1565C0' },
+    TRAINING: { bg: '#FFF3E0', color: '#E65100' },
+    VOLUNTEER: { bg: '#E8F5E9', color: '#2E7D32' },
+};
 
 export default function EventDetailPage() {
     const params = useParams();
@@ -28,14 +44,11 @@ export default function EventDetailPage() {
         try {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) setCurrentUserId(user.id);
-
             const eventData = await eventsApi.getById(eventId);
             setEvent(eventData);
         } catch (error) {
             console.error("Error fetching event:", error);
-        } finally {
-            setLoading(false);
-        }
+        } finally { setLoading(false); }
     }
 
     async function checkUserRegistration() {
@@ -48,23 +61,16 @@ export default function EventDetailPage() {
     }
 
     async function handleRegister() {
-        if (!currentUserId) {
-            router.push("/login");
-            return;
-        }
-
+        if (!currentUserId) { router.push("/login"); return; }
         setRegistering(true);
         try {
             const registration = await eventsApi.register(eventId);
             setUserRegistration(registration);
-            // Refresh event data
             fetchEvent();
         } catch (error) {
             console.error("Error registering:", error);
             alert("Failed to register for event");
-        } finally {
-            setRegistering(false);
-        }
+        } finally { setRegistering(false); }
     }
 
     async function handleCancelRegistration() {
@@ -72,247 +78,222 @@ export default function EventDetailPage() {
         try {
             await eventsApi.cancelRegistration(eventId);
             setUserRegistration(null);
-            // Refresh event data
             fetchEvent();
         } catch (error) {
             console.error("Error cancelling registration:", error);
             alert("Failed to cancel registration");
-        } finally {
-            setRegistering(false);
-        }
+        } finally { setRegistering(false); }
     }
-
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case "UPCOMING": return "bg-blue-100 text-blue-700";
-            case "ONGOING": return "bg-green-100 text-green-700";
-            case "COMPLETED": return "bg-gray-100 text-gray-700";
-            case "CANCELLED": return "bg-red-100 text-red-700";
-            default: return "bg-gray-100 text-gray-700";
-        }
-    };
-
-    const getEventTypeColor = (type: string) => {
-        switch (type) {
-            case "FUNDRAISER": return "bg-purple-100 text-purple-700";
-            case "VOLUNTEER_DRIVE": return "bg-green-100 text-green-700";
-            case "AWARENESS": return "bg-yellow-100 text-yellow-700";
-            case "COMMUNITY": return "bg-blue-100 text-blue-700";
-            case "TRAINING": return "bg-orange-100 text-orange-700";
-            default: return "bg-gray-100 text-gray-700";
-        }
-    };
 
     if (loading) {
         return (
-            <div className="space-y-6">
-                <PageHeader title="Event Details" showBack fallbackRoute="/ngo/events" />
-                <div className="flex items-center justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
-                </div>
+            <div className="dashboard-loading">
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
             </div>
         );
     }
 
     if (!event) {
         return (
-            <div className="space-y-6">
-                <PageHeader title="Event Details" showBack fallbackRoute="/ngo/events" />
-                <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-                    <span className="material-symbols-outlined text-4xl text-gray-400">event_busy</span>
-                    <p className="text-gray-500 mt-2">Event not found</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <Link href="/ngo/events" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span>
+                    Back to events
+                </Link>
+                <div className="empty-state-container">
+                    <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>event_busy</span>
+                    <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>Event not found</p>
                 </div>
             </div>
         );
     }
 
-    return (
-        <div className="space-y-6">
-            <PageHeader
-                title="Event Details"
-                showBack
-                fallbackRoute="/ngo/events"
-            />
+    const sStyle = statusColor[event.status] || { bg: '#F5F5F5', color: '#616161' };
+    const tStyle = eventTypeColor[event.event_type] || { bg: '#F5F5F5', color: '#616161' };
 
-            {/* Event Cover Image */}
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div>
+                <Link href="/ngo/events" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span>
+                    Back to events
+                </Link>
+            </div>
+
+            {/* Cover Image */}
             {event.cover_image_url && (
-                <div className="w-full h-48 md:h-64 rounded-xl overflow-hidden">
-                    <img
-                        src={event.cover_image_url}
-                        alt={event.title}
-                        className="w-full h-full object-cover"
-                    />
+                <div style={{ width: '100%', height: 180, borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
+                    <img src={event.cover_image_url} alt={event.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
             )}
 
-            {/* Event Info */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="flex items-start justify-between gap-4 mb-4">
+            {/* Main Info Card */}
+            <div className="card" style={{ padding: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, marginBottom: 14 }}>
                     <div>
-                        <span className={`text-xs font-bold px-2 py-1 rounded-full ${getEventTypeColor(event.event_type)}`}>
+                        <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 'var(--radius-full)', background: tStyle.bg, color: tStyle.color }}>
                             {event.event_type.replace("_", " ")}
                         </span>
-                        <h1 className="text-2xl font-bold mt-2">{event.title}</h1>
+                        <h1 style={{ fontSize: 20, fontWeight: 700, marginTop: 8 }}>{event.title}</h1>
                     </div>
-                    <span className={`text-xs font-bold px-2 py-1 rounded-full ${getStatusColor(event.status)}`}>
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 'var(--radius-full)', background: sStyle.bg, color: sStyle.color, flexShrink: 0 }}>
                         {event.status}
                     </span>
                 </div>
 
-                {/* NGO */}
+                {/* NGO Info */}
                 {event.ngo && (
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--primary)] to-blue-400 flex items-center justify-center text-white font-bold overflow-hidden">
-                            {event.ngo.logo_url ? (
-                                <img src={event.ngo.logo_url} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                                event.ngo.name?.charAt(0)
-                            )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                        <div style={{
+                            width: 38, height: 38, borderRadius: '50%',
+                            background: 'linear-gradient(135deg, var(--color-primary), #42A5F5)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#fff', fontWeight: 700, fontSize: 14, overflow: 'hidden',
+                        }}>
+                            {event.ngo.logo_url
+                                ? <img src={event.ngo.logo_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                : event.ngo.name?.charAt(0)
+                            }
                         </div>
                         <div>
-                            <p className="font-semibold text-sm">{event.ngo.name}</p>
-                            <p className="text-xs text-gray-500">Organizer</p>
+                            <p style={{ fontWeight: 600, fontSize: 13 }}>{event.ngo.name}</p>
+                            <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>Organizer</p>
                         </div>
                     </div>
                 )}
 
                 {/* Description */}
                 {event.description && (
-                    <div className="mb-6">
-                        <h2 className="font-semibold mb-2">About this event</h2>
-                        <p className="text-gray-600 whitespace-pre-wrap">{event.description}</p>
+                    <div style={{ marginBottom: 18 }}>
+                        <h2 style={{ fontWeight: 600, fontSize: 14, marginBottom: 6 }}>About this event</h2>
+                        <p style={{ fontSize: 13, color: 'var(--color-text-body)', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{event.description}</p>
                     </div>
                 )}
 
-                {/* Date & Time */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-blue-600">calendar_today</span>
+                {/* Detail Rows */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                    {/* Date */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#E3F2FD', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <span className="material-symbols-outlined" style={{ color: '#1565C0', fontSize: 18 }}>calendar_today</span>
                         </div>
                         <div>
-                            <p className="text-sm font-medium">
+                            <p style={{ fontSize: 13, fontWeight: 500 }}>
                                 {format(new Date(event.start_date), "MMMM d, yyyy")}
-                                {event.start_date !== event.end_date && (
-                                    <> - {format(new Date(event.end_date), "MMMM d, yyyy")}</>
-                                )}
+                                {event.start_date !== event.end_date && <> — {format(new Date(event.end_date), "MMMM d, yyyy")}</>}
                             </p>
-                            <p className="text-xs text-gray-500">Date</p>
+                            <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>Date</p>
                         </div>
                     </div>
 
+                    {/* Time */}
                     {(event.start_time || event.end_time) && (
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                                <span className="material-symbols-outlined text-purple-600">schedule</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#EDE7F6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <span className="material-symbols-outlined" style={{ color: '#4527A0', fontSize: 18 }}>schedule</span>
                             </div>
                             <div>
-                                <p className="text-sm font-medium">
+                                <p style={{ fontSize: 13, fontWeight: 500 }}>
                                     {event.start_time && format(new Date(`2000-01-01T${event.start_time}`), "h:mm a")}
-                                    {event.end_time && <> - {format(new Date(`2000-01-01T${event.end_time}`), "h:mm a")}</>}
+                                    {event.end_time && <> — {format(new Date(`2000-01-01T${event.end_time}`), "h:mm a")}</>}
                                 </p>
-                                <p className="text-xs text-gray-500">Time</p>
+                                <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>Time</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Location */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#E8F5E9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <span className="material-symbols-outlined" style={{ color: '#2E7D32', fontSize: 18 }}>
+                                {event.location_type === "VIRTUAL" ? "videocam" : "location_on"}
+                            </span>
+                        </div>
+                        <div>
+                            {event.location_type === "VIRTUAL" ? (
+                                <>
+                                    <p style={{ fontSize: 13, fontWeight: 500 }}>Virtual Event</p>
+                                    <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>Online</p>
+                                </>
+                            ) : (
+                                <>
+                                    <p style={{ fontSize: 13, fontWeight: 500 }}>{event.venue_name || event.address || "Location TBA"}</p>
+                                    <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{[event.city, event.state].filter(Boolean).join(", ")}</p>
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Capacity */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#FFF3E0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <span className="material-symbols-outlined" style={{ color: '#E65100', fontSize: 18 }}>groups</span>
+                        </div>
+                        <div>
+                            <p style={{ fontSize: 13, fontWeight: 500 }}>{event.current_attendees} / {event.max_attendees || "∞"} registered</p>
+                            <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>Attendees</p>
+                        </div>
+                    </div>
+
+                    {/* Registration Deadline */}
+                    {event.registration_deadline && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <span className="material-symbols-outlined" style={{ color: '#DC2626', fontSize: 18 }}>alarm</span>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: 13, fontWeight: 500 }}>Register by {format(new Date(event.registration_deadline), "MMMM d, yyyy")}</p>
+                                <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>Registration Deadline</p>
                             </div>
                         </div>
                     )}
                 </div>
 
-                {/* Location */}
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-green-600">
-                            {event.location_type === "VIRTUAL" ? "videocam" : "location_on"}
-                        </span>
-                    </div>
-                    <div>
-                        {event.location_type === "VIRTUAL" ? (
-                            <>
-                                <p className="text-sm font-medium">Virtual Event</p>
-                                <p className="text-xs text-gray-500">Online</p>
-                            </>
-                        ) : (
-                            <>
-                                <p className="text-sm font-medium">{event.venue_name || event.address || "Location TBA"}</p>
-                                <p className="text-xs text-gray-500">
-                                    {[event.city, event.state].filter(Boolean).join(", ")}
-                                </p>
-                            </>
-                        )}
-                    </div>
-                </div>
-
-                {/* Capacity */}
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-                        <span className="material-symbols-outlined text-orange-600">groups</span>
-                    </div>
-                    <div>
-                        <p className="text-sm font-medium">
-                            {event.current_attendees} / {event.max_attendees || "∞"} registered
-                        </p>
-                        <p className="text-xs text-gray-500">Attendees</p>
-                    </div>
-                </div>
-
-                {/* Registration Deadline */}
-                {event.registration_deadline && (
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-red-600">alarm</span>
-                        </div>
-                        <div>
-                            <p className="text-sm font-medium">
-                                Register by {format(new Date(event.registration_deadline), "MMMM d, yyyy")}
-                            </p>
-                            <p className="text-xs text-gray-500">Registration Deadline</p>
-                        </div>
-                    </div>
-                )}
-
                 {/* Virtual Link */}
                 {event.location_type === "VIRTUAL" && event.virtual_link && (
-                    <div className="mb-6">
-                        <a
-                            href={event.virtual_link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2 w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700"
-                        >
-                            <span className="material-symbols-outlined">videocam</span>
-                            Join Virtual Event
-                        </a>
-                    </div>
+                    <a
+                        href={event.virtual_link} target="_blank" rel="noopener noreferrer"
+                        className="btn btn-primary"
+                        style={{ width: '100%', justifyContent: 'center', gap: 8, marginTop: 18, height: 44, textDecoration: 'none' }}
+                    >
+                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>videocam</span>
+                        Join Virtual Event
+                    </a>
                 )}
 
                 {/* Registration Button */}
                 {event.status !== "CANCELLED" && event.status !== "COMPLETED" && (
-                    <div className="border-t border-gray-100 pt-6">
+                    <div style={{ borderTop: '1px solid var(--color-border-subtle)', paddingTop: 18, marginTop: 18 }}>
                         {userRegistration ? (
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-2 text-green-600">
-                                    <span className="material-symbols-outlined">check_circle</span>
-                                    <span className="font-medium">You are registered!</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-success)' }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 20 }}>check_circle</span>
+                                    <span style={{ fontWeight: 600, fontSize: 14 }}>You are registered!</span>
                                 </div>
                                 {userRegistration.status === "REGISTERED" && (
                                     <button
                                         onClick={handleCancelRegistration}
                                         disabled={registering}
-                                        className="w-full py-3 border-2 border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-50 disabled:opacity-50"
+                                        style={{
+                                            width: '100%', padding: '10px 0', borderRadius: 'var(--radius-md)',
+                                            border: '2px solid #FEE2E2', background: 'none',
+                                            color: '#DC2626', fontWeight: 600, fontSize: 14, cursor: 'pointer',
+                                            opacity: registering ? 0.5 : 1,
+                                        }}
                                     >
                                         {registering ? "Cancelling..." : "Cancel Registration"}
                                     </button>
                                 )}
                                 {userRegistration.status === "ATTENDED" && (
-                                    <p className="text-center text-gray-500 text-sm">
-                                        You attended this event
-                                    </p>
+                                    <p style={{ textAlign: 'center', color: 'var(--color-text-muted)', fontSize: 13 }}>You attended this event</p>
                                 )}
                             </div>
                         ) : (
                             <button
                                 onClick={handleRegister}
                                 disabled={registering}
-                                className="w-full py-3 bg-[var(--primary)] text-white rounded-xl font-semibold hover:opacity-90 disabled:opacity-50"
+                                className="btn btn-primary"
+                                style={{ width: '100%', justifyContent: 'center', height: 44, fontSize: 15, fontWeight: 700, opacity: registering ? 0.5 : 1 }}
                             >
                                 {registering ? "Registering..." : "Register for Event"}
                             </button>

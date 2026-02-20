@@ -9,70 +9,69 @@ const availableVolunteers = [
 
 export default function AssignVolunteersPage() {
     return (
-        <div className="space-y-4">
-            {/* Header */}
-            <div className="flex items-center gap-3">
-                <Link href="/ngo/requests/1" className="p-2 -ml-2 rounded-full hover:bg-gray-100">
-                    <span className="material-symbols-outlined">arrow_back</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div>
+                <Link href="/ngo/requests/1" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span>
+                    Back to request
                 </Link>
-                <h1 className="text-xl font-bold">Assign Volunteers</h1>
+                <h1 className="page-title">Assign Volunteers</h1>
             </div>
 
             {/* Search */}
-            <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                <input
-                    type="text"
-                    placeholder="Search volunteers..."
-                    className="w-full h-12 rounded-xl border border-gray-200 pl-10 pr-4"
-                />
+            <div style={{ position: 'relative' }}>
+                <span className="material-symbols-outlined" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-disabled)', fontSize: 20 }}>search</span>
+                <input type="text" placeholder="Search volunteers..." className="field-input" style={{ paddingLeft: 40 }} />
             </div>
 
             {/* Filters */}
-            <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-                <button className="px-3 py-1.5 rounded-full text-xs font-semibold bg-[var(--primary)] text-white">All</button>
-                <button className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100">Nearby</button>
-                <button className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100">Available Now</button>
-                <button className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100">First Aid</button>
+            <div className="tabs-row">
+                <button className="tab-pill tab-pill-active">All</button>
+                <button className="tab-pill">Nearby</button>
+                <button className="tab-pill">Available Now</button>
+                <button className="tab-pill">First Aid</button>
             </div>
 
             {/* Volunteer List */}
-            <div className="space-y-3">
-                {availableVolunteers.map((volunteer) => (
-                    <div key={volunteer.id} className="bg-white rounded-xl p-4 border border-gray-200">
-                        <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--primary)] to-blue-400 flex items-center justify-center text-white font-bold">
-                                {volunteer.name.charAt(0)}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {availableVolunteers.map(vol => (
+                    <div key={vol.id} className="card" style={{ padding: '16px 18px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <div style={{
+                                width: 44, height: 44, borderRadius: '50%',
+                                background: 'linear-gradient(135deg, var(--color-primary), #42A5F5)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                color: '#fff', fontWeight: 700, fontSize: 15, flexShrink: 0,
+                            }}>
+                                {vol.name.charAt(0)}
                             </div>
-                            <div className="flex-1">
-                                <div className="flex items-center gap-2">
-                                    <p className="font-semibold">{volunteer.name}</p>
-                                    {volunteer.available ? (
-                                        <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                                    ) : (
-                                        <span className="w-2 h-2 rounded-full bg-gray-300"></span>
-                                    )}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <span style={{ fontWeight: 600, fontSize: 14 }}>{vol.name}</span>
+                                    <span style={{
+                                        width: 7, height: 7, borderRadius: '50%',
+                                        background: vol.available ? 'var(--color-success)' : 'var(--color-text-disabled)',
+                                    }} />
                                 </div>
-                                <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
-                                    <span className="material-symbols-outlined text-sm">location_on</span>
-                                    {volunteer.distance}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 12, color: 'var(--color-text-muted)', marginTop: 2 }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>location_on</span>
+                                    {vol.distance}
                                 </div>
                             </div>
                             <button
-                                className={`px-4 py-2 rounded-lg text-sm font-semibold ${volunteer.available
-                                        ? "bg-[var(--primary)] text-white"
-                                        : "bg-gray-100 text-gray-400"
-                                    }`}
-                                disabled={!volunteer.available}
+                                className={`btn ${vol.available ? 'btn-primary' : 'btn-secondary'}`}
+                                style={{ fontSize: 12, padding: '6px 14px', minHeight: 0, opacity: vol.available ? 1 : 0.5 }}
+                                disabled={!vol.available}
                             >
                                 Assign
                             </button>
                         </div>
-                        <div className="flex gap-2 mt-3 flex-wrap">
-                            {volunteer.skills.map((skill) => (
-                                <span key={skill} className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">
-                                    {skill}
-                                </span>
+                        <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
+                            {vol.skills.map(skill => (
+                                <span key={skill} style={{
+                                    fontSize: 11, padding: '3px 10px', borderRadius: 'var(--radius-full)',
+                                    background: 'var(--color-bg-subtle)', color: 'var(--color-text-muted)',
+                                }}>{skill}</span>
                             ))}
                         </div>
                     </div>

@@ -1,271 +1,155 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { formatDistanceToNow } from "@/lib/utils";
 
 interface Message {
-    id: string;
-    sender_id: string;
-    content: string;
-    created_at: string;
-    is_read: boolean;
+    id: string; sender_id: string; receiver_id: string;
+    content: string; is_read: boolean; created_at: string;
 }
-
-interface User {
-    id: string;
-    full_name: string;
-    avatar_url: string | null;
+interface OtherUser {
+    id: string; full_name: string | null; avatar_url: string | null;
 }
 
 export default function ChatRoomPage() {
-    const params = useParams();
-    const conversationId = params.id as string;
+    const supabase = createClient();
+    const { id: conversationId } = useParams();
+    const router = useRouter();
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const [messages, setMessages] = useState<Message[]>([]);
-    const [otherUser, setOtherUser] = useState<User | null>(null);
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
     const [sending, setSending] = useState(false);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [otherUser, setOtherUser] = useState<OtherUser | null>(null);
 
-    const supabase = createClient();
+    useEffect(() => { init(); }, [conversationId]);
+    useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
-    // Get current user and messages
-    useEffect(() => {
-        async function fetchData() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) return;
+    async function init() {
+        setLoading(true);
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+            setCurrentUserId(user.id);
 
-            setCurrentUserId(session.user.id);
+            const { data: conv } = await supabase
+                .from("conversations")
+                .select("user1_id, user2_id, user1:users!conversations_user1_id_fkey(id, full_name, avatar_url), user2:users!conversations_user2_id_fkey(id, full_name, avatar_url)")
+                .eq("id", conversationId).single();
 
-            // Get other user's info
-            const { data: otherUserData } = await supabase
-                .from('users')
-                .select('id, full_name, avatar_url')
-                .eq('id', conversationId)
-                .single();
-
-            if (otherUserData) {
-                setOtherUser(otherUserData);
+            if (conv) {
+                const other = (conv as any).user1_id === user.id ? (conv as any).user2 : (conv as any).user1;
+                setOtherUser(other);
             }
 
-            // Get messages between users
-            const { data: messagesData } = await supabase
-                .from('messages')
-                .select('*')
-                .or(`and(sender_id.eq.${session.user.id},receiver_id.eq.${conversationId}),and(sender_id.eq.${conversationId},receiver_id.eq.${session.user.id})`)
-                .order('created_at', { ascending: true });
+            const { data: msgs } = await supabase
+                .from("messages").select("*").eq("conversation_id", conversationId)
+                .order("created_at", { ascending: true });
+            if (msgs) setMessages(msgs);
 
-            setMessages(messagesData || []);
+            await supabase.from("messages").update({ is_read: true })
+                .eq("conversation_id", conversationId).eq("receiver_id", user.id).eq("is_read", false);
 
-            // Mark messages as read
-            await supabase
-                .from('messages')
-                .update({ is_read: true })
-                .eq('sender_id', conversationId)
-                .eq('receiver_id', session.user.id);
+            const channel = supabase.channel(`messages:${conversationId}`)
+                .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${conversationId}` },
+                    (payload) => { setMessages(prev => [...prev, payload.new as Message]); })
+                .subscribe();
 
-            setLoading(false);
-        }
-
-        fetchData();
-    }, [conversationId]);
-
-    // Auto-scroll to bottom
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
-
-    // Subscribe to new messages
-    useEffect(() => {
-        const channel = supabase
-            .channel('messages')
-            .on(
-                'postgres_changes',
-                {
-                    event: 'INSERT',
-                    schema: 'public',
-                    table: 'messages',
-                    filter: `receiver_id=eq.${currentUserId}`,
-                },
-                (payload) => {
-                    setMessages(prev => [...prev, payload.new as Message]);
-                }
-            )
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
-    }, [currentUserId]);
-
-    const sendMessage = async () => {
-        if (!newMessage.trim() || !currentUserId) return;
-
-        setSending(true);
-
-        const { error } = await supabase
-            .from('messages')
-            .insert({
-                sender_id: currentUserId,
-                receiver_id: conversationId,
-                content: newMessage.trim(),
-                is_read: false,
-            });
-
-        if (!error) {
-            // Refresh messages
-            const { data: messagesData } = await supabase
-                .from('messages')
-                .select('*')
-                .or(`and(sender_id.eq.${currentUserId},receiver_id.eq.${conversationId}),and(sender_id.eq.${conversationId},receiver_id.eq.${currentUserId})`)
-                .order('created_at', { ascending: true });
-
-            setMessages(messagesData || []);
-            setNewMessage("");
-        }
-
-        setSending(false);
-    };
-
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    };
-
-    const getStatusIcon = (isRead: boolean) => {
-        return isRead ? "done_all" : "done";
-    };
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="spinner"></div>
-            </div>
-        );
+            return () => { supabase.removeChannel(channel); };
+        } catch (e) { console.error("Error loading chat:", e); }
+        finally { setLoading(false); }
     }
 
+    async function sendMessage() {
+        if (!newMessage.trim() || !currentUserId || !otherUser) return;
+        setSending(true);
+        try {
+            const { error } = await supabase.from("messages").insert({
+                conversation_id: conversationId,
+                sender_id: currentUserId,
+                receiver_id: otherUser.id,
+                content: newMessage.trim(),
+            });
+            if (error) throw error;
+            await supabase.from("conversations").update({ last_message: newMessage.trim(), last_message_at: new Date().toISOString() }).eq("id", conversationId);
+            setNewMessage("");
+        } catch (e) { console.error("Error sending message:", e); }
+        finally { setSending(false); }
+    }
+
+    const fmtTime = (ts: string) => new Date(ts).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+    const fmtDate = (ts: string) => new Date(ts).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+
+    let lastDate = "";
+
     return (
-        <div className="flex flex-col min-h-screen bg-[var(--background-light)]">
-            {/* Top Navigation Bar */}
-            <div className="sticky top-0 z-50 flex items-center bg-white border-b border-[var(--border-light)] p-4 pb-2 justify-between">
-                <div className="flex items-center gap-3">
-                    <Link href="/messages" className="text-[var(--foreground)] flex size-10 shrink-0 items-center justify-center cursor-pointer hover:bg-[var(--background-subtle)] rounded-full transition-colors">
-                        <span className="material-symbols-outlined">arrow_back_ios</span>
-                    </Link>
-                    <div className="flex items-center gap-3">
-                        <div
-                            className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--primary-light)] flex items-center justify-center text-white font-bold shrink-0"
-                            style={{ backgroundImage: otherUser?.avatar_url ? `url("${otherUser.avatar_url}")` : undefined, backgroundSize: 'cover' }}
-                        >
-                            {!otherUser?.avatar_url && otherUser?.full_name?.charAt(0)}
-                        </div>
-                        <div className="flex flex-col">
-                            <h2 className="text-base font-bold">{otherUser?.full_name || 'Chat'}</h2>
-                            <p className="text-green-500 text-xs font-medium">Online</p>
-                        </div>
-                    </div>
+        <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 80px)" }}>
+            {/* Chat header */}
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", padding: "var(--space-md) 0", borderBottom: "1px solid var(--border-light)" }}>
+                <button onClick={() => router.push("/messages")} style={{ border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center" }}>
+                    <span className="material-symbols-outlined" style={{ color: "var(--foreground-muted)" }}>arrow_back</span>
+                </button>
+                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, overflow: "hidden" }}>
+                    {otherUser?.avatar_url ? <img src={otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (otherUser?.full_name?.charAt(0) || "?").toUpperCase()}
                 </div>
-                <div className="flex items-center gap-1">
-                    <button className="flex cursor-pointer items-center justify-center rounded-xl h-10 w-10 bg-transparent text-[var(--foreground)] hover:bg-[var(--background-subtle)]">
-                        <span className="material-symbols-outlined">call</span>
-                    </button>
-                    <button className="flex cursor-pointer items-center justify-center rounded-xl h-10 w-10 bg-transparent text-[var(--foreground)] hover:bg-[var(--background-subtle)]">
-                        <span className="material-symbols-outlined">videocam</span>
-                    </button>
+                <div>
+                    <p style={{ fontWeight: 600, fontSize: "var(--font-sm)" }}>{otherUser?.full_name || "Loading..."}</p>
+                    <p style={{ fontSize: "var(--font-xs)", color: "var(--color-success)" }}>Online</p>
                 </div>
             </div>
 
-            {/* Message Thread */}
-            <div className="chat-scroll flex flex-col p-4 space-y-2 flex-1">
-                {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center">
-                        <span className="material-symbols-outlined text-5xl text-[var(--foreground-light)] mb-3">chat_bubble_outline</span>
-                        <p className="text-[var(--foreground-muted)]">No messages yet</p>
-                        <p className="text-sm text-[var(--foreground-light)]">Start the conversation!</p>
+            {/* Messages area */}
+            <div style={{ flex: 1, overflowY: "auto", padding: "var(--space-md) 0", display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}>
+                {loading ? (
+                    <div style={{ display: "flex", justifyContent: "center", padding: "3rem 0" }}><div className="spinner" /></div>
+                ) : messages.length === 0 ? (
+                    <div style={{ textAlign: "center", padding: "3rem 0", color: "var(--foreground-muted)" }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 48, color: "var(--foreground-light)" }}>waving_hand</span>
+                        <p style={{ marginTop: 8 }}>Say hello!</p>
                     </div>
-                ) : (
-                    messages.map((msg) => {
-                        const isMe = msg.sender_id === currentUserId;
-                        const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                ) : messages.map((msg) => {
+                    const isMine = msg.sender_id === currentUserId;
+                    const dateStr = fmtDate(msg.created_at);
+                    let showDate = false;
+                    if (dateStr !== lastDate) { showDate = true; lastDate = dateStr; }
 
-                        return isMe ? (
-                            // Sent Message
-                            <div key={msg.id} className="flex items-end gap-2 self-end max-w-[85%] justify-end">
-                                <div className="flex flex-col gap-1 items-end">
-                                    <div className="rounded-2xl rounded-br-sm px-4 py-3 bg-[var(--primary)] text-white shadow-md">
-                                        <p className="text-[15px] leading-relaxed">{msg.content}</p>
-                                    </div>
-                                    <div className="flex items-center gap-1 mr-1">
-                                        <p className="text-[var(--foreground-muted)] text-[10px]">{time}</p>
-                                        <span className={`material-symbols-outlined text-[14px] ${msg.is_read ? "text-blue-400" : "text-gray-400"}`}>
-                                            {getStatusIcon(msg.is_read)}
-                                        </span>
-                                    </div>
+                    return (
+                        <div key={msg.id}>
+                            {showDate && (
+                                <div style={{ textAlign: "center", padding: "var(--space-sm) 0" }}>
+                                    <span style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", background: "var(--background-subtle)", padding: "4px 12px", borderRadius: 12 }}>{dateStr}</span>
+                                </div>
+                            )}
+                            <div style={{ display: "flex", justifyContent: isMine ? "flex-end" : "flex-start" }}>
+                                <div style={{
+                                    maxWidth: "70%", padding: "var(--space-sm) var(--space-md)",
+                                    borderRadius: "var(--radius-lg)",
+                                    background: isMine ? "var(--primary)" : "var(--background-card)",
+                                    color: isMine ? "#fff" : "var(--foreground)",
+                                    border: isMine ? "none" : "1px solid var(--border-light)",
+                                }}>
+                                    <p style={{ fontSize: "var(--font-sm)", wordBreak: "break-word" }}>{msg.content}</p>
+                                    <p style={{ fontSize: 10, marginTop: 4, textAlign: "right", opacity: 0.7 }}>{fmtTime(msg.created_at)}</p>
                                 </div>
                             </div>
-                        ) : (
-                            // Received Message
-                            <div key={msg.id} className="flex items-end gap-2 max-w-[85%]">
-                                <div
-                                    className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--primary-light)] flex items-center justify-center text-white text-xs font-bold shrink-0 mb-1"
-                                    style={{ backgroundImage: otherUser?.avatar_url ? `url("${otherUser.avatar_url}")` : undefined, backgroundSize: 'cover' }}
-                                >
-                                    {!otherUser?.avatar_url && otherUser?.full_name?.charAt(0)}
-                                </div>
-                                <div className="flex flex-col gap-1 items-start">
-                                    <div className="rounded-2xl rounded-bl-sm px-4 py-3 bg-white shadow-sm border border-[var(--border-light)]">
-                                        <p className="text-[15px] leading-relaxed">{msg.content}</p>
-                                    </div>
-                                    <p className="text-[var(--foreground-muted)] text-[10px] ml-1">{time}</p>
-                                </div>
-                            </div>
-                        );
-                    })
-                )}
+                        </div>
+                    );
+                })}
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Bottom Input Bar */}
-            <div className="sticky bottom-0 left-0 w-full bg-white border-t border-[var(--border-light)] p-3 pb-8">
-                <div className="flex items-center gap-2">
-                    <button className="flex items-center justify-center w-10 h-10 text-[var(--primary)] hover:bg-[var(--primary-50)] rounded-full transition-colors">
-                        <span className="material-symbols-outlined">add</span>
-                    </button>
-                    <button className="flex items-center justify-center w-10 h-10 text-[var(--primary)] hover:bg-[var(--primary-50)] rounded-full transition-colors">
-                        <span className="material-symbols-outlined">image</span>
-                    </button>
-                    <div className="flex-1 relative">
-                        <input
-                            className="w-full bg-[var(--background-subtle)] border-none rounded-full px-4 py-2.5 text-[15px] focus:ring-2 focus:ring-[var(--primary)]/50 text-[var(--foreground)] placeholder:text-[var(--foreground-light)]"
-                            placeholder="Type a message..."
-                            type="text"
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                        />
-                    </div>
-                    <button
-                        onClick={sendMessage}
-                        disabled={!newMessage.trim() || sending}
-                        className={`flex items-center justify-center w-10 h-10 rounded-full shadow-md transition-all ${newMessage.trim() && !sending
-                            ? "bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] active:scale-95"
-                            : "bg-[var(--background-subtle)] text-[var(--foreground-light)] cursor-not-allowed"
-                            }`}
-                    >
-                        {sending ? (
-                            <div className="spinner" style={{ width: 16, height: 16 }}></div>
-                        ) : (
-                            <span className="material-symbols-outlined">send</span>
-                        )}
-                    </button>
-                </div>
+            {/* Send bar */}
+            <div style={{ display: "flex", gap: "var(--space-sm)", padding: "var(--space-md) 0", borderTop: "1px solid var(--border-light)" }}>
+                <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
+                    placeholder="Type a message..." className="field-input" style={{ flex: 1 }} />
+                <button className="btn-primary" disabled={sending || !newMessage.trim()} onClick={sendMessage}
+                    style={{ display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap" }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>send</span>Send
+                </button>
             </div>
         </div>
     );

@@ -1,333 +1,314 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PageHeader } from "@/components/ui/PageHeader";
 import { createClient } from "@/lib/supabase/client";
-import { PostCard } from "@/components/dashboard/PostCard";
-import { CreatePostModal } from "@/components/dashboard/CreatePostModal";
-import { CommentsModal } from "@/components/dashboard/CommentsModal";
-import { Post, Comment } from "@/types/dashboard";
+import { formatDistanceToNow } from "@/lib/utils";
+
+interface Post {
+    id: string;
+    content: string;
+    image_url: string | null;
+    created_at: string;
+    author: { full_name: string; avatar_url: string | null } | null;
+    likes_count: number;
+    comments_count: number;
+    user_has_liked: boolean;
+}
+
+interface Comment {
+    id: string;
+    content: string;
+    created_at: string;
+    author: { full_name: string; avatar_url: string | null } | null;
+}
 
 export default function NGOPostsPage() {
     const supabase = createClient();
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [activeTab, setActiveTab] = useState<"all" | "drafts" | "scheduled">("all");
+    const [newPostContent, setNewPostContent] = useState("");
+    const [submitting, setSubmitting] = useState(false);
+    const [commentModal, setCommentModal] = useState<{ postId: string; comments: Comment[] } | null>(null);
+    const [newComment, setNewComment] = useState("");
 
-    // Comments modal state
-    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-    const [comments, setComments] = useState<Comment[]>([]);
-    const [loadingComments, setLoadingComments] = useState(false);
-
-    // Current user info
-    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-    const [ngoName, setNgoName] = useState<string>("");
-
-    useEffect(() => {
-        fetchPosts();
-    }, [activeTab]);
+    useEffect(() => { fetchPosts(); }, []);
 
     async function fetchPosts() {
         setLoading(true);
         try {
             const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                setLoading(false);
-                return;
-            }
-            setCurrentUserId(user.id);
+            if (!user) { setLoading(false); return; }
 
-            // Get NGO ID for the user
             const { data: ngoData } = await supabase
-                .from("ngo_members")
-                .select("ngo_id")
-                .eq("user_id", user.id)
-                .single();
+                .from("ngo_members").select("ngo_id")
+                .eq("user_id", user.id).single();
 
             if (ngoData?.ngo_id) {
-                // Get NGO name separately
-                const { data: ngoInfo } = await supabase
-                    .from("ngos")
-                    .select("name")
-                    .eq("id", ngoData.ngo_id)
-                    .single();
-
-                setNgoName(ngoInfo?.name || "NGO");
-
-                // Build query
-                let query = supabase
-                    .from("posts")
-                    .select(`
-                        *,
-                        author:users(full_name, avatar_url)
-                    `)
-                    .eq("ngo_id", ngoData.ngo_id);
-
-                // Filter by tab
-                if (activeTab === "drafts") {
-                    query = query.is("published_at", null);
-                } else if (activeTab === "scheduled") {
-                    query = query.not("published_at", "is", null);
-                } else {
-                    query = query.not("published_at", "is", null);
-                }
-
-                const { data: postsData, error } = await query.order("created_at", { ascending: false });
+                const { data: postsData } = await supabase
+                    .from("posts").select("*, profiles!posts_user_id_fkey(full_name, avatar_url)")
+                    .eq("ngo_id", ngoData.ngo_id)
+                    .order("created_at", { ascending: false });
 
                 if (postsData) {
-                    // Check if user liked each post
-                    const postsWithLikes = await Promise.all(
-                        postsData.map(async (post: any) => {
-                            const { data: likeData } = await supabase
-                                .from("post_likes")
-                                .select("id")
-                                .eq("post_id", post.id)
-                                .eq("user_id", user.id)
-                                .single();
-
-                            return {
-                                ...post,
-                                is_liked: !!likeData,
-                            };
-                        })
-                    );
-                    setPosts(postsWithLikes as Post[]);
+                    setPosts(postsData.map((p: any) => ({
+                        ...p,
+                        author: p.profiles,
+                        likes_count: p.likes_count || 0,
+                        comments_count: p.comments_count || 0,
+                        user_has_liked: false,
+                    })));
                 }
             }
         } catch (error) {
             console.error("Error fetching posts:", error);
-        } finally {
-            setLoading(false);
-        }
+        } finally { setLoading(false); }
     }
 
-    async function toggleLike(postId: string) {
-        if (!currentUserId) return;
-
-        const post = posts.find(p => p.id === postId);
-        if (!post) return;
-
-        try {
-            if (post.is_liked) {
-                // Unlike
-                await supabase
-                    .from("post_likes")
-                    .delete()
-                    .eq("post_id", postId)
-                    .eq("user_id", currentUserId);
-
-                setPosts(posts.map(p =>
-                    p.id === postId
-                        ? { ...p, is_liked: false, likes_count: p.likes_count - 1 }
-                        : p
-                ));
-            } else {
-                // Like
-                await supabase
-                    .from("post_likes")
-                    .insert({ post_id: postId, user_id: currentUserId });
-
-                setPosts(posts.map(p =>
-                    p.id === postId
-                        ? { ...p, is_liked: true, likes_count: p.likes_count + 1 }
-                        : p
-                ));
-            }
-        } catch (error) {
-            console.error("Error toggling like:", error);
-        }
-    }
-
-    async function openCommentsModal(post: Post) {
-        setSelectedPost(post);
-        setLoadingComments(true);
-
-        try {
-            const { data, error } = await supabase
-                .from("post_comments")
-                .select(`
-                    *,
-                    user:users(full_name, avatar_url)
-                `)
-                .eq("post_id", post.id)
-                .order("created_at", { ascending: true });
-
-            if (data) {
-                setComments(data as any[]);
-            }
-        } catch (error) {
-            console.error("Error fetching comments:", error);
-        } finally {
-            setLoadingComments(false);
-        }
-    }
-
-    async function handleAddComment(content: string) {
-        if (!selectedPost || !currentUserId) return;
-
-        try {
-            const { data, error } = await supabase
-                .from("post_comments")
-                .insert({
-                    post_id: selectedPost.id,
-                    user_id: currentUserId,
-                    content: content.trim(),
-                })
-                .select(`
-                    *,
-                    user:users(full_name, avatar_url)
-                `)
-                .single();
-
-            if (error) throw error;
-
-            if (data) {
-                setComments([...comments, data as any]);
-                // Update comments count in the post
-                setPosts(posts.map(p =>
-                    p.id === selectedPost.id
-                        ? { ...p, comments_count: p.comments_count + 1 }
-                        : p
-                ));
-            }
-        } catch (error) {
-            console.error("Error adding comment:", error);
-            alert("Failed to add comment");
-        }
-    }
-
-    async function handleCreatePost(data: { title: string; content: string; post_type: string }) {
+    async function handleCreatePost() {
+        if (!newPostContent.trim()) return;
+        setSubmitting(true);
         try {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) return;
 
-            // Get NGO ID
             const { data: ngoData } = await supabase
-                .from("ngo_members")
-                .select("ngo_id")
-                .eq("user_id", user.id)
-                .single();
+                .from("ngo_members").select("ngo_id")
+                .eq("user_id", user.id).single();
 
-            if (!ngoData?.ngo_id) {
-                alert("You must be an NGO member to create posts");
-                return;
-            }
+            if (!ngoData?.ngo_id) return;
 
-            const { error } = await supabase.from("posts").insert({
+            await supabase.from("posts").insert({
+                user_id: user.id,
                 ngo_id: ngoData.ngo_id,
-                author_id: user.id,
-                title: data.title,
-                content: data.content,
-                post_type: data.post_type,
-                published_at: new Date().toISOString(),
+                content: newPostContent,
+                post_type: "ANNOUNCEMENT",
             });
 
-            if (error) throw error;
-
+            setNewPostContent("");
             setShowCreateModal(false);
             fetchPosts();
         } catch (error) {
             console.error("Error creating post:", error);
-            alert("Failed to create post");
+        } finally { setSubmitting(false); }
+    }
+
+    async function handleLike(postId: string) {
+        setPosts(posts.map(p => p.id === postId ? { ...p, user_has_liked: !p.user_has_liked, likes_count: p.user_has_liked ? p.likes_count - 1 : p.likes_count + 1 } : p));
+    }
+
+    async function openComments(postId: string) {
+        try {
+            const { data: comments } = await supabase
+                .from("comments").select("*, profiles!comments_user_id_fkey(full_name, avatar_url)")
+                .eq("post_id", postId).order("created_at", { ascending: true });
+
+            setCommentModal({ postId, comments: (comments || []).map((c: any) => ({ ...c, author: c.profiles })) });
+        } catch (error) {
+            console.error("Error fetching comments:", error);
+        }
+    }
+
+    async function handleAddComment() {
+        if (!newComment.trim() || !commentModal) return;
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            await supabase.from("comments").insert({
+                post_id: commentModal.postId,
+                user_id: user.id,
+                content: newComment,
+            });
+
+            setNewComment("");
+            openComments(commentModal.postId);
+        } catch (error) {
+            console.error("Error adding comment:", error);
         }
     }
 
     if (loading) {
         return (
-            <div className="space-y-6">
-                <PageHeader title="Posts" showBack fallbackRoute="/ngo" />
-                <div className="flex items-center justify-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]"></div>
-                </div>
+            <div className="dashboard-loading">
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
-            <PageHeader
-                title="Posts"
-                showBack
-                fallbackRoute="/ngo"
-                rightAction={
-                    <button
-                        onClick={() => setShowCreateModal(true)}
-                        className="flex items-center gap-1 px-4 py-2 bg-[var(--primary)] text-white text-sm font-semibold rounded-lg"
-                    >
-                        <span className="material-symbols-outlined text-lg">add</span>
-                        Create
-                    </button>
-                }
-            />
-
-            {/* Tabs */}
-            <div className="flex gap-2">
-                <button
-                    onClick={() => setActiveTab("all")}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${activeTab === "all" ? "bg-[var(--primary)] text-white" : "bg-gray-100"}`}
-                >
-                    All Posts
-                </button>
-                <button
-                    onClick={() => setActiveTab("drafts")}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${activeTab === "drafts" ? "bg-[var(--primary)] text-white" : "bg-gray-100"}`}
-                >
-                    Drafts
-                </button>
-                <button
-                    onClick={() => setActiveTab("scheduled")}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold min-h-[44px] ${activeTab === "scheduled" ? "bg-[var(--primary)] text-white" : "bg-gray-100"}`}
-                >
-                    Scheduled
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h1 className="page-title">Posts</h1>
+                <button onClick={() => setShowCreateModal(true)} className="btn btn-primary" style={{ gap: 6 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
+                    New Post
                 </button>
             </div>
 
-            {/* Posts List */}
-            <div className="space-y-4">
+            {/* Post List */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 {posts.length === 0 ? (
-                    <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-                        <span className="material-symbols-outlined text-4xl text-gray-400">article</span>
-                        <p className="text-gray-500 mt-2">No posts yet</p>
-                        <button
-                            onClick={() => setShowCreateModal(true)}
-                            className="mt-4 text-[var(--primary)] font-semibold"
-                        >
-                            Create your first post
-                        </button>
+                    <div className="empty-state-container">
+                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>article</span>
+                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No posts yet</p>
                     </div>
                 ) : (
-                    posts.map((post) => (
-                        <PostCard
-                            key={post.id}
-                            post={post}
-                            currentUserId={currentUserId}
-                            ngoName={ngoName}
-                            onLike={toggleLike}
-                            onComment={openCommentsModal}
-                        />
+                    posts.map(post => (
+                        <div key={post.id} className="card" style={{ padding: 18 }}>
+                            {/* Author Header */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                                <div style={{
+                                    width: 38, height: 38, borderRadius: '50%',
+                                    background: 'linear-gradient(135deg, var(--color-primary), #42A5F5)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    color: '#fff', fontWeight: 700, fontSize: 14, overflow: 'hidden',
+                                }}>
+                                    {post.author?.avatar_url
+                                        ? <img src={post.author.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        : (post.author?.full_name?.charAt(0) || "?")}
+                                </div>
+                                <div>
+                                    <p style={{ fontWeight: 600, fontSize: 13 }}>{post.author?.full_name || "Unknown"}</p>
+                                    <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>
+                                        {formatDistanceToNow(new Date(post.created_at))}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Content */}
+                            <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--color-text-body)', whiteSpace: 'pre-wrap' }}>{post.content}</p>
+
+                            {post.image_url && (
+                                <div style={{ marginTop: 12, borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+                                    <img src={post.image_url} alt="" style={{ width: '100%', maxHeight: 300, objectFit: 'cover' }} />
+                                </div>
+                            )}
+
+                            {/* Actions */}
+                            <div style={{ display: 'flex', gap: 16, marginTop: 14, paddingTop: 12, borderTop: '1px solid var(--color-border-subtle)' }}>
+                                <button
+                                    onClick={() => handleLike(post.id)}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: 4,
+                                        border: 'none', background: 'none', cursor: 'pointer', padding: 0,
+                                        color: post.user_has_liked ? '#DC2626' : 'var(--color-text-muted)', fontSize: 13, fontWeight: 500,
+                                    }}
+                                >
+                                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>{post.user_has_liked ? 'favorite' : 'favorite_border'}</span>
+                                    {post.likes_count}
+                                </button>
+                                <button
+                                    onClick={() => openComments(post.id)}
+                                    style={{ display: 'flex', alignItems: 'center', gap: 4, border: 'none', background: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-text-muted)', fontSize: 13, fontWeight: 500 }}
+                                >
+                                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chat_bubble_outline</span>
+                                    {post.comments_count}
+                                </button>
+                                <button style={{ display: 'flex', alignItems: 'center', gap: 4, border: 'none', background: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-text-muted)', fontSize: 13, fontWeight: 500, marginLeft: 'auto' }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>share</span>
+                                </button>
+                            </div>
+                        </div>
                     ))
                 )}
             </div>
 
-            {/* Comments Modal */}
-            {selectedPost && (
-                <CommentsModal
-                    post={selectedPost}
-                    comments={comments}
-                    loading={loadingComments}
-                    currentUserId={currentUserId}
-                    onClose={() => setSelectedPost(null)}
-                    onAddComment={handleAddComment}
-                />
-            )}
-
             {/* Create Post Modal */}
             {showCreateModal && (
-                <CreatePostModal
-                    onClose={() => setShowCreateModal(false)}
-                    onSubmit={handleCreatePost}
-                />
+                <>
+                    <div onClick={() => setShowCreateModal(false)} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} />
+                    <div style={{
+                        position: 'fixed', left: '50%', top: '50%', zIndex: 50,
+                        width: '100%', maxWidth: 440, transform: 'translate(-50%, -50%)',
+                        background: 'var(--color-bg-card)', borderRadius: 'var(--radius-lg)',
+                        boxShadow: 'var(--shadow-lg)', overflow: 'hidden',
+                    }}>
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h2 style={{ fontSize: 16, fontWeight: 700 }}>Create Announcement</h2>
+                            <button onClick={() => setShowCreateModal(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 4 }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
+                            </button>
+                        </div>
+                        <div style={{ padding: 18 }}>
+                            <textarea
+                                value={newPostContent}
+                                onChange={e => setNewPostContent(e.target.value)}
+                                placeholder="Share something with your community..."
+                                rows={5}
+                                className="field-input field-textarea"
+                                style={{ width: '100%' }}
+                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 }}>
+                                <button style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-text-muted)' }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 22 }}>add_photo_alternate</span>
+                                </button>
+                                <button
+                                    onClick={handleCreatePost}
+                                    disabled={!newPostContent.trim() || submitting}
+                                    className="btn btn-primary"
+                                    style={{ fontSize: 13, padding: '8px 20px', opacity: !newPostContent.trim() || submitting ? 0.5 : 1 }}
+                                >
+                                    {submitting ? "Posting..." : "Post"}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Comment Modal */}
+            {commentModal && (
+                <>
+                    <div onClick={() => setCommentModal(null)} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} />
+                    <div style={{
+                        position: 'fixed', left: '50%', top: '50%', zIndex: 50,
+                        width: '100%', maxWidth: 440, transform: 'translate(-50%, -50%)',
+                        background: 'var(--color-bg-card)', borderRadius: 'var(--radius-lg)',
+                        boxShadow: 'var(--shadow-lg)', overflow: 'hidden', maxHeight: '80vh', display: 'flex', flexDirection: 'column',
+                    }}>
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+                            <h2 style={{ fontSize: 16, fontWeight: 700 }}>Comments</h2>
+                            <button onClick={() => setCommentModal(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 4 }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
+                            </button>
+                        </div>
+                        <div style={{ flex: 1, overflowY: 'auto', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                            {commentModal.comments.length === 0 ? (
+                                <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', fontSize: 13 }}>No comments yet</p>
+                            ) : (
+                                commentModal.comments.map(c => (
+                                    <div key={c.id} style={{ display: 'flex', gap: 10 }}>
+                                        <div style={{
+                                            width: 30, height: 30, borderRadius: '50%', flexShrink: 0,
+                                            background: 'var(--color-primary-soft)', color: 'var(--color-primary)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontWeight: 700, fontSize: 12,
+                                        }}>{c.author?.full_name?.charAt(0) || "?"}</div>
+                                        <div>
+                                            <p style={{ fontSize: 12, fontWeight: 600 }}>{c.author?.full_name || "Unknown"} <span style={{ fontWeight: 400, color: 'var(--color-text-disabled)' }}>{formatDistanceToNow(new Date(c.created_at))}</span></p>
+                                            <p style={{ fontSize: 13, color: 'var(--color-text-body)', marginTop: 2 }}>{c.content}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                        <div style={{ padding: '12px 18px', borderTop: '1px solid var(--color-border-subtle)', display: 'flex', gap: 8, flexShrink: 0 }}>
+                            <input
+                                type="text"
+                                value={newComment}
+                                onChange={e => setNewComment(e.target.value)}
+                                placeholder="Write a comment..."
+                                className="field-input"
+                                style={{ flex: 1 }}
+                                onKeyDown={e => { if (e.key === 'Enter') handleAddComment(); }}
+                            />
+                            <button onClick={handleAddComment} className="btn btn-primary" style={{ padding: '6px 14px', minHeight: 0 }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>send</span>
+                            </button>
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );

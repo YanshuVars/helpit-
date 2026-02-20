@@ -1,15 +1,11 @@
 "use client";
 
-import { AppShell } from "@/components/ui/AppShell";
+import DashboardShell from "@/components/layout/DashboardShell";
 
 export default function AdminLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return (
-        <AppShell title="Admin" showSearch showNotifications>
-            {children}
-        </AppShell>
-    );
+    return <DashboardShell>{children}</DashboardShell>;
 }
