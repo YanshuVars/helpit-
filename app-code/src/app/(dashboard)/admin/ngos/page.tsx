@@ -54,27 +54,49 @@ export default function AdminNGOsPage() {
         n.email.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const statusColor: Record<string, string> = { ACTIVE: "var(--color-success)", SUSPENDED: "var(--color-danger)", INACTIVE: "var(--foreground-muted)" };
-    const verColor: Record<string, string> = { VERIFIED: "var(--color-success)", PENDING: "var(--color-warning)", REJECTED: "var(--color-danger)" };
+    const statusBadge: Record<string, { bg: string; text: string }> = {
+        ACTIVE: { bg: '#dcfce7', text: '#16a34a' },
+        SUSPENDED: { bg: '#fee2e2', text: '#dc2626' },
+        INACTIVE: { bg: '#f1f5f9', text: '#94a3b8' },
+    };
+    const verBadge: Record<string, { bg: string; text: string }> = {
+        VERIFIED: { bg: '#dcfce7', text: '#16a34a' },
+        PENDING: { bg: '#fef3c7', text: '#d97706' },
+        REJECTED: { bg: '#fee2e2', text: '#dc2626' },
+    };
+
+    const thStyle: React.CSSProperties = {
+        textAlign: 'left', padding: '12px 16px', fontSize: 11, fontWeight: 700,
+        color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em',
+    };
+    const tdStyle: React.CSSProperties = { padding: '14px 16px', fontSize: 14 };
+    const selectStyle: React.CSSProperties = {
+        padding: '10px 14px', borderRadius: 12, border: '1px solid #e2e8f0',
+        background: '#fff', fontSize: 13, fontWeight: 600, color: '#0f172a', cursor: 'pointer', outline: 'none',
+    };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             <div>
-                <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>NGOs</h1>
-                <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Manage registered NGOs</p>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>NGO Management</h2>
+                <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Manage registered NGOs and verifications</p>
             </div>
 
             {/* Filters */}
-            <div style={{ display: "flex", gap: "var(--space-sm)", flexWrap: "wrap" }}>
-                <input type="text" placeholder="Search NGOs..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                    className="field-input" style={{ flex: 1, minWidth: 200 }} />
-                <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <div style={{ flex: 1, minWidth: 220, position: 'relative' }}>
+                    <span className="material-symbols-outlined" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: 22 }}>search</span>
+                    <input type="text" placeholder="Search NGOs..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                        style={{ width: '100%', padding: '10px 14px 10px 46px', borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: 14, color: '#0f172a', outline: 'none' }}
+                        onFocus={e => e.target.style.borderColor = '#1de2d1'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
+                </div>
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={selectStyle}>
                     <option value="all">All Status</option>
                     <option value="ACTIVE">Active</option>
                     <option value="SUSPENDED">Suspended</option>
                     <option value="INACTIVE">Inactive</option>
                 </select>
-                <select value={verificationFilter} onChange={(e) => setVerificationFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                <select value={verificationFilter} onChange={e => setVerificationFilter(e.target.value)} style={selectStyle}>
                     <option value="all">All Verification</option>
                     <option value="VERIFIED">Verified</option>
                     <option value="PENDING">Pending</option>
@@ -82,59 +104,84 @@ export default function AdminNGOsPage() {
                 </select>
             </div>
 
-            {/* NGO table */}
+            {/* Table */}
             {loading ? (
-                <div style={{ display: "flex", justifyContent: "center", padding: "3rem 0" }}><div className="spinner" /></div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
+                    <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+                </div>
             ) : filteredNGOs.length === 0 ? (
-                <div className="card" style={{ textAlign: "center", padding: "var(--space-xl)" }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 40, color: "var(--foreground-light)" }}>domain</span>
-                    <p style={{ color: "var(--foreground-muted)", marginTop: 8 }}>No NGOs found</p>
+                <div style={{
+                    background: '#fff', borderRadius: 16, padding: 48, textAlign: 'center',
+                    border: '1px solid #e2e8f0',
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 44, color: '#cbd5e1' }}>domain</span>
+                    <p style={{ color: '#94a3b8', marginTop: 10, fontSize: 14 }}>No NGOs found</p>
                 </div>
             ) : (
-                <div className="card" style={{ overflow: "hidden", padding: 0 }}>
-                    <div style={{ overflowX: "auto" }}>
-                        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <div style={{
+                    background: '#fff', borderRadius: 16, overflow: 'hidden',
+                    border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                }}>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
-                                <tr style={{ background: "var(--background-subtle)" }}>
-                                    {["NGO", "Location", "Status", "Verification", "Donations", "Volunteers", "Actions"].map(h => (
-                                        <th key={h} style={{ textAlign: "left", padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-xs)", fontWeight: 600, color: "var(--foreground-muted)", textTransform: "uppercase" }}>{h}</th>
+                                <tr style={{ background: '#f8fafc' }}>
+                                    {['NGO', 'Location', 'Status', 'Verification', 'Donations', 'Volunteers', 'Actions'].map(h => (
+                                        <th key={h} style={thStyle}>{h}</th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredNGOs.map((ngo) => {
-                                    const sc = statusColor[ngo.status] || "var(--foreground-muted)";
-                                    const vc = verColor[ngo.verification_status] || "var(--foreground-muted)";
+                                {filteredNGOs.map(ngo => {
+                                    const sb = statusBadge[ngo.status] || statusBadge.INACTIVE;
+                                    const vb = verBadge[ngo.verification_status] || verBadge.PENDING;
                                     return (
-                                        <tr key={ngo.id} style={{ borderTop: "1px solid var(--border-light)" }}>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                                <p style={{ fontWeight: 600, fontSize: "var(--font-sm)" }}>{ngo.name}</p>
-                                                <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{ngo.email}</p>
+                                        <tr key={ngo.id} style={{ borderTop: '1px solid #f1f5f9', transition: 'background 150ms' }}
+                                            onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                                            onMouseLeave={e => e.currentTarget.style.background = ''}>
+                                            <td style={tdStyle}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                                    <div style={{
+                                                        width: 36, height: 36, borderRadius: 10,
+                                                        background: 'rgba(29,226,209,0.08)', display: 'flex',
+                                                        alignItems: 'center', justifyContent: 'center',
+                                                    }}>
+                                                        <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#1de2d1' }}>domain</span>
+                                                    </div>
+                                                    <div>
+                                                        <p style={{ fontWeight: 600, fontSize: 13, color: '#0f172a' }}>{ngo.name}</p>
+                                                        <p style={{ fontSize: 11, color: '#94a3b8' }}>{ngo.email}</p>
+                                                    </div>
+                                                </div>
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>
+                                            <td style={{ ...tdStyle, color: '#64748b', fontSize: 13 }}>
                                                 {[ngo.city, ngo.state].filter(Boolean).join(", ") || "N/A"}
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                                <span className="tab-pill" style={{ background: `${sc}20`, color: sc, fontSize: "var(--font-xs)" }}>{ngo.status}</span>
+                                            <td style={tdStyle}>
+                                                <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: sb.bg, color: sb.text }}>{ngo.status}</span>
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                                <span className="tab-pill" style={{ background: `${vc}20`, color: vc, fontSize: "var(--font-xs)" }}>{ngo.verification_status}</span>
+                                            <td style={tdStyle}>
+                                                <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: vb.bg, color: vb.text }}>{ngo.verification_status}</span>
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", color: "var(--color-success)", fontWeight: 500 }}>
+                                            <td style={{ ...tdStyle, color: '#16a34a', fontWeight: 600, fontSize: 13 }}>
                                                 {formatCurrency(ngo.total_donations_received || 0)}
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>
+                                            <td style={{ ...tdStyle, color: '#64748b', fontSize: 13 }}>
                                                 {ngo.volunteer_count || 0}
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                                <div style={{ display: "flex", gap: "var(--space-xs)" }}>
+                                            <td style={tdStyle}>
+                                                <div style={{ display: 'flex', gap: 6 }}>
                                                     {ngo.verification_status === "PENDING" && (
-                                                        <button className="btn-secondary" style={{ fontSize: "var(--font-xs)", color: "var(--color-success)", padding: "4px 12px" }}
-                                                            onClick={() => verifyNGO(ngo.id)}>Verify</button>
+                                                        <button onClick={() => verifyNGO(ngo.id)} style={{
+                                                            padding: '5px 14px', borderRadius: 8, border: '1px solid #dcfce7',
+                                                            background: '#f0fdf4', color: '#16a34a', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                                                        }}>Verify</button>
                                                     )}
                                                     {ngo.status === "ACTIVE" && (
-                                                        <button className="btn-secondary" style={{ fontSize: "var(--font-xs)", color: "var(--color-danger)", padding: "4px 12px" }}
-                                                            onClick={() => suspendNGO(ngo.id)}>Suspend</button>
+                                                        <button onClick={() => suspendNGO(ngo.id)} style={{
+                                                            padding: '5px 14px', borderRadius: 8, border: '1px solid #fee2e2',
+                                                            background: '#fef2f2', color: '#dc2626', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                                                        }}>Suspend</button>
                                                     )}
                                                 </div>
                                             </td>

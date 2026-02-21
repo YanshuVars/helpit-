@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-/* ── mock data ── */
 const mockAuditLogs = [
     { id: "1", timestamp: "2026-02-18T12:30:00Z", action: "USER_SUSPENDED", category: "USER_MANAGEMENT", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "u8", name: "Meera Joshi", type: "USER" }, details: "User suspended for policy violation", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { reason: "Spam activities", duration: "30 days" } },
     { id: "2", timestamp: "2026-02-18T11:45:00Z", action: "NGO_VERIFIED", category: "NGO_MANAGEMENT", actor: { id: "admin1", name: "Admin User", role: "PLATFORM_ADMIN" }, target: { id: "ngo4", name: "Green Earth Initiative", type: "NGO" }, details: "NGO verification approved after document review", ipAddress: "192.168.1.100", userAgent: "Chrome/120.0.0", metadata: { documentsReviewed: 5, verificationNotes: "All documents verified" } },
@@ -34,8 +33,8 @@ export default function AuditLogsPage() {
     });
 
     const catColor: Record<string, string> = {
-        USER_MANAGEMENT: "var(--color-info)", NGO_MANAGEMENT: "var(--primary)",
-        DONATION: "var(--color-success)", MODERATION: "var(--color-danger)", PLATFORM: "var(--foreground-muted)",
+        USER_MANAGEMENT: '#3b82f6', NGO_MANAGEMENT: '#1de2d1',
+        DONATION: '#16a34a', MODERATION: '#dc2626', PLATFORM: '#8b5cf6',
     };
     const actionIcon: Record<string, string> = {
         USER_SUSPENDED: "block", NGO_VERIFIED: "verified", NGO_SUSPENDED: "domain_disabled",
@@ -51,155 +50,211 @@ export default function AuditLogsPage() {
         };
     };
 
+    const thStyle: React.CSSProperties = {
+        textAlign: 'left', padding: '12px 16px', fontSize: 11, fontWeight: 700,
+        color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em',
+    };
+    const tdStyle: React.CSSProperties = { padding: '14px 16px', fontSize: 14 };
+    const selectStyle: React.CSSProperties = {
+        padding: '10px 14px', borderRadius: 12, border: '1px solid #e2e8f0',
+        background: '#fff', fontSize: 13, fontWeight: 600, color: '#0f172a', cursor: 'pointer', outline: 'none',
+    };
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Audit Logs</h1>
-                    <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Track all platform activities and changes</p>
+                    <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>Audit Logs</h2>
+                    <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Track all platform activities and changes</p>
                 </div>
-                <button className="btn-secondary" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button style={{
+                    display: 'flex', alignItems: 'center', gap: 8, padding: '10px 18px',
+                    borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff',
+                    fontSize: 13, fontWeight: 600, color: '#0f172a', cursor: 'pointer',
+                }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 18 }}>download</span>Export Logs
                 </button>
             </div>
 
-            {/* Stats row */}
-            <div className="stat-grid">
+            {/* Stats */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
                 {[
-                    { label: "Total Actions Today", value: "1,234" },
-                    { label: "User Management", value: "456", color: "var(--color-info)" },
-                    { label: "NGO Management", value: "234", color: "var(--primary)" },
-                    { label: "Moderation Actions", value: "89", color: "var(--color-danger)" },
+                    { label: 'Total Actions Today', value: '1,234', color: '#0f172a' },
+                    { label: 'User Management', value: '456', color: '#3b82f6' },
+                    { label: 'NGO Management', value: '234', color: '#1de2d1' },
+                    { label: 'Moderation Actions', value: '89', color: '#dc2626' },
                 ].map(s => (
-                    <div key={s.label} className="stat-card">
-                        <p className="stat-value" style={{ color: s.color }}>{s.value}</p>
-                        <p className="stat-label">{s.label}</p>
+                    <div key={s.label} style={{
+                        background: '#fff', padding: 22, borderRadius: 16,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
+                        <p style={{ fontSize: 26, fontWeight: 800, color: s.color }}>{s.value}</p>
+                        <p style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8', marginTop: 2 }}>{s.label}</p>
                     </div>
                 ))}
             </div>
 
             {/* Filters */}
-            <div className="card" style={{ display: "flex", flexDirection: "column", gap: "var(--space-md)" }}>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-sm)" }}>
-                    <div style={{ flex: 1, minWidth: 200, position: "relative" }}>
-                        <span className="material-symbols-outlined" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--foreground-light)" }}>search</span>
-                        <input type="text" placeholder="Search by actor, target, or details..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                            className="field-input" style={{ paddingLeft: 40 }} />
+            <div style={{
+                background: '#fff', borderRadius: 16, padding: 20,
+                border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: 14,
+            }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                    <div style={{ flex: 1, minWidth: 220, position: 'relative' }}>
+                        <span className="material-symbols-outlined" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: 22 }}>search</span>
+                        <input type="text" placeholder="Search by actor, target, or details..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                            style={{ width: '100%', padding: '10px 14px 10px 46px', borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: 14, color: '#0f172a', outline: 'none' }}
+                            onFocus={e => e.target.style.borderColor = '#1de2d1'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
                     </div>
-                    <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                    <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} style={selectStyle}>
                         {categoryFilters.map(c => <option key={c} value={c}>{c === "ALL" ? "All Categories" : c.replace(/_/g, " ")}</option>)}
                     </select>
-                    <select value={actionFilter} onChange={(e) => setActionFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                    <select value={actionFilter} onChange={e => setActionFilter(e.target.value)} style={selectStyle}>
                         {actionFilters.map(a => <option key={a} value={a}>{a === "ALL" ? "All Actions" : a.replace(/_/g, " ")}</option>)}
                     </select>
                 </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-md)" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <label className="field-label" style={{ marginBottom: 0 }}>From:</label>
-                        <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="field-input" style={{ width: "auto" }} />
+                <div style={{ display: 'flex', gap: 16 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <label style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>From:</label>
+                        <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
+                            style={{ padding: '8px 12px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 13, color: '#0f172a', outline: 'none' }} />
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <label className="field-label" style={{ marginBottom: 0 }}>To:</label>
-                        <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="field-input" style={{ width: "auto" }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <label style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>To:</label>
+                        <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
+                            style={{ padding: '8px 12px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 13, color: '#0f172a', outline: 'none' }} />
                     </div>
                 </div>
             </div>
 
             {/* Table */}
-            <div className="card" style={{ overflow: "hidden", padding: 0 }}>
-                <div style={{ overflowX: "auto" }}>
-                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <div style={{
+                background: '#fff', borderRadius: 16, overflow: 'hidden',
+                border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+            }}>
+                <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
-                            <tr style={{ background: "var(--background-subtle)" }}>
-                                {["Timestamp", "Action", "Actor", "Target", "Details", "IP"].map(h => (
-                                    <th key={h} style={{ textAlign: "left", padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-xs)", fontWeight: 600, color: "var(--foreground-muted)", textTransform: "uppercase" }}>{h}</th>
+                            <tr style={{ background: '#f8fafc' }}>
+                                {['Timestamp', 'Action', 'Actor', 'Target', 'Details', 'IP'].map(h => (
+                                    <th key={h} style={thStyle}>{h}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredLogs.map((log) => {
+                            {filteredLogs.map(log => {
                                 const { date, time } = fmtTs(log.timestamp);
-                                const cc = catColor[log.category] || "var(--foreground-muted)";
+                                const cc = catColor[log.category] || '#94a3b8';
                                 return (
-                                    <tr key={log.id} style={{ borderTop: "1px solid var(--border-light)", cursor: "pointer" }}
-                                        onClick={() => setSelectedLog(log)}>
-                                        <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                            <p style={{ fontSize: "var(--font-sm)" }}>{date}</p>
-                                            <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{time}</p>
+                                    <tr key={log.id} style={{ borderTop: '1px solid #f1f5f9', cursor: 'pointer', transition: 'background 150ms' }}
+                                        onClick={() => setSelectedLog(log)}
+                                        onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                                        onMouseLeave={e => e.currentTarget.style.background = ''}>
+                                        <td style={tdStyle}>
+                                            <p style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>{date}</p>
+                                            <p style={{ fontSize: 11, color: '#94a3b8' }}>{time}</p>
                                         </td>
-                                        <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                                <div style={{ width: 32, height: 32, borderRadius: "var(--radius-md)", background: `${cc}20`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                    <span className="material-symbols-outlined" style={{ fontSize: 16, color: cc }}>{actionIcon[log.action] || "info"}</span>
+                                        <td style={tdStyle}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                                <div style={{
+                                                    width: 34, height: 34, borderRadius: 10,
+                                                    background: `${cc}15`, display: 'flex',
+                                                    alignItems: 'center', justifyContent: 'center',
+                                                }}>
+                                                    <span className="material-symbols-outlined" style={{ fontSize: 18, color: cc }}>{actionIcon[log.action] || 'info'}</span>
                                                 </div>
                                                 <div>
-                                                    <p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{log.action.replace(/_/g, " ")}</p>
-                                                    <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{log.category.replace(/_/g, " ")}</p>
+                                                    <p style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>{log.action.replace(/_/g, " ")}</p>
+                                                    <p style={{ fontSize: 11, color: '#94a3b8' }}>{log.category.replace(/_/g, " ")}</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                            <p style={{ fontSize: "var(--font-sm)" }}>{log.actor.name}</p>
-                                            <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{log.actor.role.replace(/_/g, " ")}</p>
+                                        <td style={tdStyle}>
+                                            <p style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>{log.actor.name}</p>
+                                            <p style={{ fontSize: 11, color: '#94a3b8' }}>{log.actor.role.replace(/_/g, " ")}</p>
                                         </td>
-                                        <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                            <p style={{ fontSize: "var(--font-sm)" }}>{log.target.name}</p>
-                                            <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{log.target.type}</p>
+                                        <td style={tdStyle}>
+                                            <p style={{ fontSize: 13, fontWeight: 600, color: '#0f172a' }}>{log.target.name}</p>
+                                            <p style={{ fontSize: 11, color: '#94a3b8' }}>{log.target.type}</p>
                                         </td>
-                                        <td style={{ padding: "var(--space-sm) var(--space-md)", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>{log.details}</td>
-                                        <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", fontFamily: "monospace", color: "var(--foreground-muted)" }}>{log.ipAddress}</td>
+                                        <td style={{ ...tdStyle, maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#64748b', fontSize: 13 }}>{log.details}</td>
+                                        <td style={{ ...tdStyle, fontFamily: 'monospace', fontSize: 12, color: '#94a3b8' }}>{log.ipAddress}</td>
                                     </tr>
                                 );
                             })}
                         </tbody>
                     </table>
                 </div>
-
-                {/* Pagination */}
-                <div style={{ padding: "var(--space-sm) var(--space-md)", borderTop: "1px solid var(--border-light)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <p style={{ fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>Showing {filteredLogs.length} of {mockAuditLogs.length} logs</p>
-                    <div style={{ display: "flex", gap: "var(--space-sm)" }}>
-                        <button className="btn-secondary" disabled style={{ fontSize: "var(--font-sm)", opacity: 0.5 }}>Previous</button>
-                        <button className="btn-secondary" style={{ fontSize: "var(--font-sm)" }}>Next</button>
+                <div style={{ padding: '12px 20px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <p style={{ fontSize: 13, color: '#94a3b8' }}>Showing {filteredLogs.length} of {mockAuditLogs.length} logs</p>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                        <button disabled style={{ padding: '8px 16px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: 13, fontWeight: 600, color: '#cbd5e1', cursor: 'not-allowed' }}>Previous</button>
+                        <button style={{ padding: '8px 16px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', fontSize: 13, fontWeight: 600, color: '#0f172a', cursor: 'pointer' }}>Next</button>
                     </div>
                 </div>
             </div>
 
-            {/* Log detail modal */}
+            {/* Log Detail Modal */}
             {selectedLog && (
-                <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-                    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)" }} onClick={() => setSelectedLog(null)} />
-                    <div className="card" style={{ position: "relative", width: "100%", maxWidth: 480, display: "flex", flexDirection: "column", gap: "var(--space-md)" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <h2 style={{ fontSize: "var(--font-lg)", fontWeight: 600 }}>Log Details</h2>
-                            <button onClick={() => setSelectedLog(null)} style={{ padding: 8, border: "none", background: "transparent", cursor: "pointer", borderRadius: "var(--radius-md)" }}>
-                                <span className="material-symbols-outlined">close</span>
+                <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} onClick={() => setSelectedLog(null)} />
+                    <div style={{
+                        position: 'relative', width: '100%', maxWidth: 520,
+                        background: '#fff', borderRadius: 20, padding: 28,
+                        boxShadow: '0 24px 48px rgba(0,0,0,0.12)',
+                        display: 'flex', flexDirection: 'column', gap: 20,
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h2 style={{ fontSize: 18, fontWeight: 800, color: '#0f172a' }}>Log Details</h2>
+                            <button onClick={() => setSelectedLog(null)} style={{ width: 36, height: 36, borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
                             </button>
                         </div>
-                        <div style={{ background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", padding: "var(--space-md)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)" }}>
-                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Timestamp</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{fmtTs(selectedLog.timestamp).date} at {fmtTs(selectedLog.timestamp).time}</p></div>
-                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Category</p><span className="tab-pill" style={{ fontSize: "var(--font-xs)", background: `${catColor[selectedLog.category]}20`, color: catColor[selectedLog.category] }}>{selectedLog.category.replace(/_/g, " ")}</span></div>
-                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Actor</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{selectedLog.actor.name}</p></div>
-                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Target</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{selectedLog.target.name}</p></div>
+                        <div style={{ background: '#f8fafc', borderRadius: 14, padding: 18, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                            <div>
+                                <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>Timestamp</p>
+                                <p style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', marginTop: 2 }}>{fmtTs(selectedLog.timestamp).date} at {fmtTs(selectedLog.timestamp).time}</p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>Category</p>
+                                <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: `${catColor[selectedLog.category] || '#94a3b8'}15`, color: catColor[selectedLog.category] || '#94a3b8' }}>{selectedLog.category.replace(/_/g, " ")}</span>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>Actor</p>
+                                <p style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', marginTop: 2 }}>{selectedLog.actor.name}</p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>Target</p>
+                                <p style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', marginTop: 2 }}>{selectedLog.target.name}</p>
+                            </div>
                         </div>
-                        <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", marginBottom: 4 }}>Action Details</p><p style={{ fontSize: "var(--font-sm)", background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", padding: "var(--space-sm)" }}>{selectedLog.details}</p></div>
+                        <div>
+                            <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 6 }}>Action Details</p>
+                            <p style={{ fontSize: 14, color: '#64748b', background: '#f8fafc', borderRadius: 12, padding: 14, lineHeight: 1.6 }}>{selectedLog.details}</p>
+                        </div>
                         {selectedLog.metadata && Object.keys(selectedLog.metadata).length > 0 && (
                             <div>
-                                <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", marginBottom: 8 }}>Additional Data</p>
-                                <div style={{ background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", padding: "var(--space-sm)" }}>
+                                <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 6 }}>Additional Data</p>
+                                <div style={{ background: '#f8fafc', borderRadius: 12, padding: 14 }}>
                                     {Object.entries(selectedLog.metadata).map(([k, v]) => (
-                                        <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: "var(--font-sm)", padding: "4px 0" }}>
-                                            <span style={{ color: "var(--foreground-muted)" }}>{k}:</span>
-                                            <span style={{ fontWeight: 500 }}>{String(v)}</span>
+                                        <div key={k} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '5px 0', borderBottom: '1px solid #f1f5f9' }}>
+                                            <span style={{ color: '#94a3b8' }}>{k}:</span>
+                                            <span style={{ fontWeight: 600, color: '#0f172a' }}>{String(v)}</span>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         )}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)", paddingTop: "var(--space-md)", borderTop: "1px solid var(--border-light)" }}>
-                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>IP Address</p><p style={{ fontSize: "var(--font-sm)", fontFamily: "monospace" }}>{selectedLog.ipAddress}</p></div>
-                            <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>User Agent</p><p style={{ fontSize: "var(--font-sm)" }}>{selectedLog.userAgent}</p></div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
+                            <div>
+                                <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>IP Address</p>
+                                <p style={{ fontSize: 13, fontFamily: 'monospace', color: '#0f172a', marginTop: 2 }}>{selectedLog.ipAddress}</p>
+                            </div>
+                            <div>
+                                <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>User Agent</p>
+                                <p style={{ fontSize: 13, color: '#0f172a', marginTop: 2 }}>{selectedLog.userAgent}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

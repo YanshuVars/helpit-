@@ -45,7 +45,7 @@ export default function HomePage() {
             {/* Nav links */}
             <nav style={{ display: "flex", gap: 32, alignItems: "center" }}>
               <Link href="/" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Home</Link>
-              <Link href="/requests" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Explore NGOs</Link>
+              <Link href="/login" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Explore NGOs</Link>
               <Link href="/register/volunteer" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Volunteer</Link>
               <Link href="/donor/donate" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Donate</Link>
             </nav>

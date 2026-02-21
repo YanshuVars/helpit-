@@ -21,14 +21,12 @@ export default function AssignmentDetailPage() {
     const assignmentId = params.id as string;
     const [assignment, setAssignment] = useState<AssignmentDetail | null>(null);
     const [loading, setLoading] = useState(true);
-    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchAssignment() {
             const supabase = createClient();
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) { setLoading(false); return; }
-            setCurrentUserId(session.user.id);
 
             const { data: assignmentData } = await supabase.from('volunteer_assignments').select('id, status, hours_spent, request_id').eq('id', assignmentId).single();
             if (!assignmentData) { setLoading(false); return; }
@@ -64,116 +62,193 @@ export default function AssignmentDetailPage() {
         router.push('/volunteer/assignments');
     };
 
-    const statusStyles: Record<string, { bg: string; text: string }> = {
-        ASSIGNED: { bg: '#E3F2FD', text: '#1565C0' },
-        IN_PROGRESS: { bg: '#F3E5F5', text: '#7B1FA2' },
-        COMPLETED: { bg: '#E8F5E9', text: '#2E7D32' },
+    const statusConfig: Record<string, { bg: string; text: string; icon: string }> = {
+        ASSIGNED: { bg: '#dbeafe', text: '#1e40af', icon: 'assignment' },
+        IN_PROGRESS: { bg: '#ede9fe', text: '#7c3aed', icon: 'pending_actions' },
+        COMPLETED: { bg: '#dcfce7', text: '#166534', icon: 'check_circle' },
     };
 
-    const progress = assignment?.request?.required_volunteers
-        ? Math.round((assignment.request.assigned_volunteers / assignment.request.required_volunteers) * 100) : 0;
-
     if (loading) {
-        return <div className="dashboard-loading"><div className="spinner" /></div>;
-    }
-
-    if (!assignment) {
         return (
-            <div className="empty-state-container" style={{ minHeight: '60vh' }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 48, color: 'var(--color-text-disabled)' }}>error</span>
-                <h2 style={{ fontSize: 20, fontWeight: 700, marginTop: 8 }}>Assignment Not Found</h2>
-                <Link href="/volunteer/assignments" className="btn btn-primary" style={{ marginTop: 16, textDecoration: 'none' }}>Back to Assignments</Link>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
             </div>
         );
     }
 
-    const ss = statusStyles[assignment.status] || statusStyles.ASSIGNED;
+    if (!assignment) {
+        return (
+            <div style={{ textAlign: 'center', padding: 64 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#cbd5e1' }}>error</span>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginTop: 12 }}>Assignment Not Found</h3>
+                <Link href="/volunteer/assignments" style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    marginTop: 16, padding: '10px 20px', borderRadius: 10,
+                    background: '#1de2d1', color: '#0f172a',
+                    fontSize: 13, fontWeight: 700, textDecoration: 'none',
+                }}>Back to Assignments</Link>
+            </div>
+        );
+    }
 
-    const details = [
-        { icon: 'calendar_today', label: 'Date & Time', value: assignment.request.scheduled_date ? new Date(assignment.request.scheduled_date).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Not scheduled' },
-        { icon: 'location_on', label: 'Location', value: assignment.request.location || 'Location not specified' },
-        { icon: 'business', label: 'Organization', value: assignment.request.ngo.name },
-    ];
+    const ss = statusConfig[assignment.status] || statusConfig.ASSIGNED;
+    const progress = assignment.request.required_volunteers
+        ? Math.round((assignment.request.assigned_volunteers / assignment.request.required_volunteers) * 100) : 0;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+            {/* Header */}
             <div>
-                <Link href="/volunteer/assignments" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span> Back
+                <Link href="/volunteer/assignments" style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    color: '#64748b', textDecoration: 'none', fontSize: 13, fontWeight: 600, marginBottom: 8,
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>arrow_back</span>
+                    Assignments
                 </Link>
-                <h1 className="page-title">Assignment Details</h1>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                    Assignment Details
+                </h2>
             </div>
 
-            {/* Status Card */}
-            <div className="card" style={{ padding: 16 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <h2 style={{ fontWeight: 700, fontSize: 17 }}>{assignment.request.title}</h2>
-                    <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 10, background: ss.bg, color: ss.text }}>{assignment.status.replace("_", " ")}</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 24, alignItems: 'start' }}>
+                {/* Main Content */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    {/* Title Card */}
+                    <div style={{
+                        background: '#fff', borderRadius: 16, padding: 24,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 16 }}>
+                            <div>
+                                <h3 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}>{assignment.request.title}</h3>
+                                <p style={{ fontSize: 14, color: '#64748b', marginTop: 4 }}>{assignment.request.ngo.name}</p>
+                            </div>
+                            <span style={{
+                                display: 'inline-flex', alignItems: 'center', gap: 4,
+                                padding: '5px 12px', borderRadius: 999,
+                                fontSize: 12, fontWeight: 700, background: ss.bg, color: ss.text,
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{ss.icon}</span>
+                                {assignment.status.replace('_', ' ')}
+                            </span>
+                        </div>
+
+                        {assignment.status !== 'COMPLETED' && (
+                            <div style={{ marginTop: 4 }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6, color: '#64748b' }}>
+                                    <span>Team Progress</span>
+                                    <span style={{ fontWeight: 700, color: '#0f172a' }}>{assignment.request.assigned_volunteers} / {assignment.request.required_volunteers}</span>
+                                </div>
+                                <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
+                                    <div style={{
+                                        height: '100%', background: 'linear-gradient(90deg, #1de2d1, #0ea5e9)',
+                                        borderRadius: 4, width: `${Math.min(progress, 100)}%`,
+                                        transition: 'width 400ms',
+                                    }} />
+                                </div>
+                            </div>
+                        )}
+
+                        {assignment.status === 'COMPLETED' && (
+                            <div style={{
+                                display: 'flex', alignItems: 'center', gap: 10, padding: 14,
+                                background: '#dcfce7', borderRadius: 12, marginTop: 4,
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 22, color: '#16a34a' }}>schedule</span>
+                                <span style={{ fontSize: 14, fontWeight: 600, color: '#166534' }}>{assignment.hours_spent || 0} hours contributed</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Description */}
+                    {assignment.request.description && (
+                        <div style={{
+                            background: '#fff', borderRadius: 16, padding: 24,
+                            border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                        }}>
+                            <h4 style={{ fontSize: 14, fontWeight: 700, color: '#0f172a', marginBottom: 10 }}>Description</h4>
+                            <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7 }}>{assignment.request.description}</p>
+                        </div>
+                    )}
+
+                    {/* Details */}
+                    <div style={{
+                        background: '#fff', borderRadius: 16, padding: 24,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
+                        <h4 style={{ fontSize: 14, fontWeight: 700, color: '#0f172a', marginBottom: 16 }}>Event Details</h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+                            {[
+                                { icon: 'calendar_today', label: 'Schedule', value: assignment.request.scheduled_date ? new Date(assignment.request.scheduled_date).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Not scheduled' },
+                                { icon: 'location_on', label: 'Location', value: assignment.request.location || 'Location not specified' },
+                                { icon: 'domain', label: 'Organization', value: assignment.request.ngo.name },
+                            ].map(d => (
+                                <div key={d.label} style={{ display: 'flex', gap: 14, alignItems: 'start' }}>
+                                    <div style={{
+                                        width: 40, height: 40, borderRadius: 10,
+                                        background: 'rgba(29,226,209,0.08)', display: 'flex',
+                                        alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                    }}>
+                                        <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#1de2d1' }}>{d.icon}</span>
+                                    </div>
+                                    <div>
+                                        <p style={{ fontSize: 12, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.03em' }}>{d.label}</p>
+                                        <p style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', marginTop: 2 }}>{d.value}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-                <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginBottom: 10 }}>{assignment.request.ngo.name}</p>
 
-                {assignment.status !== 'COMPLETED' && (
-                    <div style={{ marginTop: 4 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
-                            <span>Volunteers</span>
-                            <span style={{ fontWeight: 600 }}>{assignment.request.assigned_volunteers} / {assignment.request.required_volunteers}</span>
-                        </div>
-                        <div style={{ height: 6, background: 'var(--color-bg-subtle)', borderRadius: 3, overflow: 'hidden' }}>
-                            <div style={{ height: '100%', background: 'var(--color-primary)', borderRadius: 3, width: `${Math.min(progress, 100)}%`, transition: 'width 0.4s' }} />
-                        </div>
-                    </div>
-                )}
+                {/* Sidebar */}
+                <div style={{
+                    background: '#fff', borderRadius: 16, padding: 24,
+                    border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    position: 'sticky', top: 80,
+                }}>
+                    <h4 style={{ fontSize: 14, fontWeight: 700, color: '#0f172a', marginBottom: 20 }}>Quick Actions</h4>
 
-                {assignment.status === 'COMPLETED' && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10 }}>
-                        <span className="material-symbols-outlined" style={{ color: 'var(--color-primary)', fontSize: 20 }}>schedule</span>
-                        <span style={{ fontSize: 13, fontWeight: 500 }}>{assignment.hours_spent || 0} hours contributed</span>
-                    </div>
-                )}
+                    {assignment.status !== 'COMPLETED' ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                            <Link href={`/messages/${assignment.request.ngo.id}`} style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                                height: 44, borderRadius: 12,
+                                border: '1px solid #e2e8f0', background: '#fff',
+                                color: '#0f172a', fontSize: 13, fontWeight: 600,
+                                textDecoration: 'none',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chat</span>
+                                Contact NGO
+                            </Link>
+                            <button onClick={markComplete} style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                                height: 44, borderRadius: 12, border: 'none',
+                                background: '#1de2d1', color: '#0f172a',
+                                fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                boxShadow: '0 2px 8px rgba(29,226,209,0.2)',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>check</span>
+                                Mark Complete
+                            </button>
+                        </div>
+                    ) : (
+                        <div style={{ textAlign: 'center', padding: 20 }}>
+                            <div style={{
+                                width: 56, height: 56, borderRadius: '50%',
+                                background: 'linear-gradient(135deg, #1de2d1, #0ea5e9)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                margin: '0 auto 12px',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 28, color: '#fff' }}>check_circle</span>
+                            </div>
+                            <h3 style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>Completed! 🎉</h3>
+                            <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 4 }}>Thank you for your contribution</p>
+                        </div>
+                    )}
+                </div>
             </div>
-
-            {/* Description */}
-            {assignment.request.description && (
-                <div className="card" style={{ padding: 16 }}>
-                    <h3 style={{ fontWeight: 600, fontSize: 14, marginBottom: 6 }}>Description</h3>
-                    <p style={{ fontSize: 13, color: 'var(--color-text-muted)', lineHeight: 1.5 }}>{assignment.request.description}</p>
-                </div>
-            )}
-
-            {/* Details */}
-            <div className="card" style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
-                {details.map(d => (
-                    <div key={d.label} style={{ display: 'flex', gap: 10, alignItems: 'start' }}>
-                        <span className="material-symbols-outlined" style={{ color: 'var(--color-primary)', fontSize: 20 }}>{d.icon}</span>
-                        <div>
-                            <p style={{ fontWeight: 600, fontSize: 13 }}>{d.label}</p>
-                            <p style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>{d.value}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {/* Actions */}
-            {assignment.status !== 'COMPLETED' && (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                    <Link href={`/messages/${assignment.request.ngo.id}`} className="btn btn-secondary" style={{ justifyContent: 'center', gap: 6, textDecoration: 'none' }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chat</span> Contact NGO
-                    </Link>
-                    <button onClick={markComplete} className="btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'var(--color-success)', color: '#fff', border: 'none', borderRadius: 'var(--radius-lg)', fontWeight: 600, fontSize: 13, cursor: 'pointer', padding: '10px 16px' }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>check</span> Mark Complete
-                    </button>
-                </div>
-            )}
-
-            {assignment.status === 'COMPLETED' && (
-                <div style={{ textAlign: 'center', padding: 20 }}>
-                    <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#E8F5E9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 28, color: '#2E7D32' }}>check_circle</span>
-                    </div>
-                    <h3 style={{ fontWeight: 700, fontSize: 18 }}>Completed! 🎉</h3>
-                    <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 4 }}>Thank you for your contribution</p>
-                </div>
-            )}
         </div>
     );
 }

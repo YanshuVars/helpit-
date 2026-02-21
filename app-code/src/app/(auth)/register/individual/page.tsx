@@ -5,14 +5,24 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signUp } from "@/lib/api/users";
 
+/* ── shared styles ── */
+const inputStyle: React.CSSProperties = {
+    width: "100%", height: 44, borderRadius: 8,
+    border: "1px solid #e2e8f0", paddingLeft: 40, paddingRight: 16,
+    fontSize: 14, color: "#0f172a", background: "#fff",
+    outline: "none", boxSizing: "border-box",
+};
+const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: "#334155" };
+const iconStyle: React.CSSProperties = {
+    position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)",
+    fontSize: 20, color: "#94a3b8", pointerEvents: "none",
+};
+
 export default function IndividualRegisterPage() {
     const router = useRouter();
     const [formData, setFormData] = useState({
-        fullName: '',
-        email: '',
-        phone: '',
-        password: '',
-        confirmPassword: '',
+        fullName: '', email: '', phone: '',
+        password: '', confirmPassword: '',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -54,97 +64,100 @@ export default function IndividualRegisterPage() {
     };
 
     return (
-        <>
-            <Link href="/register" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 20, fontSize: 13 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_back</span>
-                Back to role selection
-            </Link>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            {/* Header */}
+            <div>
+                <h2 style={{ fontFamily: "'Merriweather', serif", fontSize: 28, fontWeight: 700, color: "#0f172a", marginBottom: 8 }}>
+                    Create Your Account
+                </h2>
+                <p style={{ fontSize: 15, color: "#64748b" }}>
+                    Join us to start making a difference today. It takes less than a minute.
+                </p>
+            </div>
 
-            <h1>Create Donor Account</h1>
-            <p className="auth-subtitle">Discover NGOs and make donations</p>
-
+            {/* Error */}
             {error && (
-                <div className="alert alert-error" style={{ marginBottom: 16 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>error</span>
+                <div style={{
+                    display: "flex", alignItems: "center", gap: 8, padding: "12px 16px",
+                    background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8,
+                    fontSize: 13, color: "#dc2626",
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>error</span>
                     {error}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div className="form-group">
-                    <label className="field-label">Full Name</label>
-                    <input
-                        type="text"
-                        name="fullName"
-                        placeholder="Enter your name"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        required
-                        className="field-input"
-                    />
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                {/* Full Name */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Full Name</label>
+                    <div style={{ position: "relative" }}>
+                        <span className="material-symbols-outlined" style={iconStyle}>person</span>
+                        <input name="fullName" type="text" placeholder="John Doe" value={formData.fullName} onChange={handleChange} required style={inputStyle} />
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label className="field-label">Email Address</label>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="name@example.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="field-input"
-                    />
+                {/* Email */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Email Address</label>
+                    <div style={{ position: "relative" }}>
+                        <span className="material-symbols-outlined" style={iconStyle}>mail</span>
+                        <input name="email" type="email" placeholder="john@example.com" value={formData.email} onChange={handleChange} required style={inputStyle} />
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label className="field-label">Phone Number</label>
-                    <input
-                        type="tel"
-                        name="phone"
-                        placeholder="Enter your phone (optional)"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="field-input"
-                    />
+                {/* Phone */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Phone Number</label>
+                    <div style={{ position: "relative" }}>
+                        <span className="material-symbols-outlined" style={iconStyle}>call</span>
+                        <input name="phone" type="tel" placeholder="+1 (555) 000-0000" value={formData.phone} onChange={handleChange} style={inputStyle} />
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label className="field-label">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Min 8 characters"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        minLength={8}
-                        className="field-input"
-                    />
+                {/* Password row */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        <label style={labelStyle}>Password</label>
+                        <div style={{ position: "relative" }}>
+                            <span className="material-symbols-outlined" style={iconStyle}>lock</span>
+                            <input name="password" type="password" placeholder="••••••••" value={formData.password} onChange={handleChange} required minLength={8} style={inputStyle} />
+                        </div>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        <label style={labelStyle}>Confirm Password</label>
+                        <div style={{ position: "relative" }}>
+                            <span className="material-symbols-outlined" style={iconStyle}>shield</span>
+                            <input name="confirmPassword" type="password" placeholder="••••••••" value={formData.confirmPassword} onChange={handleChange} required style={inputStyle} />
+                        </div>
+                    </div>
                 </div>
 
-                <div className="form-group">
-                    <label className="field-label">Confirm Password</label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Re-enter your password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        required
-                        className="field-input"
-                    />
-                </div>
+                {/* Terms */}
+                <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#475569" }}>
+                    <input type="checkbox" required style={{ accentColor: "#0f756d", width: 16, height: 16 }} />
+                    I agree to the <a href="#" style={{ color: "#0f756d", fontWeight: 600 }}>Terms of Service</a> and <a href="#" style={{ color: "#0f756d", fontWeight: 600 }}>Privacy Policy</a>.
+                </label>
 
-                <button type="submit" disabled={loading} className="auth-submit-btn">
+                {/* Submit */}
+                <button type="submit" disabled={loading} style={{
+                    width: "100%", height: 48, borderRadius: 8,
+                    background: loading ? "#5eada7" : "#0f756d",
+                    color: "#fff", fontWeight: 700, fontSize: 15,
+                    border: "none", cursor: loading ? "not-allowed" : "pointer",
+                    boxShadow: "0 1px 3px rgba(15,117,109,0.2)",
+                }}>
                     {loading ? 'Creating Account...' : 'Create Account'}
                 </button>
             </form>
 
-            <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--color-text-muted)', marginTop: 20 }}>
+            {/* Footer */}
+            <p style={{ textAlign: "center", fontSize: 14, color: "#475569" }}>
                 Already have an account?{" "}
-                <Link href="/login" className="auth-link" style={{ fontWeight: 600 }}>Sign in</Link>
+                <Link href="/login" style={{ fontWeight: 700, color: "#0f756d", textDecoration: "none" }}>
+                    Sign In
+                </Link>
             </p>
-        </>
+        </div>
     );
 }

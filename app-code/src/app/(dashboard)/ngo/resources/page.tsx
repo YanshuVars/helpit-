@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 interface Resource {
@@ -9,275 +9,213 @@ interface Resource {
     category: string;
     quantity: number;
     unit: string;
-    min_stock: number;
-    location: string | null;
-    notes: string | null;
-    updated_at: string;
+    status: string;
+    last_updated: string;
 }
 
-const categoryIcons: Record<string, string> = {
-    FOOD: "lunch_dining",
-    MEDICAL: "medical_services",
-    CLOTHING: "checkroom",
-    SHELTER: "night_shelter",
-    EQUIPMENT: "construction",
-    OTHER: "inventory_2",
+const statusMap: Record<string, { color: string; bg: string; label: string }> = {
+    available: { color: "#059669", bg: "rgba(16,185,129,0.08)", label: "Available" },
+    low: { color: "#d97706", bg: "rgba(245,158,11,0.08)", label: "Low Stock" },
+    depleted: { color: "#dc2626", bg: "rgba(239,68,68,0.08)", label: "Depleted" },
+    reserved: { color: "#2563eb", bg: "rgba(59,130,246,0.08)", label: "Reserved" },
 };
 
-export default function NGOResourcesPage() {
-    const supabase = createClient();
+const catIcons: Record<string, { icon: string; bg: string; color: string }> = {
+    Medical: { icon: "medical_services", bg: "rgba(239,68,68,0.1)", color: "#dc2626" },
+    Food: { icon: "restaurant", bg: "rgba(245,158,11,0.1)", color: "#d97706" },
+    Water: { icon: "water_drop", bg: "rgba(59,130,246,0.1)", color: "#2563eb" },
+    Shelter: { icon: "house", bg: "rgba(139,92,246,0.1)", color: "#7c3aed" },
+    Clothing: { icon: "checkroom", bg: "rgba(236,72,153,0.1)", color: "#db2777" },
+    Equipment: { icon: "construction", bg: "rgba(100,116,139,0.1)", color: "#475569" },
+};
+
+export default function ResourcesPage() {
     const [resources, setResources] = useState<Resource[]>([]);
     const [loading, setLoading] = useState(true);
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
-    const [formData, setFormData] = useState({
-        name: "", category: "FOOD", quantity: "", unit: "units", min_stock: "10", location: "", notes: "",
-    });
+    const [search, setSearch] = useState("");
 
-    useEffect(() => { fetchResources(); }, []);
+    useEffect(() => {
+        async function load() {
+            const supabase = createClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { setLoading(false); return; }
 
-    async function fetchResources() {
-        setLoading(true);
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) { setLoading(false); return; }
-
-            const { data: ngoData } = await supabase
+            const { data: membership } = await supabase
                 .from("ngo_members").select("ngo_id")
-                .eq("user_id", user.id).single();
+                .eq("user_id", session.user.id).single();
+            if (!membership) { setLoading(false); return; }
 
-            if (ngoData?.ngo_id) {
-                const { data: resourcesData } = await supabase
-                    .from("resources").select("*")
-                    .eq("ngo_id", ngoData.ngo_id)
-                    .order("name", { ascending: true });
-                if (resourcesData) setResources(resourcesData as Resource[]);
-            }
-        } catch (error) {
-            console.error("Error fetching resources:", error);
-        } finally { setLoading(false); }
-    }
+            const { data } = await supabase
+                .from("resources")
+                .select("id, name, category, quantity, unit, status, updated_at")
+                .eq("ngo_id", membership.ngo_id)
+                .order("updated_at", { ascending: false })
+                .limit(30);
 
-    async function handleAddResource(e: React.FormEvent) {
-        e.preventDefault();
-        setSubmitting(true);
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
-
-            const { data: ngoData } = await supabase
-                .from("ngo_members").select("ngo_id")
-                .eq("user_id", user.id).single();
-            if (!ngoData?.ngo_id) return;
-
-            await supabase.from("resources").insert({
-                ngo_id: ngoData.ngo_id,
-                name: formData.name,
-                category: formData.category,
-                quantity: parseInt(formData.quantity) || 0,
-                unit: formData.unit,
-                min_stock: parseInt(formData.min_stock) || 10,
-                location: formData.location || null,
-                notes: formData.notes || null,
-            });
-
-            setShowAddModal(false);
-            setFormData({ name: "", category: "FOOD", quantity: "", unit: "units", min_stock: "10", location: "", notes: "" });
-            fetchResources();
-        } catch (error) {
-            console.error("Error adding resource:", error);
-            alert("Failed to add resource");
-        } finally { setSubmitting(false); }
-    }
-
-    async function updateQuantity(resourceId: string, delta: number) {
-        const resource = resources.find(r => r.id === resourceId);
-        if (!resource) return;
-        const newQty = Math.max(0, resource.quantity + delta);
-        setResources(resources.map(r => r.id === resourceId ? { ...r, quantity: newQty } : r));
-        try {
-            await supabase.from("resources").update({ quantity: newQty }).eq("id", resourceId);
-        } catch (error) {
-            console.error("Error updating quantity:", error);
-            fetchResources();
+            setResources((data || []).map((r: any) => ({ ...r, last_updated: r.updated_at })));
+            setLoading(false);
         }
-    }
+        load();
+    }, []);
 
-    const getStockStatus = (resource: Resource) => {
-        if (resource.quantity === 0) return { label: "OUT", bg: '#FEE2E2', color: '#DC2626' };
-        if (resource.quantity <= resource.min_stock) return { label: "LOW", bg: '#FFF3E0', color: '#E65100' };
-        return { label: "OK", bg: '#E8F5E9', color: '#2E7D32' };
-    };
+    const totalItems = resources.reduce((s, r) => s + r.quantity, 0);
+    const lowItems = resources.filter(r => r.status === "low" || r.status === "depleted").length;
+    const categories = new Set(resources.map(r => r.category));
+
+    const filtered = resources.filter(r =>
+        !search || r.name.toLowerCase().includes(search.toLowerCase())
+    );
 
     if (loading) {
         return (
-            <div className="dashboard-loading">
-                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: "#1de2d1" }}>progress_activity</span>
             </div>
         );
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h1 className="page-title">Resources</h1>
-                <button onClick={() => setShowAddModal(true)} className="btn btn-primary" style={{ gap: 6 }}>
+        <div>
+            {/* Header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+                <div>
+                    <h2 style={{ fontSize: 26, fontWeight: 900, color: "#0f172a" }}>Resources & Inventory</h2>
+                    <p style={{ color: "#64748b", fontSize: 14, marginTop: 4 }}>Track supplies, equipment, and materials across relief programs.</p>
+                </div>
+                <button style={{
+                    display: "inline-flex", alignItems: "center", gap: 6,
+                    padding: "10px 20px", borderRadius: 8,
+                    background: "#1de2d1", color: "#0f172a",
+                    fontWeight: 700, fontSize: 13, border: "none", cursor: "pointer",
+                }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
-                    Add
+                    Add Resource
                 </button>
             </div>
 
-            {/* Stats Summary */}
-            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-                <div className="stat-card">
-                    <div className="stat-card-label">Total Items</div>
-                    <div className="stat-card-value">{resources.length}</div>
-                </div>
-                <div className="stat-card">
-                    <div className="stat-card-label">Low Stock</div>
-                    <div className="stat-card-value" style={{ color: '#E65100' }}>
-                        {resources.filter(r => r.quantity > 0 && r.quantity <= r.min_stock).length}
-                    </div>
-                </div>
-                <div className="stat-card">
-                    <div className="stat-card-label">Out of Stock</div>
-                    <div className="stat-card-value" style={{ color: '#DC2626' }}>
-                        {resources.filter(r => r.quantity === 0).length}
-                    </div>
-                </div>
-            </div>
-
-            {/* Resource List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {resources.length === 0 ? (
-                    <div className="empty-state-container">
-                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>inventory</span>
-                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No resources tracked yet</p>
-                    </div>
-                ) : (
-                    resources.map(resource => {
-                        const stock = getStockStatus(resource);
-                        const icon = categoryIcons[resource.category] || "inventory_2";
-                        return (
-                            <div key={resource.id} className="card" style={{ padding: '16px 18px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                    <div style={{
-                                        width: 42, height: 42, borderRadius: 10, flexShrink: 0,
-                                        background: 'var(--color-primary-soft)',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    }}>
-                                        <span className="material-symbols-outlined" style={{ color: 'var(--color-primary)', fontSize: 20 }}>{icon}</span>
-                                    </div>
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                            <span style={{ fontWeight: 600, fontSize: 14 }}>{resource.name}</span>
-                                            <span style={{
-                                                fontSize: 9, fontWeight: 700,
-                                                padding: '2px 6px', borderRadius: 'var(--radius-full)',
-                                                background: stock.bg, color: stock.color,
-                                            }}>{stock.label}</span>
-                                        </div>
-                                        <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
-                                            {resource.category} {resource.location ? `· ${resource.location}` : ""}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, marginTop: 10 }}>
-                                    <button
-                                        onClick={() => updateQuantity(resource.id, -1)}
-                                        style={{
-                                            width: 30, height: 30, borderRadius: 'var(--radius-sm)',
-                                            border: '1px solid var(--color-border)', background: 'var(--color-bg-card)',
-                                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        }}
-                                    >
-                                        <span className="material-symbols-outlined" style={{ fontSize: 16 }}>remove</span>
-                                    </button>
-                                    <span style={{ minWidth: 60, textAlign: 'center', fontSize: 14, fontWeight: 700 }}>
-                                        {resource.quantity} {resource.unit}
-                                    </span>
-                                    <button
-                                        onClick={() => updateQuantity(resource.id, 1)}
-                                        style={{
-                                            width: 30, height: 30, borderRadius: 'var(--radius-sm)',
-                                            border: '1px solid var(--color-border)', background: 'var(--color-bg-card)',
-                                            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        }}
-                                    >
-                                        <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>
-                                    </button>
-                                </div>
-                            </div>
-                        );
-                    })
-                )}
-            </div>
-
-            {/* Add Resource Modal */}
-            {showAddModal && (
-                <>
-                    <div onClick={() => setShowAddModal(false)} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} />
-                    <div style={{
-                        position: 'fixed', left: '50%', top: '50%', zIndex: 50,
-                        width: '100%', maxWidth: 440, transform: 'translate(-50%, -50%)',
-                        background: 'var(--color-bg-card)', borderRadius: 'var(--radius-lg)',
-                        boxShadow: 'var(--shadow-lg)', overflow: 'hidden', maxHeight: '90vh', overflowY: 'auto',
-                    }}>
-                        <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: 'var(--color-bg-card)', zIndex: 1 }}>
-                            <h2 style={{ fontSize: 16, fontWeight: 700 }}>Add Resource</h2>
-                            <button onClick={() => setShowAddModal(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 4 }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
-                            </button>
+            {/* Summary Cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 24 }}>
+                <div style={{
+                    background: "#fff", borderRadius: 12, padding: 18,
+                    border: "1px solid #f1f5f9", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div>
+                            <p style={{ fontSize: 12, color: "#94a3b8", fontWeight: 500 }}>Total Items</p>
+                            <p style={{ fontSize: 28, fontWeight: 700, color: "#0f172a", marginTop: 6 }}>{totalItems}</p>
                         </div>
-                        <form onSubmit={handleAddResource}>
-                            <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 14 }}>
-                                <div className="form-group">
-                                    <label className="field-label">Resource Name *</label>
-                                    <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required className="field-input" />
-                                </div>
-                                <div className="form-group">
-                                    <label className="field-label">Category</label>
-                                    <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} className="field-input">
-                                        <option value="FOOD">Food</option>
-                                        <option value="MEDICAL">Medical</option>
-                                        <option value="CLOTHING">Clothing</option>
-                                        <option value="SHELTER">Shelter</option>
-                                        <option value="EQUIPMENT">Equipment</option>
-                                        <option value="OTHER">Other</option>
-                                    </select>
-                                </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                                    <div className="form-group">
-                                        <label className="field-label">Quantity</label>
-                                        <input type="number" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: e.target.value })} className="field-input" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label className="field-label">Unit</label>
-                                        <input type="text" value={formData.unit} onChange={e => setFormData({ ...formData, unit: e.target.value })} className="field-input" />
-                                    </div>
-                                </div>
-                                <div className="form-group">
-                                    <label className="field-label">Minimum Stock Alert</label>
-                                    <input type="number" value={formData.min_stock} onChange={e => setFormData({ ...formData, min_stock: e.target.value })} className="field-input" />
-                                </div>
-                                <div className="form-group">
-                                    <label className="field-label">Storage Location</label>
-                                    <input type="text" value={formData.location} onChange={e => setFormData({ ...formData, location: e.target.value })} placeholder="e.g. Warehouse A" className="field-input" />
-                                </div>
-                                <div className="form-group">
-                                    <label className="field-label">Notes</label>
-                                    <textarea value={formData.notes} onChange={e => setFormData({ ...formData, notes: e.target.value })} rows={2} className="field-input field-textarea" />
-                                </div>
-                            </div>
-                            <div style={{ padding: '14px 18px', borderTop: '1px solid var(--color-border-subtle)', position: 'sticky', bottom: 0, background: 'var(--color-bg-card)' }}>
-                                <button type="submit" disabled={submitting} className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', height: 42, fontSize: 14, fontWeight: 700, opacity: submitting ? 0.5 : 1 }}>
-                                    {submitting ? "Adding..." : "Add Resource"}
-                                </button>
-                            </div>
-                        </form>
+                        <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(29,226,209,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <span className="material-symbols-outlined" style={{ color: "#1de2d1", fontVariationSettings: "'FILL' 1" }}>inventory_2</span>
+                        </div>
                     </div>
-                </>
-            )}
+                </div>
+                <div style={{
+                    background: "#fff", borderRadius: 12, padding: 18,
+                    border: "1px solid #f1f5f9", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div>
+                            <p style={{ fontSize: 12, color: "#94a3b8", fontWeight: 500 }}>Low / Depleted</p>
+                            <p style={{ fontSize: 28, fontWeight: 700, color: lowItems > 0 ? "#f59e0b" : "#0f172a", marginTop: 6 }}>{lowItems}</p>
+                        </div>
+                        <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(245,158,11,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <span className="material-symbols-outlined" style={{ color: "#d97706", fontVariationSettings: "'FILL' 1" }}>warning</span>
+                        </div>
+                    </div>
+                </div>
+                <div style={{
+                    background: "#fff", borderRadius: 12, padding: 18,
+                    border: "1px solid #f1f5f9", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div>
+                            <p style={{ fontSize: 12, color: "#94a3b8", fontWeight: 500 }}>Categories</p>
+                            <p style={{ fontSize: 28, fontWeight: 700, color: "#0f172a", marginTop: 6 }}>{categories.size}</p>
+                        </div>
+                        <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(139,92,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <span className="material-symbols-outlined" style={{ color: "#7c3aed", fontVariationSettings: "'FILL' 1" }}>category</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Search */}
+            <div style={{
+                position: "relative", marginBottom: 20,
+            }}>
+                <span className="material-symbols-outlined" style={{
+                    position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#94a3b8",
+                }}>search</span>
+                <input
+                    type="text" placeholder="Search resources..."
+                    value={search} onChange={e => setSearch(e.target.value)}
+                    style={{
+                        width: "100%", height: 44, paddingLeft: 42, borderRadius: 10,
+                        border: "1px solid #e2e8f0", fontSize: 13, outline: "none",
+                    }}
+                />
+            </div>
+
+            {/* Resources Table */}
+            <div style={{
+                background: "#fff", borderRadius: 12,
+                border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                overflow: "hidden",
+            }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                    <thead>
+                        <tr style={{ background: "rgba(248,250,252,0.5)", borderBottom: "1px solid #e2e8f0" }}>
+                            <th style={{ padding: "14px 20px", fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.1em" }}>Resource</th>
+                            <th style={{ padding: "14px 20px", fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.1em" }}>Category</th>
+                            <th style={{ padding: "14px 20px", fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: "center" }}>Quantity</th>
+                            <th style={{ padding: "14px 20px", fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.1em" }}>Status</th>
+                            <th style={{ padding: "14px 20px", fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.1em", textAlign: "right" }}>Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filtered.map(r => {
+                            const ci = catIcons[r.category] || catIcons.Equipment;
+                            const sm = statusMap[r.status] || statusMap.available;
+                            return (
+                                <tr key={r.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                                    <td style={{ padding: "14px 20px" }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                            <div style={{
+                                                width: 34, height: 34, borderRadius: 8,
+                                                background: ci.bg, display: "flex", alignItems: "center", justifyContent: "center",
+                                            }}>
+                                                <span className="material-symbols-outlined" style={{ fontSize: 18, color: ci.color }}>{ci.icon}</span>
+                                            </div>
+                                            <span style={{ fontSize: 13, fontWeight: 600 }}>{r.name}</span>
+                                        </div>
+                                    </td>
+                                    <td style={{ padding: "14px 20px", fontSize: 13, color: "#64748b" }}>{r.category}</td>
+                                    <td style={{ padding: "14px 20px", fontSize: 13, fontWeight: 700, textAlign: "center" }}>
+                                        {r.quantity} {r.unit || "units"}
+                                    </td>
+                                    <td style={{ padding: "14px 20px" }}>
+                                        <span style={{
+                                            fontSize: 11, fontWeight: 600, padding: "3px 10px",
+                                            borderRadius: 20, background: sm.bg, color: sm.color,
+                                        }}>{sm.label}</span>
+                                    </td>
+                                    <td style={{ padding: "14px 20px", fontSize: 12, color: "#94a3b8", textAlign: "right" }}>
+                                        {r.last_updated ? new Date(r.last_updated).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        {filtered.length === 0 && (
+                            <tr>
+                                <td colSpan={5} style={{ padding: 40, textAlign: "center", color: "#94a3b8" }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 36, marginBottom: 8 }}>inventory</span>
+                                    <p>No resources tracked yet</p>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

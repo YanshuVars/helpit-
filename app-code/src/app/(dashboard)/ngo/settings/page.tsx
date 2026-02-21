@@ -1,31 +1,87 @@
+"use client";
+
 import Link from "next/link";
 
-const settingsItems = [
-    { href: "/ngo/settings/profile", icon: "business", iconBg: "#E3F2FD", iconColor: "var(--color-primary)", title: "Organization Profile", desc: "Edit name, description, logo" },
-    { href: "/ngo/settings/members", icon: "group", iconBg: "#E8F5E9", iconColor: "#2E7D32", title: "Team Members", desc: "Manage admins and coordinators" },
-    { href: "/ngo/settings/audit", icon: "history", iconBg: "#EDE7F6", iconColor: "#4527A0", title: "Audit Log", desc: "View activity history" },
-    { href: "/notifications/settings", icon: "notifications", iconBg: "#FFF3E0", iconColor: "#E65100", title: "Notification Preferences", desc: "Email, push, in-app" },
+const sections = [
+    {
+        title: "Organization Profile",
+        desc: "Manage your NGO's public-facing information and branding",
+        icon: "business",
+        iconBg: "rgba(29,226,209,0.1)",
+        iconColor: "#1de2d1",
+        href: "/ngo/settings/profile",
+    },
+    {
+        title: "Team Members",
+        desc: "Add, remove, and manage roles for your team",
+        icon: "group",
+        iconBg: "rgba(59,130,246,0.1)",
+        iconColor: "#2563eb",
+        href: "/ngo/settings/members",
+    },
+    {
+        title: "Audit Log",
+        desc: "Review all administrative actions and changes",
+        icon: "history",
+        iconBg: "rgba(139,92,246,0.1)",
+        iconColor: "#7c3aed",
+        href: "/ngo/settings/audit",
+    },
+    {
+        title: "Notifications",
+        desc: "Configure email and in-app notification preferences",
+        icon: "notifications",
+        iconBg: "rgba(245,158,11,0.1)",
+        iconColor: "#d97706",
+        href: "#",
+    },
+    {
+        title: "Integrations",
+        desc: "Connect third-party services and payment gateways",
+        icon: "extension",
+        iconBg: "rgba(236,72,153,0.1)",
+        iconColor: "#db2777",
+        href: "#",
+    },
+    {
+        title: "Security",
+        desc: "Two-factor authentication and session management",
+        icon: "shield",
+        iconBg: "rgba(16,185,129,0.1)",
+        iconColor: "#059669",
+        href: "#",
+    },
 ];
 
-export default function NGOSettingsPage() {
+export default function SettingsHubPage() {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <h1 className="page-title">Settings</h1>
+        <div>
+            <div style={{ marginBottom: 32 }}>
+                <h2 style={{ fontSize: 28, fontWeight: 900, color: "#0f172a", letterSpacing: "-0.02em" }}>Settings</h2>
+                <p style={{ color: "#64748b", fontSize: 14, marginTop: 6 }}>Manage your organization, team and system preferences.</p>
+            </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {settingsItems.map(item => (
-                    <Link key={item.href} href={item.href} className="card card-interactive" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px', textDecoration: 'none' }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+                {sections.map(s => (
+                    <Link key={s.title} href={s.href} style={{ textDecoration: "none", color: "inherit" }}>
                         <div style={{
-                            width: 40, height: 40, borderRadius: '50%',
-                            background: item.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                            background: "#fff", borderRadius: 14, padding: 22,
+                            border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                            transition: "box-shadow 200ms, border-color 200ms",
+                            cursor: "pointer",
                         }}>
-                            <span className="material-symbols-outlined" style={{ color: item.iconColor, fontSize: 20 }}>{item.icon}</span>
+                            <div style={{
+                                width: 46, height: 46, borderRadius: 10, background: s.iconBg,
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                marginBottom: 16,
+                            }}>
+                                <span className="material-symbols-outlined" style={{
+                                    color: s.iconColor, fontVariationSettings: "'FILL' 1",
+                                }}>{s.icon}</span>
+                            </div>
+                            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{s.title}</h3>
+                            <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.5 }}>{s.desc}</p>
                         </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <p style={{ fontWeight: 600, fontSize: 14 }}>{item.title}</p>
-                            <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{item.desc}</p>
-                        </div>
-                        <span className="material-symbols-outlined" style={{ color: 'var(--color-text-disabled)', fontSize: 20 }}>chevron_right</span>
                     </Link>
                 ))}
             </div>

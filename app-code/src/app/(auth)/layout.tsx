@@ -4,63 +4,49 @@ export default function AuthLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="auth-layout">
-            {/* Brand panel — hidden on mobile via CSS */}
-            <div className="auth-brand">
-                {/* Decorative gradient circles */}
-                <div style={{
-                    position: 'absolute', top: -60, right: -60,
-                    width: 200, height: 200, borderRadius: '50%',
-                    background: 'rgba(255,255,255,0.05)'
-                }} />
-                <div style={{
-                    position: 'absolute', bottom: -40, left: -40,
-                    width: 160, height: 160, borderRadius: '50%',
-                    background: 'rgba(255,255,255,0.03)'
-                }} />
-
-                <div className="auth-brand-logo">
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                        <span style={{
-                            width: 36, height: 36, borderRadius: 8,
-                            background: 'var(--color-primary)', color: '#fff',
-                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                            fontWeight: 700, fontSize: 18
-                        }}>H</span>
-                        Helpit
+        <main style={{ display: "flex", minHeight: "100vh", width: "100%", fontFamily: "'Public Sans', sans-serif" }}>
+            {/* ── Left Brand Panel (45%) ── */}
+            <section style={{
+                position: "relative", display: "flex", flexDirection: "column",
+                justifyContent: "space-between", width: "45%", padding: "64px",
+                backgroundColor: "#0f756d", overflow: "hidden", color: "#fff",
+                /* Geometric plus-sign pattern */
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}>
+                {/* Brand identity */}
+                <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 16 }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 72, fontWeight: 300, color: "#fff" }}>
+                        diversity_1
                     </span>
+                    <h1 style={{ fontFamily: "'Merriweather', serif", fontSize: 52, fontWeight: 700, letterSpacing: "-1px", color: "#fff" }}>
+                        Helpit
+                    </h1>
+                    <p style={{ fontFamily: "'Merriweather', serif", fontStyle: "italic", fontSize: 22, color: "rgba(255,255,255,0.9)" }}>
+                        Connecting India for Good
+                    </p>
                 </div>
 
-                <h1 className="auth-brand-tagline">
-                    Connecting communities to make a difference
-                </h1>
-                <p className="auth-brand-subtitle">
-                    Join thousands of NGOs, donors, and volunteers working together to create meaningful change in communities around the world.
-                </p>
-
-                {/* Stats */}
-                <div style={{
-                    display: 'flex', gap: 32, marginTop: 48
-                }}>
-                    {[
-                        { value: '500+', label: 'NGOs Listed' },
-                        { value: '10K+', label: 'Active Volunteers' },
-                        { value: '₹2Cr+', label: 'Donations Raised' },
-                    ].map(stat => (
-                        <div key={stat.label}>
-                            <div style={{ fontSize: 22, fontWeight: 700, color: '#FFFFFF' }}>{stat.value}</div>
-                            <div style={{ fontSize: 12, color: '#C4B5E8', marginTop: 2 }}>{stat.label}</div>
-                        </div>
-                    ))}
+                {/* Trust stats */}
+                <div style={{ position: "relative", zIndex: 10, paddingTop: 28, borderTop: "1px solid rgba(255,255,255,0.2)", marginTop: 80 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 24, fontSize: 14, fontWeight: 500, letterSpacing: 0.5, color: "rgba(255,255,255,0.8)" }}>
+                        <span>500+ NGOs</span>
+                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
+                        <span>10k+ Volunteers</span>
+                        <span style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(255,255,255,0.4)" }} />
+                        <span>₹5Cr+ Raised</span>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            {/* Form panel */}
-            <div className="auth-form-panel">
-                <div className="auth-form-container animate-fade-in">
+            {/* ── Right Form Panel (55%) ── */}
+            <section style={{
+                display: "flex", width: "55%", alignItems: "center", justifyContent: "center",
+                backgroundColor: "#fff", padding: "32px 64px",
+            }}>
+                <div style={{ width: "100%", maxWidth: 448 }}>
                     {children}
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
     );
 }

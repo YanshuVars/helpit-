@@ -63,63 +63,75 @@ export default function MessagesPage() {
     const totalUnread = conversations.reduce((sum, c) => sum + c.unreadCount, 0);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div>
-                    <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Messages</h1>
-                    <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>
-                        {totalUnread > 0 ? `${totalUnread} unread messages` : "All caught up!"}
-                    </p>
-                </div>
+            <div>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>Messages</h2>
+                <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>
+                    {totalUnread > 0 ? `${totalUnread} unread messages` : "All caught up!"}
+                </p>
             </div>
 
             {/* Search */}
-            <div style={{ position: "relative" }}>
-                <span className="material-symbols-outlined" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--foreground-light)" }}>search</span>
-                <input type="text" placeholder="Search conversations..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                    className="field-input" style={{ paddingLeft: 40 }} />
+            <div style={{ position: 'relative' }}>
+                <span className="material-symbols-outlined" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: 22 }}>search</span>
+                <input type="text" placeholder="Search conversations..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                    style={{ width: '100%', padding: '12px 14px 12px 46px', borderRadius: 14, border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: 14, color: '#0f172a', outline: 'none' }}
+                    onFocus={e => e.target.style.borderColor = '#1de2d1'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
             </div>
 
-            {/* Conversation list */}
+            {/* Conversations */}
             {loading ? (
-                <div style={{ display: "flex", justifyContent: "center", padding: "3rem 0" }}><div className="spinner" /></div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
+                    <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+                </div>
             ) : filteredConversations.length === 0 ? (
-                <div className="card" style={{ textAlign: "center", padding: "var(--space-xl)" }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 48, color: "var(--foreground-light)" }}>chat_bubble_outline</span>
-                    <p style={{ color: "var(--foreground-muted)", marginTop: "var(--space-sm)" }}>No conversations yet</p>
+                <div style={{
+                    background: '#fff', borderRadius: 16, padding: 48, textAlign: 'center',
+                    border: '1px solid #e2e8f0',
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#cbd5e1' }}>chat_bubble_outline</span>
+                    <p style={{ color: '#94a3b8', marginTop: 10 }}>No conversations yet</p>
                 </div>
             ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}>
-                    {filteredConversations.map((conv) => (
-                        <Link key={conv.id} href={`/messages/${conv.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                            <div className="card" style={{
-                                display: "flex", alignItems: "center", gap: "var(--space-md)",
-                                cursor: "pointer", transition: "background 0.15s",
-                                background: conv.unreadCount > 0 ? "var(--primary-50)" : undefined,
-                            }}>
-                                {/* Avatar */}
-                                <div style={{ width: 48, height: 48, borderRadius: "50%", background: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "var(--font-lg)", flexShrink: 0, overflow: "hidden" }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {filteredConversations.map(conv => (
+                        <Link key={conv.id} href={`/messages/${conv.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <div style={{
+                                display: 'flex', alignItems: 'center', gap: 14, padding: 16,
+                                borderRadius: 14, cursor: 'pointer', transition: 'all 200ms',
+                                background: conv.unreadCount > 0 ? 'rgba(29,226,209,0.04)' : '#fff',
+                                border: `1px solid ${conv.unreadCount > 0 ? '#1de2d1' : '#e2e8f0'}`,
+                            }}
+                                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.06)'}
+                                onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}>
+                                <div style={{
+                                    width: 48, height: 48, borderRadius: 14,
+                                    background: '#1de2d1', display: 'flex',
+                                    alignItems: 'center', justifyContent: 'center',
+                                    color: '#fff', fontWeight: 800, fontSize: 18, flexShrink: 0, overflow: 'hidden',
+                                }}>
                                     {conv.otherUser.avatar_url
-                                        ? <img src={conv.otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                        ? <img src={conv.otherUser.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         : (conv.otherUser.full_name?.charAt(0) || "?").toUpperCase()
                                     }
                                 </div>
-
-                                {/* Content */}
                                 <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                        <p style={{ fontWeight: conv.unreadCount > 0 ? 700 : 500, fontSize: "var(--font-sm)" }}>{conv.otherUser.full_name || "Unknown"}</p>
-                                        {conv.lastMessageTime && <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{formatDistanceToNow(conv.lastMessageTime)}</p>}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <p style={{ fontWeight: conv.unreadCount > 0 ? 700 : 500, fontSize: 14, color: '#0f172a' }}>{conv.otherUser.full_name || "Unknown"}</p>
+                                        {conv.lastMessageTime && <p style={{ fontSize: 11, color: '#94a3b8' }}>{formatDistanceToNow(conv.lastMessageTime)}</p>}
                                     </div>
-                                    <p style={{ fontSize: "var(--font-sm)", color: "var(--foreground-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "80%" }}>
+                                    <p style={{ fontSize: 13, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                         {conv.lastMessage || "No messages yet"}
                                     </p>
                                 </div>
-
-                                {/* Unread badge */}
                                 {conv.unreadCount > 0 && (
-                                    <div style={{ width: 24, height: 24, borderRadius: "50%", background: "var(--primary)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>
+                                    <div style={{
+                                        minWidth: 24, height: 24, borderRadius: 999, padding: '0 6px',
+                                        background: '#1de2d1', color: '#0f172a',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        fontSize: 11, fontWeight: 800,
+                                    }}>
                                         {conv.unreadCount}
                                     </div>
                                 )}

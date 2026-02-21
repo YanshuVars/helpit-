@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { signUp } from "@/lib/api/users";
 
-const CATEGORIES = [
+const ORG_TYPES = [
     { value: "EDUCATION", label: "Education" },
     { value: "MEDICAL", label: "Healthcare" },
     { value: "ENVIRONMENT", label: "Environment" },
@@ -18,19 +18,36 @@ const CATEGORIES = [
     { value: "OTHER", label: "Other" },
 ];
 
+const STATES = ["Andhra Pradesh", "Bihar", "Delhi", "Goa", "Gujarat", "Haryana", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Punjab", "Rajasthan", "Tamil Nadu", "Telangana", "Uttar Pradesh", "West Bengal"];
+
+/* ── shared styles ── */
+const inputStyle: React.CSSProperties = {
+    width: "100%", height: 44, borderRadius: 8,
+    border: "1px solid #e2e8f0", paddingLeft: 16, paddingRight: 16,
+    fontSize: 14, color: "#0f172a", background: "#fff",
+    outline: "none", boxSizing: "border-box",
+};
+const inputIconStyle: React.CSSProperties = { ...inputStyle, paddingLeft: 40 };
+const selectStyle: React.CSSProperties = { ...inputStyle, appearance: "none" as const };
+const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 600, color: "#334155" };
+const reqStar: React.CSSProperties = { color: "#dc2626", marginLeft: 2 };
+const iconStyle: React.CSSProperties = {
+    position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)",
+    fontSize: 20, color: "#94a3b8", pointerEvents: "none",
+};
+const sectionLabel: React.CSSProperties = {
+    fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase",
+    color: "#0f756d", paddingBottom: 12, borderBottom: "1px solid #e2e8f0", marginBottom: 16,
+};
+
 export default function NGORegisterPage() {
     const router = useRouter();
     const [formData, setFormData] = useState({
-        orgName: '',
-        registrationNumber: '',
-        category: '',
-        contactEmail: '',
-        contactPhone: '',
-        address: '',
-        city: '',
-        state: '',
-        adminEmail: '',
-        adminPassword: '',
+        orgName: '', registrationNumber: '', orgType: '',
+        description: '', websiteUrl: '',
+        contactEmail: '', contactPhone: '',
+        address: '', city: '', state: '',
+        password: '',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -51,7 +68,7 @@ export default function NGORegisterPage() {
         e.preventDefault();
         setError('');
 
-        if (formData.adminPassword.length < 8) {
+        if (formData.password.length < 8) {
             setError('Password must be at least 8 characters');
             return;
         }
@@ -60,7 +77,7 @@ export default function NGORegisterPage() {
 
         try {
             // 1. Create admin user account
-            const { user } = await signUp(formData.adminEmail, formData.adminPassword, {
+            const { user } = await signUp(formData.contactEmail, formData.password, {
                 full_name: `${formData.orgName} Admin`,
                 role: 'NGO_ADMIN',
             });
@@ -81,7 +98,7 @@ export default function NGORegisterPage() {
                     city: formData.city || null,
                     state: formData.state || null,
                     registration_number: formData.registrationNumber,
-                    categories: formData.category ? [formData.category] : [],
+                    categories: formData.orgType ? [formData.orgType] : [],
                     tags: [],
                     status: 'PENDING',
                     verification_status: 'PENDING',
@@ -114,117 +131,113 @@ export default function NGORegisterPage() {
     };
 
     return (
-        <div style={{ maxHeight: 'calc(100vh - 120px)', overflowY: 'auto', paddingRight: 4 }}>
-            <Link href="/register" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 20, fontSize: 13 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_back</span>
-                Back to role selection
-            </Link>
-
-            <h1>Register Your NGO</h1>
-            <p className="auth-subtitle">Set up your organization on Helpit</p>
-
+        <div style={{ display: "flex", flexDirection: "column", gap: 20, maxHeight: "calc(100vh - 100px)", overflowY: "auto", paddingRight: 4 }}>
+            {/* Error */}
             {error && (
-                <div className="alert alert-error" style={{ marginBottom: 16 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>error</span>
+                <div style={{
+                    display: "flex", alignItems: "center", gap: 8, padding: "12px 16px",
+                    background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8,
+                    fontSize: 13, color: "#dc2626",
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>error</span>
                     {error}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                {/* Organization Info */}
-                <div className="form-section">
-                    <div className="form-section-title">Organization Details</div>
-                    <div className="form-section-subtitle">Basic information about your NGO</div>
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                {/* ── Organization Name ── */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Organization Name<span style={reqStar}>*</span></label>
+                    <input name="orgName" type="text" placeholder="e.g. Save the Earth Foundation" value={formData.orgName} onChange={handleChange} required style={inputStyle} />
+                </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                        <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                            <label className="field-label">Organization Name</label>
-                            <input type="text" name="orgName" placeholder="Enter NGO name" value={formData.orgName} onChange={handleChange} required className="field-input" />
-                        </div>
-                        <div className="form-group">
-                            <label className="field-label">Registration Number</label>
-                            <input type="text" name="registrationNumber" placeholder="NGO registration number" value={formData.registrationNumber} onChange={handleChange} required className="field-input" />
-                        </div>
-                        <div className="form-group">
-                            <label className="field-label">Category</label>
-                            <select name="category" value={formData.category} onChange={handleChange} className="field-input">
-                                <option value="">Select category</option>
-                                {CATEGORIES.map(cat => (
-                                    <option key={cat.value} value={cat.value}>{cat.label}</option>
-                                ))}
-                            </select>
-                        </div>
+                {/* Registration # + Org Type */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        <label style={labelStyle}>Registration Number<span style={reqStar}>*</span></label>
+                        <input name="registrationNumber" type="text" placeholder="e.g. 501(c)(3) ID" value={formData.registrationNumber} onChange={handleChange} required style={inputStyle} />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        <label style={labelStyle}>Organization Type</label>
+                        <select name="orgType" value={formData.orgType} onChange={handleChange} style={selectStyle}>
+                            <option value="">Select type...</option>
+                            {ORG_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                        </select>
                     </div>
                 </div>
 
-                {/* Contact */}
-                <div className="form-section">
-                    <div className="form-section-title">Contact Information</div>
-                    <div className="form-section-subtitle">How NGOs and users can reach you</div>
+                {/* Description */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Short Description</label>
+                    <textarea name="description" placeholder="Briefly describe your mission..." value={formData.description} onChange={handleChange} maxLength={300}
+                        style={{ ...inputStyle, height: 80, paddingTop: 12, resize: "vertical" }} />
+                    <span style={{ fontSize: 12, color: "#94a3b8", textAlign: "right" }}>{formData.description.length}/300 characters</span>
+                </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                        <div className="form-group">
-                            <label className="field-label">Contact Email</label>
-                            <input type="email" name="contactEmail" placeholder="org@email.com" value={formData.contactEmail} onChange={handleChange} required className="field-input" />
-                        </div>
-                        <div className="form-group">
-                            <label className="field-label">Contact Phone</label>
-                            <input type="tel" name="contactPhone" placeholder="Phone number" value={formData.contactPhone} onChange={handleChange} className="field-input" />
-                        </div>
-                        <div className="form-group">
-                            <label className="field-label">City</label>
-                            <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} className="field-input" />
-                        </div>
-                        <div className="form-group">
-                            <label className="field-label">State</label>
-                            <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} className="field-input" />
-                        </div>
-                        <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                            <label className="field-label">Address</label>
-                            <textarea name="address" placeholder="Full address" value={formData.address} onChange={handleChange} className="field-input field-textarea" rows={2} />
-                        </div>
+                {/* Website */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Website URL</label>
+                    <div style={{ position: "relative" }}>
+                        <span className="material-symbols-outlined" style={iconStyle}>link</span>
+                        <input name="websiteUrl" type="url" placeholder="https://www.example.org" value={formData.websiteUrl} onChange={handleChange} style={inputIconStyle} />
                     </div>
                 </div>
 
-                {/* Document Upload */}
-                <div className="form-section">
-                    <div className="form-section-title">Verification Documents</div>
-                    <div style={{
-                        border: '2px dashed var(--color-border)',
-                        borderRadius: 'var(--radius-md)',
-                        padding: '24px',
-                        textAlign: 'center',
-                        marginTop: 8,
-                    }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 32, color: 'var(--color-text-muted)' }}>cloud_upload</span>
-                        <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 4 }}>Upload registration certificate, 80G certificate</p>
-                        <p style={{ fontSize: 11, color: 'var(--color-text-disabled)', marginTop: 2 }}>(Can be uploaded later from NGO settings)</p>
+                {/* ── Contact & Location ── */}
+                <div style={sectionLabel}>CONTACT &amp; LOCATION</div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        <label style={labelStyle}>Email Address<span style={reqStar}>*</span></label>
+                        <input name="contactEmail" type="email" placeholder="contact@org.com" value={formData.contactEmail} onChange={handleChange} required style={inputStyle} />
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        <label style={labelStyle}>Phone Number</label>
+                        <input name="contactPhone" type="tel" placeholder="+1 (555) 000-0000" value={formData.contactPhone} onChange={handleChange} style={inputStyle} />
                     </div>
                 </div>
 
-                {/* Admin Account */}
-                <div className="form-section" style={{ background: 'var(--color-primary-soft)', padding: 16, borderRadius: 'var(--radius-md)', border: 'none' }}>
-                    <div className="form-section-title">Admin Account</div>
-                    <div className="form-section-subtitle">Login credentials for the organization admin</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Street Address</label>
+                    <input name="address" type="text" placeholder="123 Charity Lane, Suite 100" value={formData.address} onChange={handleChange} style={inputStyle} />
+                </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                        <div className="form-group">
-                            <label className="field-label">Admin Email</label>
-                            <input type="email" name="adminEmail" placeholder="admin@email.com" value={formData.adminEmail} onChange={handleChange} required className="field-input" />
-                        </div>
-                        <div className="form-group">
-                            <label className="field-label">Admin Password</label>
-                            <input type="password" name="adminPassword" placeholder="Min 8 characters" value={formData.adminPassword} onChange={handleChange} required minLength={8} className="field-input" />
-                        </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        <label style={labelStyle}>City</label>
+                        <select name="city" value={formData.city} onChange={handleChange} style={selectStyle}>
+                            <option value="">Select...</option>
+                            {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune"].map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                        <label style={labelStyle}>State/Region</label>
+                        <select name="state" value={formData.state} onChange={handleChange} style={selectStyle}>
+                            <option value="">Select...</option>
+                            {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
                     </div>
                 </div>
 
-                <button type="submit" disabled={loading} className="auth-submit-btn">
-                    {loading ? 'Submitting...' : 'Submit for Verification'}
+                {/* ── Security ── */}
+                <div style={sectionLabel}>SECURITY</div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Create Password<span style={reqStar}>*</span></label>
+                    <input name="password" type="password" placeholder="••••••••" value={formData.password} onChange={handleChange} required minLength={8} style={inputStyle} />
+                    <span style={{ fontSize: 12, color: "#94a3b8" }}>Must be at least 8 characters with one number.</span>
+                </div>
+
+                {/* Submit */}
+                <button type="submit" disabled={loading} style={{
+                    width: "100%", height: 48, borderRadius: 8,
+                    background: loading ? "#5eada7" : "#0f756d",
+                    color: "#fff", fontWeight: 700, fontSize: 15,
+                    border: "none", cursor: loading ? "not-allowed" : "pointer",
+                    boxShadow: "0 1px 3px rgba(15,117,109,0.2)",
+                }}>
+                    {loading ? 'Registering...' : 'Register Organization'}
                 </button>
-                <p style={{ fontSize: 11, color: 'var(--color-text-muted)', textAlign: 'center' }}>
-                    Your application will be reviewed within 2-3 business days
-                </p>
             </form>
         </div>
     );

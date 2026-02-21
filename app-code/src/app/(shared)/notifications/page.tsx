@@ -11,13 +11,13 @@ interface Notification {
 }
 
 const typeStyles: Record<string, { icon: string; color: string }> = {
-    DONATION: { icon: "payments", color: "var(--color-success)" },
-    VOLUNTEER: { icon: "diversity_3", color: "var(--primary)" },
-    VERIFICATION: { icon: "verified", color: "var(--color-info)" },
-    REQUEST: { icon: "help", color: "var(--color-warning)" },
-    REPORT: { icon: "flag", color: "var(--color-danger)" },
-    MESSAGE: { icon: "chat", color: "var(--primary)" },
-    SYSTEM: { icon: "info", color: "var(--foreground-muted)" },
+    DONATION: { icon: "payments", color: "#16a34a" },
+    VOLUNTEER: { icon: "diversity_3", color: "#1de2d1" },
+    VERIFICATION: { icon: "verified", color: "#3b82f6" },
+    REQUEST: { icon: "help", color: "#f59e0b" },
+    REPORT: { icon: "flag", color: "#dc2626" },
+    MESSAGE: { icon: "chat", color: "#8b5cf6" },
+    SYSTEM: { icon: "info", color: "#94a3b8" },
 };
 
 export default function NotificationsPage() {
@@ -59,60 +59,79 @@ export default function NotificationsPage() {
     const unreadCount = notifications.filter(n => !n.is_read).length;
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Notifications</h1>
-                    <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>
+                    <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>Notifications</h2>
+                    <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>
                         {unreadCount > 0 ? `${unreadCount} unread notifications` : "You're all caught up!"}
                     </p>
                 </div>
-                <div style={{ display: "flex", gap: "var(--space-sm)" }}>
+                <div style={{ display: 'flex', gap: 10 }}>
                     {unreadCount > 0 && (
-                        <button className="btn-secondary" onClick={markAllAsRead} style={{ fontSize: "var(--font-sm)", display: "flex", alignItems: "center", gap: 8 }}>
-                            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>done_all</span>
-                            Mark all read
+                        <button onClick={markAllAsRead} style={{
+                            display: 'flex', alignItems: 'center', gap: 6, padding: '10px 18px',
+                            borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff',
+                            fontSize: 13, fontWeight: 600, color: '#0f172a', cursor: 'pointer',
+                        }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>done_all</span>Mark all read
                         </button>
                     )}
-                    <Link href="/notifications/settings" className="btn-secondary" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", fontSize: "var(--font-sm)" }}>
+                    <Link href="/notifications/settings" style={{
+                        display: 'flex', alignItems: 'center', gap: 6, padding: '10px 18px',
+                        borderRadius: 12, border: '1px solid #e2e8f0', background: '#fff',
+                        fontSize: 13, fontWeight: 600, color: '#0f172a', textDecoration: 'none',
+                    }}>
                         <span className="material-symbols-outlined" style={{ fontSize: 16 }}>settings</span>Settings
                     </Link>
                 </div>
             </div>
 
-            {/* Notification list */}
+            {/* List */}
             {loading ? (
-                <div style={{ display: "flex", justifyContent: "center", padding: "3rem 0" }}><div className="spinner" /></div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
+                    <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+                </div>
             ) : notifications.length === 0 ? (
-                <div className="card" style={{ textAlign: "center", padding: "var(--space-xl)" }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 48, color: "var(--foreground-light)" }}>notifications_none</span>
-                    <p style={{ color: "var(--foreground-muted)", marginTop: "var(--space-sm)" }}>No notifications</p>
+                <div style={{
+                    background: '#fff', borderRadius: 16, padding: 48, textAlign: 'center',
+                    border: '1px solid #e2e8f0',
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#cbd5e1' }}>notifications_none</span>
+                    <p style={{ color: '#94a3b8', marginTop: 10 }}>No notifications</p>
                 </div>
             ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}>
-                    {notifications.map((n) => {
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {notifications.map(n => {
                         const style = typeStyles[n.type] || typeStyles.SYSTEM;
                         return (
-                            <div key={n.id} className="card" onClick={() => !n.is_read && markAsRead(n.id)}
+                            <div key={n.id} onClick={() => !n.is_read && markAsRead(n.id)}
                                 style={{
-                                    display: "flex", alignItems: "flex-start", gap: "var(--space-md)",
-                                    cursor: "pointer", transition: "background 0.15s",
-                                    background: n.is_read ? undefined : "var(--primary-50)",
-                                    borderLeft: n.is_read ? undefined : `3px solid var(--primary)`,
+                                    display: 'flex', alignItems: 'start', gap: 14, padding: 18,
+                                    borderRadius: 14, cursor: 'pointer', transition: 'all 200ms',
+                                    background: n.is_read ? '#fff' : 'rgba(29,226,209,0.04)',
+                                    border: `1px solid ${n.is_read ? '#e2e8f0' : '#1de2d1'}`,
+                                    borderLeft: n.is_read ? '1px solid #e2e8f0' : '3px solid #1de2d1',
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.06)'}
+                                onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}>
+                                <div style={{
+                                    width: 40, height: 40, borderRadius: 12,
+                                    background: `${style.color}15`, display: 'flex',
+                                    alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                                 }}>
-                                <div style={{ width: 40, height: 40, borderRadius: "50%", background: `${style.color}20`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                                     <span className="material-symbols-outlined" style={{ fontSize: 20, color: style.color }}>{style.icon}</span>
                                 </div>
                                 <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                                        <p style={{ fontWeight: n.is_read ? 400 : 600, fontSize: "var(--font-sm)" }}>{n.title}</p>
-                                        <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", whiteSpace: "nowrap" }}>{formatDistanceToNow(n.created_at)}</p>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                                        <p style={{ fontWeight: n.is_read ? 500 : 700, fontSize: 14, color: '#0f172a' }}>{n.title}</p>
+                                        <p style={{ fontSize: 11, color: '#94a3b8', whiteSpace: 'nowrap' }}>{formatDistanceToNow(n.created_at)}</p>
                                     </div>
-                                    <p style={{ fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>{n.message}</p>
+                                    <p style={{ fontSize: 13, color: '#64748b' }}>{n.message}</p>
                                 </div>
                                 {!n.is_read && (
-                                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--primary)", flexShrink: 0, marginTop: 6 }} />
+                                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#1de2d1', flexShrink: 0, marginTop: 8 }} />
                                 )}
                             </div>
                         );

@@ -17,7 +17,7 @@ export function PublicNavbar() {
 
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-[var(--foreground-muted)]">
                         <Link href="/requests" className="hover:text-[var(--primary)] transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[var(--primary)] after:transition-all hover:after:w-full">Requests</Link>
-                        <Link href="/ngos" className="hover:text-[var(--primary)] transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[var(--primary)] after:transition-all hover:after:w-full">NGOs</Link>
+                        <Link href="/login" className="hover:text-[var(--primary)] transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[var(--primary)] after:transition-all hover:after:w-full">NGOs</Link>
                         <Link href="/about" className="hover:text-[var(--primary)] transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[var(--primary)] after:transition-all hover:after:w-full">About</Link>
                     </div>
 

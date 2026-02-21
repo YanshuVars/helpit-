@@ -24,92 +24,108 @@ export default function NotificationSettingsPage() {
 
     const Toggle = ({ checked, onChange }: { checked: boolean; onChange: () => void }) => (
         <div onClick={onChange} style={{
-            width: 44, height: 24, borderRadius: 12, cursor: "pointer", transition: "background 0.2s",
-            background: checked ? "var(--primary)" : "var(--border-default)",
-            display: "flex", alignItems: "center", padding: 2,
+            width: 48, height: 26, borderRadius: 13, cursor: 'pointer', transition: 'background 200ms',
+            background: checked ? '#1de2d1' : '#e2e8f0',
+            display: 'flex', alignItems: 'center', padding: 3,
         }}>
             <div style={{
-                width: 20, height: 20, borderRadius: "50%", background: "#fff",
-                transition: "transform 0.2s", transform: checked ? "translateX(20px)" : "translateX(0)",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                width: 20, height: 20, borderRadius: '50%', background: '#fff',
+                transition: 'transform 200ms', transform: checked ? 'translateX(22px)' : 'translateX(0)',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
             }} />
         </div>
     );
 
     const SettingRow = ({ label, desc, checked, onToggle }: { label: string; desc?: string; checked: boolean; onToggle: () => void }) => (
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "var(--space-sm) 0" }}>
+        <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            padding: '14px 0', borderBottom: '1px solid #f1f5f9',
+        }}>
             <div>
-                <p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{label}</p>
-                {desc && <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{desc}</p>}
+                <p style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{label}</p>
+                {desc && <p style={{ fontSize: 12, color: '#94a3b8', marginTop: 2 }}>{desc}</p>}
             </div>
             <Toggle checked={checked} onChange={onToggle} />
         </div>
     );
 
+    const SectionCard = ({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) => (
+        <div style={{
+            background: '#fff', borderRadius: 16, padding: 24,
+            border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+        }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                <div style={{
+                    width: 36, height: 36, borderRadius: 10,
+                    background: 'rgba(29,226,209,0.1)', display: 'flex',
+                    alignItems: 'center', justifyContent: 'center',
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#1de2d1' }}>{icon}</span>
+                </div>
+                <h3 style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>{title}</h3>
+            </div>
+            {children}
+        </div>
+    );
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {/* Header */}
-            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
-                <button onClick={() => router.push("/notifications")} style={{ border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center" }}>
-                    <span className="material-symbols-outlined" style={{ color: "var(--foreground-muted)" }}>arrow_back</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <button onClick={() => router.push("/notifications")} style={{
+                    width: 40, height: 40, borderRadius: 10, border: '1px solid #e2e8f0',
+                    background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                    <span className="material-symbols-outlined" style={{ color: '#64748b', fontSize: 20 }}>arrow_back</span>
                 </button>
                 <div>
-                    <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Notification Settings</h1>
-                    <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Manage how you receive notifications</p>
+                    <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>Notification Settings</h2>
+                    <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Manage how you receive notifications</p>
                 </div>
             </div>
 
-            {/* Push Notifications */}
-            <div className="card">
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)", marginBottom: "var(--space-md)" }}>
-                    <span className="material-symbols-outlined" style={{ color: "var(--primary)" }}>notifications</span>
-                    <h2 style={{ fontWeight: 600, fontSize: "var(--font-base)" }}>Push Notifications</h2>
-                </div>
+            <SectionCard icon="notifications" title="Push Notifications">
                 <SettingRow label="Donations" desc="New donations and refunds" checked={settings.pushDonations} onToggle={() => handleToggle("pushDonations")} />
                 <SettingRow label="Volunteers" desc="Volunteer applications and updates" checked={settings.pushVolunteers} onToggle={() => handleToggle("pushVolunteers")} />
                 <SettingRow label="Messages" desc="New direct messages" checked={settings.pushMessages} onToggle={() => handleToggle("pushMessages")} />
                 <SettingRow label="Help Requests" desc="New and updated help requests" checked={settings.pushRequests} onToggle={() => handleToggle("pushRequests")} />
                 <SettingRow label="Platform Updates" desc="New features and announcements" checked={settings.pushUpdates} onToggle={() => handleToggle("pushUpdates")} />
-            </div>
+            </SectionCard>
 
-            {/* Email Notifications */}
-            <div className="card">
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)", marginBottom: "var(--space-md)" }}>
-                    <span className="material-symbols-outlined" style={{ color: "var(--primary)" }}>email</span>
-                    <h2 style={{ fontWeight: 600, fontSize: "var(--font-base)" }}>Email Notifications</h2>
-                </div>
+            <SectionCard icon="email" title="Email Notifications">
                 <SettingRow label="Donations" desc="Donation receipts and summaries" checked={settings.emailDonations} onToggle={() => handleToggle("emailDonations")} />
                 <SettingRow label="Volunteers" desc="Volunteer activity digest" checked={settings.emailVolunteers} onToggle={() => handleToggle("emailVolunteers")} />
                 <SettingRow label="Messages" desc="Unread message reminders" checked={settings.emailMessages} onToggle={() => handleToggle("emailMessages")} />
                 <SettingRow label="Help Requests" desc="Request status updates" checked={settings.emailRequests} onToggle={() => handleToggle("emailRequests")} />
                 <SettingRow label="Platform Updates" desc="Weekly digest and news" checked={settings.emailUpdates} onToggle={() => handleToggle("emailUpdates")} />
-            </div>
+            </SectionCard>
 
-            {/* General Settings */}
-            <div className="card">
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)", marginBottom: "var(--space-md)" }}>
-                    <span className="material-symbols-outlined" style={{ color: "var(--primary)" }}>tune</span>
-                    <h2 style={{ fontWeight: 600, fontSize: "var(--font-base)" }}>General</h2>
-                </div>
+            <SectionCard icon="tune" title="General">
                 <SettingRow label="Sound" desc="Play sound for notifications" checked={settings.soundEnabled} onToggle={() => handleToggle("soundEnabled")} />
                 <SettingRow label="Vibration" desc="Vibrate for notifications" checked={settings.vibrateEnabled} onToggle={() => handleToggle("vibrateEnabled")} />
                 <SettingRow label="Quiet Hours" desc="Mute notifications during set hours" checked={settings.quietHoursEnabled} onToggle={() => handleToggle("quietHoursEnabled")} />
                 {settings.quietHoursEnabled && (
-                    <div style={{ display: "flex", gap: "var(--space-md)", marginTop: "var(--space-sm)", paddingLeft: "var(--space-md)" }}>
+                    <div style={{ display: 'flex', gap: 20, marginTop: 12, paddingLeft: 4 }}>
                         <div>
-                            <label className="field-label">From</label>
-                            <input type="time" value={settings.quietStart} onChange={(e) => setSettings(prev => ({ ...prev, quietStart: e.target.value }))} className="field-input" style={{ width: "auto" }} />
+                            <label style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>From</label>
+                            <input type="time" value={settings.quietStart} onChange={e => setSettings(prev => ({ ...prev, quietStart: e.target.value }))}
+                                style={{ display: 'block', marginTop: 4, padding: '8px 12px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none' }} />
                         </div>
                         <div>
-                            <label className="field-label">To</label>
-                            <input type="time" value={settings.quietEnd} onChange={(e) => setSettings(prev => ({ ...prev, quietEnd: e.target.value }))} className="field-input" style={{ width: "auto" }} />
+                            <label style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>To</label>
+                            <input type="time" value={settings.quietEnd} onChange={e => setSettings(prev => ({ ...prev, quietEnd: e.target.value }))}
+                                style={{ display: 'block', marginTop: 4, padding: '8px 12px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 13, outline: 'none' }} />
                         </div>
                     </div>
                 )}
-            </div>
+            </SectionCard>
 
-            {/* Save */}
-            <button className="btn-primary" onClick={handleSave} disabled={saving} style={{ alignSelf: "flex-end" }}>
+            <button onClick={handleSave} disabled={saving} style={{
+                alignSelf: 'flex-end', padding: '12px 28px', borderRadius: 12,
+                background: '#1de2d1', color: '#0f172a', fontWeight: 700,
+                fontSize: 14, border: 'none', cursor: saving ? 'not-allowed' : 'pointer',
+                opacity: saving ? 0.6 : 1,
+            }}>
                 {saving ? "Saving..." : "Save Settings"}
             </button>
         </div>

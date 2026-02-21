@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-/* ── mock data ── */
 const mockReports = [
     { id: "1", type: "NGO_REPORT", status: "PENDING", priority: "HIGH", reporter: { name: "Rahul Sharma", id: "u1" }, reportedEntity: { name: "Help All Trust", type: "NGO", id: "ngo1" }, reason: "Suspected fraudulent activities", description: "This NGO is collecting donations but not using them for the stated purpose. Multiple beneficiaries have complained about not receiving aid.", evidence: ["screenshot1.png", "receipt.pdf", "whatsapp_chat.jpg"], createdAt: "2 hours ago", assignedTo: null },
     { id: "2", type: "USER_REPORT", status: "IN_REVIEW", priority: "MEDIUM", reporter: { name: "Priya Patel", id: "u2" }, reportedEntity: { name: "Amit Kumar", type: "USER", id: "u3" }, reason: "Harassment in chat", description: "User is sending inappropriate messages and harassing volunteers.", evidence: ["chat_log.txt"], createdAt: "5 hours ago", assignedTo: { name: "Admin User", id: "admin1" } },
@@ -32,147 +31,204 @@ export default function ModerationReportsPage() {
             (typeFilter === "ALL" || r.type === typeFilter);
     });
 
-    const statusColor: Record<string, string> = { PENDING: "var(--color-warning)", IN_REVIEW: "var(--color-info)", RESOLVED: "var(--color-success)", DISMISSED: "var(--foreground-muted)" };
-    const priorityColor: Record<string, string> = { HIGH: "var(--color-danger)", MEDIUM: "var(--color-warning)", LOW: "var(--color-success)" };
-    const typeIcon: Record<string, string> = { NGO_REPORT: "domain", USER_REPORT: "person", CONTENT_REPORT: "article" };
+    const statusColor: Record<string, { bg: string; text: string }> = {
+        PENDING: { bg: '#fef3c7', text: '#d97706' },
+        IN_REVIEW: { bg: '#dbeafe', text: '#2563eb' },
+        RESOLVED: { bg: '#dcfce7', text: '#16a34a' },
+        DISMISSED: { bg: '#f1f5f9', text: '#94a3b8' },
+    };
+    const priorityColor: Record<string, { bg: string; text: string }> = {
+        HIGH: { bg: '#fee2e2', text: '#dc2626' },
+        MEDIUM: { bg: '#fef3c7', text: '#d97706' },
+        LOW: { bg: '#dcfce7', text: '#16a34a' },
+    };
+    const typeIcon: Record<string, { icon: string; color: string }> = {
+        NGO_REPORT: { icon: 'domain', color: '#1de2d1' },
+        USER_REPORT: { icon: 'person', color: '#3b82f6' },
+        CONTENT_REPORT: { icon: 'article', color: '#f59e0b' },
+    };
+
+    const selectStyle: React.CSSProperties = {
+        padding: '10px 14px', borderRadius: 12, border: '1px solid #e2e8f0',
+        background: '#fff', fontSize: 13, fontWeight: 600, color: '#0f172a', cursor: 'pointer', outline: 'none',
+    };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
-            {/* Header */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             <div>
-                <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Moderation Reports</h1>
-                <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Review and manage user reports</p>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>Moderation Reports</h2>
+                <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Review and manage user reports</p>
             </div>
 
             {/* Stats */}
-            <div className="stat-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
                 {[
-                    { icon: "pending", label: "Pending", value: 12, color: "var(--color-warning)" },
-                    { icon: "visibility", label: "In Review", value: 5, color: "var(--color-info)" },
-                    { icon: "check_circle", label: "Resolved", value: 89, color: "var(--color-success)" },
-                    { icon: "priority_high", label: "High Priority", value: 3, color: "var(--color-danger)" },
+                    { icon: 'pending', label: 'Pending', value: 12, color: '#f59e0b' },
+                    { icon: 'visibility', label: 'In Review', value: 5, color: '#3b82f6' },
+                    { icon: 'check_circle', label: 'Resolved', value: 89, color: '#16a34a' },
+                    { icon: 'priority_high', label: 'High Priority', value: 3, color: '#dc2626' },
                 ].map(s => (
-                    <div key={s.label} className="stat-card">
-                        <span className="material-symbols-outlined" style={{ fontSize: 28, color: s.color }}>{s.icon}</span>
-                        <p className="stat-value">{s.value}</p>
-                        <p className="stat-label">{s.label}</p>
+                    <div key={s.label} style={{
+                        background: '#fff', padding: 22, borderRadius: 16,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
+                        <div style={{
+                            width: 40, height: 40, borderRadius: 12,
+                            background: `${s.color}15`, display: 'flex',
+                            alignItems: 'center', justifyContent: 'center', marginBottom: 12,
+                        }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 22, color: s.color }}>{s.icon}</span>
+                        </div>
+                        <p style={{ fontSize: 26, fontWeight: 800, color: '#0f172a' }}>{s.value}</p>
+                        <p style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8', marginTop: 2 }}>{s.label}</p>
                     </div>
                 ))}
             </div>
 
             {/* Filters */}
-            <div className="card" style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-sm)" }}>
-                <div style={{ flex: 1, minWidth: 200, position: "relative" }}>
-                    <span className="material-symbols-outlined" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--foreground-light)" }}>search</span>
-                    <input type="text" placeholder="Search reports..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                        className="field-input" style={{ paddingLeft: 40 }} />
+            <div style={{
+                background: '#fff', borderRadius: 16, padding: 20,
+                border: '1px solid #e2e8f0', display: 'flex', gap: 12, flexWrap: 'wrap',
+            }}>
+                <div style={{ flex: 1, minWidth: 220, position: 'relative' }}>
+                    <span className="material-symbols-outlined" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: 22 }}>search</span>
+                    <input type="text" placeholder="Search reports..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                        style={{ width: '100%', padding: '10px 14px 10px 46px', borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: 14, color: '#0f172a', outline: 'none' }}
+                        onFocus={e => e.target.style.borderColor = '#1de2d1'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
                 </div>
-                <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={selectStyle}>
                     {statusFilters.map(s => <option key={s} value={s}>{s === "ALL" ? "All Status" : s.replace("_", " ")}</option>)}
                 </select>
-                <select value={priorityFilter} onChange={(e) => setPriorityFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                <select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value)} style={selectStyle}>
                     {priorityFilters.map(p => <option key={p} value={p}>{p === "ALL" ? "All Priority" : p}</option>)}
                 </select>
-                <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} style={selectStyle}>
                     {typeFilters.map(t => <option key={t} value={t}>{t === "ALL" ? "All Types" : t.replace("_", " ")}</option>)}
                 </select>
             </div>
 
-            {/* Report cards */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-md)" }}>
-                {filteredReports.map((r) => {
-                    const sc = statusColor[r.status] || "var(--foreground-muted)";
-                    const pc = priorityColor[r.priority] || "var(--foreground-muted)";
+            {/* Report Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {filteredReports.map(r => {
+                    const sc = statusColor[r.status] || statusColor.PENDING;
+                    const pc = priorityColor[r.priority] || priorityColor.MEDIUM;
+                    const ti = typeIcon[r.type] || { icon: 'report', color: '#94a3b8' };
                     return (
-                        <div key={r.id} className="card" style={{ cursor: "pointer" }}
-                            onClick={() => { setSelectedReport(r); setShowDetailModal(true); }}>
-                            <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-md)" }}>
-                                <div style={{ width: 48, height: 48, borderRadius: "var(--radius-lg)", background: "var(--primary-50)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                    <span className="material-symbols-outlined" style={{ color: "var(--primary)" }}>{typeIcon[r.type] || "report"}</span>
+                        <div key={r.id} onClick={() => { setSelectedReport(r); setShowDetailModal(true); }}
+                            style={{
+                                background: '#fff', borderRadius: 16, padding: 22,
+                                border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                                cursor: 'pointer', transition: 'box-shadow 200ms, transform 200ms',
+                                display: 'flex', alignItems: 'start', gap: 16,
+                            }}
+                            onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.06)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+                            <div style={{
+                                width: 48, height: 48, borderRadius: 14,
+                                background: `${ti.color}15`, display: 'flex',
+                                alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 24, color: ti.color }}>{ti.icon}</span>
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                                    <h3 style={{ fontWeight: 700, fontSize: 15, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.reason}</h3>
+                                    <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: pc.bg, color: pc.text, flexShrink: 0 }}>{r.priority}</span>
                                 </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)", marginBottom: 4 }}>
-                                        <h3 style={{ fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.reason}</h3>
-                                        <span className="tab-pill" style={{ fontSize: 10, background: `${pc}20`, color: pc }}>{r.priority}</span>
-                                    </div>
-                                    <p style={{ fontSize: "var(--font-sm)", color: "var(--foreground-muted)", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", marginBottom: 8 }}>{r.description}</p>
-                                    <div style={{ display: "flex", gap: "var(--space-md)", fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>
-                                        <span>By: {r.reporter.name}</span><span>•</span>
-                                        <span>Against: {r.reportedEntity.name}</span><span>•</span>
-                                        <span>{r.createdAt}</span>
-                                    </div>
+                                <p style={{ fontSize: 13, color: '#64748b', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', marginBottom: 8 }}>{r.description}</p>
+                                <div style={{ display: 'flex', gap: 12, fontSize: 12, color: '#94a3b8' }}>
+                                    <span>By: {r.reporter.name}</span><span>•</span>
+                                    <span>Against: {r.reportedEntity.name}</span><span>•</span>
+                                    <span>{r.createdAt}</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
-                                    <span className="tab-pill" style={{ background: `${sc}20`, color: sc, fontSize: "var(--font-xs)" }}>{r.status.replace("_", " ")}</span>
-                                    {r.evidence.length > 0 && (
-                                        <span style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", display: "flex", alignItems: "center", gap: 4 }}>
-                                            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>attach_file</span>{r.evidence.length} files
-                                        </span>
-                                    )}
-                                </div>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, flexShrink: 0 }}>
+                                <span style={{ padding: '4px 12px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: sc.bg, color: sc.text }}>{r.status.replace("_", " ")}</span>
+                                {r.evidence.length > 0 && (
+                                    <span style={{ fontSize: 12, color: '#94a3b8', display: 'flex', alignItems: 'center', gap: 4 }}>
+                                        <span className="material-symbols-outlined" style={{ fontSize: 16 }}>attach_file</span>{r.evidence.length} files
+                                    </span>
+                                )}
                             </div>
                         </div>
                     );
                 })}
             </div>
 
-            {/* Detail modal */}
+            {/* Detail Modal */}
             {showDetailModal && selectedReport && (
-                <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-                    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)" }} onClick={() => setShowDetailModal(false)} />
-                    <div className="card" style={{ position: "relative", width: "100%", maxWidth: 640, maxHeight: "90vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: "var(--space-md)" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
-                                <h2 style={{ fontSize: "var(--font-lg)", fontWeight: 600 }}>Report Details</h2>
-                                <span className="tab-pill" style={{ fontSize: "var(--font-xs)", background: `${statusColor[selectedReport.status] || "var(--foreground-muted)"}20`, color: statusColor[selectedReport.status] }}>{selectedReport.status.replace("_", " ")}</span>
+                <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} onClick={() => setShowDetailModal(false)} />
+                    <div style={{
+                        position: 'relative', width: '100%', maxWidth: 640, maxHeight: '90vh',
+                        overflowY: 'auto', background: '#fff', borderRadius: 20, padding: 28,
+                        boxShadow: '0 24px 48px rgba(0,0,0,0.12)',
+                        display: 'flex', flexDirection: 'column', gap: 20,
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                <h2 style={{ fontSize: 18, fontWeight: 800, color: '#0f172a' }}>Report Details</h2>
+                                <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: (statusColor[selectedReport.status] || statusColor.PENDING).bg, color: (statusColor[selectedReport.status] || statusColor.PENDING).text }}>{selectedReport.status.replace("_", " ")}</span>
                             </div>
-                            <button onClick={() => setShowDetailModal(false)} style={{ padding: 8, borderRadius: "var(--radius-md)", border: "none", background: "transparent", cursor: "pointer" }}>
-                                <span className="material-symbols-outlined">close</span>
+                            <button onClick={() => setShowDetailModal(false)} style={{ width: 36, height: 36, borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
                             </button>
                         </div>
 
-                        <div style={{ background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", padding: "var(--space-md)" }}>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-md)" }}>
-                                <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Report Type</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{selectedReport.type.replace("_", " ")}</p></div>
-                                <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Priority</p><span className="tab-pill" style={{ fontSize: "var(--font-xs)", background: `${priorityColor[selectedReport.priority]}20`, color: priorityColor[selectedReport.priority] }}>{selectedReport.priority}</span></div>
-                                <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Reporter</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{selectedReport.reporter.name}</p></div>
-                                <div><p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>Reported Entity</p><p style={{ fontSize: "var(--font-sm)", fontWeight: 500 }}>{selectedReport.reportedEntity.name} ({selectedReport.reportedEntity.type})</p></div>
-                            </div>
+                        <div style={{ background: '#f8fafc', borderRadius: 14, padding: 18, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                            {[
+                                { label: 'Report Type', value: selectedReport.type.replace("_", " ") },
+                                { label: 'Priority', value: selectedReport.priority, isBadge: true },
+                                { label: 'Reporter', value: selectedReport.reporter.name },
+                                { label: 'Reported', value: `${selectedReport.reportedEntity.name} (${selectedReport.reportedEntity.type})` },
+                            ].map(f => (
+                                <div key={f.label}>
+                                    <p style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.03em' }}>{f.label}</p>
+                                    {f.isBadge ? (
+                                        <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, background: (priorityColor[f.value] || priorityColor.MEDIUM).bg, color: (priorityColor[f.value] || priorityColor.MEDIUM).text }}>{f.value}</span>
+                                    ) : (
+                                        <p style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', marginTop: 2 }}>{f.value}</p>
+                                    )}
+                                </div>
+                            ))}
                         </div>
 
                         <div>
-                            <h3 style={{ fontWeight: 500, marginBottom: 8 }}>Description</h3>
-                            <p style={{ fontSize: "var(--font-sm)", color: "var(--foreground-muted)", background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", padding: "var(--space-sm)" }}>{selectedReport.description}</p>
+                            <h3 style={{ fontWeight: 700, fontSize: 14, color: '#0f172a', marginBottom: 8 }}>Description</h3>
+                            <p style={{ fontSize: 14, color: '#64748b', background: '#f8fafc', borderRadius: 12, padding: 14, lineHeight: 1.6 }}>{selectedReport.description}</p>
                         </div>
 
                         {selectedReport.evidence.length > 0 && (
                             <div>
-                                <h3 style={{ fontWeight: 500, marginBottom: 8 }}>Evidence ({selectedReport.evidence.length} files)</h3>
+                                <h3 style={{ fontWeight: 700, fontSize: 14, color: '#0f172a', marginBottom: 8 }}>Evidence ({selectedReport.evidence.length} files)</h3>
                                 {selectedReport.evidence.map((f, i) => (
-                                    <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "var(--space-sm)", background: "var(--background-subtle)", borderRadius: "var(--radius-lg)", marginBottom: 8 }}>
-                                        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
-                                            <span className="material-symbols-outlined" style={{ color: "var(--foreground-light)" }}>description</span>
-                                            <span style={{ fontSize: "var(--font-sm)" }}>{f}</span>
+                                    <div key={i} style={{
+                                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                                        padding: 12, background: '#f8fafc', borderRadius: 10, marginBottom: 8,
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                            <span className="material-symbols-outlined" style={{ color: '#94a3b8', fontSize: 18 }}>description</span>
+                                            <span style={{ fontSize: 13, color: '#0f172a' }}>{f}</span>
                                         </div>
-                                        <button className="auth-link" style={{ fontSize: "var(--font-sm)" }}>View</button>
+                                        <button style={{ color: '#1de2d1', fontSize: 13, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>View</button>
                                     </div>
                                 ))}
                             </div>
                         )}
 
                         {selectedReport.resolution && (
-                            <div style={{ background: "var(--color-success-bg, #DCFCE7)", borderRadius: "var(--radius-lg)", padding: "var(--space-md)" }}>
-                                <h3 style={{ fontWeight: 500, color: "var(--color-success)", marginBottom: 4 }}>Resolution</h3>
-                                <p style={{ fontSize: "var(--font-sm)", color: "var(--color-success)" }}>{selectedReport.resolution}</p>
-                                {selectedReport.resolvedAt && <p style={{ fontSize: "var(--font-xs)", color: "var(--color-success)", marginTop: 8, opacity: 0.8 }}>Resolved {selectedReport.resolvedAt}</p>}
+                            <div style={{ background: '#dcfce7', borderRadius: 12, padding: 16 }}>
+                                <h3 style={{ fontWeight: 700, color: '#166534', marginBottom: 4, fontSize: 14 }}>Resolution</h3>
+                                <p style={{ fontSize: 13, color: '#166534' }}>{selectedReport.resolution}</p>
+                                {selectedReport.resolvedAt && <p style={{ fontSize: 11, color: '#16a34a', marginTop: 6 }}>Resolved {selectedReport.resolvedAt}</p>}
                             </div>
                         )}
 
                         {selectedReport.status !== "RESOLVED" && selectedReport.status !== "DISMISSED" && (
-                            <div style={{ display: "flex", gap: "var(--space-sm)", paddingTop: "var(--space-md)", borderTop: "1px solid var(--border-light)" }}>
-                                <button className="btn-secondary" style={{ flex: 1 }}>Assign to Me</button>
-                                <button className="btn-secondary" style={{ flex: 1, color: "var(--color-danger)", borderColor: "var(--color-danger)" }}>Dismiss</button>
-                                <button className="btn-primary" style={{ flex: 1, background: "var(--color-danger)" }}>Take Action</button>
+                            <div style={{ display: 'flex', gap: 10, paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
+                                <button style={{ flex: 1, height: 42, borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', color: '#0f172a', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Assign to Me</button>
+                                <button style={{ flex: 1, height: 42, borderRadius: 10, border: '1px solid #fee2e2', background: '#fff', color: '#dc2626', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Dismiss</button>
+                                <button style={{ flex: 1, height: 42, borderRadius: 10, border: 'none', background: '#dc2626', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>Take Action</button>
                             </div>
                         )}
                     </div>

@@ -18,34 +18,41 @@ export default function SettingsPage() {
     const handleLogout = async () => {
         try {
             await signOut();
-            router.push("/auth/login");
+            router.push("/");
         } catch (e) { console.error("Error signing out:", e); }
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {/* Header */}
             <div>
-                <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Settings</h1>
-                <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Manage your account preferences</p>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>Settings</h2>
+                <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Manage your account preferences</p>
             </div>
 
-            {/* Settings menu */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}>
-                {settingsItems.map((item) => (
-                    <Link key={item.label} href={item.href} style={{ textDecoration: "none", color: "inherit" }}>
-                        <div className="card" style={{
-                            display: "flex", alignItems: "center", gap: "var(--space-md)",
-                            cursor: "pointer", transition: "background 0.15s",
-                        }}>
-                            <div style={{ width: 44, height: 44, borderRadius: "var(--radius-lg)", background: "var(--primary-50)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <span className="material-symbols-outlined" style={{ color: "var(--primary)" }}>{item.icon}</span>
+            {/* Menu */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {settingsItems.map(item => (
+                    <Link key={item.label} href={item.href} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: 14, padding: 18,
+                            borderRadius: 14, background: '#fff', border: '1px solid #e2e8f0',
+                            cursor: 'pointer', transition: 'all 200ms',
+                        }}
+                            onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.06)'; e.currentTarget.style.borderColor = '#1de2d1'; }}
+                            onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0'; }}>
+                            <div style={{
+                                width: 44, height: 44, borderRadius: 12,
+                                background: 'rgba(29,226,209,0.08)', display: 'flex',
+                                alignItems: 'center', justifyContent: 'center',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ color: '#1de2d1', fontSize: 22 }}>{item.icon}</span>
                             </div>
                             <div style={{ flex: 1 }}>
-                                <p style={{ fontWeight: 500, fontSize: "var(--font-sm)" }}>{item.label}</p>
-                                <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{item.desc}</p>
+                                <p style={{ fontWeight: 600, fontSize: 14, color: '#0f172a' }}>{item.label}</p>
+                                <p style={{ fontSize: 12, color: '#94a3b8', marginTop: 2 }}>{item.desc}</p>
                             </div>
-                            <span className="material-symbols-outlined" style={{ color: "var(--foreground-light)" }}>chevron_right</span>
+                            <span className="material-symbols-outlined" style={{ color: '#cbd5e1', fontSize: 20 }}>chevron_right</span>
                         </div>
                     </Link>
                 ))}
@@ -54,12 +61,13 @@ export default function SettingsPage() {
             {/* Logout */}
             <button onClick={handleLogout}
                 style={{
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--space-sm)",
-                    padding: "var(--space-md)", borderRadius: "var(--radius-lg)",
-                    border: "1px solid var(--color-danger)", background: "transparent",
-                    color: "var(--color-danger)", fontWeight: 500, cursor: "pointer",
-                    transition: "background 0.15s",
-                }}>
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    padding: 16, borderRadius: 14, border: '1px solid #fecaca',
+                    background: '#fef2f2', color: '#dc2626', fontWeight: 700, fontSize: 14,
+                    cursor: 'pointer', transition: 'background 200ms',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#fee2e2'}
+                onMouseLeave={e => e.currentTarget.style.background = '#fef2f2'}>
                 <span className="material-symbols-outlined" style={{ fontSize: 20 }}>logout</span>
                 Log Out
             </button>

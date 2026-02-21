@@ -7,15 +7,28 @@ import { createClient } from '@/lib/supabase/client';
 interface NGO {
     id: string; name: string; category: string;
     followers_count: number; verification_status: string; logo_url: string | null;
+    description?: string;
 }
 
 type CategoryType = 'ALL' | 'EDUCATION' | 'ENVIRONMENT' | 'MEDICAL' | 'COMMUNITY' | 'ANIMAL_CARE' | 'OTHER';
 
 const categories = [
-    { label: 'All', value: 'ALL' }, { label: 'Education', value: 'EDUCATION' },
-    { label: 'Environment', value: 'ENVIRONMENT' }, { label: 'Healthcare', value: 'MEDICAL' },
-    { label: 'Community', value: 'COMMUNITY' }, { label: 'Animals', value: 'ANIMAL_CARE' },
+    { label: 'All', value: 'ALL', icon: 'apps' },
+    { label: 'Education', value: 'EDUCATION', icon: 'school' },
+    { label: 'Environment', value: 'ENVIRONMENT', icon: 'eco' },
+    { label: 'Healthcare', value: 'MEDICAL', icon: 'local_hospital' },
+    { label: 'Community', value: 'COMMUNITY', icon: 'groups' },
+    { label: 'Animals', value: 'ANIMAL_CARE', icon: 'pets' },
 ];
+
+const catColors: Record<string, { bg: string; text: string; light: string }> = {
+    EDUCATION: { bg: '#dbeafe', text: '#1e40af', light: 'rgba(59,130,246,0.1)' },
+    ENVIRONMENT: { bg: '#dcfce7', text: '#166534', light: 'rgba(22,163,74,0.1)' },
+    MEDICAL: { bg: '#fce7f3', text: '#9d174d', light: 'rgba(236,72,153,0.1)' },
+    COMMUNITY: { bg: '#fef3c7', text: '#92400e', light: 'rgba(245,158,11,0.1)' },
+    ANIMAL_CARE: { bg: '#ede9fe', text: '#5b21b6', light: 'rgba(139,92,246,0.1)' },
+    OTHER: { bg: '#f1f5f9', text: '#475569', light: 'rgba(100,116,139,0.1)' },
+};
 
 export default function DonorDiscoverPage() {
     const [ngos, setNgos] = useState<NGO[]>([]);
@@ -34,14 +47,15 @@ export default function DonorDiscoverPage() {
                 if (followed) setFollowedNgoIds(new Set(followed.map(f => f.ngo_id)));
             }
 
-            let query = supabase.from('ngos').select('id, name, categories, followers_count, verification_status, logo_url').eq('status', 'ACTIVE').order('followers_count', { ascending: false });
+            let query = supabase.from('ngos').select('id, name, categories, followers_count, verification_status, logo_url, description').eq('status', 'ACTIVE').order('followers_count', { ascending: false });
             if (activeCategory !== 'ALL') query = query.contains('categories', [activeCategory]);
             if (searchQuery) query = query.ilike('name', `%${searchQuery}%`);
 
             const { data } = await query.limit(20);
             const ngosData = (data || []).map(n => ({
                 id: n.id, name: n.name, category: n.categories?.[0] || 'Other',
-                followers_count: n.followers_count || 0, verification_status: n.verification_status, logo_url: n.logo_url,
+                followers_count: n.followers_count || 0, verification_status: n.verification_status,
+                logo_url: n.logo_url, description: n.description || '',
             }));
             setNgos(ngosData);
             setLoading(false);
@@ -66,70 +80,194 @@ export default function DonorDiscoverPage() {
 
     if (loading) {
         return (
-            <div className="dashboard-loading">
-                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
             </div>
         );
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div>
-                <Link href="/donor" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span> Back
-                </Link>
-                <h1 className="page-title">Discover NGOs</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+            {/* Header */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                    Discover NGOs
+                </h2>
+                <p style={{ color: '#64748b', fontSize: 15 }}>
+                    Find and support causes that align with your values. Browse verified organizations making a real impact.
+                </p>
             </div>
 
-            {/* Search */}
-            <div style={{ position: 'relative' }}>
-                <span className="material-symbols-outlined" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-disabled)', fontSize: 20 }}>search</span>
-                <input type="text" placeholder="Search NGOs..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="field-input" style={{ paddingLeft: 38 }} />
+            {/* Search & Filter Bar */}
+            <div style={{
+                background: '#fff', borderRadius: 16, padding: 20,
+                border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+            }}>
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+                    {/* Search Input */}
+                    <div style={{ position: 'relative', flex: 1, minWidth: 220 }}>
+                        <span className="material-symbols-outlined" style={{
+                            position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
+                            color: '#94a3b8', fontSize: 22,
+                        }}>search</span>
+                        <input
+                            type="text" placeholder="Search NGOs by name, cause, or location..."
+                            value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                            style={{
+                                width: '100%', padding: '12px 16px 12px 46px',
+                                borderRadius: 12, border: '1px solid #e2e8f0',
+                                background: '#f8fafc', fontSize: 14, color: '#0f172a',
+                                outline: 'none', transition: 'border-color 200ms',
+                            }}
+                            onFocus={e => e.target.style.borderColor = '#1de2d1'}
+                            onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+                        />
+                    </div>
+                </div>
+
+                {/* Category Pills */}
+                <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
+                    {categories.map(cat => {
+                        const isActive = activeCategory === cat.value;
+                        return (
+                            <button
+                                key={cat.value}
+                                onClick={() => setActiveCategory(cat.value as CategoryType)}
+                                style={{
+                                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                                    padding: '8px 16px', borderRadius: 999,
+                                    border: isActive ? '1.5px solid #1de2d1' : '1px solid #e2e8f0',
+                                    background: isActive ? 'rgba(29,226,209,0.08)' : '#fff',
+                                    color: isActive ? '#0d9488' : '#64748b',
+                                    fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                                    transition: 'all 200ms',
+                                }}
+                            >
+                                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{cat.icon}</span>
+                                {cat.label}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
 
-            {/* Category Tabs */}
-            <div style={{ display: 'flex', gap: 6, overflowX: 'auto' }}>
-                {categories.map(cat => (
-                    <button key={cat.value} onClick={() => setActiveCategory(cat.value as CategoryType)}
-                        className={activeCategory === cat.value ? "tab-pill tab-pill-active" : "tab-pill"}
-                        style={{ whiteSpace: 'nowrap' }}
-                    >{cat.label}</button>
-                ))}
-            </div>
-
-            {/* NGO List */}
+            {/* NGO Grid */}
             {ngos.length === 0 ? (
-                <div className="empty-state-container">
-                    <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>search_off</span>
-                    <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No NGOs found</p>
+                <div style={{
+                    textAlign: 'center', padding: 64,
+                    background: '#fff', borderRadius: 16,
+                    border: '1px solid #e2e8f0',
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#cbd5e1' }}>search_off</span>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginTop: 12 }}>No NGOs found</h3>
+                    <p style={{ color: '#94a3b8', marginTop: 4, fontSize: 14 }}>Try adjusting your search or filters.</p>
                 </div>
             ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {ngos.map(ngo => (
-                        <Link key={ngo.id} href={`/donor/donate/${ngo.id}`} className="card-interactive" style={{ padding: 14, textDecoration: 'none' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                    gap: 20,
+                }}>
+                    {ngos.map(ngo => {
+                        const cc = catColors[ngo.category] || catColors.OTHER;
+                        return (
+                            <div key={ngo.id} style={{
+                                background: '#fff', borderRadius: 16,
+                                border: '1px solid #e2e8f0', overflow: 'hidden',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                                transition: 'box-shadow 300ms, transform 300ms',
+                                cursor: 'pointer',
+                            }}
+                                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                            >
+                                {/* Card Header with gradient */}
                                 <div style={{
-                                    width: 48, height: 48, borderRadius: 12, flexShrink: 0,
-                                    background: ngo.logo_url ? `url("${ngo.logo_url}") center/cover` : 'linear-gradient(135deg, var(--color-primary), #42A5F5)',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 18, fontWeight: 700,
+                                    height: 80, position: 'relative',
+                                    background: `linear-gradient(135deg, ${cc.bg}, ${cc.light})`,
                                 }}>
-                                    {!ngo.logo_url && ngo.name.charAt(0)}
+                                    {/* Category Badge */}
+                                    <span style={{
+                                        position: 'absolute', top: 12, left: 12,
+                                        padding: '4px 10px', borderRadius: 999,
+                                        background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)',
+                                        fontSize: 11, fontWeight: 600, color: cc.text,
+                                    }}>{ngo.category}</span>
+                                    {ngo.verification_status === 'VERIFIED' && (
+                                        <span style={{
+                                            position: 'absolute', top: 12, right: 12,
+                                            display: 'inline-flex', alignItems: 'center', gap: 4,
+                                            padding: '4px 10px', borderRadius: 999,
+                                            background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)',
+                                            fontSize: 11, fontWeight: 600, color: '#059669',
+                                        }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>verified</span>
+                                            Verified
+                                        </span>
+                                    )}
                                 </div>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                                        <span style={{ fontWeight: 700, fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ngo.name}</span>
-                                        {ngo.verification_status === 'VERIFIED' && <span className="material-symbols-outlined" style={{ color: 'var(--color-primary)', fontSize: 14, flexShrink: 0 }}>verified</span>}
+
+                                <div style={{ padding: 20, paddingTop: 0, position: 'relative' }}>
+                                    {/* Logo */}
+                                    <div style={{
+                                        width: 56, height: 56, borderRadius: 14,
+                                        background: ngo.logo_url ? `url("${ngo.logo_url}") center/cover` : `linear-gradient(135deg, #1de2d1, #0ea5e9)`,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        color: '#fff', fontSize: 22, fontWeight: 800,
+                                        border: '3px solid #fff', marginTop: -28,
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                    }}>
+                                        {!ngo.logo_url && ngo.name.charAt(0)}
                                     </div>
-                                    <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{ngo.category} • {ngo.followers_count.toLocaleString()} followers</p>
+
+                                    <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginTop: 12 }}>{ngo.name}</h3>
+                                    <p style={{ fontSize: 13, color: '#64748b', marginTop: 2 }}>
+                                        {ngo.followers_count.toLocaleString()} supporters
+                                    </p>
+                                    {ngo.description && (
+                                        <p style={{
+                                            fontSize: 13, color: '#94a3b8', marginTop: 8,
+                                            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                                            overflow: 'hidden',
+                                        }}>{ngo.description}</p>
+                                    )}
+
+                                    <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+                                        <Link
+                                            href={`/donor/donate/${ngo.id}`}
+                                            style={{
+                                                flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                                                padding: '10px 16px', borderRadius: 10,
+                                                background: '#1de2d1', color: '#0f172a',
+                                                fontSize: 13, fontWeight: 700, textDecoration: 'none',
+                                                transition: 'background 200ms',
+                                            }}
+                                        >
+                                            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>volunteer_activism</span>
+                                            Donate
+                                        </Link>
+                                        <button
+                                            onClick={e => { e.preventDefault(); toggleFollow(ngo.id); }}
+                                            style={{
+                                                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                                                padding: '10px 16px', borderRadius: 10,
+                                                border: followedNgoIds.has(ngo.id) ? '1.5px solid #1de2d1' : '1px solid #e2e8f0',
+                                                background: followedNgoIds.has(ngo.id) ? 'rgba(29,226,209,0.08)' : '#fff',
+                                                color: followedNgoIds.has(ngo.id) ? '#0d9488' : '#64748b',
+                                                fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                                                transition: 'all 200ms',
+                                            }}
+                                        >
+                                            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
+                                                {followedNgoIds.has(ngo.id) ? 'favorite' : 'favorite_border'}
+                                            </span>
+                                            {followedNgoIds.has(ngo.id) ? 'Following' : 'Follow'}
+                                        </button>
+                                    </div>
                                 </div>
-                                <button
-                                    onClick={e => { e.preventDefault(); toggleFollow(ngo.id); }}
-                                    className={followedNgoIds.has(ngo.id) ? "btn btn-secondary" : "btn btn-primary"}
-                                    style={{ fontSize: 12, padding: '6px 14px', minHeight: 0, flexShrink: 0 }}
-                                >{followedNgoIds.has(ngo.id) ? 'Following' : 'Follow'}</button>
                             </div>
-                        </Link>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </div>

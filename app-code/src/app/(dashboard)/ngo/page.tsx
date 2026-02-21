@@ -35,12 +35,8 @@ export default function NGODashboardPage() {
     useEffect(() => {
         async function fetchDashboardData() {
             const supabase = createClient();
-
             const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
-                setLoading(false);
-                return;
-            }
+            if (!session) { setLoading(false); return; }
 
             const { data: membership } = await supabase
                 .from('ngo_members')
@@ -48,233 +44,261 @@ export default function NGODashboardPage() {
                 .eq('user_id', session.user.id)
                 .single();
 
-            if (!membership) {
-                setLoading(false);
-                return;
-            }
-
+            if (!membership) { setLoading(false); return; }
             const ngoId = membership.ngo_id;
 
             const { data: ngoData } = await supabase
-                .from('ngos')
-                .select('*')
-                .eq('id', ngoId)
-                .single();
-
-            const ngo = ngoData;
+                .from('ngos').select('*').eq('id', ngoId).single();
 
             const { count: activeRequests } = await supabase
-                .from('requests')
-                .select('*', { count: 'exact', head: true })
-                .eq('ngo_id', ngoId)
-                .eq('status', 'ACTIVE');
+                .from('requests').select('*', { count: 'exact', head: true })
+                .eq('ngo_id', ngoId).eq('status', 'ACTIVE');
 
             const { count: pendingDonations } = await supabase
-                .from('donations')
-                .select('*', { count: 'exact', head: true })
-                .eq('ngo_id', ngoId)
-                .eq('status', 'PENDING');
+                .from('donations').select('*', { count: 'exact', head: true })
+                .eq('ngo_id', ngoId).eq('status', 'PENDING');
 
             const { count: upcomingEvents } = await supabase
-                .from('events')
-                .select('*', { count: 'exact', head: true })
-                .eq('ngo_id', ngoId)
-                .gte('start_date', new Date().toISOString());
+                .from('events').select('*', { count: 'exact', head: true })
+                .eq('ngo_id', ngoId).gte('start_date', new Date().toISOString());
 
             const { data: recentRequests } = await supabase
-                .from('requests')
-                .select('id, title, status, created_at')
-                .eq('ngo_id', ngoId)
-                .order('created_at', { ascending: false })
-                .limit(3);
+                .from('requests').select('id, title, status, created_at')
+                .eq('ngo_id', ngoId).order('created_at', { ascending: false }).limit(3);
 
             const { data: recentDonations } = await supabase
-                .from('donations')
-                .select('id, amount, donor_name, created_at')
-                .eq('ngo_id', ngoId)
-                .order('created_at', { ascending: false })
-                .limit(3);
+                .from('donations').select('id, amount, donor_name, created_at')
+                .eq('ngo_id', ngoId).order('created_at', { ascending: false }).limit(3);
 
             const activity: NGODashboardData['recentActivity'] = [];
-
             recentRequests?.forEach(r => {
-                activity.push({
-                    id: `req-${r.id}`,
-                    type: 'request',
-                    title: `New request: ${r.title}`,
-                    description: `Status: ${r.status}`,
-                    created_at: r.created_at,
-                });
+                activity.push({ id: `req-${r.id}`, type: 'request', title: `New request: ${r.title}`, description: `Status: ${r.status}`, created_at: r.created_at });
             });
-
             recentDonations?.forEach(d => {
-                activity.push({
-                    id: `don-${d.id}`,
-                    type: 'donation',
-                    title: `Donation received: ₹${d.amount}`,
-                    description: d.donor_name || 'Anonymous donor',
-                    created_at: d.created_at,
-                });
+                activity.push({ id: `don-${d.id}`, type: 'donation', title: `Donation received: ₹${d.amount}`, description: d.donor_name || 'Anonymous donor', created_at: d.created_at });
             });
-
             activity.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-            const finalActivity = activity.slice(0, 5);
 
             setData({
-                ngo: ngo ? {
-                    id: ngo.id,
-                    name: ngo.name,
-                    total_requests: ngo.total_requests || 0,
-                    total_volunteers: ngo.total_volunteers || 0,
-                    total_donations: ngo.total_donations || 0,
-                    total_events: ngo.total_events || 0,
+                ngo: ngoData ? {
+                    id: ngoData.id, name: ngoData.name,
+                    total_requests: ngoData.total_requests || 0,
+                    total_volunteers: ngoData.total_volunteers || 0,
+                    total_donations: ngoData.total_donations || 0,
+                    total_events: ngoData.total_events || 0,
                 } : null,
-                stats: {
-                    activeRequests: activeRequests || 0,
-                    pendingDonations: pendingDonations || 0,
-                    upcomingEvents: upcomingEvents || 0,
-                },
-                recentActivity: finalActivity,
+                stats: { activeRequests: activeRequests || 0, pendingDonations: pendingDonations || 0, upcomingEvents: upcomingEvents || 0 },
+                recentActivity: activity.slice(0, 5),
             });
             setLoading(false);
         }
-
         fetchDashboardData();
     }, []);
 
     const getActivityIcon = (type: string) => {
         switch (type) {
-            case 'request': return 'pending_actions';
-            case 'donation': return 'paid';
+            case 'request': return 'assignment_turned_in';
+            case 'donation': return 'add_card';
             case 'volunteer': return 'person_add';
-            case 'event': return 'event';
+            case 'event': return 'campaign';
             default: return 'info';
         }
     };
 
-    const getActivityBg = (type: string) => {
+    const getActivityStyle = (type: string) => {
         switch (type) {
-            case 'request': return { bg: '#FFF3E0', color: '#E65100' };
-            case 'donation': return { bg: '#E8F5E9', color: '#2E7D32' };
-            case 'volunteer': return { bg: '#E3F2FD', color: '#1565C0' };
-            case 'event': return { bg: '#EDE7F6', color: '#4527A0' };
-            default: return { bg: '#F5F5F5', color: '#616161' };
+            case 'request': return { bg: 'rgba(59,130,246,0.1)', color: '#2563eb' };
+            case 'donation': return { bg: 'rgba(16,185,129,0.1)', color: '#059669' };
+            case 'volunteer': return { bg: 'rgba(139,92,246,0.1)', color: '#7c3aed' };
+            case 'event': return { bg: 'rgba(245,158,11,0.1)', color: '#d97706' };
+            default: return { bg: '#f1f5f9', color: '#64748b' };
         }
     };
 
     if (loading) {
         return (
-            <div className="dashboard-loading">
-                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
             </div>
         );
     }
 
-    if (!data?.ngo) {
-        return (
-            <div className="empty-state-container">
-                <div style={{ width: 56, height: 56, borderRadius: 14, background: 'var(--color-primary-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 28, color: 'var(--color-primary)' }}>business</span>
-                </div>
-                <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>No NGO Found</h2>
-                <p style={{ color: 'var(--color-text-muted)', fontSize: 13, marginBottom: 16 }}>You need to register an NGO to access this dashboard.</p>
-                <Link href="/register/ngo" className="btn btn-primary">Register NGO</Link>
-            </div>
-        );
-    }
-
-    const statCards = [
-        { icon: 'pending_actions', iconBg: '#EDE7F6', iconColor: 'var(--color-primary)', value: data.ngo.total_requests, label: 'Total Requests', badge: `${data.stats.activeRequests} active` },
-        { icon: 'groups', iconBg: '#E3F2FD', iconColor: '#1565C0', value: data.ngo.total_volunteers, label: 'Volunteers' },
-        { icon: 'payments', iconBg: '#E8F5E9', iconColor: '#2E7D32', value: formatCurrency(data.ngo.total_donations), label: 'Total Raised' },
-        { icon: 'event', iconBg: '#EDE7F6', iconColor: '#4527A0', value: data.ngo.total_events, label: 'Events', badge: `${data.stats.upcomingEvents} upcoming` },
+    const ngo = data?.ngo;
+    const stats = [
+        { label: 'Total Requests', value: ngo?.total_requests || 0, icon: 'description', iconBg: 'rgba(59,130,246,0.08)', iconColor: '#2563eb', trend: '+12%', trendUp: true },
+        { label: 'Active Volunteers', value: ngo?.total_volunteers || 0, icon: 'person_check', iconBg: 'rgba(16,185,129,0.08)', iconColor: '#059669', trend: '-5%', trendUp: false },
+        { label: 'Donations', value: formatCurrency(ngo?.total_donations || 0), icon: 'payments', iconBg: 'rgba(245,158,11,0.08)', iconColor: '#d97706', trend: '+18%', trendUp: true },
+        { label: 'Upcoming Events', value: data?.stats.upcomingEvents || 0, icon: 'event', iconBg: 'rgba(139,92,246,0.08)', iconColor: '#7c3aed', trend: '0%', trendUp: null },
     ];
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            {/* Welcome */}
-            <div>
-                <h1 className="page-title">{data.ngo.name}</h1>
-                <p style={{ color: 'var(--color-text-muted)', fontSize: 14, marginTop: 2 }}>Welcome back! Here&apos;s your impact overview.</p>
-            </div>
-
-            {/* Quick Actions */}
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <Link href="/ngo/requests/create" className="btn btn-primary" style={{ gap: 6 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add_circle</span>
-                    New Request
-                </Link>
-                <Link href="/ngo/events" className="btn btn-secondary" style={{ gap: 6 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>event</span>
-                    Create Event
-                </Link>
-                <Link href="/ngo/posts" className="btn btn-secondary" style={{ gap: 6 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>campaign</span>
-                    Announcement
-                </Link>
-            </div>
+        <div>
+            {/* Header */}
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1e293b', marginBottom: 24 }}>
+                Dashboard Overview
+            </h2>
 
             {/* Stats Grid */}
-            <div className="stat-grid">
-                {statCards.map(stat => (
-                    <div key={stat.label} className="card" style={{ padding: 18 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 20, marginBottom: 32 }}>
+                {stats.map((stat, i) => (
+                    <div key={i} style={{
+                        background: '#fff', padding: 20, borderRadius: 12,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
                             <div style={{
-                                width: 40, height: 40, borderRadius: 10,
+                                width: 40, height: 40, borderRadius: 8,
                                 background: stat.iconBg,
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                             }}>
-                                <span className="material-symbols-outlined" style={{ color: stat.iconColor, fontSize: 20 }}>{stat.icon}</span>
+                                <span className="material-symbols-outlined" style={{ fontSize: 22, color: stat.iconColor }}>{stat.icon}</span>
                             </div>
-                            {stat.badge && (
-                                <span className="badge badge-info" style={{ fontSize: 11 }}>{stat.badge}</span>
+                            {stat.trendUp !== null && (
+                                <span style={{
+                                    display: 'inline-flex', alignItems: 'center', gap: 2,
+                                    fontSize: 11, fontWeight: 700, borderRadius: 20,
+                                    padding: '3px 8px',
+                                    background: stat.trendUp ? 'rgba(16,185,129,0.08)' : 'rgba(244,63,94,0.08)',
+                                    color: stat.trendUp ? '#059669' : '#f43f5e',
+                                }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
+                                        {stat.trendUp ? 'trending_up' : 'trending_down'}
+                                    </span>
+                                    {stat.trend}
+                                </span>
                             )}
                         </div>
-                        <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--color-text-heading)' }}>{stat.value}</div>
-                        <div style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 2 }}>{stat.label}</div>
+                        <p style={{ fontSize: 13, fontWeight: 500, color: '#64748b', marginBottom: 4 }}>{stat.label}</p>
+                        <h3 style={{ fontSize: 24, fontWeight: 700, color: '#0f172a' }}>{stat.value}</h3>
                     </div>
                 ))}
             </div>
 
-            {/* Recent Activity */}
-            <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                    <h2 style={{ fontSize: 16, fontWeight: 700 }}>Recent Activity</h2>
-                    <button className="auth-link" style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 13 }}>View all</button>
+            {/* Dashboard Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
+                {/* Recent Activity Feed */}
+                <div style={{
+                    background: '#fff', borderRadius: 12,
+                    border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    overflow: 'hidden',
+                }}>
+                    <div style={{
+                        padding: '14px 20px',
+                        borderBottom: '1px solid #f1f5f9',
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    }}>
+                        <h4 style={{ fontWeight: 700, color: '#1e293b' }}>Recent Activity</h4>
+                        <button style={{ fontSize: 12, fontWeight: 700, color: '#1de2d1', background: 'none', border: 'none', cursor: 'pointer' }}>View All</button>
+                    </div>
+                    <div>
+                        {(data?.recentActivity || []).length === 0 ? (
+                            <div style={{ padding: 40, textAlign: 'center', color: '#94a3b8' }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 36, marginBottom: 8 }}>inbox</span>
+                                <p style={{ fontSize: 14 }}>No recent activity</p>
+                            </div>
+                        ) : (
+                            data?.recentActivity.map((item) => {
+                                const style = getActivityStyle(item.type);
+                                return (
+                                    <div key={item.id} style={{
+                                        padding: '14px 20px',
+                                        display: 'flex', alignItems: 'center', gap: 14,
+                                        borderBottom: '1px solid #f8fafc',
+                                        cursor: 'pointer',
+                                    }}>
+                                        <div style={{
+                                            width: 40, height: 40, borderRadius: '50%',
+                                            background: style.bg, display: 'flex',
+                                            alignItems: 'center', justifyContent: 'center',
+                                            flexShrink: 0,
+                                        }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 20, color: style.color }}>{getActivityIcon(item.type)}</span>
+                                        </div>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <p style={{ fontSize: 13, fontWeight: 600, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</p>
+                                            <p style={{ fontSize: 12, color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.description}</p>
+                                        </div>
+                                        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                                            <p style={{ fontSize: 11, fontWeight: 500, color: '#94a3b8' }}>{formatDistanceToNow(item.created_at)}</p>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
+                    </div>
                 </div>
 
-                <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-                    {data.recentActivity.length === 0 ? (
-                        <div style={{ padding: 40, textAlign: 'center' }}>
-                            <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>inbox</span>
-                            <p style={{ color: 'var(--color-text-muted)', marginTop: 8, fontSize: 13 }}>No recent activity</p>
+                {/* Quick Actions Panel */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    <div style={{
+                        background: '#fff', padding: 20, borderRadius: 12,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
+                        <h4 style={{ fontWeight: 700, color: '#1e293b', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span className="material-symbols-outlined" style={{ color: '#1de2d1' }}>bolt</span>
+                            Quick Actions
+                        </h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                            <Link href="/ngo/requests/create" style={{
+                                display: 'flex', alignItems: 'center', gap: 10,
+                                padding: '10px 14px', borderRadius: 8,
+                                background: '#1de2d1', color: '#1E3A5F',
+                                fontWeight: 700, fontSize: 13, textDecoration: 'none',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>add_box</span>
+                                Create New Request
+                            </Link>
+                            <Link href="/ngo/volunteers" style={{
+                                display: 'flex', alignItems: 'center', gap: 10,
+                                padding: '10px 14px', borderRadius: 8,
+                                background: '#f1f5f9', color: '#475569',
+                                fontWeight: 700, fontSize: 13, textDecoration: 'none',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#64748b' }}>person_add</span>
+                                Invite Volunteer
+                            </Link>
+                            <button style={{
+                                display: 'flex', alignItems: 'center', gap: 10,
+                                padding: '10px 14px', borderRadius: 8,
+                                background: '#f1f5f9', color: '#475569',
+                                fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', textAlign: 'left',
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#64748b' }}>summarize</span>
+                                View Reports
+                            </button>
                         </div>
-                    ) : (
-                        data.recentActivity.map((activity, i) => {
-                            const colors = getActivityBg(activity.type);
-                            return (
-                                <div key={activity.id} className="list-row" style={{
-                                    display: 'flex', alignItems: 'flex-start', gap: 12, padding: '14px 18px',
-                                    borderBottom: i < data.recentActivity.length - 1 ? '1px solid var(--color-border-subtle)' : 'none',
-                                }}>
-                                    <div style={{
-                                        width: 36, height: 36, borderRadius: 8,
-                                        background: colors.bg, color: colors.color,
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                                    }}>
-                                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>{getActivityIcon(activity.type)}</span>
-                                    </div>
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                        <p style={{ fontWeight: 500, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{activity.title}</p>
-                                        <p style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 2 }}>{activity.description}</p>
-                                    </div>
-                                    <span style={{ fontSize: 11, color: 'var(--color-text-disabled)', flexShrink: 0 }}>
-                                        {activity.created_at ? formatDistanceToNow(activity.created_at) : 'Just now'}
-                                    </span>
-                                </div>
-                            );
-                        })
-                    )}
+                    </div>
+
+                    {/* Annual Impact Report Card */}
+                    <div style={{
+                        background: '#1E3A5F', borderRadius: 12, padding: 20,
+                        color: '#fff', position: 'relative', overflow: 'hidden',
+                    }}>
+                        <div style={{ position: 'relative', zIndex: 10 }}>
+                            <h5 style={{ fontWeight: 700, fontSize: 17, marginBottom: 8 }}>Annual Impact Report</h5>
+                            <p style={{ color: '#94a3b8', fontSize: 12, marginBottom: 14, lineHeight: 1.5 }}>
+                                Generate your NGO&apos;s yearly transparency report for donors and stakeholders.
+                            </p>
+                            <button style={{
+                                fontSize: 12, fontWeight: 700, color: '#1de2d1',
+                                background: 'none', border: 'none', cursor: 'pointer',
+                                display: 'flex', alignItems: 'center', gap: 4,
+                            }}>
+                                Generate Now
+                                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_forward</span>
+                            </button>
+                        </div>
+                        <span className="material-symbols-outlined" style={{
+                            position: 'absolute', bottom: -16, right: -16,
+                            fontSize: 80, color: 'rgba(255,255,255,0.03)',
+                            transform: 'rotate(12deg)',
+                        }}>auto_awesome</span>
+                        <div style={{
+                            position: 'absolute', inset: 0,
+                            background: 'linear-gradient(135deg, rgba(29,226,209,0.1), transparent)',
+                            opacity: 0.5,
+                        }} />
+                    </div>
                 </div>
             </div>
         </div>

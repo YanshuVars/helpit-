@@ -86,31 +86,46 @@ export default function ChatRoomPage() {
     let lastDate = "";
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 80px)" }}>
-            {/* Chat header */}
-            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", padding: "var(--space-md) 0", borderBottom: "1px solid var(--border-light)" }}>
-                <button onClick={() => router.push("/messages")} style={{ border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center" }}>
-                    <span className="material-symbols-outlined" style={{ color: "var(--foreground-muted)" }}>arrow_back</span>
+        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 80px)' }}>
+            {/* Chat Header */}
+            <div style={{
+                display: 'flex', alignItems: 'center', gap: 14, padding: '16px 0',
+                borderBottom: '1px solid #f1f5f9',
+            }}>
+                <button onClick={() => router.push("/messages")} style={{
+                    width: 40, height: 40, borderRadius: 10, border: '1px solid #e2e8f0',
+                    background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                    <span className="material-symbols-outlined" style={{ color: '#64748b', fontSize: 20 }}>arrow_back</span>
                 </button>
-                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, overflow: "hidden" }}>
-                    {otherUser?.avatar_url ? <img src={otherUser.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (otherUser?.full_name?.charAt(0) || "?").toUpperCase()}
+                <div style={{
+                    width: 42, height: 42, borderRadius: 12, background: '#1de2d1',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', fontWeight: 800, fontSize: 16, overflow: 'hidden',
+                }}>
+                    {otherUser?.avatar_url ? <img src={otherUser.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (otherUser?.full_name?.charAt(0) || "?").toUpperCase()}
                 </div>
                 <div>
-                    <p style={{ fontWeight: 600, fontSize: "var(--font-sm)" }}>{otherUser?.full_name || "Loading..."}</p>
-                    <p style={{ fontSize: "var(--font-xs)", color: "var(--color-success)" }}>Online</p>
+                    <p style={{ fontWeight: 700, fontSize: 15, color: '#0f172a' }}>{otherUser?.full_name || "Loading..."}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#16a34a' }} />
+                        <p style={{ fontSize: 12, color: '#16a34a', fontWeight: 600 }}>Online</p>
+                    </div>
                 </div>
             </div>
 
-            {/* Messages area */}
-            <div style={{ flex: 1, overflowY: "auto", padding: "var(--space-md) 0", display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}>
+            {/* Messages Area */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 0', display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {loading ? (
-                    <div style={{ display: "flex", justifyContent: "center", padding: "3rem 0" }}><div className="spinner" /></div>
-                ) : messages.length === 0 ? (
-                    <div style={{ textAlign: "center", padding: "3rem 0", color: "var(--foreground-muted)" }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 48, color: "var(--foreground-light)" }}>waving_hand</span>
-                        <p style={{ marginTop: 8 }}>Say hello!</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                        <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
                     </div>
-                ) : messages.map((msg) => {
+                ) : messages.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '60px 0', color: '#94a3b8' }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#cbd5e1' }}>waving_hand</span>
+                        <p style={{ marginTop: 10, fontWeight: 600 }}>Say hello!</p>
+                    </div>
+                ) : messages.map(msg => {
                     const isMine = msg.sender_id === currentUserId;
                     const dateStr = fmtDate(msg.created_at);
                     let showDate = false;
@@ -119,20 +134,23 @@ export default function ChatRoomPage() {
                     return (
                         <div key={msg.id}>
                             {showDate && (
-                                <div style={{ textAlign: "center", padding: "var(--space-sm) 0" }}>
-                                    <span style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)", background: "var(--background-subtle)", padding: "4px 12px", borderRadius: 12 }}>{dateStr}</span>
+                                <div style={{ textAlign: 'center', padding: '10px 0' }}>
+                                    <span style={{ fontSize: 11, color: '#94a3b8', background: '#f1f5f9', padding: '4px 14px', borderRadius: 999, fontWeight: 600 }}>{dateStr}</span>
                                 </div>
                             )}
-                            <div style={{ display: "flex", justifyContent: isMine ? "flex-end" : "flex-start" }}>
+                            <div style={{ display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start' }}>
                                 <div style={{
-                                    maxWidth: "70%", padding: "var(--space-sm) var(--space-md)",
-                                    borderRadius: "var(--radius-lg)",
-                                    background: isMine ? "var(--primary)" : "var(--background-card)",
-                                    color: isMine ? "#fff" : "var(--foreground)",
-                                    border: isMine ? "none" : "1px solid var(--border-light)",
+                                    maxWidth: '70%', padding: '10px 16px',
+                                    borderRadius: 16,
+                                    borderBottomRightRadius: isMine ? 4 : 16,
+                                    borderBottomLeftRadius: isMine ? 16 : 4,
+                                    background: isMine ? '#1de2d1' : '#fff',
+                                    color: isMine ? '#0f172a' : '#0f172a',
+                                    border: isMine ? 'none' : '1px solid #e2e8f0',
+                                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                                 }}>
-                                    <p style={{ fontSize: "var(--font-sm)", wordBreak: "break-word" }}>{msg.content}</p>
-                                    <p style={{ fontSize: 10, marginTop: 4, textAlign: "right", opacity: 0.7 }}>{fmtTime(msg.created_at)}</p>
+                                    <p style={{ fontSize: 14, wordBreak: 'break-word', lineHeight: 1.5 }}>{msg.content}</p>
+                                    <p style={{ fontSize: 10, marginTop: 4, textAlign: 'right', opacity: 0.6, fontWeight: 600 }}>{fmtTime(msg.created_at)}</p>
                                 </div>
                             </div>
                         </div>
@@ -141,13 +159,25 @@ export default function ChatRoomPage() {
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Send bar */}
-            <div style={{ display: "flex", gap: "var(--space-sm)", padding: "var(--space-md) 0", borderTop: "1px solid var(--border-light)" }}>
-                <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
-                    placeholder="Type a message..." className="field-input" style={{ flex: 1 }} />
-                <button className="btn-primary" disabled={sending || !newMessage.trim()} onClick={sendMessage}
-                    style={{ display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap" }}>
+            {/* Send Bar */}
+            <div style={{ display: 'flex', gap: 10, padding: '16px 0', borderTop: '1px solid #f1f5f9' }}>
+                <input type="text" value={newMessage} onChange={e => setNewMessage(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && !e.shiftKey && sendMessage()}
+                    placeholder="Type a message..."
+                    style={{
+                        flex: 1, padding: '12px 18px', borderRadius: 14,
+                        border: '1px solid #e2e8f0', background: '#f8fafc',
+                        fontSize: 14, color: '#0f172a', outline: 'none',
+                    }}
+                    onFocus={e => e.target.style.borderColor = '#1de2d1'}
+                    onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
+                <button onClick={sendMessage} disabled={sending || !newMessage.trim()}
+                    style={{
+                        display: 'flex', alignItems: 'center', gap: 6, padding: '12px 20px',
+                        borderRadius: 14, border: 'none', background: '#1de2d1',
+                        color: '#0f172a', fontWeight: 700, fontSize: 14, cursor: (sending || !newMessage.trim()) ? 'not-allowed' : 'pointer',
+                        opacity: (sending || !newMessage.trim()) ? 0.5 : 1,
+                    }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 18 }}>send</span>Send
                 </button>
             </div>

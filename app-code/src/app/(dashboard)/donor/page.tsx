@@ -12,6 +12,14 @@ interface DonorDashboardData {
     recentDonations: Array<{ id: string; amount: number; ngo_name: string; status: string; created_at: string }>;
 }
 
+const catColors: Record<string, { bg: string; text: string }> = {
+    Education: { bg: "rgba(245,158,11,0.1)", text: "#92400e" },
+    "Disaster Relief": { bg: "rgba(239,68,68,0.1)", text: "#991b1b" },
+    Hunger: { bg: "rgba(59,130,246,0.1)", text: "#1e3a8a" },
+    Environment: { bg: "rgba(16,185,129,0.1)", text: "#064e3b" },
+    Health: { bg: "rgba(139,92,246,0.1)", text: "#5b21b6" },
+};
+
 export default function DonorDashboardPage() {
     const [data, setData] = useState<DonorDashboardData | null>(null);
     const [loading, setLoading] = useState(true);
@@ -53,131 +61,182 @@ export default function DonorDashboardPage() {
 
     if (loading) {
         return (
-            <div className="dashboard-loading">
-                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
             </div>
         );
     }
 
     if (!data?.user) {
         return (
-            <div className="empty-state-container">
-                <span className="material-symbols-outlined" style={{ fontSize: 48, color: 'var(--color-text-disabled)' }}>favorite</span>
+            <div style={{ textAlign: 'center', padding: 64 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#cbd5e1' }}>favorite</span>
                 <h2 style={{ fontSize: 18, fontWeight: 700, marginTop: 12 }}>Welcome, Donor!</h2>
-                <p style={{ color: 'var(--color-text-muted)', marginTop: 4 }}>Complete your profile to start donating.</p>
-                <Link href="/register/individual" className="btn btn-primary" style={{ marginTop: 16 }}>Complete Profile</Link>
+                <p style={{ color: '#64748b', marginTop: 4 }}>Complete your profile to start donating.</p>
+                <Link href="/register/individual" style={{ display: 'inline-block', marginTop: 16, padding: '10px 24px', borderRadius: 8, background: '#1de2d1', color: '#0f172a', fontWeight: 700, fontSize: 13, textDecoration: 'none' }}>Complete Profile</Link>
             </div>
         );
     }
 
     const firstName = data.user.full_name.split(' ')[0] || 'Donor';
 
-    return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-            {/* Greeting */}
-            <div>
-                <h2 style={{ fontSize: 22, fontWeight: 700 }}>Hi, {firstName}! 👋</h2>
-                <p style={{ fontSize: 14, color: 'var(--color-text-muted)', marginTop: 4 }}>Your contributions are making a difference.</p>
-            </div>
+    const stats = [
+        { label: 'Total Donated', value: formatCurrency(data.stats.totalDonated), icon: 'payments', iconBg: 'rgba(29,226,209,0.1)', iconColor: '#1de2d1', bubble: 'rgba(29,226,209,0.1)' },
+        { label: 'NGOs Supported', value: data.followedNgos.length, icon: 'diversity_1', iconBg: 'rgba(59,130,246,0.1)', iconColor: '#2563eb', bubble: 'rgba(59,130,246,0.1)' },
+        { label: 'Tax Saved', value: formatCurrency(Math.floor(data.stats.totalDonated * 0.25)), icon: 'savings', iconBg: 'rgba(16,185,129,0.1)', iconColor: '#059669', bubble: 'rgba(16,185,129,0.1)' },
+        { label: 'Donations Count', value: data.recentDonations.length, icon: 'receipt_long', iconBg: 'rgba(245,158,11,0.1)', iconColor: '#d97706', bubble: 'rgba(245,158,11,0.1)' },
+    ];
 
-            {/* Impact Stats */}
-            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-                <div className="stat-card">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--color-primary)', marginBottom: 6 }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>volunteer_activism</span>
-                        <span className="stat-card-label">Donated</span>
-                    </div>
-                    <div className="stat-card-value">{formatCurrency(data.stats.totalDonated)}</div>
-                    <Link href="/donor/history" style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-success)', display: 'inline-flex', alignItems: 'center', gap: 2, marginTop: 4, textDecoration: 'none' }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>trending_up</span>
-                        View history
-                    </Link>
-                </div>
-                <div className="stat-card">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#E65100', marginBottom: 6 }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>groups</span>
-                        <span className="stat-card-label">Impacted</span>
-                    </div>
-                    <div className="stat-card-value">{data.stats.impactCount}</div>
-                    <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: 2, marginTop: 4 }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>favorite</span> Lives helped
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+            {/* Header */}
+            <header style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20 }}>
+                <div>
+                    <h2 style={{ fontSize: 32, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                        Welcome back, {firstName} <span style={{ display: 'inline-block' }}>👋</span>
+                    </h2>
+                    <p style={{ color: '#64748b', fontSize: 16, marginTop: 6, maxWidth: 500 }}>
+                        Here is the summary of your kindness journey and the impact you've made this year.
                     </p>
                 </div>
+                <div style={{ display: 'flex', gap: 12 }}>
+                    <Link href="/donor/discover" style={{
+                        display: 'inline-flex', alignItems: 'center',
+                        height: 48, padding: '0 24px', borderRadius: 12,
+                        border: '1px solid #e2e8f0', background: '#fff',
+                        fontSize: 14, fontWeight: 600, color: '#0f172a', textDecoration: 'none',
+                    }}>Browse NGOs</Link>
+                    <Link href="/donor/donate" style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 8,
+                        height: 48, padding: '0 24px', borderRadius: 12,
+                        background: '#1de2d1', color: '#0f172a',
+                        fontSize: 14, fontWeight: 700, textDecoration: 'none',
+                        boxShadow: '0 4px 16px rgba(29,226,209,0.2)',
+                    }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 20 }}>favorite</span>
+                        Donate Now
+                    </Link>
+                </div>
+            </header>
+
+            {/* Stat Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 18 }}>
+                {stats.map((s, i) => (
+                    <div key={i} style={{
+                        position: 'relative', overflow: 'hidden',
+                        background: '#fff', borderRadius: 16, padding: 22,
+                        border: '1px solid #f1f5f9', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                        transition: 'box-shadow 200ms',
+                    }}>
+                        {/* Decorative bubble */}
+                        <div style={{
+                            position: 'absolute', right: -24, top: -24,
+                            width: 80, height: 80, borderRadius: '50%',
+                            background: s.bubble,
+                        }} />
+                        <div style={{ position: 'relative', zIndex: 1 }}>
+                            <div style={{
+                                width: 48, height: 48, borderRadius: 12,
+                                background: s.iconBg,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                marginBottom: 16,
+                            }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 26, color: s.iconColor }}>{s.icon}</span>
+                            </div>
+                            <p style={{ fontSize: 13, fontWeight: 500, color: '#64748b' }}>{s.label}</p>
+                            <p style={{ fontSize: 24, fontWeight: 700, color: '#0f172a', marginTop: 4 }}>{s.value}</p>
+                        </div>
+                    </div>
+                ))}
             </div>
 
-            {/* Followed NGOs */}
-            <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700 }}>Followed NGOs</h3>
-                    <Link href="/donor/discover" style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-primary)', textDecoration: 'none' }}>See all</Link>
+            {/* Recent Donations */}
+            <section>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                    <h3 style={{ fontSize: 17, fontWeight: 700, color: '#0f172a' }}>Recent Donations</h3>
+                    <Link href="/donor/history" style={{
+                        display: 'flex', alignItems: 'center', gap: 4,
+                        fontSize: 13, fontWeight: 600, color: '#1de2d1', textDecoration: 'none',
+                    }}>
+                        View All History
+                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>arrow_forward</span>
+                    </Link>
                 </div>
-                <div style={{ display: 'flex', gap: 14, overflowX: 'auto' }}>
-                    {data.followedNgos.length === 0 ? (
-                        <Link href="/donor/discover" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
-                            <div style={{ width: 56, height: 56, borderRadius: '50%', border: '2px dashed var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-disabled)' }}>
-                                <span className="material-symbols-outlined">add</span>
-                            </div>
-                            <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--color-text-muted)' }}>Discover</span>
-                        </Link>
-                    ) : (
-                        <>
-                            {data.followedNgos.map(ngo => (
-                                <Link key={ngo.id} href={`/donor/discover/${ngo.id}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0, textDecoration: 'none' }}>
-                                    <div style={{
-                                        width: 56, height: 56, borderRadius: '50%', border: '2px solid var(--color-primary)',
-                                        padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
-                                    }}>
-                                        <div style={{
-                                            width: '100%', height: '100%', borderRadius: '50%', backgroundSize: 'cover', backgroundPosition: 'center',
-                                            backgroundImage: ngo.logo_url ? `url("${ngo.logo_url}")` : 'linear-gradient(135deg, var(--color-primary), #42A5F5)',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 16,
-                                        }}>
-                                            {!ngo.logo_url && ngo.name?.charAt(0)}
-                                        </div>
-                                    </div>
-                                    <span style={{ fontSize: 11, fontWeight: 500, textAlign: 'center', width: 56, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--color-text-body)' }}>{ngo.name}</span>
-                                </Link>
-                            ))}
-                            <Link href="/donor/discover" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0, textDecoration: 'none' }}>
-                                <div style={{ width: 56, height: 56, borderRadius: '50%', border: '2px dashed var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-disabled)' }}>
-                                    <span className="material-symbols-outlined">add</span>
-                                </div>
-                                <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--color-text-muted)' }}>Discover</span>
-                            </Link>
-                        </>
-                    )}
-                </div>
-            </div>
 
-            {/* Recent Activity */}
-            <div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>Recent Activity</h3>
-                {data.recentDonations.length === 0 ? (
-                    <div className="empty-state-container">
-                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>inbox</span>
-                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No recent donations</p>
-                        <Link href="/donor/discover" className="btn btn-primary" style={{ marginTop: 12 }}>Discover NGOs</Link>
+                <div style={{
+                    background: '#fff', borderRadius: 16,
+                    border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    overflow: 'hidden',
+                }}>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                            <thead>
+                                <tr style={{ background: 'rgba(248,250,252,0.5)', borderBottom: '1px solid #e2e8f0' }}>
+                                    <th style={{ padding: '14px 20px', fontSize: 13, fontWeight: 600, color: '#64748b' }}>Organization</th>
+                                    <th style={{ padding: '14px 20px', fontSize: 13, fontWeight: 600, color: '#64748b' }}>Category</th>
+                                    <th style={{ padding: '14px 20px', fontSize: 13, fontWeight: 600, color: '#64748b' }}>Amount</th>
+                                    <th style={{ padding: '14px 20px', fontSize: 13, fontWeight: 600, color: '#64748b' }}>Date</th>
+                                    <th style={{ padding: '14px 20px', fontSize: 13, fontWeight: 600, color: '#64748b', textAlign: 'right' }}>Receipt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.recentDonations.map((d) => {
+                                    const cc = catColors[d.status] || { bg: 'rgba(100,116,139,0.1)', text: '#475569' };
+                                    return (
+                                        <tr key={d.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                            <td style={{ padding: '14px 20px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                                    <div style={{
+                                                        width: 38, height: 38, borderRadius: '50%',
+                                                        background: '#f1f5f9',
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    }}>
+                                                        <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#64748b' }}>volunteer_activism</span>
+                                                    </div>
+                                                    <div>
+                                                        <p style={{ fontSize: 13, fontWeight: 600 }}>{d.ngo_name}</p>
+                                                        <p style={{ fontSize: 11, color: '#94a3b8' }}>ID: #{d.id.slice(0, 8)}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style={{ padding: '14px 20px' }}>
+                                                <span style={{
+                                                    fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20,
+                                                    background: cc.bg, color: cc.text,
+                                                }}>{d.status}</span>
+                                            </td>
+                                            <td style={{ padding: '14px 20px', fontSize: 13, fontWeight: 600 }}>
+                                                {formatCurrency(d.amount)}
+                                            </td>
+                                            <td style={{ padding: '14px 20px', fontSize: 13, color: '#64748b' }}>
+                                                {new Date(d.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                            </td>
+                                            <td style={{ padding: '14px 20px', textAlign: 'right' }}>
+                                                <Link href={`/donor/receipts/${d.id}`} style={{
+                                                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                                                    padding: '5px 10px', borderRadius: 6,
+                                                    fontSize: 12, fontWeight: 600, color: '#64748b', textDecoration: 'none',
+                                                }}>
+                                                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>download</span>
+                                                    View
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                                {data.recentDonations.length === 0 && (
+                                    <tr>
+                                        <td colSpan={5} style={{ padding: 40, textAlign: 'center', color: '#94a3b8' }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 36 }}>favorite</span>
+                                            <p style={{ marginTop: 8 }}>No donations yet. Start making an impact!</p>
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
                     </div>
-                ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, paddingLeft: 20, position: 'relative' }}>
-                        <div style={{ position: 'absolute', left: 7, top: 8, bottom: 8, width: 2, background: 'var(--color-border-subtle)' }} />
-                        {data.recentDonations.map(donation => (
-                            <div key={donation.id} style={{ position: 'relative', paddingLeft: 20 }}>
-                                <div style={{ position: 'absolute', left: -14, top: 6, width: 10, height: 10, borderRadius: '50%', background: 'var(--color-primary)', border: '3px solid var(--color-bg-card)', zIndex: 1 }} />
-                                <div className="card" style={{ padding: 14 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 4 }}>
-                                        <span style={{ fontWeight: 700, fontSize: 13 }}>{donation.status === 'COMPLETED' ? 'Donation Confirmed' : 'Donation Pending'}</span>
-                                        <span style={{ fontSize: 10, color: 'var(--color-text-disabled)' }}>{formatDistanceToNow(donation.created_at)}</span>
-                                    </div>
-                                    <p style={{ fontSize: 13, color: 'var(--color-text-body)' }}>
-                                        Donated <span style={{ fontWeight: 600, color: 'var(--color-primary)' }}>{formatCurrency(donation.amount)}</span> to <span style={{ fontWeight: 600 }}>{donation.ngo_name}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+                </div>
+            </section>
         </div>
     );
 }

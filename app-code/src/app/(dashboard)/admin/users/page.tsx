@@ -65,111 +65,158 @@ export default function UserManagementPage() {
     };
     const getNGOName = (u: User) => u.ngo_members?.[0]?.ngo_name || null;
 
-    const roleColor: Record<string, string> = {
-        PLATFORM_ADMIN: "var(--color-danger)", NGO_ADMIN: "var(--primary)",
-        NGO_COORDINATOR: "var(--color-info)", NGO_MEMBER: "#06B6D4",
-        VOLUNTEER: "var(--color-success)",
+    const roleColor: Record<string, { bg: string; text: string }> = {
+        PLATFORM_ADMIN: { bg: '#fee2e2', text: '#dc2626' },
+        NGO_ADMIN: { bg: 'rgba(29,226,209,0.1)', text: '#0d9488' },
+        NGO_COORDINATOR: { bg: '#dbeafe', text: '#2563eb' },
+        NGO_MEMBER: { bg: '#e0f2fe', text: '#0284c7' },
+        VOLUNTEER: { bg: '#dcfce7', text: '#16a34a' },
+        INDIVIDUAL: { bg: '#f1f5f9', text: '#64748b' },
     };
-    const statusColor: Record<string, string> = {
-        ACTIVE: "var(--color-success)", SUSPENDED: "var(--color-danger)", INACTIVE: "var(--foreground-muted)",
+    const statusBadge: Record<string, { bg: string; text: string }> = {
+        ACTIVE: { bg: '#dcfce7', text: '#16a34a' },
+        SUSPENDED: { bg: '#fee2e2', text: '#dc2626' },
+        INACTIVE: { bg: '#f1f5f9', text: '#94a3b8' },
     };
 
     const toggleSelectAll = () => setSelectedUsers(selectedUsers.length === filteredUsers.length ? [] : filteredUsers.map(u => u.id));
     const toggleSelectUser = (id: string) => setSelectedUsers(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
+    const thStyle: React.CSSProperties = {
+        textAlign: 'left', padding: '12px 16px', fontSize: 11, fontWeight: 700,
+        color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em',
+    };
+    const tdStyle: React.CSSProperties = { padding: '14px 16px', fontSize: 14 };
+    const selectStyle: React.CSSProperties = {
+        padding: '10px 14px', borderRadius: 12, border: '1px solid #e2e8f0',
+        background: '#fff', fontSize: 13, fontWeight: 600, color: '#0f172a', cursor: 'pointer', outline: 'none',
+    };
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
-            {/* Header */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             <div>
-                <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Users</h1>
-                <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Manage platform users</p>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>User Management</h2>
+                <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Manage platform users and access</p>
             </div>
 
             {/* Filters */}
-            <div style={{ display: "flex", gap: "var(--space-sm)", flexWrap: "wrap" }}>
-                <input type="text" placeholder="Search users..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                    className="field-input" style={{ flex: 1, minWidth: 200 }} />
-                <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <div style={{ flex: 1, minWidth: 220, position: 'relative' }}>
+                    <span className="material-symbols-outlined" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: 22 }}>search</span>
+                    <input type="text" placeholder="Search users..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                        style={{ width: '100%', padding: '10px 14px 10px 46px', borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: 14, color: '#0f172a', outline: 'none' }}
+                        onFocus={e => e.target.style.borderColor = '#1de2d1'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
+                </div>
+                <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} style={selectStyle}>
                     {roleFilters.map(r => <option key={r} value={r}>{r === "ALL" ? "All Roles" : r.replace(/_/g, " ")}</option>)}
                 </select>
-                <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={selectStyle}>
                     {statusFilters.map(s => <option key={s} value={s}>{s === "ALL" ? "All Status" : s}</option>)}
                 </select>
             </div>
 
-            {/* Bulk actions */}
+            {/* Bulk Actions */}
             {selectedUsers.length > 0 && (
-                <div className="card" style={{ background: "var(--color-info-bg, #DBEAFE)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontSize: "var(--font-sm)", color: "var(--color-info)" }}>{selectedUsers.length} user(s) selected</span>
-                    <div style={{ display: "flex", gap: "var(--space-sm)" }}>
-                        <button className="btn-secondary" style={{ color: "var(--color-danger)", fontSize: "var(--font-xs)" }}
-                            onClick={() => { selectedUsers.forEach(id => updateUserStatus(id, "SUSPENDED")); setSelectedUsers([]); }}>Suspend</button>
-                        <button className="btn-secondary" style={{ color: "var(--color-success)", fontSize: "var(--font-xs)" }}
-                            onClick={() => { selectedUsers.forEach(id => updateUserStatus(id, "ACTIVE")); setSelectedUsers([]); }}>Activate</button>
+                <div style={{
+                    background: '#eff6ff', borderRadius: 14, padding: '14px 20px',
+                    border: '1px solid #bfdbfe', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: '#2563eb' }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 16, verticalAlign: 'middle', marginRight: 4 }}>check_circle</span>
+                        {selectedUsers.length} user(s) selected
+                    </span>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                        <button onClick={() => { selectedUsers.forEach(id => updateUserStatus(id, "SUSPENDED")); setSelectedUsers([]); }}
+                            style={{ padding: '6px 14px', borderRadius: 8, border: '1px solid #fee2e2', background: '#fef2f2', color: '#dc2626', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Suspend</button>
+                        <button onClick={() => { selectedUsers.forEach(id => updateUserStatus(id, "ACTIVE")); setSelectedUsers([]); }}
+                            style={{ padding: '6px 14px', borderRadius: 8, border: '1px solid #dcfce7', background: '#f0fdf4', color: '#16a34a', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Activate</button>
                     </div>
                 </div>
             )}
 
-            {/* User table */}
+            {/* Table */}
             {loading ? (
-                <div style={{ display: "flex", justifyContent: "center", padding: "3rem 0" }}><div className="spinner" /></div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
+                    <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+                </div>
             ) : filteredUsers.length === 0 ? (
-                <div className="card" style={{ textAlign: "center", padding: "var(--space-xl)" }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 40, color: "var(--foreground-light)" }}>person</span>
-                    <p style={{ color: "var(--foreground-muted)", marginTop: 8 }}>No users found</p>
+                <div style={{
+                    background: '#fff', borderRadius: 16, padding: 48, textAlign: 'center',
+                    border: '1px solid #e2e8f0',
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 44, color: '#cbd5e1' }}>person</span>
+                    <p style={{ color: '#94a3b8', marginTop: 10, fontSize: 14 }}>No users found</p>
                 </div>
             ) : (
-                <div className="card" style={{ overflow: "hidden", padding: 0 }}>
-                    <div style={{ overflowX: "auto" }}>
-                        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <div style={{
+                    background: '#fff', borderRadius: 16, overflow: 'hidden',
+                    border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                }}>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                             <thead>
-                                <tr style={{ background: "var(--background-subtle)" }}>
-                                    <th style={{ padding: "var(--space-sm) var(--space-md)", textAlign: "left" }}>
-                                        <input type="checkbox" checked={selectedUsers.length === filteredUsers.length} onChange={toggleSelectAll} />
+                                <tr style={{ background: '#f8fafc' }}>
+                                    <th style={{ ...thStyle, width: 44 }}>
+                                        <input type="checkbox" checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
+                                            onChange={toggleSelectAll}
+                                            style={{ width: 16, height: 16, accentColor: '#1de2d1', cursor: 'pointer' }} />
                                     </th>
-                                    {["User", "Role", "Status", "NGO", "Joined", "Actions"].map(h => (
-                                        <th key={h} style={{ textAlign: "left", padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-xs)", fontWeight: 600, color: "var(--foreground-muted)", textTransform: "uppercase" }}>{h}</th>
+                                    {['User', 'Role', 'Status', 'NGO', 'Joined', 'Actions'].map(h => (
+                                        <th key={h} style={thStyle}>{h}</th>
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredUsers.map((user) => {
+                                {filteredUsers.map(user => {
                                     const role = getPrimaryRole(user);
                                     const ngoName = getNGOName(user);
-                                    const rc = roleColor[role] || "var(--foreground-muted)";
-                                    const sc = statusColor[user.status] || "var(--foreground-muted)";
+                                    const rc = roleColor[role] || roleColor.INDIVIDUAL;
+                                    const sb = statusBadge[user.status] || statusBadge.INACTIVE;
                                     return (
-                                        <tr key={user.id} style={{ borderTop: "1px solid var(--border-light)" }}>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                                <input type="checkbox" checked={selectedUsers.includes(user.id)} onChange={() => toggleSelectUser(user.id)} />
+                                        <tr key={user.id} style={{ borderTop: '1px solid #f1f5f9', transition: 'background 150ms' }}
+                                            onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
+                                            onMouseLeave={e => e.currentTarget.style.background = ''}>
+                                            <td style={{ ...tdStyle, width: 44 }}>
+                                                <input type="checkbox" checked={selectedUsers.includes(user.id)} onChange={() => toggleSelectUser(user.id)}
+                                                    style={{ width: 16, height: 16, accentColor: '#1de2d1', cursor: 'pointer' }} />
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
-                                                    <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "var(--font-sm)", overflow: "hidden" }}>
-                                                        {user.avatar_url ? <img src={user.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase())}
+                                            <td style={tdStyle}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                                    <div style={{
+                                                        width: 36, height: 36, borderRadius: 10,
+                                                        background: '#1de2d1', display: 'flex',
+                                                        alignItems: 'center', justifyContent: 'center',
+                                                        color: '#fff', fontWeight: 800, fontSize: 14, overflow: 'hidden',
+                                                    }}>
+                                                        {user.avatar_url ? <img src={user.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                            : (user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase())}
                                                     </div>
                                                     <div>
-                                                        <p style={{ fontWeight: 600, fontSize: "var(--font-sm)" }}>{user.full_name || "Unknown"}</p>
-                                                        <p style={{ fontSize: "var(--font-xs)", color: "var(--foreground-muted)" }}>{user.email}</p>
+                                                        <p style={{ fontWeight: 600, fontSize: 13, color: '#0f172a' }}>{user.full_name || "Unknown"}</p>
+                                                        <p style={{ fontSize: 11, color: '#94a3b8' }}>{user.email}</p>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                                <span className="tab-pill" style={{ background: `${rc}20`, color: rc, fontSize: "var(--font-xs)" }}>{role.replace(/_/g, " ")}</span>
+                                            <td style={tdStyle}>
+                                                <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: rc.bg, color: rc.text }}>{role.replace(/_/g, " ")}</span>
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
-                                                <span className="tab-pill" style={{ background: `${sc}20`, color: sc, fontSize: "var(--font-xs)" }}>{user.status}</span>
+                                            <td style={tdStyle}>
+                                                <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: sb.bg, color: sb.text }}>{user.status}</span>
                                             </td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>{ngoName || "-"}</td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)", fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>{formatDistanceToNow(user.created_at)}</td>
-                                            <td style={{ padding: "var(--space-sm) var(--space-md)" }}>
+                                            <td style={{ ...tdStyle, color: '#64748b', fontSize: 13 }}>{ngoName || "—"}</td>
+                                            <td style={{ ...tdStyle, color: '#94a3b8', fontSize: 13 }}>{formatDistanceToNow(user.created_at)}</td>
+                                            <td style={tdStyle}>
                                                 {user.status === "ACTIVE" && (
-                                                    <button className="btn-secondary" style={{ fontSize: "var(--font-xs)", color: "var(--color-danger)", padding: "4px 12px" }}
-                                                        onClick={() => updateUserStatus(user.id, "SUSPENDED")}>Suspend</button>
+                                                    <button onClick={() => updateUserStatus(user.id, "SUSPENDED")} style={{
+                                                        padding: '5px 14px', borderRadius: 8, border: '1px solid #fee2e2',
+                                                        background: '#fef2f2', color: '#dc2626', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                                                    }}>Suspend</button>
                                                 )}
                                                 {user.status === "SUSPENDED" && (
-                                                    <button className="btn-secondary" style={{ fontSize: "var(--font-xs)", color: "var(--color-success)", padding: "4px 12px" }}
-                                                        onClick={() => updateUserStatus(user.id, "ACTIVE")}>Activate</button>
+                                                    <button onClick={() => updateUserStatus(user.id, "ACTIVE")} style={{
+                                                        padding: '5px 14px', borderRadius: 8, border: '1px solid #dcfce7',
+                                                        background: '#f0fdf4', color: '#16a34a', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                                                    }}>Activate</button>
                                                 )}
                                             </td>
                                         </tr>

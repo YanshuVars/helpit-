@@ -111,7 +111,7 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
     const handleLogout = async () => {
         try {
             await signOut();
-            router.push('/auth/login');
+            router.push('/');
         } catch (err) {
             console.error('Logout failed:', err);
         }

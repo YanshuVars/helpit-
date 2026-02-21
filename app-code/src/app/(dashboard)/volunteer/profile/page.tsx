@@ -44,14 +44,8 @@ export default function VolunteerProfilePage() {
 
     if (loading) {
         return (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div>
-                    <Link href="/volunteer" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span> Back
-                    </Link>
-                    <h1 className="page-title">My Profile</h1>
-                </div>
-                <div className="dashboard-loading"><span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span></div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
             </div>
         );
     }
@@ -59,82 +53,131 @@ export default function VolunteerProfilePage() {
     if (!user) return null;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+            {/* Header */}
             <div>
-                <Link href="/volunteer" className="auth-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, marginBottom: 8 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span> Back
-                </Link>
-                <h1 className="page-title">My Profile</h1>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>My Profile</h2>
+                <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Your volunteer identity and impact.</p>
             </div>
 
-            {/* Profile Header */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 28, alignItems: 'start' }}>
+                {/* Left: Profile Card */}
                 <div style={{
-                    width: 80, height: 80, borderRadius: '50%', overflow: 'hidden', marginBottom: 12,
-                    background: 'linear-gradient(135deg, var(--color-primary), #42A5F5)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 28, fontWeight: 700,
+                    background: '#fff', borderRadius: 16, overflow: 'hidden',
+                    border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    position: 'sticky', top: 80,
                 }}>
-                    {user.avatar_url ? (
-                        <img src={user.avatar_url} alt={user.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (user.full_name?.charAt(0) || "U")}
-                </div>
-                <h2 style={{ fontSize: 20, fontWeight: 700 }}>{user.full_name}</h2>
-                <p style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>{user.email}</p>
-                <Link href="/volunteer/profile/edit" style={{ marginTop: 8, color: 'var(--color-primary)', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>Edit Profile</Link>
-            </div>
-
-            {/* Stats */}
-            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-                {[
-                    { label: 'Hours', value: stats.hours },
-                    { label: 'Tasks', value: stats.tasks },
-                    { label: 'NGOs', value: stats.ngos },
-                ].map(s => (
-                    <div key={s.label} className="stat-card" style={{ minHeight: 80 }}>
-                        <div className="stat-card-value">{s.value}</div>
-                        <div className="stat-card-label">{s.label}</div>
+                    {/* Cover */}
+                    <div style={{ height: 80, background: 'linear-gradient(135deg, #1de2d1, #0ea5e9)', position: 'relative' }}>
+                        <div style={{
+                            position: 'absolute', bottom: -36, left: '50%', transform: 'translateX(-50%)',
+                            width: 72, height: 72, borderRadius: '50%',
+                            background: user.avatar_url ? `url("${user.avatar_url}") center/cover` : 'linear-gradient(135deg, #1de2d1, #0ea5e9)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: '#fff', fontSize: 28, fontWeight: 800,
+                            border: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                        }}>
+                            {!user.avatar_url && (user.full_name?.charAt(0) || "U")}
+                        </div>
                     </div>
-                ))}
-            </div>
 
-            {/* Skills */}
-            <div className="card" style={{ padding: 18 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <h3 style={{ fontWeight: 600, fontSize: 15 }}>Skills</h3>
-                    <Link href="/volunteer/profile/edit" style={{ color: 'var(--color-primary)', fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>Add</Link>
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {user.skills && user.skills.length > 0 ? (
-                        user.skills.map((skill: string) => (
-                            <span key={skill} style={{
-                                padding: '4px 12px', borderRadius: 20, background: 'var(--color-primary-bg)',
-                                color: 'var(--color-primary)', fontSize: 12, fontWeight: 500,
-                            }}>{skill}</span>
-                        ))
-                    ) : (
-                        <p style={{ fontSize: 13, color: 'var(--color-text-disabled)' }}>No skills added yet.</p>
-                    )}
-                </div>
-            </div>
+                    <div style={{ padding: '48px 24px 24px', textAlign: 'center' }}>
+                        <h3 style={{ fontSize: 18, fontWeight: 700, color: '#0f172a' }}>{user.full_name}</h3>
+                        <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 2 }}>{user.email}</p>
 
-            {/* Achievements */}
-            <div className="card" style={{ padding: 18 }}>
-                <h3 style={{ fontWeight: 600, fontSize: 15, marginBottom: 10 }}>Achievements</h3>
-                {achievements.length > 0 ? (
-                    <div style={{ display: 'flex', gap: 14, overflowX: 'auto', paddingBottom: 4 }}>
-                        {achievements.map(a => (
-                            <div key={a.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 72, flexShrink: 0 }}>
-                                <div style={{
-                                    width: 44, height: 44, borderRadius: '50%', background: '#FFF8E1',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, marginBottom: 4,
-                                }}>{a.icon || "🏆"}</div>
-                                <span style={{ fontSize: 10, textAlign: 'center', lineHeight: 1.3 }}>{a.title}</span>
+                        <Link href="/volunteer/profile/edit" style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                            marginTop: 16, padding: '9px 20px', borderRadius: 10,
+                            border: '1.5px solid #1de2d1', background: 'rgba(29,226,209,0.05)',
+                            color: '#0d9488', fontSize: 13, fontWeight: 700, textDecoration: 'none',
+                        }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>edit</span>
+                            Edit Profile
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Right: Content */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    {/* Stats */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+                        {[
+                            { icon: 'schedule', label: 'Hours', value: stats.hours, color: '#1de2d1' },
+                            { icon: 'task_alt', label: 'Tasks Done', value: stats.tasks, color: '#f59e0b' },
+                            { icon: 'apartment', label: 'NGOs Helped', value: stats.ngos, color: '#8b5cf6' },
+                        ].map(s => (
+                            <div key={s.label} style={{
+                                background: '#fff', padding: 22, borderRadius: 16,
+                                border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 22, color: s.color }}>{s.icon}</span>
+                                    <span style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</span>
+                                </div>
+                                <p style={{ fontSize: 28, fontWeight: 800, color: '#0f172a' }}>{s.value}</p>
                             </div>
                         ))}
                     </div>
-                ) : (
-                    <p style={{ fontSize: 13, color: 'var(--color-text-disabled)' }}>No achievements yet. Keep volunteering!</p>
-                )}
+
+                    {/* Skills */}
+                    <div style={{
+                        background: '#fff', borderRadius: 16, padding: 24,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }}>
+                                <span className="material-symbols-outlined" style={{ fontSize: 20, verticalAlign: 'middle', marginRight: 8, color: '#1de2d1' }}>construction</span>
+                                Skills
+                            </h3>
+                            <Link href="/volunteer/profile/edit" style={{ fontSize: 13, fontWeight: 600, color: '#1de2d1', textDecoration: 'none' }}>+ Add</Link>
+                        </div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                            {user.skills && user.skills.length > 0 ? (
+                                user.skills.map((skill: string) => (
+                                    <span key={skill} style={{
+                                        padding: '6px 14px', borderRadius: 999,
+                                        background: 'rgba(29,226,209,0.08)',
+                                        color: '#0d9488', fontSize: 13, fontWeight: 600,
+                                        border: '1px solid rgba(29,226,209,0.2)',
+                                    }}>{skill}</span>
+                                ))
+                            ) : (
+                                <p style={{ fontSize: 13, color: '#94a3b8' }}>No skills added yet.</p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Achievements */}
+                    <div style={{
+                        background: '#fff', borderRadius: 16, padding: 24,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
+                        <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginBottom: 16 }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 20, verticalAlign: 'middle', marginRight: 8, color: '#f59e0b' }}>emoji_events</span>
+                            Achievements
+                        </h3>
+                        {achievements.length > 0 ? (
+                            <div style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingBottom: 4 }}>
+                                {achievements.map(a => (
+                                    <div key={a.id} style={{
+                                        display: 'flex', flexDirection: 'column', alignItems: 'center',
+                                        minWidth: 88, flexShrink: 0, padding: 12,
+                                    }}>
+                                        <div style={{
+                                            width: 52, height: 52, borderRadius: '50%',
+                                            background: '#fef3c7', display: 'flex',
+                                            alignItems: 'center', justifyContent: 'center',
+                                            fontSize: 22, marginBottom: 8,
+                                        }}>{a.icon || "🏆"}</div>
+                                        <span style={{ fontSize: 12, fontWeight: 600, textAlign: 'center', lineHeight: 1.3, color: '#0f172a' }}>{a.title}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p style={{ fontSize: 13, color: '#94a3b8' }}>No achievements yet. Keep volunteering!</p>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

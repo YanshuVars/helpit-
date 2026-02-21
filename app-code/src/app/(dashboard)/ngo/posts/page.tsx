@@ -1,315 +1,158 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { formatDistanceToNow } from "@/lib/utils";
 
 interface Post {
     id: string;
+    title: string;
     content: string;
-    image_url: string | null;
+    type: string;
     created_at: string;
-    author: { full_name: string; avatar_url: string | null } | null;
-    likes_count: number;
-    comments_count: number;
-    user_has_liked: boolean;
+    author_name: string;
+    status: string;
 }
 
-interface Comment {
-    id: string;
-    content: string;
-    created_at: string;
-    author: { full_name: string; avatar_url: string | null } | null;
-}
+const typeIcons: Record<string, { icon: string; bg: string; color: string }> = {
+    update: { icon: "campaign", bg: "rgba(59,130,246,0.1)", color: "#2563eb" },
+    news: { icon: "newspaper", bg: "rgba(16,185,129,0.1)", color: "#059669" },
+    alert: { icon: "warning", bg: "rgba(245,158,11,0.1)", color: "#d97706" },
+    story: { icon: "auto_stories", bg: "rgba(139,92,246,0.1)", color: "#7c3aed" },
+};
 
-export default function NGOPostsPage() {
-    const supabase = createClient();
+export default function PostsPage() {
     const [posts, setPosts] = useState<Post[]>([]);
+    const [filter, setFilter] = useState("All");
     const [loading, setLoading] = useState(true);
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [newPostContent, setNewPostContent] = useState("");
-    const [submitting, setSubmitting] = useState(false);
-    const [commentModal, setCommentModal] = useState<{ postId: string; comments: Comment[] } | null>(null);
-    const [newComment, setNewComment] = useState("");
 
-    useEffect(() => { fetchPosts(); }, []);
+    useEffect(() => {
+        async function load() {
+            const supabase = createClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { setLoading(false); return; }
 
-    async function fetchPosts() {
-        setLoading(true);
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) { setLoading(false); return; }
-
-            const { data: ngoData } = await supabase
+            const { data: membership } = await supabase
                 .from("ngo_members").select("ngo_id")
-                .eq("user_id", user.id).single();
+                .eq("user_id", session.user.id).single();
+            if (!membership) { setLoading(false); return; }
 
-            if (ngoData?.ngo_id) {
-                const { data: postsData } = await supabase
-                    .from("posts").select("*, profiles!posts_user_id_fkey(full_name, avatar_url)")
-                    .eq("ngo_id", ngoData.ngo_id)
-                    .order("created_at", { ascending: false });
+            const { data } = await supabase
+                .from("posts")
+                .select("id, title, content, type, created_at, author_name, status")
+                .eq("ngo_id", membership.ngo_id)
+                .order("created_at", { ascending: false })
+                .limit(20);
 
-                if (postsData) {
-                    setPosts(postsData.map((p: any) => ({
-                        ...p,
-                        author: p.profiles,
-                        likes_count: p.likes_count || 0,
-                        comments_count: p.comments_count || 0,
-                        user_has_liked: false,
-                    })));
-                }
-            }
-        } catch (error) {
-            console.error("Error fetching posts:", error);
-        } finally { setLoading(false); }
-    }
-
-    async function handleCreatePost() {
-        if (!newPostContent.trim()) return;
-        setSubmitting(true);
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
-
-            const { data: ngoData } = await supabase
-                .from("ngo_members").select("ngo_id")
-                .eq("user_id", user.id).single();
-
-            if (!ngoData?.ngo_id) return;
-
-            await supabase.from("posts").insert({
-                user_id: user.id,
-                ngo_id: ngoData.ngo_id,
-                content: newPostContent,
-                post_type: "ANNOUNCEMENT",
-            });
-
-            setNewPostContent("");
-            setShowCreateModal(false);
-            fetchPosts();
-        } catch (error) {
-            console.error("Error creating post:", error);
-        } finally { setSubmitting(false); }
-    }
-
-    async function handleLike(postId: string) {
-        setPosts(posts.map(p => p.id === postId ? { ...p, user_has_liked: !p.user_has_liked, likes_count: p.user_has_liked ? p.likes_count - 1 : p.likes_count + 1 } : p));
-    }
-
-    async function openComments(postId: string) {
-        try {
-            const { data: comments } = await supabase
-                .from("comments").select("*, profiles!comments_user_id_fkey(full_name, avatar_url)")
-                .eq("post_id", postId).order("created_at", { ascending: true });
-
-            setCommentModal({ postId, comments: (comments || []).map((c: any) => ({ ...c, author: c.profiles })) });
-        } catch (error) {
-            console.error("Error fetching comments:", error);
+            setPosts(data || []);
+            setLoading(false);
         }
-    }
+        load();
+    }, []);
 
-    async function handleAddComment() {
-        if (!newComment.trim() || !commentModal) return;
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return;
-
-            await supabase.from("comments").insert({
-                post_id: commentModal.postId,
-                user_id: user.id,
-                content: newComment,
-            });
-
-            setNewComment("");
-            openComments(commentModal.postId);
-        } catch (error) {
-            console.error("Error adding comment:", error);
-        }
-    }
+    const filters = ["All", "Updates", "News", "Alerts", "Stories"];
 
     if (loading) {
         return (
-            <div className="dashboard-loading">
-                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: "#1de2d1" }}>progress_activity</span>
             </div>
         );
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h1 className="page-title">Posts</h1>
-                <button onClick={() => setShowCreateModal(true)} className="btn btn-primary" style={{ gap: 6 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
+        <div>
+            {/* Header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+                <div>
+                    <h2 style={{ fontSize: 26, fontWeight: 900, color: "#0f172a" }}>Posts & Updates</h2>
+                    <p style={{ fontSize: 14, color: "#64748b", marginTop: 4 }}>Share news, updates, and stories with your community.</p>
+                </div>
+                <button style={{
+                    display: "inline-flex", alignItems: "center", gap: 6,
+                    padding: "10px 20px", borderRadius: 8,
+                    background: "#1de2d1", color: "#0f172a",
+                    fontWeight: 700, fontSize: 13, border: "none", cursor: "pointer",
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>edit_note</span>
                     New Post
                 </button>
             </div>
 
-            {/* Post List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                {posts.length === 0 ? (
-                    <div className="empty-state-container">
-                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>article</span>
-                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No posts yet</p>
-                    </div>
-                ) : (
-                    posts.map(post => (
-                        <div key={post.id} className="card" style={{ padding: 18 }}>
-                            {/* Author Header */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                                <div style={{
-                                    width: 38, height: 38, borderRadius: '50%',
-                                    background: 'linear-gradient(135deg, var(--color-primary), #42A5F5)',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    color: '#fff', fontWeight: 700, fontSize: 14, overflow: 'hidden',
-                                }}>
-                                    {post.author?.avatar_url
-                                        ? <img src={post.author.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                        : (post.author?.full_name?.charAt(0) || "?")}
-                                </div>
-                                <div>
-                                    <p style={{ fontWeight: 600, fontSize: 13 }}>{post.author?.full_name || "Unknown"}</p>
-                                    <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>
-                                        {formatDistanceToNow(new Date(post.created_at))}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Content */}
-                            <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--color-text-body)', whiteSpace: 'pre-wrap' }}>{post.content}</p>
-
-                            {post.image_url && (
-                                <div style={{ marginTop: 12, borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
-                                    <img src={post.image_url} alt="" style={{ width: '100%', maxHeight: 300, objectFit: 'cover' }} />
-                                </div>
-                            )}
-
-                            {/* Actions */}
-                            <div style={{ display: 'flex', gap: 16, marginTop: 14, paddingTop: 12, borderTop: '1px solid var(--color-border-subtle)' }}>
-                                <button
-                                    onClick={() => handleLike(post.id)}
-                                    style={{
-                                        display: 'flex', alignItems: 'center', gap: 4,
-                                        border: 'none', background: 'none', cursor: 'pointer', padding: 0,
-                                        color: post.user_has_liked ? '#DC2626' : 'var(--color-text-muted)', fontSize: 13, fontWeight: 500,
-                                    }}
-                                >
-                                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>{post.user_has_liked ? 'favorite' : 'favorite_border'}</span>
-                                    {post.likes_count}
-                                </button>
-                                <button
-                                    onClick={() => openComments(post.id)}
-                                    style={{ display: 'flex', alignItems: 'center', gap: 4, border: 'none', background: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-text-muted)', fontSize: 13, fontWeight: 500 }}
-                                >
-                                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>chat_bubble_outline</span>
-                                    {post.comments_count}
-                                </button>
-                                <button style={{ display: 'flex', alignItems: 'center', gap: 4, border: 'none', background: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-text-muted)', fontSize: 13, fontWeight: 500, marginLeft: 'auto' }}>
-                                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>share</span>
-                                </button>
-                            </div>
-                        </div>
-                    ))
-                )}
+            {/* Filter Pills */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
+                {filters.map(f => (
+                    <button key={f} onClick={() => setFilter(f)}
+                        style={{
+                            padding: "7px 16px", borderRadius: 20, fontSize: 12, fontWeight: 600,
+                            background: filter === f ? "#1de2d1" : "#f1f5f9",
+                            color: filter === f ? "#0f172a" : "#64748b",
+                            border: "none", cursor: "pointer",
+                        }}
+                    >{f}</button>
+                ))}
             </div>
 
-            {/* Create Post Modal */}
-            {showCreateModal && (
-                <>
-                    <div onClick={() => setShowCreateModal(false)} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} />
+            {/* Post Cards */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                {posts.length === 0 ? (
                     <div style={{
-                        position: 'fixed', left: '50%', top: '50%', zIndex: 50,
-                        width: '100%', maxWidth: 440, transform: 'translate(-50%, -50%)',
-                        background: 'var(--color-bg-card)', borderRadius: 'var(--radius-lg)',
-                        boxShadow: 'var(--shadow-lg)', overflow: 'hidden',
+                        padding: 48, textAlign: "center", background: "#fff",
+                        borderRadius: 12, border: "1px solid #e2e8f0",
                     }}>
-                        <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h2 style={{ fontSize: 16, fontWeight: 700 }}>Create Announcement</h2>
-                            <button onClick={() => setShowCreateModal(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 4 }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
-                            </button>
-                        </div>
-                        <div style={{ padding: 18 }}>
-                            <textarea
-                                value={newPostContent}
-                                onChange={e => setNewPostContent(e.target.value)}
-                                placeholder="Share something with your community..."
-                                rows={5}
-                                className="field-input field-textarea"
-                                style={{ width: '100%' }}
-                            />
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 }}>
-                                <button style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0, color: 'var(--color-text-muted)' }}>
-                                    <span className="material-symbols-outlined" style={{ fontSize: 22 }}>add_photo_alternate</span>
-                                </button>
-                                <button
-                                    onClick={handleCreatePost}
-                                    disabled={!newPostContent.trim() || submitting}
-                                    className="btn btn-primary"
-                                    style={{ fontSize: 13, padding: '8px 20px', opacity: !newPostContent.trim() || submitting ? 0.5 : 1 }}
-                                >
-                                    {submitting ? "Posting..." : "Post"}
-                                </button>
-                            </div>
-                        </div>
+                        <span className="material-symbols-outlined" style={{ fontSize: 40, color: "#cbd5e1" }}>article</span>
+                        <p style={{ marginTop: 12, color: "#94a3b8" }}>No posts yet. Create your first post!</p>
                     </div>
-                </>
-            )}
-
-            {/* Comment Modal */}
-            {commentModal && (
-                <>
-                    <div onClick={() => setCommentModal(null)} style={{ position: 'fixed', inset: 0, zIndex: 50, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} />
-                    <div style={{
-                        position: 'fixed', left: '50%', top: '50%', zIndex: 50,
-                        width: '100%', maxWidth: 440, transform: 'translate(-50%, -50%)',
-                        background: 'var(--color-bg-card)', borderRadius: 'var(--radius-lg)',
-                        boxShadow: 'var(--shadow-lg)', overflow: 'hidden', maxHeight: '80vh', display: 'flex', flexDirection: 'column',
-                    }}>
-                        <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--color-border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
-                            <h2 style={{ fontSize: 16, fontWeight: 700 }}>Comments</h2>
-                            <button onClick={() => setCommentModal(null)} style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 4 }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
-                            </button>
-                        </div>
-                        <div style={{ flex: 1, overflowY: 'auto', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                            {commentModal.comments.length === 0 ? (
-                                <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', fontSize: 13 }}>No comments yet</p>
-                            ) : (
-                                commentModal.comments.map(c => (
-                                    <div key={c.id} style={{ display: 'flex', gap: 10 }}>
-                                        <div style={{
-                                            width: 30, height: 30, borderRadius: '50%', flexShrink: 0,
-                                            background: 'var(--color-primary-soft)', color: 'var(--color-primary)',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontWeight: 700, fontSize: 12,
-                                        }}>{c.author?.full_name?.charAt(0) || "?"}</div>
-                                        <div>
-                                            <p style={{ fontSize: 12, fontWeight: 600 }}>{c.author?.full_name || "Unknown"} <span style={{ fontWeight: 400, color: 'var(--color-text-disabled)' }}>{formatDistanceToNow(new Date(c.created_at))}</span></p>
-                                            <p style={{ fontSize: 13, color: 'var(--color-text-body)', marginTop: 2 }}>{c.content}</p>
+                ) : (
+                    posts.map(p => {
+                        const ti = typeIcons[p.type] || typeIcons.update;
+                        return (
+                            <div key={p.id} style={{
+                                background: "#fff", borderRadius: 12,
+                                border: "1px solid #e2e8f0", padding: 20,
+                                boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                                display: "flex", gap: 16,
+                            }}>
+                                <div style={{
+                                    width: 42, height: 42, borderRadius: 10,
+                                    background: ti.bg, flexShrink: 0,
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                }}>
+                                    <span className="material-symbols-outlined" style={{ color: ti.color, fontVariationSettings: "'FILL' 1" }}>{ti.icon}</span>
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                                        <h4 style={{ fontSize: 15, fontWeight: 700 }}>{p.title}</h4>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                            <span style={{
+                                                fontSize: 10, fontWeight: 600, textTransform: "uppercase",
+                                                padding: "2px 8px", borderRadius: 4,
+                                                background: p.status === "published" ? "rgba(16,185,129,0.08)" : "rgba(245,158,11,0.08)",
+                                                color: p.status === "published" ? "#059669" : "#d97706",
+                                            }}>{p.status}</span>
+                                            <button style={{ background: "none", border: "none", cursor: "pointer" }}>
+                                                <span className="material-symbols-outlined" style={{ fontSize: 18, color: "#94a3b8" }}>more_horiz</span>
+                                            </button>
                                         </div>
                                     </div>
-                                ))
-                            )}
-                        </div>
-                        <div style={{ padding: '12px 18px', borderTop: '1px solid var(--color-border-subtle)', display: 'flex', gap: 8, flexShrink: 0 }}>
-                            <input
-                                type="text"
-                                value={newComment}
-                                onChange={e => setNewComment(e.target.value)}
-                                placeholder="Write a comment..."
-                                className="field-input"
-                                style={{ flex: 1 }}
-                                onKeyDown={e => { if (e.key === 'Enter') handleAddComment(); }}
-                            />
-                            <button onClick={handleAddComment} className="btn btn-primary" style={{ padding: '6px 14px', minHeight: 0 }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>send</span>
-                            </button>
-                        </div>
-                    </div>
-                </>
-            )}
+                                    <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.5, overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any }}>
+                                        {p.content}
+                                    </p>
+                                    <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 14, fontSize: 12, color: "#94a3b8" }}>
+                                        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>person</span>
+                                            {p.author_name || "Admin"}
+                                        </span>
+                                        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>schedule</span>
+                                            {new Date(p.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })
+                )}
+            </div>
         </div>
     );
 }

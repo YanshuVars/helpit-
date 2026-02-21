@@ -26,7 +26,6 @@ export default function VolunteerDashboardPage() {
 
             const { data: userData } = await supabase.from('users').select('full_name, is_available').eq('id', session.user.id).single();
 
-            // Stats
             const { data: completedAssignments } = await supabase.from('volunteer_assignments')
                 .select('hours_spent, request:requests(ngo_id)').eq('volunteer_id', session.user.id).eq('status', 'COMPLETED');
 
@@ -34,7 +33,6 @@ export default function VolunteerDashboardPage() {
             const totalTasks = (completedAssignments || []).length;
             const uniqueNgos = new Set((completedAssignments || []).map((a: any) => a.request?.ngo_id).filter(Boolean));
 
-            // Active assignments
             const { data: activeData } = await supabase.from('volunteer_assignments')
                 .select('id, status, request_id').eq('volunteer_id', session.user.id).in('status', ['ASSIGNED', 'IN_PROGRESS']).order('created_at', { ascending: false }).limit(5);
 
@@ -52,7 +50,6 @@ export default function VolunteerDashboardPage() {
                 scheduled_date: requestMap[a.request_id]?.scheduled_date || '',
             }));
 
-            // Nearby urgent requests
             const { data: urgentRequests } = await supabase.from('requests')
                 .select('id, title, ngo:ngos(name), urgency, location').eq('status', 'OPEN')
                 .order('created_at', { ascending: false }).limit(3);
@@ -85,84 +82,127 @@ export default function VolunteerDashboardPage() {
     };
 
     if (loading) {
-        return <div className="dashboard-loading"><span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, color: 'var(--color-primary)' }}>progress_activity</span></div>;
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+            </div>
+        );
     }
 
     if (!data?.user) return null;
     const firstName = data.user.full_name.split(' ')[0] || 'Volunteer';
 
-    const statusStyles: Record<string, { bg: string; text: string }> = {
-        ASSIGNED: { bg: '#E3F2FD', text: '#1565C0' },
-        IN_PROGRESS: { bg: '#F3E5F5', text: '#7B1FA2' },
+    const statusConfig: Record<string, { bg: string; text: string; icon: string }> = {
+        ASSIGNED: { bg: '#dbeafe', text: '#1e40af', icon: 'assignment' },
+        IN_PROGRESS: { bg: '#ede9fe', text: '#7c3aed', icon: 'pending_actions' },
+    };
+
+    const urgencyConfig: Record<string, { bg: string; text: string }> = {
+        HIGH: { bg: '#fee2e2', text: '#dc2626' },
+        NORMAL: { bg: '#fef3c7', text: '#d97706' },
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
-            {/* Greeting + Availability */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+            {/* Greeting */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h2 style={{ fontSize: 22, fontWeight: 700 }}>Hi, {firstName}! 🙌</h2>
-                    <p style={{ fontSize: 14, color: 'var(--color-text-muted)', marginTop: 4 }}>Ready to make an impact?</p>
+                    <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
+                        Hi, {firstName}! 🙌
+                    </h2>
+                    <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Ready to make an impact today?</p>
                 </div>
-                <button onClick={toggleAvailability} style={{
-                    width: 48, height: 26, borderRadius: 13, border: 'none', cursor: 'pointer',
-                    background: availability ? 'var(--color-success)' : 'var(--color-border)',
-                    position: 'relative', transition: 'background 0.2s',
-                }}>
-                    <span style={{
-                        position: 'absolute', top: 3, width: 20, height: 20, borderRadius: '50%', background: '#fff',
-                        boxShadow: 'var(--shadow-sm)', transition: 'left 0.2s',
-                        left: availability ? 25 : 3,
-                    }} />
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: availability ? '#0d9488' : '#94a3b8' }}>
+                        {availability ? 'Available' : 'Unavailable'}
+                    </span>
+                    <button onClick={toggleAvailability} style={{
+                        width: 48, height: 26, borderRadius: 13, border: 'none', cursor: 'pointer',
+                        background: availability ? '#1de2d1' : '#cbd5e1',
+                        position: 'relative', transition: 'background 200ms',
+                    }}>
+                        <span style={{
+                            position: 'absolute', top: 3, width: 20, height: 20, borderRadius: '50%',
+                            background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                            transition: 'left 200ms', left: availability ? 25 : 3,
+                        }} />
+                    </button>
+                </div>
             </div>
 
             {/* Stats */}
-            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
                 {[
-                    { icon: 'schedule', label: 'Hours', value: data.stats.hours, color: 'var(--color-primary)' },
-                    { icon: 'task_alt', label: 'Tasks', value: data.stats.tasks, color: '#E65100' },
-                    { icon: 'apartment', label: 'NGOs', value: data.stats.ngos, color: '#2E7D32' },
+                    { icon: 'schedule', label: 'Hours', value: data.stats.hours, color: '#1de2d1' },
+                    { icon: 'task_alt', label: 'Tasks Done', value: data.stats.tasks, color: '#f59e0b' },
+                    { icon: 'apartment', label: 'NGOs Helped', value: data.stats.ngos, color: '#8b5cf6' },
                 ].map(s => (
-                    <div key={s.label} className="stat-card">
-                        <span className="material-symbols-outlined" style={{ fontSize: 18, color: s.color, marginBottom: 4 }}>{s.icon}</span>
-                        <div className="stat-card-value">{s.value}</div>
-                        <div className="stat-card-label">{s.label}</div>
+                    <div key={s.label} style={{
+                        background: '#fff', padding: 22, borderRadius: 16,
+                        border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                            <span className="material-symbols-outlined" style={{ fontSize: 22, color: s.color }}>{s.icon}</span>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</span>
+                        </div>
+                        <p style={{ fontSize: 28, fontWeight: 800, color: '#0f172a' }}>{s.value}</p>
                     </div>
                 ))}
             </div>
 
             {/* Active Assignments */}
-            <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700 }}>Active Assignments</h3>
-                    <Link href="/volunteer/assignments" style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-primary)', textDecoration: 'none' }}>See all</Link>
+            <div style={{
+                background: '#fff', borderRadius: 16, padding: 24,
+                border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }}>Active Assignments</h3>
+                    <Link href="/volunteer/assignments" style={{ fontSize: 13, fontWeight: 600, color: '#1de2d1', textDecoration: 'none' }}>See all →</Link>
                 </div>
                 {data.activeAssignments.length === 0 ? (
-                    <div className="empty-state-container">
-                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>assignment</span>
-                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No active assignments</p>
-                        <Link href="/volunteer/opportunities" className="btn btn-primary" style={{ marginTop: 10, textDecoration: 'none' }}>Find Opportunities</Link>
+                    <div style={{ textAlign: 'center', padding: 32 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 40, color: '#cbd5e1' }}>assignment</span>
+                        <p style={{ color: '#94a3b8', marginTop: 8, fontWeight: 600 }}>No active assignments</p>
+                        <Link href="/volunteer/opportunities" style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                            marginTop: 12, padding: '10px 20px', borderRadius: 10,
+                            background: '#1de2d1', color: '#0f172a',
+                            fontSize: 13, fontWeight: 700, textDecoration: 'none',
+                        }}>Find Opportunities</Link>
                     </div>
                 ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                         {data.activeAssignments.map(a => {
-                            const ss = statusStyles[a.status] || statusStyles.ASSIGNED;
+                            const ss = statusConfig[a.status] || statusConfig.ASSIGNED;
                             return (
-                                <Link key={a.id} href={`/volunteer/assignments/${a.id}`} className="card-interactive" style={{ padding: 14, textDecoration: 'none' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 4 }}>
-                                        <div>
-                                            <h4 style={{ fontWeight: 700, fontSize: 14 }}>{a.request_title}</h4>
-                                            <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{a.ngo_name}</p>
-                                        </div>
-                                        <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 10, background: ss.bg, color: ss.text, whiteSpace: 'nowrap' }}>{a.status.replace('_', ' ')}</span>
+                                <Link key={a.id} href={`/volunteer/assignments/${a.id}`} style={{
+                                    display: 'flex', alignItems: 'center', gap: 14,
+                                    padding: 16, borderRadius: 12,
+                                    border: '1px solid #f1f5f9', background: '#fafbfc',
+                                    textDecoration: 'none', transition: 'background 200ms',
+                                }}
+                                    onMouseEnter={e => e.currentTarget.style.background = '#f1f5f9'}
+                                    onMouseLeave={e => e.currentTarget.style.background = '#fafbfc'}>
+                                    <div style={{
+                                        width: 40, height: 40, borderRadius: 10,
+                                        background: ss.bg, display: 'flex',
+                                        alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                    }}>
+                                        <span className="material-symbols-outlined" style={{ fontSize: 20, color: ss.text }}>{ss.icon}</span>
                                     </div>
-                                    {a.scheduled_date && (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--color-text-disabled)' }}>
-                                            <span className="material-symbols-outlined" style={{ fontSize: 14 }}>calendar_today</span>
-                                            {formatDistanceToNow(a.scheduled_date)}
-                                        </div>
-                                    )}
+                                    <div style={{ flex: 1 }}>
+                                        <h4 style={{ fontSize: 14, fontWeight: 700, color: '#0f172a' }}>{a.request_title}</h4>
+                                        <p style={{ fontSize: 12, color: '#94a3b8', marginTop: 2 }}>{a.ngo_name}</p>
+                                    </div>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <span style={{
+                                            padding: '3px 10px', borderRadius: 999,
+                                            fontSize: 11, fontWeight: 700, background: ss.bg, color: ss.text,
+                                        }}>{a.status.replace('_', ' ')}</span>
+                                        {a.scheduled_date && (
+                                            <p style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>{formatDistanceToNow(a.scheduled_date)}</p>
+                                        )}
+                                    </div>
                                 </Link>
                             );
                         })}
@@ -170,40 +210,51 @@ export default function VolunteerDashboardPage() {
                 )}
             </div>
 
-            {/* Nearby Urgent Requests */}
-            <div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>Nearby Requests</h3>
+            {/* Nearby Requests */}
+            <div style={{
+                background: '#fff', borderRadius: 16, padding: 24,
+                border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+            }}>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginBottom: 20 }}>Nearby Requests</h3>
                 {data.nearbyRequests.length === 0 ? (
-                    <div className="empty-state-container">
-                        <span className="material-symbols-outlined" style={{ fontSize: 36, color: 'var(--color-text-disabled)' }}>explore</span>
-                        <p style={{ color: 'var(--color-text-muted)', marginTop: 8 }}>No nearby requests right now</p>
+                    <div style={{ textAlign: 'center', padding: 32 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 40, color: '#cbd5e1' }}>explore</span>
+                        <p style={{ color: '#94a3b8', marginTop: 8 }}>No nearby requests right now</p>
                     </div>
                 ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                        {data.nearbyRequests.map(r => (
-                            <div key={r.id} className="card" style={{ padding: 14 }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 6 }}>
-                                    <div>
-                                        <h4 style={{ fontWeight: 700, fontSize: 14 }}>{r.title}</h4>
-                                        <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{r.ngo_name}</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
+                        {data.nearbyRequests.map(r => {
+                            const uc = urgencyConfig[r.urgency] || urgencyConfig.NORMAL;
+                            return (
+                                <div key={r.id} style={{
+                                    padding: 18, borderRadius: 14,
+                                    border: '1px solid #f1f5f9', background: '#fafbfc',
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 8 }}>
+                                        <div>
+                                            <h4 style={{ fontSize: 14, fontWeight: 700, color: '#0f172a' }}>{r.title}</h4>
+                                            <p style={{ fontSize: 12, color: '#94a3b8', marginTop: 2 }}>{r.ngo_name}</p>
+                                        </div>
+                                        <span style={{
+                                            padding: '3px 10px', borderRadius: 999,
+                                            fontSize: 11, fontWeight: 700, background: uc.bg, color: uc.text,
+                                        }}>{r.urgency}</span>
                                     </div>
-                                    <span style={{
-                                        fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 10, whiteSpace: 'nowrap',
-                                        background: r.urgency === 'HIGH' ? '#FFEBEE' : '#FFF8E1',
-                                        color: r.urgency === 'HIGH' ? '#E53935' : '#F9A825',
-                                    }}>{r.urgency}</span>
+                                    {r.location && (
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#94a3b8', marginBottom: 12 }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>location_on</span>
+                                            {r.location}
+                                        </div>
+                                    )}
+                                    <Link href="/volunteer/opportunities" style={{
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                                        padding: '9px 16px', borderRadius: 10,
+                                        background: '#1de2d1', color: '#0f172a',
+                                        fontSize: 13, fontWeight: 700, textDecoration: 'none',
+                                    }}>View Details</Link>
                                 </div>
-                                {r.location && (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--color-text-disabled)', marginBottom: 10 }}>
-                                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>location_on</span>
-                                        {r.location}
-                                    </div>
-                                )}
-                                <Link href={`/volunteer/opportunities`} className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', fontSize: 12, padding: '8px 0', textDecoration: 'none' }}>
-                                    View Details
-                                </Link>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </div>

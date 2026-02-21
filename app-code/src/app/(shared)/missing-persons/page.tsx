@@ -32,29 +32,41 @@ export default function MissingPersonsPage() {
         p.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const statusColor: Record<string, string> = { MISSING: "var(--color-danger)", FOUND: "var(--color-success)", INVESTIGATING: "var(--color-warning)" };
+    const statusBadge: Record<string, { bg: string; text: string }> = {
+        MISSING: { bg: '#fee2e2', text: '#dc2626' },
+        FOUND: { bg: '#dcfce7', text: '#16a34a' },
+        INVESTIGATING: { bg: '#fef3c7', text: '#d97706' },
+    };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {/* Header */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h1 style={{ fontSize: "var(--font-2xl)", fontWeight: 700 }}>Missing Persons</h1>
-                    <p style={{ color: "var(--foreground-muted)", fontSize: "var(--font-sm)", marginTop: 4 }}>Help find missing individuals</p>
+                    <h2 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>Missing Persons</h2>
+                    <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Help find missing individuals</p>
                 </div>
-                <Link href="/missing-persons/report" className="btn-primary" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
+                <Link href="/missing-persons/report" style={{
+                    display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px',
+                    borderRadius: 12, background: '#1de2d1', color: '#0f172a',
+                    fontWeight: 700, fontSize: 14, textDecoration: 'none', border: 'none',
+                }}>
                     <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>Report Missing Person
                 </Link>
             </div>
 
             {/* Filters */}
-            <div style={{ display: "flex", gap: "var(--space-sm)", flexWrap: "wrap" }}>
-                <div style={{ flex: 1, minWidth: 200, position: "relative" }}>
-                    <span className="material-symbols-outlined" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--foreground-light)" }}>search</span>
-                    <input type="text" placeholder="Search by name..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                        className="field-input" style={{ paddingLeft: 40 }} />
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <div style={{ flex: 1, minWidth: 200, position: 'relative' }}>
+                    <span className="material-symbols-outlined" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: 22 }}>search</span>
+                    <input type="text" placeholder="Search by name..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                        style={{ width: '100%', padding: '10px 14px 10px 46px', borderRadius: 12, border: '1px solid #e2e8f0', background: '#f8fafc', fontSize: 14, color: '#0f172a', outline: 'none' }}
+                        onFocus={e => e.target.style.borderColor = '#1de2d1'} onBlur={e => e.target.style.borderColor = '#e2e8f0'} />
                 </div>
-                <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="field-input" style={{ width: "auto" }}>
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{
+                    padding: '10px 14px', borderRadius: 12, border: '1px solid #e2e8f0',
+                    background: '#fff', fontSize: 13, fontWeight: 600, color: '#0f172a', cursor: 'pointer', outline: 'none',
+                }}>
                     <option value="ALL">All Status</option>
                     <option value="MISSING">Missing</option>
                     <option value="FOUND">Found</option>
@@ -64,35 +76,50 @@ export default function MissingPersonsPage() {
 
             {/* Cards */}
             {loading ? (
-                <div style={{ display: "flex", justifyContent: "center", padding: "3rem 0" }}><div className="spinner" /></div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
+                    <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+                </div>
             ) : filteredPersons.length === 0 ? (
-                <div className="card" style={{ textAlign: "center", padding: "var(--space-xl)" }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 48, color: "var(--foreground-light)" }}>person_search</span>
-                    <p style={{ color: "var(--foreground-muted)", marginTop: 8 }}>No records found</p>
+                <div style={{
+                    background: '#fff', borderRadius: 16, padding: 48, textAlign: 'center',
+                    border: '1px solid #e2e8f0',
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#cbd5e1' }}>person_search</span>
+                    <p style={{ color: '#94a3b8', marginTop: 10 }}>No records found</p>
                 </div>
             ) : (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "var(--space-md)" }}>
-                    {filteredPersons.map((p) => {
-                        const sc = statusColor[p.status] || "var(--foreground-muted)";
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 16 }}>
+                    {filteredPersons.map(p => {
+                        const sb = statusBadge[p.status] || statusBadge.INVESTIGATING;
                         return (
-                            <div key={p.id} className="card">
-                                <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-md)" }}>
-                                    <div style={{ width: 64, height: 64, borderRadius: "var(--radius-lg)", background: "var(--background-subtle)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                        <span className="material-symbols-outlined" style={{ fontSize: 32, color: "var(--foreground-light)" }}>person</span>
+                            <div key={p.id} style={{
+                                background: '#fff', borderRadius: 16, padding: 20,
+                                border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                                transition: 'all 200ms',
+                            }}
+                                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = '#1de2d1'; }}
+                                onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; e.currentTarget.style.borderColor = '#e2e8f0'; }}>
+                                <div style={{ display: 'flex', alignItems: 'start', gap: 14 }}>
+                                    <div style={{
+                                        width: 64, height: 64, borderRadius: 14,
+                                        background: '#f1f5f9', display: 'flex',
+                                        alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                    }}>
+                                        <span className="material-symbols-outlined" style={{ fontSize: 32, color: '#94a3b8' }}>person</span>
                                     </div>
                                     <div style={{ flex: 1 }}>
-                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                                            <h3 style={{ fontWeight: 600, fontSize: "var(--font-base)" }}>{p.name}</h3>
-                                            <span className="tab-pill" style={{ fontSize: 10, background: `${sc}20`, color: sc }}>{p.status}</span>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                                            <h3 style={{ fontWeight: 700, fontSize: 15, color: '#0f172a' }}>{p.name}</h3>
+                                            <span style={{ padding: '3px 10px', borderRadius: 999, fontSize: 11, fontWeight: 700, background: sb.bg, color: sb.text }}>{p.status}</span>
                                         </div>
-                                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4, fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, fontSize: 13, color: '#64748b' }}>
                                             <span>Age: {p.age}</span><span>Gender: {p.gender}</span>
                                         </div>
-                                        <div style={{ marginTop: 8, fontSize: "var(--font-sm)", color: "var(--foreground-muted)" }}>
-                                            <p style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                        <div style={{ marginTop: 10, fontSize: 13, color: '#94a3b8' }}>
+                                            <p style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                                                 <span className="material-symbols-outlined" style={{ fontSize: 14 }}>location_on</span>{p.location}
                                             </p>
-                                            <p style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4 }}>
+                                            <p style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
                                                 <span className="material-symbols-outlined" style={{ fontSize: 14 }}>schedule</span>Last seen: {p.lastSeen}
                                             </p>
                                         </div>
