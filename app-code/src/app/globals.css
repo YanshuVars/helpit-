@@ -1970,3 +1970,167 @@ a:hover {
 .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE UTILITIES — Used by restyled dashboard pages
+══════════════════════════════════════════════════════════════ */
+
+/* ── Grid utilities ── */
+.r-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.r-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.r-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.r-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.r-grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Two-column layout ── */
+.r-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.r-main-side {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+}
+
+.r-side-main {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+}
+
+/* ── Flexbox utilities ── */
+.r-flex-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.r-flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Visibility ── */
+.r-hide-mobile {}
+
+.r-hide-desktop {
+  display: none;
+}
+
+/* ── Font size ── */
+.r-title {
+  font-size: 28px;
+}
+
+.r-subtitle {
+  font-size: 15px;
+}
+
+/* ── Table wrapper ── */
+.r-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ═══ Tablet (≤1024px) ═══ */
+@media (max-width: 1024px) {
+  .r-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .r-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .r-main-side {
+    grid-template-columns: 1fr;
+  }
+
+  .r-side-main {
+    grid-template-columns: 1fr;
+  }
+
+  .r-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ═══ Mobile (≤768px) ═══ */
+@media (max-width: 768px) {
+  .r-grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .r-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .r-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .r-grid-form {
+    grid-template-columns: 1fr;
+  }
+
+  .r-grid-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .r-flex-between {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .r-hide-mobile {
+    display: none !important;
+  }
+
+  .r-hide-desktop {
+    display: block;
+  }
+
+  .r-title {
+    font-size: 22px;
+  }
+
+  .r-subtitle {
+    font-size: 13px;
+  }
+}
+
+/* ═══ Small mobile (≤480px) ═══ */
+@media (max-width: 480px) {
+  .r-title {
+    font-size: 20px;
+  }
+}

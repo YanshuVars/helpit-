@@ -50,7 +50,7 @@ export default function EditVolunteerProfilePage() {
                 </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 28, alignItems: 'start' }}>
+            <div className="r-side-main" style={{ alignItems: 'start' }}>
                 {/* Left: Avatar */}
                 <div style={{
                     background: '#fff', borderRadius: 16, padding: 28,
@@ -104,7 +104,7 @@ export default function EditVolunteerProfilePage() {
                             <span className="material-symbols-outlined" style={{ fontSize: 20, verticalAlign: 'middle', marginRight: 8, color: '#1de2d1' }}>person</span>
                             Basic Information
                         </h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                        <div className="r-grid-form">
                             {[
                                 { label: 'Full Name', value: name, onChange: setName, type: 'text' },
                                 { label: 'Username', value: username, onChange: setUsername, type: 'text' },
@@ -168,7 +168,7 @@ export default function EditVolunteerProfilePage() {
                             <span className="material-symbols-outlined" style={{ fontSize: 20, verticalAlign: 'middle', marginRight: 8, color: '#1de2d1' }}>schedule</span>
                             Availability
                         </h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                        <div className="r-grid-form">
                             <div>
                                 <label style={{ fontSize: 12, fontWeight: 700, color: '#64748b', marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: '0.03em' }}>When are you available?</label>
                                 <select value={availabilityHours} onChange={e => setAvailabilityHours(e.target.value)}

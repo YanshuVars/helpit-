@@ -84,11 +84,7 @@ export default function VolunteerOpportunitiesPage() {
             </div>
 
             {/* Opportunities Grid */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-                gap: 20,
-            }}>
+            <div className="r-grid-cards" style={{ gap: 20 }}>
                 {opportunities.map(opp => {
                     const uc = urgencyConfig[opp.urgency] || urgencyConfig.MEDIUM;
                     const cc = catColors[opp.category] || { bg: '#f1f5f9', text: '#475569' };

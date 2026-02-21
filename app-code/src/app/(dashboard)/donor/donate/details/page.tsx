@@ -27,7 +27,7 @@ export default function DonateDetailsPage() {
                 </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 24, alignItems: 'start' }}>
+            <div className="r-main-side" style={{ alignItems: 'start' }}>
                 {/* Left Column - Form */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                     {/* Amount Section */}

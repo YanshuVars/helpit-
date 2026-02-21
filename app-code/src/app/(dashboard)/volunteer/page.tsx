@@ -131,7 +131,7 @@ export default function VolunteerDashboardPage() {
             </div>
 
             {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+            <div className="r-grid-3">
                 {[
                     { icon: 'schedule', label: 'Hours', value: data.stats.hours, color: '#1de2d1' },
                     { icon: 'task_alt', label: 'Tasks Done', value: data.stats.tasks, color: '#f59e0b' },
@@ -222,7 +222,7 @@ export default function VolunteerDashboardPage() {
                         <p style={{ color: '#94a3b8', marginTop: 8 }}>No nearby requests right now</p>
                     </div>
                 ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
+                    <div className="r-grid-cards" style={{ gap: 14 }}>
                         {data.nearbyRequests.map(r => {
                             const uc = urgencyConfig[r.urgency] || urgencyConfig.NORMAL;
                             return (

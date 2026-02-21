@@ -163,11 +163,7 @@ export default function DonorDiscoverPage() {
                     <p style={{ color: '#94a3b8', marginTop: 4, fontSize: 14 }}>Try adjusting your search or filters.</p>
                 </div>
             ) : (
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                    gap: 20,
-                }}>
+                <div className="r-grid-cards" style={{ gap: 20 }}>
                     {ngos.map(ngo => {
                         const cc = catColors[ngo.category] || catColors.OTHER;
                         return (

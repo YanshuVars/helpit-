@@ -78,7 +78,7 @@ export default function AuditLogsPage() {
             </div>
 
             {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div className="r-grid-4">
                 {[
                     { label: 'Total Actions Today', value: '1,234', color: '#0f172a' },
                     { label: 'User Management', value: '456', color: '#3b82f6' },

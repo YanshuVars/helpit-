@@ -84,7 +84,7 @@ export default function DonationHistoryPage() {
             </div>
 
             {/* Summary Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+            <div className="r-grid-3">
                 {[
                     { label: 'Total Donated', value: formatCurrency(totalDonated), icon: 'monetization_on', color: '#1de2d1' },
                     { label: 'Tax Deductible', value: formatCurrency(Math.floor(totalDonated * 0.5)), icon: 'receipt_long', color: '#1de2d1' },

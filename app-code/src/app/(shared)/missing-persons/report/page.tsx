@@ -77,7 +77,7 @@ export default function ReportMissingPersonPage() {
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                 {/* Personal Details */}
                 <Section title="Personal Details" icon="person">
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                    <div className="r-grid-form">
                         <div style={{ gridColumn: '1 / -1' }}>
                             <label style={labelStyle}>Full Name *</label>
                             <input name="fullName" value={formData.fullName} onChange={handleChange} style={inputStyle} required placeholder="Enter full name"
@@ -110,7 +110,7 @@ export default function ReportMissingPersonPage() {
 
                 {/* Physical Description */}
                 <Section title="Physical Description" icon="face">
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                    <div className="r-grid-form">
                         <div>
                             <label style={labelStyle}>Hair Color</label>
                             <input name="hairColor" value={formData.hairColor} onChange={handleChange} style={inputStyle} placeholder="e.g. Black"
@@ -132,7 +132,7 @@ export default function ReportMissingPersonPage() {
 
                 {/* Last Seen */}
                 <Section title="Last Seen Information" icon="location_on">
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                    <div className="r-grid-form">
                         <div>
                             <label style={labelStyle}>Date *</label>
                             <input name="lastSeenDate" type="date" value={formData.lastSeenDate} onChange={handleChange} style={inputStyle} required
@@ -175,7 +175,7 @@ export default function ReportMissingPersonPage() {
 
                 {/* Contact Info */}
                 <Section title="Contact Information" icon="call">
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                    <div className="r-grid-form">
                         <div>
                             <label style={labelStyle}>Contact Name *</label>
                             <input name="contactName" value={formData.contactName} onChange={handleChange} style={inputStyle} required placeholder="Your name"

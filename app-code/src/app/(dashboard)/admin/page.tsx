@@ -152,7 +152,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Stats Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div className="r-grid-4">
                 {[
                     { icon: 'groups', label: 'Total Users', value: stats.totalUsers.toLocaleString(), sub: `+${stats.newUsersThisMonth} new`, subColor: '#16a34a', color: '#3b82f6' },
                     { icon: 'domain', label: 'Active NGOs', value: stats.activeNGOs, sub: `${stats.pendingNGOs} pending`, subColor: '#d97706', color: '#1de2d1' },
@@ -178,7 +178,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Financial Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+            <div className="r-grid-3">
                 {[
                     { label: 'Total Donations', value: formatCurrency(stats.totalDonations), sub: 'All time', color: '#16a34a' },
                     { label: 'Monthly Donations', value: formatCurrency(stats.monthlyDonations), sub: 'This month', color: '#1de2d1' },
@@ -211,7 +211,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Two-col: Pending + Activity */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+            <div className="r-two-col">
                 {/* Pending Verifications */}
                 <div style={{
                     background: '#fff', borderRadius: 16, padding: 24,

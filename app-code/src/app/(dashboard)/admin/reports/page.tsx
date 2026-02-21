@@ -61,7 +61,7 @@ export default function ModerationReportsPage() {
             </div>
 
             {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div className="r-grid-4">
                 {[
                     { icon: 'pending', label: 'Pending', value: 12, color: '#f59e0b' },
                     { icon: 'visibility', label: 'In Review', value: 5, color: '#3b82f6' },

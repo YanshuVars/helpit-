@@ -88,7 +88,7 @@ export default function MissingPersonsPage() {
                     <p style={{ color: '#94a3b8', marginTop: 10 }}>No records found</p>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 16 }}>
+                <div className="r-grid-cards">
                     {filteredPersons.map(p => {
                         const sb = statusBadge[p.status] || statusBadge.INVESTIGATING;
                         return (

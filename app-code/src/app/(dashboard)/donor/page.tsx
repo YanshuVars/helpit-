@@ -120,7 +120,7 @@ export default function DonorDashboardPage() {
             </header>
 
             {/* Stat Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 18 }}>
+            <div className="r-grid-4" style={{ gap: 18 }}>
                 {stats.map((s, i) => (
                     <div key={i} style={{
                         position: 'relative', overflow: 'hidden',

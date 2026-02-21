@@ -60,7 +60,7 @@ export default function VolunteerProfilePage() {
                 <p style={{ color: '#64748b', fontSize: 15, marginTop: 4 }}>Your volunteer identity and impact.</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 28, alignItems: 'start' }}>
+            <div className="r-side-main" style={{ alignItems: 'start' }}>
                 {/* Left: Profile Card */}
                 <div style={{
                     background: '#fff', borderRadius: 16, overflow: 'hidden',
@@ -100,7 +100,7 @@ export default function VolunteerProfilePage() {
                 {/* Right: Content */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                     {/* Stats */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+                    <div className="r-grid-3">
                         {[
                             { icon: 'schedule', label: 'Hours', value: stats.hours, color: '#1de2d1' },
                             { icon: 'task_alt', label: 'Tasks Done', value: stats.tasks, color: '#f59e0b' },

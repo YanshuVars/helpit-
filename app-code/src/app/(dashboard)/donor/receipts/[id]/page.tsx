@@ -147,7 +147,7 @@ export default function DonationReceiptPage() {
                     </div>
 
                     {/* Main Info Grid */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, marginTop: 32, position: 'relative', zIndex: 1 }}>
+                    <div className="r-grid-form" style={{ gap: 40, marginTop: 32, position: 'relative', zIndex: 1 }}>
                         {/* Donor Details */}
                         <div>
                             <h3 style={{ fontSize: 11, fontWeight: 800, color: '#1de2d1', textTransform: 'uppercase', letterSpacing: '0.1em', paddingBottom: 8, borderBottom: '1px solid #f1f5f9', marginBottom: 16 }}>Donor Details</h3>

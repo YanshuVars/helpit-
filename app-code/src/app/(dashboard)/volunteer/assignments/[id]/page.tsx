@@ -111,7 +111,7 @@ export default function AssignmentDetailPage() {
                 </h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 24, alignItems: 'start' }}>
+            <div className="r-main-side" style={{ alignItems: 'start' }}>
                 {/* Main Content */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                     {/* Title Card */}
