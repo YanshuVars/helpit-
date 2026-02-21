@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Event Detail View - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main-light": "#0e1b1a",
+                        "text-main-dark": "#e0f2f1",
+                        "text-sub-light": "#4f9690",
+                        "text-sub-dark": "#80cbc4",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better look in containers */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark transition-colors duration-200 min-h-screen flex flex-col">
+<!-- Top Navigation / Breadcrumbs -->
+<header class="w-full bg-surface-light dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800 px-6 py-4">
+<div class="max-w-[1200px] mx-auto w-full flex flex-col gap-4">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-sm">
+<a class="text-text-sub-light dark:text-text-sub-dark hover:text-primary transition-colors" href="#">Home</a>
+<span class="text-gray-300 dark:text-gray-600">/</span>
+<a class="text-text-sub-light dark:text-text-sub-dark hover:text-primary transition-colors" href="#">Events</a>
+<span class="text-gray-300 dark:text-gray-600">/</span>
+<span class="text-text-main-light dark:text-text-main-dark font-medium">Annual Charity Gala</span>
+</nav>
+<!-- Header Content -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3 flex-wrap">
+<a class="inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-text-sub-light dark:text-text-sub-dark transition-colors mr-1" href="#">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+</a>
+<h1 class="text-3xl md:text-4xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">Annual Charity Gala</h1>
+<span class="inline-flex items-center rounded-full bg-primary/20 dark:bg-primary/30 px-3 py-1 text-sm font-semibold text-teal-800 dark:text-teal-100 ring-1 ring-inset ring-primary/30">
+                            Upcoming
+                        </span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="inline-flex items-center justify-center rounded-lg bg-white dark:bg-surface-dark border border-gray-300 dark:border-gray-600 px-4 py-2.5 text-sm font-semibold text-text-main-light dark:text-text-main-dark shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 transition-all">
+<span class="material-symbols-outlined mr-2 text-lg">share</span>
+                        Share
+                    </button>
+<button class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-teal-950 shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all">
+<span class="material-symbols-outlined mr-2 text-lg">edit</span>
+                        Edit Event
+                    </button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow w-full px-6 py-8">
+<div class="max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Column (Main Content) -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- About Card -->
+<section class="rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm p-6 md:p-8">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-bold text-text-main-light dark:text-text-main-dark">About the Event</h2>
+</div>
+<div class="prose dark:prose-invert max-w-none text-text-main-light dark:text-text-main-dark">
+<p class="leading-relaxed mb-4">
+                            Join us for an evening of giving and celebration at our Annual Charity Gala. All proceeds go towards our clean water initiative across three continents. This year, we are focusing on sustainable infrastructure development in rural communities.
+                        </p>
+<p class="leading-relaxed text-text-sub-light dark:text-text-sub-dark">
+                            Expect a night of inspiring stories, networking with community leaders, and a silent auction featuring works from local artists. Dress code is formal attire.
+                        </p>
+</div>
+<!-- Quick Stats/Tags row within about -->
+<div class="mt-8 flex gap-3 flex-wrap">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-primary text-sm">water_drop</span>
+<span class="text-sm font-medium">Clean Water</span>
+</div>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-primary text-sm">public</span>
+<span class="text-sm font-medium">Global Impact</span>
+</div>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-primary text-sm">volunteer_activism</span>
+<span class="text-sm font-medium">Fundraiser</span>
+</div>
+</div>
+</section>
+<!-- Schedule Card -->
+<section class="rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm p-6 md:p-8">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-bold text-text-main-light dark:text-text-main-dark">Schedule</h2>
+<button class="text-sm font-medium text-primary hover:text-primary/80 transition-colors">Download PDF</button>
+</div>
+<div class="flex flex-col">
+<!-- Timeline Item 1 -->
+<div class="flex group">
+<div class="flex flex-col items-center mr-4">
+<div class="w-3 h-3 rounded-full bg-primary mt-2 ring-4 ring-primary/20"></div>
+<div class="w-0.5 bg-gray-200 dark:bg-gray-700 h-full my-1 group-last:hidden"></div>
+</div>
+<div class="pb-8 group-last:pb-0 w-full">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-1 mb-1">
+<h3 class="text-lg font-semibold text-text-main-light dark:text-text-main-dark">Registration &amp; Welcome Drinks</h3>
+<span class="text-sm font-medium text-text-sub-light dark:text-text-sub-dark bg-background-light dark:bg-background-dark px-2 py-0.5 rounded">18:00 - 19:00</span>
+</div>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm">Main Lobby</p>
+<div class="mt-3 flex items-center gap-2">
+<div class="flex -space-x-2 overflow-hidden">
+<div class="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-200 flex items-center justify-center text-[10px] text-gray-500 font-bold">JD</div>
+<div class="inline-block h-6 w-6 rounded-full ring-2 ring-white dark:ring-surface-dark bg-gray-200 flex items-center justify-center text-[10px] text-gray-500 font-bold">AS</div>
+</div>
+<span class="text-xs text-gray-400">Staff assigned</span>
+</div>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="flex group">
+<div class="flex flex-col items-center mr-4">
+<div class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 mt-2"></div>
+<div class="w-0.5 bg-gray-200 dark:bg-gray-700 h-full my-1 group-last:hidden"></div>
+</div>
+<div class="pb-8 group-last:pb-0 w-full">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-1 mb-1">
+<h3 class="text-lg font-semibold text-text-main-light dark:text-text-main-dark">Keynote Speech</h3>
+<span class="text-sm font-medium text-text-sub-light dark:text-text-sub-dark bg-background-light dark:bg-background-dark px-2 py-0.5 rounded">19:00 - 20:30</span>
+</div>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm">Grand Ballroom</p>
+<div class="mt-3 p-3 bg-background-light dark:bg-background-dark rounded-lg flex items-center gap-3 border border-gray-100 dark:border-gray-700">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">mic</span>
+</div>
+<div>
+<p class="text-sm font-bold text-text-main-light dark:text-text-main-dark">Dr. Elena Rostova</p>
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark">Director of Water &amp; Sanitation, UNICEF</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="flex group">
+<div class="flex flex-col items-center mr-4">
+<div class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 mt-2"></div>
+<div class="w-0.5 bg-gray-200 dark:bg-gray-700 h-full my-1 group-last:hidden"></div>
+</div>
+<div class="pb-8 group-last:pb-0 w-full">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-1 mb-1">
+<h3 class="text-lg font-semibold text-text-main-light dark:text-text-main-dark">Dinner &amp; Auction</h3>
+<span class="text-sm font-medium text-text-sub-light dark:text-text-sub-dark bg-background-light dark:bg-background-dark px-2 py-0.5 rounded">20:30 - 22:00</span>
+</div>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm">Grand Ballroom</p>
+</div>
+</div>
+<!-- Timeline Item 4 -->
+<div class="flex group">
+<div class="flex flex-col items-center mr-4">
+<div class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 mt-2"></div>
+</div>
+<div class="pb-0 w-full">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-1 mb-1">
+<h3 class="text-lg font-semibold text-text-main-light dark:text-text-main-dark">Closing Remarks</h3>
+<span class="text-sm font-medium text-text-sub-light dark:text-text-sub-dark bg-background-light dark:bg-background-dark px-2 py-0.5 rounded">22:00 - 22:30</span>
+</div>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm">Stage</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Danger Zone -->
+<section class="mt-4 pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+<button class="inline-flex items-center justify-center rounded-lg border border-red-500 px-4 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all">
+<span class="material-symbols-outlined mr-2 text-lg">cancel</span>
+                        Cancel Event
+                    </button>
+</section>
+</div>
+<!-- Right Column (Details & Attendees) -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<!-- Event Details Card -->
+<section class="rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm p-6 md:p-8">
+<h2 class="text-xl font-bold text-text-main-light dark:text-text-main-dark mb-6">Event Details</h2>
+<div class="space-y-6">
+<!-- Date -->
+<div class="flex items-start gap-4">
+<div class="flex items-center justify-center w-10 h-10 rounded-lg bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark">
+<span class="material-symbols-outlined">calendar_month</span>
+</div>
+<div>
+<p class="text-sm text-text-sub-light dark:text-text-sub-dark font-medium">Date &amp; Time</p>
+<p class="text-base font-semibold text-text-main-light dark:text-text-main-dark mt-0.5">Oct 24, 2023</p>
+<p class="text-sm text-text-sub-light dark:text-text-sub-dark">18:00 - 22:30</p>
+</div>
+</div>
+<!-- Location -->
+<div class="flex items-start gap-4">
+<div class="flex items-center justify-center w-10 h-10 rounded-lg bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div>
+<p class="text-sm text-text-sub-light dark:text-text-sub-dark font-medium">Location</p>
+<p class="text-base font-semibold text-text-main-light dark:text-text-main-dark mt-0.5">Grand Hall, NY</p>
+<a class="text-sm text-primary font-medium hover:underline mt-1 inline-block" href="#">View on map</a>
+</div>
+</div>
+<!-- Capacity Progress -->
+<div class="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
+<div class="flex justify-between items-end mb-2">
+<div>
+<p class="text-sm text-text-sub-light dark:text-text-sub-dark font-medium">Capacity</p>
+<p class="text-2xl font-bold text-text-main-light dark:text-text-main-dark mt-1">120<span class="text-base font-normal text-gray-400 dark:text-gray-600"> / 200 Guests</span></p>
+</div>
+<span class="text-sm font-bold text-primary">60% Full</span>
+</div>
+<div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+<div class="bg-primary h-3 rounded-full transition-all duration-500 ease-out" style="width: 60%"></div>
+</div>
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark mt-2 text-right">80 spots remaining</p>
+</div>
+</div>
+</section>
+<!-- Attendees Card -->
+<section class="rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-100 dark:border-gray-800 shadow-sm p-6 md:p-8 flex-1">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-bold text-text-main-light dark:text-text-main-dark">Attendees</h2>
+<a class="text-sm font-semibold text-primary hover:text-primary/80 transition-colors" href="#">View All</a>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Attendee Row 1 -->
+<div class="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 p-2 -mx-2 rounded-lg transition-colors">
+<div class="flex items-center gap-3">
+<img alt="Attendee" class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700" data-alt="Portrait of Sarah Jenkins, a smiling young woman with glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuRN-TXlh2FZgWUBQiSE42vvhw4P_JGhntJAYz6uzNvGMUCejlg3L_-jtbKMpQEQCKzfTiMi69zEhb1vqKPhwzulVQStpZ5NL6cd2bSa4HFBimxV1syvKoVI908NuNGgAnGzunrEnJKLCrrMRo3CkInmyHFmHzdrk-eujWrG3aX47ZWZ-QnBHIFR7RfWIy-Tod9tjVunX4uATFlR9xrq9cAme6_UpYmRJ7LgrgWEt11dtavBfc4Uvb3H7yRKhQCPS5MjFAoMv-znw"/>
+<div>
+<p class="text-sm font-bold text-text-main-light dark:text-text-main-dark">Sarah Jenkins</p>
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark">Volunteer</p>
+</div>
+</div>
+<span class="inline-flex items-center rounded-full bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Confirmed</span>
+</div>
+<!-- Attendee Row 2 -->
+<div class="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 p-2 -mx-2 rounded-lg transition-colors">
+<div class="flex items-center gap-3">
+<img alt="Attendee" class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700" data-alt="Portrait of Michael Chen, a man looking to the side" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAytTfaz00nSuZ2lB4G0rzSq6bJ4A-fFTOOBvUmesrFER60Sjenb1qISSWwAqO8DgD2OcBITxCIX3AIZESSTiCpXMntM_IfYXMVqJTNjQIrV3mN6Epopzi3B0gykPZj6IpiVR1NXSlnPLpHXnzQ8Ms5Eo0LdKfXEVQvyQ1teIVfD7Oo56l-jWjO51qQRQmhXqQ-HwXxNOKTz5egiO1ZTHOoUlFvS5FATmtRJJc-nZJuu1vubGVcv_yXSYZOk-MFyz3TEZVAMGyKlAs"/>
+<div>
+<p class="text-sm font-bold text-text-main-light dark:text-text-main-dark">Michael Chen</p>
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark">Donor</p>
+</div>
+</div>
+<span class="inline-flex items-center rounded-full bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Confirmed</span>
+</div>
+<!-- Attendee Row 3 -->
+<div class="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 p-2 -mx-2 rounded-lg transition-colors">
+<div class="flex items-center gap-3">
+<img alt="Attendee" class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700" data-alt="Portrait of Emily Davis, a woman with curly hair smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgpNa7t4XsWeVvjlpD3j_FpJIrsGA1EKSM674MYYqDPoXHU0O9G4jhjVUCaOjjIo0e7cDU-nYwLdUqqJvYIJ7QFNUYMo97ksIqvt4byaoeU000f8sctF-w3GwYj5mqNac7e0f9vEAkPUDpmgrvjNgBjUK0qJL3LJ_Ej_P5dPWCNRvXz5e4_ufZZLe-LAt-U-35ygjy4zdF3N3y5Htz7eA0wh5T7ko7IUwUROlQA5pH39a9NerSv3sjx5QYVvkgEZyHtEtN-4aqGYo"/>
+<div>
+<p class="text-sm font-bold text-text-main-light dark:text-text-main-dark">Emily Davis</p>
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark">Staff</p>
+</div>
+</div>
+<span class="inline-flex items-center rounded-full bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-800 dark:text-yellow-500 ring-1 ring-inset ring-yellow-600/20">Pending</span>
+</div>
+<!-- Attendee Row 4 -->
+<div class="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 p-2 -mx-2 rounded-lg transition-colors">
+<div class="flex items-center gap-3">
+<img alt="Attendee" class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700" data-alt="Portrait of David Wilson, a man with a beard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIe6MTz9Y1_lKI4oWP2I7Y9vtjBe6A7BHdKrHR3CXQ5HVWmmiEWNJ30NdZKDt4Pcs_tkq_xHJNp8qsGxWmJGsQ0VOqiJ-WX4jhcL1NSjtOFcPjMgklSalhFrewU9LG-NHhtlGqR1Ic2tq6NUm88XfnQVcKGutqIfmsxY17Z1YOYOAS8GYzP4F5wwj-md4S7VEiKkCbbdVEMDHMIhJntniEk4eZd7UxNI50ELTHiXRniOExZpkLOWfWuz5zO4ir5ukOTaGcOuJVE1k"/>
+<div>
+<p class="text-sm font-bold text-text-main-light dark:text-text-main-dark">David Wilson</p>
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark">Guest Speaker</p>
+</div>
+</div>
+<span class="inline-flex items-center rounded-full bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Confirmed</span>
+</div>
+<!-- Attendee Row 5 -->
+<div class="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 p-2 -mx-2 rounded-lg transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-500 dark:text-gray-300 ring-2 ring-gray-100 dark:ring-gray-700">RB</div>
+<div>
+<p class="text-sm font-bold text-text-main-light dark:text-text-main-dark">Rachel Black</p>
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark">Volunteer</p>
+</div>
+</div>
+<span class="inline-flex items-center rounded-full bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Confirmed</span>
+</div>
+</div>
+</section>
+<!-- Quick Contact Card (Optional but helpful context) -->
+<section class="rounded-xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 p-6">
+<div class="flex gap-4">
+<div class="bg-primary/20 p-2 rounded-lg h-fit">
+<span class="material-symbols-outlined text-primary">support_agent</span>
+</div>
+<div>
+<h3 class="text-sm font-bold text-text-main-light dark:text-text-main-dark">Need help managing this event?</h3>
+<p class="text-xs text-text-sub-light dark:text-text-sub-dark mt-1 mb-3">Contact the support team for assistance with logistics or ticketing.</p>
+<button class="text-xs font-bold text-teal-700 dark:text-teal-200 hover:text-teal-900 dark:hover:text-primary transition-colors">Contact Support →</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

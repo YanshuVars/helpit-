@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Settings Hub Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;family=Merriweather:wght@400;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "serif": ["Merriweather", "serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="flex w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1a2c2b] shrink-0 h-screen sticky top-0">
+<div class="flex h-16 items-center gap-3 border-b border-slate-100 dark:border-slate-800 px-6">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8 shrink-0 bg-primary/20" data-alt="Helpit Logo Abstract" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVh6lWE0f6IyrU8r5DSACzWn5qjFoECRhPo14eB8iST2UHUjyP3x_zuRrOL9awHO7oHboRSGo9r4kODAA-dz24ILnIDMBQdLDvt6GYV0pKNEtoPca_2agj0bG29MU4xHY2aQwlBHnSNjw8kgR40UkRgHii7zJS08WmpLfMEc1Pl-PKA5RdbFDnGUnnqKgnv2XEWskv_j6anLz5vY2rNcW7E3iVxp82QzQFqR9so-ETJ1cN9hceNRGpcLYsxKnN5bIIwA9hhkIu4HQ");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-none">Helpit</h1>
+<p class="text-primary text-xs font-medium mt-1">NGO Portal</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1 p-4 overflow-y-auto flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">grid_view</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">work</span>
+<span class="text-sm font-medium">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">group</span>
+<span class="text-sm font-medium">Volunteers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">description</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<div class="mt-4 mb-2 px-3 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Administration</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-primary font-medium" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">help</span>
+<span class="text-sm">Help Center</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shrink-0 border border-slate-200 dark:border-slate-700" data-alt="User Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBP_rdnS4rXxT3vo0uGkNsTcqVBGuU17sZGzZJ0CAQGakqSv8FMOBInZMXeiYSuU39FKWxJUAirvGt0Re12SDYWdakYl_KXDZ35zIdOF65HemZbQ8A2pOnLgJ4WJxJYcFSxTVH7yA3fKy0i9xiOU85FMo2IJmfIq2Ylp4nvS1kHfwT_JsXAHP5E0bz1IPcAjsEtjl3dkAkkq3w3U-BrhplP754pM45RVuw-n5KR_9rrCHqiPetydmkOuQ1hiQEWWP_CZF4lQf9wNS0");'></div>
+<div class="flex flex-col overflow-hidden">
+<p class="text-sm font-semibold text-slate-900 dark:text-white truncate">Tom Cook</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">tom@helpit.org</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Header -->
+<header class="h-16 flex items-center justify-between px-8 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1a2c2b] shrink-0">
+<h1 class="font-serif text-2xl font-bold text-slate-900 dark:text-white">Settings</h1>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:text-primary hover:bg-primary/5 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-500 text-lg">search</span>
+<span class="text-sm text-slate-500 dark:text-slate-400">Search settings...</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-8">
+<div class="max-w-4xl mx-auto space-y-6">
+<div class="mb-6">
+<h2 class="text-slate-900 dark:text-white text-lg font-semibold">General Settings</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Manage your organization's core configuration and preferences.</p>
+</div>
+<!-- Cards Stack -->
+<div class="flex flex-col gap-4">
+<!-- Card 1: Organization Profile -->
+<a class="group block bg-white dark:bg-[#1a2c2b] rounded-lg border border-[#e5e5e5] dark:border-slate-700 hover:border-primary hover:shadow-md dark:hover:border-primary transition-all duration-200 ease-in-out p-6" href="#">
+<div class="flex items-center gap-5">
+<div class="flex items-center justify-center size-12 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shrink-0">
+<span class="material-symbols-outlined">business</span>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-slate-900 dark:text-white text-base font-semibold group-hover:text-primary transition-colors">Organization Profile</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage your NGO's details, logo, and public information.</p>
+</div>
+<div class="shrink-0 text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</a>
+<!-- Card 2: Team Members -->
+<a class="group block bg-white dark:bg-[#1a2c2b] rounded-lg border border-[#e5e5e5] dark:border-slate-700 hover:border-primary hover:shadow-md dark:hover:border-primary transition-all duration-200 ease-in-out p-6" href="#">
+<div class="flex items-center gap-5">
+<div class="flex items-center justify-center size-12 rounded-full bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 shrink-0">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-slate-900 dark:text-white text-base font-semibold group-hover:text-primary transition-colors">Team Members</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Invite staff, assign roles, and manage permissions.</p>
+</div>
+<div class="shrink-0 text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</a>
+<!-- Card 3: Audit Log -->
+<a class="group block bg-white dark:bg-[#1a2c2b] rounded-lg border border-[#e5e5e5] dark:border-slate-700 hover:border-primary hover:shadow-md dark:hover:border-primary transition-all duration-200 ease-in-out p-6" href="#">
+<div class="flex items-center gap-5">
+<div class="flex items-center justify-center size-12 rounded-full bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 shrink-0">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-slate-900 dark:text-white text-base font-semibold group-hover:text-primary transition-colors">Audit Log</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">View a history of changes and sensitive actions taken.</p>
+</div>
+<div class="shrink-0 text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</a>
+<!-- Card 4: Notification Preferences -->
+<a class="group block bg-white dark:bg-[#1a2c2b] rounded-lg border border-[#e5e5e5] dark:border-slate-700 hover:border-primary hover:shadow-md dark:hover:border-primary transition-all duration-200 ease-in-out p-6" href="#">
+<div class="flex items-center gap-5">
+<div class="flex items-center justify-center size-12 rounded-full bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 shrink-0">
+<span class="material-symbols-outlined">notifications_active</span>
+</div>
+<div class="flex flex-col flex-1">
+<h3 class="text-slate-900 dark:text-white text-base font-semibold group-hover:text-primary transition-colors">Notification Preferences</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Customize email alerts and system notifications.</p>
+</div>
+<div class="shrink-0 text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</a>
+</div>
+<!-- Additional decorative footer or info -->
+<div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700 text-center">
+<p class="text-xs text-slate-400">Helpit Platform v2.4.0 • <a class="hover:text-primary" href="#">Privacy Policy</a> • <a class="hover:text-primary" href="#">Terms of Service</a></p>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

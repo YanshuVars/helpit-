@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit - Donor Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#16b2a4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased h-screen w-full overflow-hidden flex">
+<!-- Left Split: Branding Panel -->
+<div class="hidden lg:flex lg:w-[45%] xl:w-[40%] relative bg-surface-dark flex-col justify-between p-12 overflow-hidden">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/90 to-[#0e5c54]/90 z-10 mix-blend-multiply"></div>
+<div class="w-full h-full bg-cover bg-center opacity-40 mix-blend-overlay grayscale" data-alt="Group of diverse volunteers planting trees together" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBBB7YZO5HvEVTuFdiPAX_hLUQ95m8xR9aDqNU2Gu0FWYE9BtiPvrXeUaitjFGazc9w2mXtDgdrz549SOPqGfiql3vYRlCYX2I8JxKjFIPem4sXbhfEvd8viVmmV-ouqisREFHxvSL7aHg0Tsx7dgadjlgs0daJowwf6b6cwXG1SjD-3veEcNzv8YkNC1DF1dCW4G0nL3wVi2IYeAzyPB-z3_sBY8Ccn_qHKO6ehc-WM3ebAkuGuknl66yd-tglV85FirwJDJvF8sM');"></div>
+</div>
+<!-- Header content on top of image -->
+<div class="relative z-20">
+<div class="flex items-center gap-3 text-white mb-12">
+<div class="size-8">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-2xl font-bold tracking-tight">Helpit</h2>
+</div>
+<h1 class="text-4xl xl:text-5xl font-black leading-tight tracking-tight text-white max-w-md drop-shadow-sm">
+                Empower Change Today.
+            </h1>
+<p class="mt-6 text-lg text-white/90 font-medium max-w-sm leading-relaxed">
+                Join thousands of donors helping communities thrive around the world. Your contribution matters.
+            </p>
+</div>
+<!-- Footer content on top of image -->
+<div class="relative z-20 mt-auto">
+<div class="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20 w-fit">
+<div class="flex -space-x-2">
+<img alt="Donor avatar 1" class="inline-block h-8 w-8 rounded-full ring-2 ring-primary" data-alt="Portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx7W04GBItH9WZlWbvO1NNXO3kAUfWSuu9DV6WD673nykkLi_8s625tm0--VRyWGMWmVltE9xiJJX9Y7yWFQPE-igqAGGGOmxAlKC6opmZRryZAHNCIM62FWCXYch7MLmYq4UEQzLivHmtgFrlI-yXWdtRawABWd5cL3a__4HsYvM9VaTFs9SurxFCCmdeJX6gNkOw48PDnkN319A8GDATdSlq7kwfszK0q__GE6cuLp0kEG9TjfoguwBPYKUg2Mm6jXMTs27wp4A"/>
+<img alt="Donor avatar 2" class="inline-block h-8 w-8 rounded-full ring-2 ring-primary" data-alt="Portrait of a smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKpCOKB8Bu5Na9j640IhLZBaBhFuPHBVLLckCbdzx1GD3qRV63rNLfCIxOqNridC9TLPG44UH93md4grGNhgNLnhdrIRt05xCf9LgfCoRvFtspVgzJ7-4a_aP1HoNIUMKMCAc9oPPnuqOdXX8UbXEdSQOJjA19Pw-GI_WBmMcw5Xa24jPi8naHIy_Js4lQR_8mPSi_-xjpCTc7X3puQLCXdZsmVW9dx3prDUXNTDARifnolk9_5-4Szi2X6kgFn44L-myDpMmrLOI"/>
+<img alt="Donor avatar 3" class="inline-block h-8 w-8 rounded-full ring-2 ring-primary" data-alt="Portrait of a smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgdgVRObSqD5ndfm_lpnAfDX7fZYK6qg_SGVN4aQrigM7htBSxPFSFDiVLwqxVwL15xbxDehny_JecVhppyObyznabMITnDf7Y7PbkV3lT_1quTCZAkWIup_7JxNAO49Xd6mn43-UcagLOlx9iKH9GPDGIgAAfAJpZT9luqtN9Thys0hOTbU7F9C-VTqamXLYCVRWlmdmiBkuD4PhmkXi54HqpmGjvzmQb-hGb-sYBUV3Phb0yPSV68Ix5xv5U2lVMH55g8iapPwU"/>
+</div>
+<div class="text-xs font-semibold text-white">
+<p>Trusted by 10k+ donors</p>
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-[16px]">star</span>
+<span class="material-symbols-outlined text-[16px]">star</span>
+<span class="material-symbols-outlined text-[16px]">star</span>
+<span class="material-symbols-outlined text-[16px]">star</span>
+<span class="material-symbols-outlined text-[16px]">star</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Split: Form Area -->
+<div class="w-full lg:w-[55%] xl:w-[60%] h-full flex flex-col overflow-y-auto bg-surface-light dark:bg-background-dark">
+<!-- Mobile Header (Only visible on small screens) -->
+<div class="lg:hidden p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-surface-light dark:bg-surface-dark sticky top-0 z-30">
+<div class="flex items-center gap-2 text-primary-dark dark:text-primary">
+<div class="size-6">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="font-bold text-lg text-slate-900 dark:text-white">Helpit</span>
+</div>
+<a class="text-sm font-semibold text-primary-dark dark:text-primary hover:underline" href="#">Sign In</a>
+</div>
+<div class="flex-1 flex items-center justify-center p-6 md:p-12 lg:p-16">
+<div class="w-full max-w-[480px] flex flex-col gap-8">
+<!-- Form Header -->
+<div class="space-y-2">
+<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Create Your Account</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base">
+                        Join us to start making a difference today. It takes less than a minute.
+                    </p>
+</div>
+<!-- Form Fields -->
+<form class="space-y-5" onsubmit="event.preventDefault();">
+<!-- Name Field -->
+<div class="space-y-1.5">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-200" for="fullname">Full Name</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<input class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark text-slate-900 dark:text-white pl-10 pr-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm shadow-sm transition-colors duration-200 ease-in-out placeholder:text-slate-400" id="fullname" name="fullname" placeholder="John Doe" type="text"/>
+</div>
+</div>
+<!-- Email Field -->
+<div class="space-y-1.5">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-200" for="email">Email Address</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<input class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark text-slate-900 dark:text-white pl-10 pr-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm shadow-sm transition-colors duration-200 ease-in-out placeholder:text-slate-400" id="email" name="email" placeholder="john@example.com" type="email"/>
+</div>
+</div>
+<!-- Phone Field -->
+<div class="space-y-1.5">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-200" for="phone">Phone Number</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</div>
+<input class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark text-slate-900 dark:text-white pl-10 pr-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm shadow-sm transition-colors duration-200 ease-in-out placeholder:text-slate-400" id="phone" name="phone" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+</div>
+<!-- Password Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="space-y-1.5">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-200" for="password">Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark text-slate-900 dark:text-white pl-10 pr-10 py-3 focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm shadow-sm transition-colors duration-200 ease-in-out placeholder:text-slate-400" id="password" name="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-200" for="confirm_password">Confirm Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">lock_reset</span>
+</div>
+<input class="block w-full rounded-lg border-slate-300 dark:border-slate-600 bg-white dark:bg-surface-dark text-slate-900 dark:text-white pl-10 pr-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm shadow-sm transition-colors duration-200 ease-in-out placeholder:text-slate-400" id="confirm_password" name="confirm_password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+</div>
+<!-- Terms Checkbox -->
+<div class="flex items-start gap-3 pt-2">
+<div class="flex h-6 items-center">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-surface-dark dark:checked:bg-primary" id="terms" name="terms" type="checkbox"/>
+</div>
+<div class="text-sm leading-6">
+<label class="font-medium text-slate-600 dark:text-slate-300" for="terms">
+                                I agree to the <a class="font-semibold text-primary-dark dark:text-primary hover:underline" href="#">Terms of Service</a> and <a class="font-semibold text-primary-dark dark:text-primary hover:underline" href="#">Privacy Policy</a>
+</label>
+</div>
+</div>
+<!-- Submit Button -->
+<div class="pt-4">
+<button class="flex w-full justify-center rounded-lg bg-primary px-3 py-3.5 text-sm font-bold leading-6 text-slate-900 shadow-sm hover:bg-primary-dark hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200" type="submit">
+                            Create Account
+                        </button>
+</div>
+</form>
+<!-- Footer Link -->
+<p class="text-center text-sm text-slate-500 dark:text-slate-400">
+                    Already have an account?
+                    <a class="font-bold text-primary-dark dark:text-primary hover:underline ml-1" href="#">Sign In</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

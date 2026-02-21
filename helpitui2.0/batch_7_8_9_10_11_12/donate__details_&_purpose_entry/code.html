@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donate: Details &amp; Purpose Entry</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1de2d1",
+              "background-light": "#f6f8f8",
+              "background-dark": "#112120",
+            },
+            fontFamily: {
+              "display": ["Public Sans", "sans-serif"]
+            },
+            borderRadius: {
+                "DEFAULT": "0.25rem", 
+                "lg": "0.5rem", 
+                "xl": "0.75rem", 
+                "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased">
+<div class="relative flex h-screen w-full bg-background-light dark:bg-background-dark overflow-hidden">
+<!-- SideNavBar -->
+<div class="hidden lg:flex w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 h-full">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- User Profile Summary -->
+<div class="flex items-center gap-3 px-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-slate-100 dark:ring-slate-800" data-alt="Portrait of a user" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCkRbKwSpBlRGccaSt3KeyJNHZiXBE-U-yPdYmcuWtYwgENcJsp0UfCAfFzMUbpYI9YmnWjo_-NaccpJIZ5msmV8M-DuPX114-uxJY5BocKdZ7gUd0g0mfLDZCFi7VkbPNA3zNumSNAeATmCA2lPjOuVouNByjnPXW34Poq0f1b4kH5ut-QU6LKKs883QDxvBxuXbLvIO1mqzWv-7Tb-olHEji7uVWYIAyNIVdL0JenatjM5Z3dOU0lplP8NRoHmnRa9ZGvWXmuF0Y");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-normal">Jane Doe</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Donor Portal</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:text-slate-400 dark:group-hover:text-primary">home</span>
+<span class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-white">Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined fill-1">volunteer_activism</span>
+<span class="text-sm font-bold">Donate</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:text-slate-400 dark:group-hover:text-primary">favorite</span>
+<span class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-white">My Donations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:text-slate-400 dark:group-hover:text-primary">receipt_long</span>
+<span class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-white">Tax Receipts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:text-slate-400 dark:group-hover:text-primary">settings</span>
+<span class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-white">Settings</span>
+</a>
+</nav>
+</div>
+<div class="px-2 pb-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Sign Out</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full overflow-y-auto relative">
+<!-- Top Bar -->
+<header class="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-6 py-4">
+<div class="flex items-center gap-4">
+<!-- Mobile Menu Button (Visible on small screens) -->
+<button class="lg:hidden p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-primary">
+<div class="size-6 bg-primary rounded-md flex items-center justify-center text-slate-900">
+<span class="material-symbols-outlined text-[16px] font-bold">favorite</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">Helpit</h2>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full size-10 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<div class="hidden sm:block text-right">
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Current Balance</p>
+<p class="text-sm text-slate-900 dark:text-white font-bold">₹ 12,450.00</p>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 w-full max-w-4xl mx-auto p-4 sm:p-6 lg:p-10">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-6 text-sm">
+<a class="text-slate-500 hover:text-primary dark:text-slate-400 transition-colors" href="#">Home</a>
+<span class="text-slate-300 dark:text-slate-600">/</span>
+<a class="text-slate-500 hover:text-primary dark:text-slate-400 transition-colors" href="#">Donate</a>
+<span class="text-slate-300 dark:text-slate-600">/</span>
+<span class="text-slate-900 dark:text-white font-medium">Details</span>
+</div>
+<div class="flex flex-col gap-1 mb-8">
+<h1 class="text-slate-900 dark:text-white text-3xl sm:text-4xl font-black tracking-tight">Enter Donation Details</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base">Securely support your chosen cause with full transparency.</p>
+</div>
+<!-- Form Container -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<!-- Selected NGO Summary -->
+<div class="p-6 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex items-start sm:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="size-16 rounded-lg bg-cover bg-center shadow-inner border border-slate-200 dark:border-slate-700" data-alt="Helpit Foundation Logo showing hands holding a heart" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAcQj88tj5DF5qIDa7iHcqv9Gg8rgbQrAIR-Uz36zAiE_R5Twe3HhlDrvggZECLbkPwEHEDNgGoNUz27W4stbZulSABJecsQ0QZrByry8zZsTG2bkqOGR2Zuxyu44LxskmTMzeTLjWgKoMJVco0OCH65afyFe8G1EqOMvsij9spG_gGbtFHrzDeEaDspljMw0K6lK4SQokj68jzxPZYTEFft5fWHbcBxg-9OIqGczfi3nR_58eiyzjmzA7dTeASvZ6jPiZEv61GCPw");'></div>
+<div>
+<p class="text-xs font-bold tracking-wider text-primary uppercase mb-1">Selected NGO</p>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                Helpit Foundation
+                                <span class="material-symbols-outlined text-primary text-[18px] filled" title="Verified Organization">verified</span>
+</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Registered Non-Profit • ID: #882910</p>
+</div>
+</div>
+<button class="text-sm font-medium text-primary hover:text-primary/80 hover:underline hidden sm:block">Change</button>
+</div>
+<!-- Input Form -->
+<div class="p-6 sm:p-8 flex flex-col gap-8">
+<!-- Amount Section -->
+<div class="flex flex-col gap-4">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300" for="amount">Donation Amount</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="text-slate-400 dark:text-slate-500 text-2xl font-semibold">₹</span>
+</div>
+<input class="block w-full pl-10 pr-4 py-4 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 rounded-lg text-2xl font-bold text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-700 focus:ring-2 focus:ring-primary focus:border-primary transition-all shadow-sm" id="amount" name="amount" placeholder="0.00" type="number"/>
+<div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+<span class="text-slate-400 dark:text-slate-600 text-sm font-medium">INR</span>
+</div>
+</div>
+<!-- Quick Select Chips -->
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 transition-all" type="button">₹ 500</button>
+<button class="px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 transition-all" type="button">₹ 1,000</button>
+<button class="px-4 py-2 rounded-full border border-primary bg-primary/10 text-primary dark:text-primary text-sm font-bold shadow-sm transition-all" type="button">₹ 2,500</button>
+<button class="px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 transition-all" type="button">₹ 5,000</button>
+<button class="px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 transition-all" type="button">Other</button>
+</div>
+</div>
+<!-- Purpose & Message Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Purpose Select -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300" for="purpose">Purpose of Donation</label>
+<div class="relative">
+<select class="appearance-none block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 rounded-lg text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all cursor-pointer" id="purpose" name="purpose">
+<option>Education for All</option>
+<option>Disaster Relief Fund</option>
+<option>Medical Aid</option>
+<option>Animal Welfare</option>
+<option>General Fund</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Funds will be allocated based on priority if 'General Fund' is selected.</p>
+</div>
+<!-- Donation Type -->
+<div class="flex flex-col gap-2">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Donation Frequency</span>
+<div class="grid grid-cols-2 gap-3 h-[50px]">
+<label class="cursor-pointer relative">
+<input checked="" class="peer sr-only" name="frequency" type="radio"/>
+<div class="h-full w-full flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2 text-slate-600 dark:text-slate-400 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span class="font-medium">One-time</span>
+</div>
+</label>
+<label class="cursor-pointer relative">
+<input class="peer sr-only" name="frequency" type="radio"/>
+<div class="h-full w-full flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2 text-slate-600 dark:text-slate-400 peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">autorenew</span>
+<span class="font-medium">Monthly</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Message Textarea -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300" for="message">Message of Support <span class="text-slate-400 font-normal">(Optional)</span></label>
+<span class="text-xs text-slate-400">Max 200 characters</span>
+</div>
+<textarea class="block w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 rounded-lg text-base text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none" id="message" name="message" placeholder="Write a few words to encourage the team..." rows="3"></textarea>
+</div>
+<!-- Checkbox -->
+<div class="flex items-start gap-3">
+<div class="flex h-6 items-center">
+<input class="h-5 w-5 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-slate-50 dark:bg-slate-950" id="anonymous" name="anonymous" type="checkbox"/>
+</div>
+<div class="text-sm leading-6">
+<label class="font-medium text-slate-900 dark:text-white" for="anonymous">Make this donation anonymously</label>
+<p class="text-slate-500 dark:text-slate-400">Your name will not be displayed on the public donor wall.</p>
+</div>
+</div>
+<!-- Action Button -->
+<div class="pt-4 flex flex-col gap-4">
+<button class="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-slate-900 font-bold text-lg py-4 px-6 rounded-lg shadow-lg shadow-primary/20 transition-all transform active:scale-[0.99]" type="button">
+                            Proceed to Payment
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<div class="flex items-center justify-center gap-2 text-slate-400 dark:text-slate-500 text-xs">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>Payments are secure and encrypted.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Info -->
+<div class="mt-8 text-center">
+<p class="text-sm text-slate-400 dark:text-slate-500">
+                    Need help? <a class="text-primary hover:underline" href="#">Contact Support</a>
+</p>
+<div class="mt-4 flex justify-center gap-4 grayscale opacity-50">
+<!-- Abstract payment logos represented as colored divs with alt text -->
+<div class="h-6 w-10 bg-slate-300 dark:bg-slate-700 rounded" title="Visa Card"></div>
+<div class="h-6 w-10 bg-slate-300 dark:bg-slate-700 rounded" title="Mastercard"></div>
+<div class="h-6 w-10 bg-slate-300 dark:bg-slate-700 rounded" title="PayPal"></div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

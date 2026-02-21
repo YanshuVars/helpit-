@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Donations Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2a",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen antialiased selection:bg-primary/30">
+<div class="relative flex h-full min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 bg-surface-light dark:border-slate-800 dark:bg-surface-dark lg:flex">
+<div class="flex h-16 items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-800/50">
+<div class="flex items-center justify-center rounded-lg bg-primary/20 p-2 text-primary">
+<span class="material-symbols-outlined filled">volunteer_activism</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-base font-bold leading-none text-slate-900 dark:text-white">Helpit</h1>
+<p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">NGO Portal</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1">
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">dashboard</span>
+                    Dashboard
+                </a>
+<a class="group flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2.5 text-sm font-medium text-teal-900 dark:bg-primary/20 dark:text-teal-100" href="#">
+<span class="material-symbols-outlined filled text-teal-700 dark:text-primary">payments</span>
+                    Donations
+                </a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">group</span>
+                    Donors
+                </a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">bar_chart</span>
+                    Reports
+                </a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">campaign</span>
+                    Campaigns
+                </a>
+</nav>
+<div class="border-t border-slate-200 p-4 dark:border-slate-800">
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">settings</span>
+                    Settings
+                </a>
+<div class="mt-4 flex items-center gap-3 px-3">
+<div class="relative h-9 w-9 overflow-hidden rounded-full ring-2 ring-white dark:ring-slate-700">
+<img alt="User Profile" class="h-full w-full object-cover" data-alt="Portrait of a smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdRbgn5WHaEnFEtJTJy70vOm2yMv6nUZdOK_XNZ-3fpHZmLEDriIvEYQA7cbbX_yadL-GICyz5-3CdE3c5uWSives_zN4iFHvufIheVYRjMSVUU35pd7XeL1OHyU1VvsITUU-tsTQTAEEl0ZONAmD_B9K_bDUKGm0-237yV_XQb1Sc0OMh0ZsfsUR8qGh-_w0-QExAu6nmVwqUWxtV2UdwUFKQN1ekdGQ1sDe1PEHiQXJdvGO-OjP8uM6NVX_ty8eZApNzen4EBGA"/>
+<span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white dark:ring-slate-800"></span>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-slate-900 dark:text-white">Alex Morgan</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex h-full flex-1 flex-col overflow-y-auto bg-background-light dark:bg-background-dark">
+<!-- Mobile Header -->
+<header class="flex h-16 items-center justify-between border-b border-slate-200 bg-surface-light px-4 dark:border-slate-800 dark:bg-surface-dark lg:hidden">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined filled text-primary">volunteer_activism</span>
+<span class="font-bold text-slate-900 dark:text-white">Helpit</span>
+</div>
+<button class="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+<!-- Breadcrumbs & Header -->
+<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+<div>
+<nav class="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">
+<a class="hover:text-primary transition-colors" href="#">NGO Dashboard</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary font-semibold">Donations</span>
+</nav>
+<h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Donations Overview</h2>
+</div>
+<div class="flex gap-3">
+<button class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/50 dark:border-slate-700 dark:bg-surface-dark dark:text-slate-200 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            Export
+                        </button>
+<button class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-teal-950 shadow-sm hover:bg-teal-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Add Donation
+                        </button>
+</div>
+</div>
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+<!-- Total Received -->
+<div class="rounded-xl border border-slate-100 bg-surface-light p-6 shadow-sm dark:border-slate-800 dark:bg-surface-dark">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Received</p>
+<p class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">₹4,85,000</p>
+</div>
+<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary dark:bg-primary/20">
+<span class="material-symbols-outlined filled">account_balance_wallet</span>
+</div>
+</div>
+<div class="mt-4 flex items-center text-sm">
+<span class="flex items-center font-medium text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined mr-1 text-[16px]">trending_up</span>
+                                12%
+                            </span>
+<span class="ml-2 text-slate-500 dark:text-slate-400">vs last month</span>
+</div>
+</div>
+<!-- This Month -->
+<div class="rounded-xl border border-slate-100 bg-surface-light p-6 shadow-sm dark:border-slate-800 dark:bg-surface-dark">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">This Month</p>
+<p class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">₹1,20,000</p>
+</div>
+<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined filled">calendar_month</span>
+</div>
+</div>
+<div class="mt-4 flex items-center text-sm">
+<span class="flex items-center font-medium text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined mr-1 text-[16px]">trending_up</span>
+                                8%
+                            </span>
+<span class="ml-2 text-slate-500 dark:text-slate-400">vs last month</span>
+</div>
+</div>
+<!-- Active Donors -->
+<div class="rounded-xl border border-slate-100 bg-surface-light p-6 shadow-sm dark:border-slate-800 dark:bg-surface-dark">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Active Donors</p>
+<p class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">28</p>
+</div>
+<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined filled">group</span>
+</div>
+</div>
+<div class="mt-4 flex items-center text-sm">
+<span class="flex items-center font-medium text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined mr-1 text-[16px]">add_circle</span>
+                                4 New
+                            </span>
+<span class="ml-2 text-slate-500 dark:text-slate-400">this week</span>
+</div>
+</div>
+<!-- Avg Donation -->
+<div class="rounded-xl border border-slate-100 bg-surface-light p-6 shadow-sm dark:border-slate-800 dark:bg-surface-dark">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Avg Donation</p>
+<p class="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">₹17,321</p>
+</div>
+<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined filled">analytics</span>
+</div>
+</div>
+<div class="mt-4 flex items-center text-sm">
+<span class="flex items-center font-medium text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined mr-1 text-[16px]">trending_down</span>
+                                2%
+                            </span>
+<span class="ml-2 text-slate-500 dark:text-slate-400">vs last month</span>
+</div>
+</div>
+</div>
+<!-- Filters & Search -->
+<div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center">
+<div class="relative flex-1">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="material-symbols-outlined text-slate-400">search</span>
+</div>
+<input class="block w-full rounded-lg border-slate-200 bg-surface-light py-2.5 pl-10 pr-3 text-sm placeholder-slate-400 focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-surface-dark dark:placeholder-slate-500 dark:focus:ring-primary/50" placeholder="Search donors, transaction ID..." type="text"/>
+</div>
+<div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+<div class="relative min-w-[180px]">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">calendar_today</span>
+</div>
+<input class="block w-full rounded-lg border-slate-200 bg-surface-light py-2.5 pl-10 pr-3 text-sm text-slate-600 focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-surface-dark dark:text-slate-300 dark:focus:ring-primary/50" placeholder="Select dates" type="text"/>
+</div>
+<div class="relative min-w-[160px]">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">filter_list</span>
+</div>
+<select class="block w-full appearance-none rounded-lg border-slate-200 bg-surface-light py-2.5 pl-10 pr-8 text-sm text-slate-600 focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-surface-dark dark:text-slate-300 dark:focus:ring-primary/50">
+<option>All Amounts</option>
+<option>Under ₹1,000</option>
+<option>₹1,000 - ₹10,000</option>
+<option>₹10,000+</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Donations Table -->
+<div class="overflow-hidden rounded-xl border border-slate-200 bg-surface-light shadow-sm dark:border-slate-800 dark:bg-surface-dark">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-slate-50 text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
+<tr>
+<th class="px-6 py-4 font-semibold" scope="col">Donor Name</th>
+<th class="px-6 py-4 font-semibold" scope="col">Payment Method</th>
+<th class="px-6 py-4 font-semibold" scope="col">Date &amp; Time</th>
+<th class="px-6 py-4 font-semibold text-right" scope="col">Amount</th>
+<th class="px-6 py-4 font-semibold text-center" scope="col">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 dark:text-white">Rajesh Mehta</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">ID: #DON-8832</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px] text-slate-400">qr_code_2</span>
+                                            UPI
+                                        </div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">Today</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">10:30 AM</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-bold text-green-600 dark:text-green-400">+₹50,000</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20">Completed</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 dark:text-white">Priya Foundation</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">ID: #DON-8831</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px] text-slate-400">account_balance</span>
+                                            Bank Transfer
+                                        </div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">Yesterday</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">04:15 PM</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-bold text-green-600 dark:text-green-400">+₹25,000</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20">Completed</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 dark:text-white">Anonymous Donor</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">ID: #DON-8830</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px] text-slate-400">credit_card</span>
+                                            Credit Card
+                                        </div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">Oct 24, 2023</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">09:00 AM</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-bold text-green-600 dark:text-green-400">+₹5,000</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20">Completed</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
+<span class="material-symbols-outlined">public</span>
+</div>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 dark:text-white">Green Earth Initiative</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">ID: #DON-8829</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px] text-slate-400">currency_exchange</span>
+                                            Wire Transfer
+                                        </div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">Oct 22, 2023</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">11:45 AM</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-bold text-green-600 dark:text-green-400">+₹1,50,000</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20 dark:bg-yellow-500/10 dark:text-yellow-500 dark:ring-yellow-500/20">Processing</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div class="flex flex-col">
+<span class="font-medium text-slate-900 dark:text-white">Amit Sharma</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">ID: #DON-8828</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px] text-slate-400">qr_code_2</span>
+                                            UPI
+                                        </div>
+</td>
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-slate-900 dark:text-white">Oct 20, 2023</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">02:20 PM</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="font-bold text-green-600 dark:text-green-400">+₹2,000</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20">Completed</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between border-t border-slate-200 bg-surface-light px-6 py-4 dark:border-slate-800 dark:bg-surface-dark">
+<div class="flex flex-1 justify-between sm:hidden">
+<a class="relative inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600" href="#">Previous</a>
+<a class="relative ml-3 inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600" href="#">Next</a>
+</div>
+<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+<div>
+<p class="text-sm text-slate-700 dark:text-slate-400">
+                                    Showing
+                                    <span class="font-medium text-slate-900 dark:text-white">1</span>
+                                    to
+                                    <span class="font-medium text-slate-900 dark:text-white">5</span>
+                                    of
+                                    <span class="font-medium text-slate-900 dark:text-white">28</span>
+                                    results
+                                </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+<a class="relative inline-flex items-center rounded-l-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:ring-slate-700 dark:hover:bg-slate-800" href="#">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</a>
+<a aria-current="page" class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-teal-950 focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" href="#">1</a>
+<a class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-slate-900 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-800" href="#">2</a>
+<a class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-slate-900 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-800" href="#">3</a>
+<a class="relative inline-flex items-center rounded-r-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:ring-slate-700 dark:hover:bg-slate-800" href="#">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

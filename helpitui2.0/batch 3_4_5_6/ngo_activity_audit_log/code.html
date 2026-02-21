@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Activity Audit Log</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-content": "#0e4d47",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "border-light": "#e0e7e7",
+                        "border-dark": "#2d3f3e",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        /* Custom scrollbar for table container if needed */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased font-display">
+<div class="relative flex min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 border-r border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark hidden md:flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary-content">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-base font-bold leading-tight">HelpIt NGO</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">Admin Console</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Beneficiaries</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">volunteer_activism</span>
+<span class="text-sm font-medium">Donors</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary-content dark:text-primary font-semibold" href="#">
+<span class="material-symbols-outlined fill-1">description</span>
+<span class="text-sm">Audit Log</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-border-light dark:border-border-dark">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="User profile photo of admin" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA3DtSaZz4I8nvHL5fOabkFxWSflAVuQdhSxGVQeEeBKCw0infjMIcNl3I2JhyMv-h0jwa64-mmO3ePp_QDkHA6t4__Ry9Q8FwpKHn96FrdJz03eBQ_8bLUPU-4eqriuyuPH13pCztEnjp_mhftC_Untbq5rXcSA3wOrHgbDlqPUKvBZvsUP6y7Ulmmm4F8OZpLYaXPZx2Y0Hxi7Q7iDjztu32jWVyeCJFtk4DXCgd6zpCJcJ8IDrfEbyy8veEWvH2dKDYvhPD1UUI');"></div>
+<div class="flex flex-col">
+<p class="text-sm font-medium">Sarah Jenkins</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Head of Ops</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden bg-background-light dark:bg-background-dark">
+<!-- Mobile Header -->
+<header class="md:hidden flex items-center justify-between p-4 bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary-content">
+<span class="material-symbols-outlined text-lg">volunteer_activism</span>
+</div>
+<span class="font-bold">HelpIt NGO</span>
+</div>
+<button class="text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto">
+<div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+<!-- Breadcrumbs -->
+<nav aria-label="Breadcrumb" class="flex mb-4">
+<ol class="inline-flex items-center space-x-1 md:space-x-3 text-sm">
+<li class="inline-flex items-center">
+<a class="text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary font-medium" href="#">Organization</a>
+</li>
+<li>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-slate-400 text-sm">chevron_right</span>
+<a class="ml-1 text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary font-medium md:ml-2" href="#">Security</a>
+</div>
+</li>
+<li aria-current="page">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-slate-400 text-sm">chevron_right</span>
+<span class="ml-1 text-slate-900 dark:text-slate-100 font-semibold md:ml-2">Audit Log</span>
+</div>
+</li>
+</ol>
+</nav>
+<!-- Header -->
+<div class="mb-8">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Audit Log</h1>
+<p class="mt-2 text-slate-500 dark:text-slate-400 text-lg">Track all administrative activities and security events within your organization.</p>
+</div>
+<!-- Filters and Search -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark p-4 mb-6">
+<div class="flex flex-col md:flex-row gap-4 items-end md:items-center justify-between">
+<div class="flex flex-wrap gap-3 w-full md:w-auto">
+<!-- Date Range -->
+<div class="relative w-full md:w-48">
+<label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Date Range</label>
+<div class="relative">
+<select class="w-full appearance-none bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark text-slate-900 dark:text-slate-100 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 pr-8">
+<option>Last 7 days</option>
+<option>Last 30 days</option>
+<option>Last 90 days</option>
+<option>Custom range</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Action Type -->
+<div class="relative w-full md:w-48">
+<label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Action Type</label>
+<div class="relative">
+<select class="w-full appearance-none bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark text-slate-900 dark:text-slate-100 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 pr-8">
+<option>All Actions</option>
+<option>Create</option>
+<option>Update</option>
+<option>Delete</option>
+<option>Export</option>
+<option>Login</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<!-- User -->
+<div class="relative w-full md:w-48">
+<label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">User</label>
+<div class="relative">
+<select class="w-full appearance-none bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark text-slate-900 dark:text-slate-100 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 pr-8">
+<option>All Users</option>
+<option>Sarah Admin</option>
+<option>Rahul Coordinator</option>
+<option>Priya Manager</option>
+<option>System Bot</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Search -->
+<div class="relative w-full md:w-64">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<span class="material-symbols-outlined text-slate-400">search</span>
+</div>
+<input class="bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark text-slate-900 dark:text-slate-100 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 p-2.5" placeholder="Search by resource ID..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-slate-600 dark:text-slate-300">
+<thead class="bg-slate-50 dark:bg-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400 border-b border-border-light dark:border-border-dark">
+<tr>
+<th class="px-6 py-4 font-bold tracking-wider" scope="col">Timestamp</th>
+<th class="px-6 py-4 font-bold tracking-wider" scope="col">User</th>
+<th class="px-6 py-4 font-bold tracking-wider" scope="col">Action</th>
+<th class="px-6 py-4 font-bold tracking-wider" scope="col">Resource</th>
+<th class="px-6 py-4 text-right" scope="col">Details</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-light dark:divide-border-dark">
+<!-- Row 1 -->
+<tr class="bg-white dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 24, 09:30 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold">SA</div>
+<span class="font-medium text-slate-900 dark:text-white">Sarah Admin</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800 dark:text-slate-200">Updated Profile</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Volunteer #4922</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 (Alternating BG) -->
+<tr class="bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 24, 09:15 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">RC</div>
+<span class="font-medium text-slate-900 dark:text-white">Rahul Coordinator</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-emerald-600 dark:text-emerald-400">Created Request</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Aid Request #881</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="bg-white dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 23, 04:45 PM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">SB</div>
+<span class="font-medium text-slate-900 dark:text-white">System Bot</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800 dark:text-slate-200">Synced Database</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Inventory_Main</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 23, 02:20 PM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">PM</div>
+<span class="font-medium text-slate-900 dark:text-white">Priya Manager</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-emerald-600 dark:text-emerald-400">Approved Grant</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Grant App #102</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="bg-white dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 23, 11:10 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold">SA</div>
+<span class="font-medium text-slate-900 dark:text-white">Sarah Admin</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-red-500 dark:text-red-400">Deleted Record</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Donor #331</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 22, 05:00 PM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">RC</div>
+<span class="font-medium text-slate-900 dark:text-white">Rahul Coordinator</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800 dark:text-slate-200">Exported Data</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Beneficiary_List_Q3</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 7 -->
+<tr class="bg-white dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 22, 09:30 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">AU</div>
+<span class="font-medium text-slate-900 dark:text-white">Admin User</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-blue-600 dark:text-blue-400">Login Success</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Session #9921</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 8 -->
+<tr class="bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 21, 03:15 PM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">PM</div>
+<span class="font-medium text-slate-900 dark:text-white">Priya Manager</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800 dark:text-slate-200">Updated Status</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Project Alpha</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 9 -->
+<tr class="bg-white dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 21, 01:00 PM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold">SB</div>
+<span class="font-medium text-slate-900 dark:text-white">System Bot</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800 dark:text-slate-200">Backup Complete</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Backup_Daily_21</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 10 -->
+<tr class="bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 20, 10:45 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold">SA</div>
+<span class="font-medium text-slate-900 dark:text-white">Sarah Admin</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-emerald-600 dark:text-emerald-400">Added Role</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">User: John Doe</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 11 -->
+<tr class="bg-white dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 20, 08:20 AM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">RC</div>
+<span class="font-medium text-slate-900 dark:text-white">Rahul Coordinator</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800 dark:text-slate-200">Modified Event</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Fundraiser Gala</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+<!-- Row 12 -->
+<tr class="bg-slate-50/50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">Oct 19, 04:55 PM</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div class="size-6 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">PM</div>
+<span class="font-medium text-slate-900 dark:text-white">Priya Manager</span>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap font-bold text-slate-800 dark:text-slate-200">Reviewed App</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded text-xs font-mono border border-slate-200 dark:border-slate-700">Volunteer App #55</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-border-light dark:border-border-dark bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between">
+<button class="inline-flex items-center px-4 py-2 border border-border-light dark:border-border-dark text-sm font-medium rounded-lg text-slate-700 dark:text-slate-300 bg-white dark:bg-surface-dark hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-lg mr-2">arrow_back</span>
+                                Previous
+                            </button>
+<span class="text-sm text-slate-600 dark:text-slate-400">
+                                Page <span class="font-bold text-slate-900 dark:text-white">1</span> of <span class="font-bold text-slate-900 dark:text-white">3</span>
+</span>
+<button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-content transition-colors shadow-sm hover:shadow-md">
+                                Next
+                                <span class="material-symbols-outlined text-lg ml-2">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Export Area -->
+<div class="mt-6 flex justify-end">
+<button class="inline-flex items-center gap-2 text-primary hover:text-primary-content font-medium text-sm transition-colors">
+<span class="material-symbols-outlined">download</span>
+                            Download Full Report (CSV)
+                         </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

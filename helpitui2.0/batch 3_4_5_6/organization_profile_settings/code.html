@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Organization Profile Settings - Helpit</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#14b0a3", 
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-secondary": "#4f9690",
+                        "border-light": "#d0e6e5",
+                        "border-dark": "#2a403e",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-gray-100 antialiased selection:bg-primary/30">
+<div class="flex min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col w-72 border-r border-border-light dark:border-border-dark bg-background-light dark:bg-surface-dark h-screen sticky top-0">
+<div class="flex flex-col h-full justify-between p-6">
+<div class="flex flex-col gap-8">
+<!-- User/Org Header -->
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-12 w-12 border-2 border-primary/20 shrink-0" data-alt="Organization logo abstract colored shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCEKei0b5vUc_ZbKhcoVZB13ZNCcDe_ZrAvuqvobYYnFSJWtDoZsGT0NaRjy2JicKPmdepYbauktmSHISxjyPthW0QRIvt8BJlL-VzqVSVESKnLe18MfHMWVzGbbq50K760zW9PlPlwNcchgwv9e2aRV-MPU6Xt2zP-vQYwaanKYhV2RmlQuaD7a1zYGDf_twj21X52xIDM3O9F4MmrgQmQDJERRy-xEjhTZKfhI197f7CrYTy7H2YD2O0R7F7PlLfXjrbQSw4BIqw");'>
+</div>
+<div class="flex flex-col min-w-0">
+<h1 class="text-text-main dark:text-white text-base font-bold leading-tight truncate">Helpit Foundation</h1>
+<p class="text-text-secondary dark:text-gray-400 text-xs font-normal leading-normal truncate">Organization Management</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-primary/10 hover:text-primary-dark transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-text-secondary group-hover:text-primary-dark dark:text-gray-500">grid_view</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary-dark dark:text-primary" href="#">
+<span class="material-symbols-outlined text-2xl text-primary-dark dark:text-primary fill-1">account_circle</span>
+<span class="text-sm font-bold">Profile Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-primary/10 hover:text-primary-dark transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-text-secondary group-hover:text-primary-dark dark:text-gray-500">volunteer_activism</span>
+<span class="text-sm font-medium">Donations</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-primary/10 hover:text-primary-dark transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-text-secondary group-hover:text-primary-dark dark:text-gray-500">campaign</span>
+<span class="text-sm font-medium">Campaigns</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-primary/10 hover:text-primary-dark transition-colors group" href="#">
+<span class="material-symbols-outlined text-2xl text-text-secondary group-hover:text-primary-dark dark:text-gray-500">description</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Action -->
+<div class="pt-6 border-t border-border-light dark:border-border-dark">
+<button class="flex items-center gap-3 px-4 py-2 w-full text-left rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="text-sm font-medium">Sign Out</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-y-auto bg-background-light dark:bg-background-dark">
+<!-- Top Bar -->
+<header class="sticky top-0 z-10 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md px-6 py-4 lg:px-10 border-b border-border-light dark:border-border-dark flex items-center justify-between">
+<div class="flex items-center gap-4">
+<button class="lg:hidden p-2 text-text-main dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<a class="flex items-center gap-2 text-text-secondary hover:text-primary-dark transition-colors text-sm font-medium" href="#">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+                        Back to settings
+                    </a>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm text-text-secondary dark:text-gray-400">Last saved: 2 mins ago</span>
+<button class="bg-primary text-text-main font-semibold px-4 py-2 rounded-lg text-sm hover:bg-primary-dark hover:text-white transition-all shadow-sm shadow-primary/30">
+                        Publish Changes
+                    </button>
+</div>
+</header>
+<!-- Content Container -->
+<div class="flex-1 px-6 py-8 lg:px-10 max-w-5xl mx-auto w-full">
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">Organization Profile</h2>
+<p class="text-text-secondary dark:text-gray-400 mt-2">Manage your NGO's public information and settings displayed on the platform.</p>
+</div>
+<!-- Main Form Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+<!-- Basic Information Section -->
+<div class="p-6 lg:p-8 border-b border-border-light dark:border-border-dark">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold text-text-main dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">feed</span>
+                                Basic Information
+                            </h3>
+</div>
+<div class="flex flex-col md:flex-row gap-8">
+<!-- Logo Upload -->
+<div class="flex flex-col gap-3 items-center md:items-start">
+<span class="text-sm font-medium text-text-main dark:text-gray-300">Organization Logo</span>
+<div class="relative group cursor-pointer">
+<div class="w-32 h-32 rounded-full bg-background-light dark:bg-background-dark border-2 border-dashed border-border-light dark:border-border-dark flex items-center justify-center overflow-hidden hover:border-primary transition-colors">
+<img alt="Current Logo" class="w-full h-full object-cover opacity-80 group-hover:opacity-40 transition-opacity" data-alt="Geometric colorful logo abstract" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy1RLhN6Jj9_yKiCuLhu6n9KliJ-h1Sq9eWtUoUpnkNwE1OGODsM0DkMmDDODSudBVxU0fta_Q9xjhpAjO0bA8uBr2cqbC8n06AuCiDMdmtQQu-TYQ8NObd3bCycrNmFJLDpoFGJN-2Okx6pEPGh-lvd6ofh37vkqkJc3haR-EQ3fON-PR3U-FCUiRyDiw9cqTy26jQw3gVfecw4XRM6Ild-A1_ZwmOtZDs0fNpkUE4BfJ3TMTm6lsrwY0YV8gglpj9xWRdEO3WaI"/>
+<div class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+<span class="text-xs text-text-secondary font-medium mt-1">Change</span>
+</div>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-text-main p-1.5 rounded-full shadow-md flex items-center justify-center pointer-events-none">
+<span class="material-symbols-outlined text-sm font-bold">edit</span>
+</div>
+</div>
+<p class="text-xs text-text-secondary text-center md:text-left max-w-[140px]">Recommended: 400x400px JPG or PNG.</p>
+</div>
+<!-- Basic Inputs -->
+<div class="flex-1 flex flex-col gap-5">
+<div class="w-full">
+<label class="block text-sm font-medium text-text-main dark:text-gray-300 mb-1.5">Organization Name</label>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-2.5 text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-text-secondary/50" type="text" value="Helpit Foundation"/>
+</div>
+<div class="w-full">
+<label class="block text-sm font-medium text-text-main dark:text-gray-300 mb-1.5">Description</label>
+<textarea class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-2.5 text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none placeholder:text-text-secondary/50 resize-none" rows="4">Helpit Foundation is dedicated to bridging the gap between donors and causes that matter. We facilitate transparent, impactful giving to empower communities and drive sustainable change across India.</textarea>
+<p class="text-xs text-text-secondary text-right mt-1">245/500 characters</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Contact & Address Section (Grid) -->
+<div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x border-border-light dark:border-border-dark border-b">
+<!-- Contact Info -->
+<div class="p-6 lg:p-8">
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">contact_mail</span>
+                                Contact Information
+                            </h3>
+<div class="space-y-5">
+<div>
+<label class="block text-sm font-medium text-text-main dark:text-gray-300 mb-1.5">Email Address</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
+<span class="material-symbols-outlined text-xl">mail</span>
+</span>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark pl-10 pr-4 py-2.5 text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" type="email" value="contact@helpit.org"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-text-main dark:text-gray-300 mb-1.5">Phone Number</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
+<span class="material-symbols-outlined text-xl">call</span>
+</span>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark pl-10 pr-4 py-2.5 text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" type="tel" value="+91 98765 43210"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-text-main dark:text-gray-300 mb-1.5">Website</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
+<span class="material-symbols-outlined text-xl">language</span>
+</span>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark pl-10 pr-4 py-2.5 text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" type="url" value="https://helpit.org"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Address -->
+<div class="p-6 lg:p-8">
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                                Address Details
+                            </h3>
+<div class="space-y-5">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-text-main dark:text-gray-300 mb-1.5">City</label>
+<input class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-2.5 text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" type="text" value="Mumbai"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-text-main dark:text-gray-300 mb-1.5">State</label>
+<div class="relative">
+<select class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-2.5 text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
+<option>Maharashtra</option>
+<option>Delhi</option>
+<option>Karnataka</option>
+</select>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none">
+<span class="material-symbols-outlined text-xl">expand_more</span>
+</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-text-main dark:text-gray-300 mb-1.5">Full Address</label>
+<textarea class="w-full rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark px-4 py-2.5 text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none" rows="3">101, Impact Tower, Linking Road, Bandra West</textarea>
+</div>
+<div class="h-24 rounded-lg overflow-hidden relative">
+<img alt="Map view of location" class="w-full h-full object-cover" data-location="Mumbai" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-pYxWmSqt1cLChO1g-11YU8KT9zo3Rih0WZfh9upAMm_BlZzGRutf7ojO1qZp-_KYk8lUI73gJ26VjN3GQERmXCf1Exdk_aahPVcrHHgyYPm-2F6kGy-vO5tkOJSvtoAOdj9aL0o59t88b2VmnXjybfS1BnGKlU4IogNklGZ83i4xtcUR6L4M3PHBJioi3swTBLNKvGHDrphoCO6sD4YhnvovewZDrgkpdtRpyS-uGWzbEg5lzvJ_jB-1Qc4w0nDg7verr_rlRcw"/>
+<div class="absolute inset-0 bg-black/10 flex items-center justify-center">
+<button class="bg-white/90 text-xs font-bold px-3 py-1.5 rounded shadow-sm text-text-main hover:bg-white transition-colors">Adjust Pin</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Social Links -->
+<div class="p-6 lg:p-8">
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">share</span>
+                            Social Links
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="relative group">
+<label class="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">Facebook</label>
+<div class="flex">
+<span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-text-secondary">
+<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fill-rule="evenodd"></path></svg>
+</span>
+<input class="flex-1 min-w-0 block w-full px-3 py-2.5 rounded-r-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary sm:text-sm outline-none transition-all" placeholder="Username" type="text"/>
+</div>
+</div>
+<div class="relative group">
+<label class="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">Twitter / X</label>
+<div class="flex">
+<span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-text-secondary">
+<svg aria-hidden="true" class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+</span>
+<input class="flex-1 min-w-0 block w-full px-3 py-2.5 rounded-r-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary sm:text-sm outline-none transition-all" placeholder="Username" type="text"/>
+</div>
+</div>
+<div class="relative group">
+<label class="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">Instagram</label>
+<div class="flex">
+<span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-border-light dark:border-border-dark bg-gray-50 dark:bg-gray-800 text-text-secondary">
+<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path clip-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 2.373c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" fill-rule="evenodd"></path></svg>
+</span>
+<input class="flex-1 min-w-0 block w-full px-3 py-2.5 rounded-r-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary sm:text-sm outline-none transition-all" placeholder="Username" type="text"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="px-6 py-4 lg:px-8 bg-background-light/50 dark:bg-surface-dark border-t border-border-light dark:border-border-dark flex justify-end">
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 rounded-lg text-text-main hover:bg-background-light/80 dark:text-gray-300 dark:hover:bg-background-dark transition-colors text-sm font-medium">
+                                Cancel
+                            </button>
+<button class="bg-primary hover:bg-primary-dark text-text-main dark:text-gray-900 px-8 py-2.5 rounded-lg font-bold shadow-lg shadow-primary/20 transition-all active:scale-95">
+                                Save Changes
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

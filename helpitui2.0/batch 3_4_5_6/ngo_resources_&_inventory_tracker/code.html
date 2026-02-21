@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Resources &amp; Inventory Tracker - Helpit</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "slate": {
+                            850: "#1e293b",
+                            900: "#0f172a",
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased selection:bg-primary/30">
+<div class="flex min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 lg:flex">
+<div class="flex h-16 items-center gap-3 border-b border-slate-100 px-6 dark:border-slate-800">
+<div class="flex size-8 items-center justify-center rounded-lg bg-primary/20 text-primary">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+<div>
+<h1 class="text-base font-bold leading-none text-slate-900 dark:text-white">Helpit</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">NGO Platform</p>
+</div>
+</div>
+<nav class="flex flex-1 flex-col gap-1 px-3 py-6">
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white" href="#">
+<span class="material-symbols-outlined text-xl text-slate-400 group-hover:text-primary">grid_view</span>
+                    Dashboard
+                </a>
+<a class="group flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-slate-900 transition-colors dark:bg-primary/20 dark:text-white" href="#">
+<span class="material-symbols-outlined text-xl text-primary">inventory_2</span>
+                    Resources
+                </a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white" href="#">
+<span class="material-symbols-outlined text-xl text-slate-400 group-hover:text-primary">group</span>
+                    Donors
+                </a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white" href="#">
+<span class="material-symbols-outlined text-xl text-slate-400 group-hover:text-primary">local_shipping</span>
+                    Logistics
+                </a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white" href="#">
+<span class="material-symbols-outlined text-xl text-slate-400 group-hover:text-primary">bar_chart</span>
+                    Reports
+                </a>
+<div class="my-2 border-t border-slate-100 dark:border-slate-800"></div>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white" href="#">
+<span class="material-symbols-outlined text-xl text-slate-400 group-hover:text-primary">settings</span>
+                    Settings
+                </a>
+</nav>
+<div class="border-t border-slate-100 p-4 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="size-10 overflow-hidden rounded-full bg-slate-200">
+<!-- User Avatar -->
+<div class="size-full bg-gradient-to-tr from-primary to-blue-500" data-alt="User profile abstract gradient"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-900 dark:text-white">Sarah Jenkins</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Field Coordinator</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex flex-1 flex-col overflow-hidden">
+<!-- Header -->
+<header class="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-6 dark:border-slate-800 dark:bg-slate-900 lg:px-8">
+<div class="flex items-center gap-4 lg:hidden">
+<button class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="text-lg font-bold text-slate-900 dark:text-white">Helpit</span>
+</div>
+<div class="hidden items-center gap-2 text-sm text-slate-500 dark:text-slate-400 lg:flex">
+<span>Organization</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="font-medium text-slate-900 dark:text-white">Inventory Management</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative rounded-full p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 rounded-full bg-red-500 border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="hidden rounded-full p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white lg:block">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 lg:p-8">
+<div class="mx-auto max-w-7xl">
+<!-- Page Title & Primary Action -->
+<div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+<div>
+<h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Inventory Management</h2>
+<p class="mt-1 text-slate-500 dark:text-slate-400">Track and manage your relief resources across all locations.</p>
+</div>
+<button class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-slate-900 transition-transform active:scale-95 hover:brightness-105 shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                            Add Resource
+                        </button>
+</div>
+<!-- Filters & Search -->
+<div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+<!-- Category Pills -->
+<div class="flex flex-wrap items-center gap-2">
+<button class="rounded-full bg-slate-900 px-4 py-1.5 text-sm font-medium text-white shadow-sm ring-1 ring-inset ring-slate-900 dark:bg-primary dark:text-slate-900 dark:ring-primary">All</button>
+<button class="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700">Food</button>
+<button class="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700">Medical</button>
+<button class="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700">Shelter</button>
+<button class="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-slate-600 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-700">Logistics</button>
+</div>
+<!-- Search Box -->
+<div class="relative w-full sm:w-64">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="block w-full rounded-lg border-0 bg-white py-2 pl-10 pr-3 text-slate-900 ring-1 ring-inset ring-slate-200 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-slate-800 dark:text-white dark:ring-slate-700 sm:text-sm sm:leading-6" placeholder="Search resources..." type="text"/>
+</div>
+</div>
+<!-- Data Table -->
+<div class="mt-6 flow-root">
+<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+<table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:pl-6" scope="col">Resource</th>
+<th class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400" scope="col">Category</th>
+<th class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400" scope="col">Quantity</th>
+<th class="hidden px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 sm:table-cell" scope="col">Unit</th>
+<th class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400" scope="col">Status</th>
+<th class="relative py-3.5 pl-3 pr-4 sm:pr-6" scope="col">
+<span class="sr-only">Actions</span>
+</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 bg-white dark:divide-slate-800 dark:bg-slate-900">
+<!-- Row 1 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+<div class="flex items-center">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
+<span class="material-symbols-outlined">rice_bowl</span>
+</div>
+<div class="ml-4">
+<div class="font-medium text-slate-900 dark:text-white">Rice Bags (50kg)</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: #RES-0042</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">Food</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-slate-900 dark:text-white">120</td>
+<td class="hidden whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400 sm:table-cell">Bags</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm">
+<span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-emerald-400/30">Available</span>
+</td>
+<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+<div class="flex items-center justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="text-slate-400 hover:text-primary dark:text-slate-500 dark:hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+<div class="flex items-center">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<div class="ml-4">
+<div class="font-medium text-slate-900 dark:text-white">First Aid Kits (Type B)</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: #RES-0118</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">Medical</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-slate-900 dark:text-white">15</td>
+<td class="hidden whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400 sm:table-cell">Kits</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm">
+<span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20 dark:bg-amber-400/10 dark:text-amber-400 dark:ring-amber-400/30">Low Stock</span>
+</td>
+<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+<div class="flex items-center justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="text-slate-400 hover:text-primary dark:text-slate-500 dark:hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+<div class="flex items-center">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+<span class="material-symbols-outlined">camping</span>
+</div>
+<div class="ml-4">
+<div class="font-medium text-slate-900 dark:text-white">Tents (4-Person)</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: #RES-0099</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">Shelter</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-slate-900 dark:text-white">2</td>
+<td class="hidden whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400 sm:table-cell">Units</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm">
+<span class="inline-flex items-center rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10 dark:bg-red-400/10 dark:text-red-400 dark:ring-red-400/30">Critical</span>
+</td>
+<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+<div class="flex items-center justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="text-slate-400 hover:text-primary dark:text-slate-500 dark:hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+<div class="flex items-center">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30 dark:text-cyan-400">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div class="ml-4">
+<div class="font-medium text-slate-900 dark:text-white">Water Purification Tablets</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: #RES-0201</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">Medical</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-slate-900 dark:text-white">0</td>
+<td class="hidden whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400 sm:table-cell">Boxes</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10 dark:bg-slate-400/10 dark:text-slate-400 dark:ring-slate-400/20">Depleted</span>
+</td>
+<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+<div class="flex items-center justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="text-slate-400 hover:text-primary dark:text-slate-500 dark:hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+<div class="flex items-center">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400">
+<span class="material-symbols-outlined">bed</span>
+</div>
+<div class="ml-4">
+<div class="font-medium text-slate-900 dark:text-white">Blankets (Wool)</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">ID: #RES-0155</div>
+</div>
+</div>
+</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">Shelter</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-slate-900 dark:text-white">500</td>
+<td class="hidden whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400 sm:table-cell">Units</td>
+<td class="whitespace-nowrap px-3 py-4 text-sm">
+<span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-emerald-400/30">Available</span>
+</td>
+<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+<div class="flex items-center justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+<button class="text-slate-400 hover:text-primary dark:text-slate-500 dark:hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Pagination -->
+<div class="flex items-center justify-between border-t border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900 sm:px-6">
+<div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+<div>
+<p class="text-sm text-slate-700 dark:text-slate-400">
+                                            Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">42</span> results
+                                        </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="isolate inline-flex -space-x-px rounded-md shadow-sm">
+<a class="relative inline-flex items-center rounded-l-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:ring-slate-700 dark:hover:bg-slate-800" href="#">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</a>
+<a aria-current="page" class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-slate-900 focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" href="#">1</a>
+<a class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-slate-900 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:text-white dark:ring-slate-700 dark:hover:bg-slate-800" href="#">2</a>
+<a class="relative hidden items-center px-4 py-2 text-sm font-semibold text-slate-900 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:text-white dark:ring-slate-700 dark:hover:bg-slate-800 md:inline-flex" href="#">3</a>
+<span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-300 focus:outline-offset-0 dark:text-slate-400 dark:ring-slate-700">...</span>
+<a class="relative hidden items-center px-4 py-2 text-sm font-semibold text-slate-900 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:text-white dark:ring-slate-700 dark:hover:bg-slate-800 md:inline-flex" href="#">8</a>
+<a class="relative inline-flex items-center rounded-r-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 dark:ring-slate-700 dark:hover:bg-slate-800" href="#">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

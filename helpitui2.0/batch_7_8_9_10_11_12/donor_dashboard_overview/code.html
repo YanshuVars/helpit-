@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donor Dashboard Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700&amp;family=Merriweather:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-content": "#0e1b1a",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-muted": "#4f9690",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "serif": ["Merriweather", "serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 min-h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark hidden md:flex flex-col h-screen fixed left-0 top-0 overflow-y-auto">
+<div class="p-6 flex items-center gap-3">
+<div class="h-8 w-8 rounded bg-primary flex items-center justify-center text-primary-content font-bold text-xl">H</div>
+<span class="text-xl font-bold tracking-tight">Helpit</span>
+</div>
+<div class="px-4 py-2">
+<div class="flex items-center gap-3 p-3 mb-6 bg-background-light dark:bg-background-dark rounded-xl">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-10 w-10 border border-slate-200" data-alt="Portrait of Rajesh Kumar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB91FUO94JkcH4VVf0UJjrkqN7awel4FNFzfMlcQtkIz0GfvCMnA2C6yKaORIZ_UPtMgdjuASLOlPLsFZB5f9sCp44IMzlAEn5RWUuV6ao3kRNAJmdHo26K1LNlsegOlt5VI2-UWBumk2ByVeYlAZz-K047u87LdejuQD1tvWgKhpu5CJKb_zdrjHXe-el0GAJeCSk6CNoTs2uAcybwX_w1244IouMiMPVZXIJgemWMusSHDy4OAuw-jg2FBHQd9DUHj6nHUjWnL3c");'></div>
+<div class="flex flex-col overflow-hidden">
+<h1 class="text-sm font-bold truncate">Rajesh Kumar</h1>
+<p class="text-text-muted text-xs truncate">Donor Account</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary-content dark:text-primary" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-sm font-medium">My Donations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="text-sm font-medium">Tax Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">explore</span>
+<span class="text-sm font-medium">Explore NGOs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-4">
+<button class="flex w-full items-center justify-center gap-2 rounded-lg py-2.5 px-4 bg-primary text-primary-content text-sm font-bold hover:bg-opacity-90 transition-all shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">volunteer_activism</span>
+<span>Donate Now</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-0 md:ml-64 flex flex-col min-h-screen overflow-y-auto">
+<!-- Top Header Mobile -->
+<div class="md:hidden flex items-center justify-between p-4 bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<div class="h-8 w-8 rounded bg-primary flex items-center justify-center text-primary-content font-bold">H</div>
+<span class="font-bold">Helpit</span>
+</div>
+<button class="p-2 text-slate-600">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<!-- Breadcrumb & Top Bar -->
+<header class="sticky top-0 z-20 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+<div class="flex items-center gap-2 text-sm text-text-muted">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="text-slate-300 dark:text-slate-600">/</span>
+<span class="text-text-main dark:text-slate-200 font-medium">Donor Dashboard</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500 border-2 border-background-light dark:border-background-dark"></span>
+</button>
+<div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden md:hidden">
+<div class="bg-center bg-no-repeat aspect-square bg-cover w-full h-full" data-alt="Portrait of Rajesh Kumar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1zY2K_95M4aeB3X4DPsaCOv_RajdGKyprEwAaaOAr5KdbLph_uYcapNcI8TPG4CrBOPEfSpnnAZyM8xf9-y90opJXLWpkAO9sUzQxd3-DN_HysrgES4N3MwCD2w2Hv6VhHBy9cIVxn8bcI1W5V9mAznipxGRvOcNwaVsAbSkKtXjlJ_HBeokU7ZjWPyXhO4BIufkEC-XtLPf2DaxDSGx7iBpRQEeB3vEngT5cuZyPe2FRhR63xHabh9iLfBb4mrf-HbxMTHt_gYI");'></div>
+</div>
+</div>
+</header>
+<div class="px-6 pb-12 max-w-7xl mx-auto w-full">
+<!-- Welcome Section -->
+<div class="mt-4 mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-serif text-3xl md:text-4xl text-text-main dark:text-slate-100 mb-2">Welcome back, Rajesh</h1>
+<p class="text-text-muted dark:text-slate-400">Here is an overview of your giving impact and recent activity.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">search</span>
+                        Browse NGOs
+                    </button>
+<button class="px-4 py-2.5 rounded-lg bg-primary text-primary-content text-sm font-bold shadow-md shadow-primary/20 hover:bg-opacity-90 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Donate Now
+                    </button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<!-- Stat Card 1 -->
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col gap-1">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Donated</p>
+<div class="p-1.5 rounded-md bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+</div>
+</div>
+<p class="text-2xl font-bold text-text-main dark:text-slate-100">₹2,45,000</p>
+<p class="text-xs text-green-600 dark:text-green-400 font-medium mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                        +12% this month
+                    </p>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col gap-1">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">NGOs Supported</p>
+<div class="p-1.5 rounded-md bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-[20px]">diversity_1</span>
+</div>
+</div>
+<p class="text-2xl font-bold text-text-main dark:text-slate-100">8</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 font-medium mt-1">
+                        Across 3 causes
+                    </p>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col gap-1">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Tax Saved</p>
+<div class="p-1.5 rounded-md bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+</div>
+<p class="text-2xl font-bold text-text-main dark:text-slate-100">₹61,250</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 font-medium mt-1">
+                        FY 2023-2024
+                    </p>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col gap-1">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Donation Count</p>
+<div class="p-1.5 rounded-md bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined text-[20px]">volunteer_activism</span>
+</div>
+</div>
+<p class="text-2xl font-bold text-text-main dark:text-slate-100">15</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 font-medium mt-1">
+                        Lifetime donations
+                    </p>
+</div>
+</div>
+<!-- Recent Donations Section -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden">
+<div class="p-5 border-b border-slate-100 dark:border-slate-700 flex flex-wrap justify-between items-center gap-4">
+<h3 class="font-bold text-lg text-text-main dark:text-slate-100">Recent Donations</h3>
+<a class="text-primary text-sm font-semibold hover:text-opacity-80 flex items-center gap-1" href="#">
+                        View all history
+                        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
+<tr>
+<th class="px-6 py-4">NGO Name</th>
+<th class="px-6 py-4">Cause</th>
+<th class="px-6 py-4">Date</th>
+<th class="px-6 py-4">Amount</th>
+<th class="px-6 py-4 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">EF</div>
+<div>
+<p class="font-semibold text-text-main dark:text-slate-200">EduCare Foundation</p>
+<p class="text-xs text-slate-400">ID: #DN-2938</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                                        Education
+                                    </span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Oct 24, 2023</td>
+<td class="px-6 py-4 font-bold text-text-main dark:text-slate-200">₹10,000</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-opacity-80 font-medium text-xs flex items-center gap-1 justify-end ml-auto">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                        Receipt
+                                    </button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 font-bold text-xs">GE</div>
+<div>
+<p class="font-semibold text-text-main dark:text-slate-200">Green Earth Initiative</p>
+<p class="text-xs text-slate-400">ID: #DN-2811</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                                        Environment
+                                    </span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Oct 12, 2023</td>
+<td class="px-6 py-4 font-bold text-text-main dark:text-slate-200">₹5,000</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-opacity-80 font-medium text-xs flex items-center gap-1 justify-end ml-auto">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                        Receipt
+                                    </button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 dark:text-red-400 font-bold text-xs">H4A</div>
+<div>
+<p class="font-semibold text-text-main dark:text-slate-200">HealthForAll</p>
+<p class="text-xs text-slate-400">ID: #DN-2745</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300">
+                                        Healthcare
+                                    </span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Sep 28, 2023</td>
+<td class="px-6 py-4 font-bold text-text-main dark:text-slate-200">₹25,000</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-opacity-80 font-medium text-xs flex items-center gap-1 justify-end ml-auto">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                        Receipt
+                                    </button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-xs">SK</div>
+<div>
+<p class="font-semibold text-text-main dark:text-slate-200">Street Kids Relief</p>
+<p class="text-xs text-slate-400">ID: #DN-2655</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
+                                        Child Welfare
+                                    </span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Sep 15, 2023</td>
+<td class="px-6 py-4 font-bold text-text-main dark:text-slate-200">₹8,000</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-opacity-80 font-medium text-xs flex items-center gap-1 justify-end ml-auto">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                        Receipt
+                                    </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Suggested Campaigns (Extra visual interest) -->
+<div class="mt-8">
+<h3 class="font-bold text-lg text-text-main dark:text-slate-100 mb-4">Recommended for You</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-100 dark:border-slate-700 p-4 flex gap-4 items-start group hover:border-primary/50 transition-colors cursor-pointer">
+<div class="w-24 h-24 flex-shrink-0 rounded-lg bg-cover bg-center" data-alt="Children studying in a classroom" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDMcL7ibT8AqdmnqJlHnyQCH98i_cSPlJ5eDHlJtY1PlQWXDRJuhxUfNTkxp5uIWajCzxUR9Wd857xw8kmObc3SNIg8M4ZytZ0-jesY4hVTy4s7172xgZoa7T05-PpzZdE0kItIwFiLihjVJt1s6gByPTrbNN-lop2Mh9L4CmjsiLvZ2akPjEenAGEe_yjaLl-vZCjjvioff2LL0hzhQ-BpLL3oBsn2MertEc2tuXXURh3nYOdu9a6Rn3OPOX7E0ejXaFObKy3tKZg");'></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-text-main dark:text-slate-200 text-sm group-hover:text-primary transition-colors">Support Rural Education</h4>
+<span class="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] uppercase font-bold px-2 py-0.5 rounded">Urgent</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">Help build classrooms for underprivileged children in rural districts. Your contribution directly impacts literacy rates.</p>
+<div class="mt-3 flex items-center justify-between">
+<div class="w-full max-w-[120px] bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 75%"></div>
+</div>
+<span class="text-xs font-semibold text-slate-600 dark:text-slate-300">75% Funded</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-100 dark:border-slate-700 p-4 flex gap-4 items-start group hover:border-primary/50 transition-colors cursor-pointer">
+<div class="w-24 h-24 flex-shrink-0 rounded-lg bg-cover bg-center" data-alt="Volunteer planting a sapling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzN78iejH5uU6fIXFP7oVqcJ5hxF1BC-XfvOM-v5WDPbSaTSYWASEN9NePlSSREfrcPxhp6uVQaRI1yYttUCEH5dWCAXmcjBpnRgWAapSrqdHuzEYB6yLGO-FjdulTayz6qixIFaRP_7O-Ycnvaa2jaNCH2De0aVEHoZJrlCe7A1PLV2Q3YmDFkvYK7XQbn_s3NWz8WLut6s0n2fqHlQBCOvrsofRx8J4MjA_D_pu18DB2_Z0A5A2IcAvi8XvUeazqCXdmpte1X4I");'></div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-text-main dark:text-slate-200 text-sm group-hover:text-primary transition-colors">Reforestation Project 2024</h4>
+<span class="bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300 text-[10px] uppercase font-bold px-2 py-0.5 rounded">New</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">Join us in planting 10,000 trees across deforested zones. Combat climate change one sapling at a time.</p>
+<div class="mt-3 flex items-center justify-between">
+<div class="w-full max-w-[120px] bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 30%"></div>
+</div>
+<span class="text-xs font-semibold text-slate-600 dark:text-slate-300">30% Funded</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

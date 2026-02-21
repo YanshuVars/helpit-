@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Registration - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#16b2a4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-slate-100 min-h-screen flex flex-col lg:flex-row">
+<!-- Left Panel: Branding -->
+<div class="hidden lg:flex lg:w-5/12 xl:w-1/3 bg-slate-900 relative overflow-hidden flex-col justify-between p-12 text-white">
+<!-- Decorative Background Image/Gradient -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/80 z-10"></div>
+<img alt="Background texture" class="w-full h-full object-cover grayscale opacity-40 mix-blend-overlay" data-alt="People collaborating on a community project" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuXpvTN-iG3ME-B3-ihZLnZMej-cyi4PMes0UvrVC30KXSUQ9NWaVot_HDCAVQrXu_ZlrzELFhO6gNzKyGJwnTz0e0_qGikeEcMmue842i5Lq1EaLO0GtRhEaC1vC5DlVvaooXCUZmTVFqkW0ikeMKLw335UMSZO9niotnvjDnk5dwuTLMqewyblfdS-yX_7Mhy8URT1T0vUlHERuJJKNptPeWoG9EbMkGnhCn9bsoEhFYQI6CJLzAz1dg_zD1CIs0rnRHHUJlv9k"/>
+<!-- Abstract shapes -->
+<div class="absolute -bottom-24 -left-24 w-96 h-96 bg-primary/20 rounded-full blur-3xl z-0"></div>
+<div class="absolute top-1/4 -right-12 w-64 h-64 bg-primary/10 rounded-full blur-2xl z-0"></div>
+</div>
+<!-- Branding Content -->
+<div class="relative z-20">
+<div class="flex items-center gap-3 text-primary mb-8">
+<span class="material-symbols-outlined text-4xl">volunteer_activism</span>
+<span class="text-2xl font-bold tracking-tight text-white">Helpit</span>
+</div>
+<h2 class="text-4xl font-bold leading-tight mb-6">Empowering NGOs to change the world.</h2>
+<p class="text-slate-300 text-lg leading-relaxed max-w-md">
+                Join thousands of non-profits using Helpit to amplify their impact, manage resources, and connect with global donors seamlessly.
+            </p>
+</div>
+<!-- Footer/Testimonial -->
+<div class="relative z-20 mt-auto pt-12 border-t border-slate-700/50">
+<blockquote class="italic text-slate-300 mb-4">
+                "Helpit transformed how we handle volunteers and donations. It's the backbone of our operations now."
+            </blockquote>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-slate-400">person</span>
+</div>
+<div>
+<p class="font-semibold text-white text-sm">Sarah Jenkins</p>
+<p class="text-xs text-slate-400">Director, Green Earth Alliance</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Form -->
+<div class="flex-1 flex flex-col justify-center py-12 px-6 sm:px-12 lg:px-16 xl:px-24 bg-white dark:bg-background-dark overflow-y-auto h-screen">
+<!-- Mobile Header (Logo only visible on small screens) -->
+<div class="lg:hidden flex items-center gap-2 text-primary mb-8">
+<span class="material-symbols-outlined text-3xl">volunteer_activism</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Helpit</span>
+</div>
+<div class="w-full max-w-2xl mx-auto">
+<div class="mb-10">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">Register Your Organization</h1>
+<p class="text-slate-500 dark:text-slate-400">Enter your details to join the Helpit network. It takes less than 5 minutes.</p>
+</div>
+<form class="space-y-6">
+<!-- Section: Organization Details -->
+<div class="space-y-5">
+<h3 class="text-xs uppercase tracking-wider font-semibold text-slate-400 border-b border-slate-100 dark:border-slate-800 pb-2 mb-4">Organization Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="col-span-1 md:col-span-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="orgName">Organization Name <span class="text-red-500">*</span></label>
+<input class="w-full rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 placeholder:text-slate-400" id="orgName" placeholder="e.g. Save the Earth Foundation" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="regNum">Registration Number <span class="text-red-500">*</span></label>
+<input class="w-full rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 placeholder:text-slate-400" id="regNum" placeholder="e.g. 501(c)(3) ID" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="orgType">Organization Type</label>
+<div class="relative">
+<select class="w-full appearance-none rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 pr-10" id="orgType">
+<option disabled="" selected="" value="">Select type...</option>
+<option value="education">Education</option>
+<option value="health">Health &amp; Medicine</option>
+<option value="environment">Environment</option>
+<option value="human_rights">Human Rights</option>
+<option value="community">Community Development</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="description">Short Description</label>
+<textarea class="w-full rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 placeholder:text-slate-400 resize-none" id="description" placeholder="Briefly describe your mission..." rows="3"></textarea>
+<p class="text-xs text-slate-400 text-right mt-1">0/300 characters</p>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="website">Website URL</label>
+<div class="relative rounded-lg shadow-sm">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">link</span>
+</div>
+<input class="block w-full rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 pl-10 placeholder:text-slate-400" id="website" name="website" placeholder="https://www.example.org" type="url"/>
+</div>
+</div>
+</div>
+<!-- Section: Contact & Location -->
+<div class="space-y-5 pt-2">
+<h3 class="text-xs uppercase tracking-wider font-semibold text-slate-400 border-b border-slate-100 dark:border-slate-800 pb-2 mb-4">Contact &amp; Location</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="email">Email Address <span class="text-red-500">*</span></label>
+<input class="w-full rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 placeholder:text-slate-400" id="email" placeholder="contact@org.com" type="email"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="phone">Phone Number</label>
+<input class="w-full rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 placeholder:text-slate-400" id="phone" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="address">Street Address</label>
+<textarea class="w-full rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 placeholder:text-slate-400 resize-none" id="address" placeholder="123 Charity Lane, Suite 100" rows="2"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-5">
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="city">City</label>
+<div class="relative">
+<select class="w-full appearance-none rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 pr-8" id="city">
+<option value="">Select...</option>
+<option value="ny">New York</option>
+<option value="sf">San Francisco</option>
+<option value="ldn">London</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="state">State/Region</label>
+<div class="relative">
+<select class="w-full appearance-none rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 pr-8" id="state">
+<option value="">Select...</option>
+<option value="ca">California</option>
+<option value="ny">New York</option>
+<option value="tx">Texas</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Security -->
+<div class="space-y-5 pt-2">
+<h3 class="text-xs uppercase tracking-wider font-semibold text-slate-400 border-b border-slate-100 dark:border-slate-800 pb-2 mb-4">Security</h3>
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" for="password">Create Password <span class="text-red-500">*</span></label>
+<div class="relative">
+<input class="w-full rounded-lg border-slate-200 bg-background-light dark:bg-slate-800 dark:border-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary/20 pr-10 placeholder:text-slate-400" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+<p class="text-xs text-slate-500 mt-1.5">Must be at least 8 characters with one number.</p>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-6">
+<button class="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-slate-900 bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors" type="button">
+                        Register Organization
+                    </button>
+<div class="mt-6 text-center">
+<p class="text-sm text-slate-600 dark:text-slate-400">
+                            Already registered? 
+                            <a class="font-medium text-primary hover:text-primary-dark hover:underline" href="#">Login here</a>
+</p>
+</div>
+</div>
+</form>
+<div class="mt-12 border-t border-slate-200 dark:border-slate-800 pt-6 flex justify-between items-center text-xs text-slate-400">
+<p>© 2023 Helpit Inc.</p>
+<div class="flex gap-4">
+<a class="hover:text-slate-600 dark:hover:text-slate-300" href="#">Privacy Policy</a>
+<a class="hover:text-slate-600 dark:hover:text-slate-300" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</div>
+</body></html>

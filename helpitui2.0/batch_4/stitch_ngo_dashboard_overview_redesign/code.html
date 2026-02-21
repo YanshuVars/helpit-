@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Help Request | Helpit NGO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "sans": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background-color: rgba(29, 226, 209, 0.1);
+            border-right: 3px solid #1de2d1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-sans text-slate-900 dark:text-slate-100">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary rounded-lg p-1.5 flex items-center justify-center">
+<span class="material-symbols-outlined text-white">volunteer_activism</span>
+</div>
+<div>
+<h1 class="font-display text-xl font-bold tracking-tight">Helpit</h1>
+<p class="text-xs text-slate-500 uppercase tracking-widest font-semibold">NGO Dashboard</p>
+</div>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-primary font-semibold active-nav" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">ad</span>
+<span class="text-sm">Requests</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Volunteers</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<div class="mt-auto border-t border-slate-100 dark:border-slate-800 p-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 flex flex-col">
+<!-- Top Bar -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<nav class="flex items-center gap-2 text-sm">
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-xs text-slate-400">chevron_right</span>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Requests</a>
+<span class="material-symbols-outlined text-xs text-slate-400">chevron_right</span>
+<span class="text-slate-900 dark:text-white font-medium">Create New</span>
+</nav>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary" placeholder="Search requests..." type="text"/>
+</div>
+<div class="flex items-center gap-3 border-l pl-6 border-slate-200 dark:border-slate-700">
+<div class="text-right">
+<p class="text-xs font-bold">Admin User</p>
+<p class="text-[10px] text-slate-500 uppercase">Global Relief NGO</p>
+</div>
+<img class="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700" data-alt="Profile picture of an NGO administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNdY6gT_LgxrIhy6SxCqykptlLqa6-nak-2ewWsbCMl5II9TFhCSTBkIfFdzgrKestlA1bbw0ais4JSKMJtVV-EMlm7HExD7eWNEPFyhoJcf6HJNrr9jEUobznMCkKBIo16_UeQZvucdm7hnfcnUsnoxHzM4u5slHyDLjbMqlhsu2RrASz417AtIU8uCJL8_6a5YKS1zOXurAD6v7TjyROaTqhKLDL28ughPgoq7sbrWAniZJkC2bx0YVT8CAu8ZbOvyRhuIfP-oM"/>
+</div>
+</div>
+</header>
+<!-- Form Content -->
+<div class="p-8 max-w-5xl mx-auto w-full">
+<a class="flex items-center gap-2 text-primary text-sm font-semibold mb-6 hover:underline" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Back to requests
+                </a>
+<div class="mb-10">
+<h2 class="font-display text-4xl font-bold text-slate-900 dark:text-white mb-2">Create Help Request</h2>
+<p class="text-slate-500 dark:text-slate-400">Fill in the formal requirements to broadcast this assistance need to our volunteer network.</p>
+</div>
+<form class="space-y-8 pb-24">
+<!-- Section 1: Basic Info -->
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+<h3 class="font-display text-xl font-bold">1. Basic Information</h3>
+</div>
+<div class="p-6 space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-2">
+<label class="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Request Title</label>
+<input class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary focus:ring-primary transition-all" placeholder="e.g. Emergency Food Supply - Sector 7" type="text"/>
+</div>
+<div class="col-span-2">
+<label class="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Detailed Description</label>
+<textarea class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary focus:ring-primary transition-all" placeholder="Provide full details of the assistance required..." rows="4"></textarea>
+</div>
+<div>
+<label class="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Category</label>
+<select class="w-full rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary focus:ring-primary transition-all">
+<option>Disaster Relief</option>
+<option>Medical Assistance</option>
+<option>Education Support</option>
+<option>Food &amp; Nutrition</option>
+<option>Infrastructure</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Urgency Level</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all" type="button">LOW</button>
+<button class="px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all" type="button">MEDIUM</button>
+<button class="px-4 py-2 rounded-full bg-orange-100 text-orange-600 border border-orange-200 text-xs font-bold" type="button">HIGH</button>
+<button class="px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all" type="button">CRITICAL</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Location & Media -->
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+<h3 class="font-display text-xl font-bold">2. Location &amp; Media</h3>
+</div>
+<div class="p-6 space-y-6">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Physical Address</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">location_on</span>
+<input class="w-full pl-10 rounded-lg border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary focus:ring-primary transition-all" placeholder="Street address, City, Country" type="text"/>
+</div>
+</div>
+<div class="aspect-video bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center text-slate-400 relative overflow-hidden">
+<span class="material-symbols-outlined text-4xl mb-2">map</span>
+<p class="text-xs uppercase font-bold tracking-widest">Interactive Map Placeholder</p>
+<div class="absolute inset-0 bg-slate-200/20 mix-blend-multiply pointer-events-none"></div>
+<img class="absolute inset-0 w-full h-full object-cover opacity-10 grayscale" data-alt="Subtle map background pattern" data-location="Global" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzPQYTfsEdiHMreThCA1Vs-l7f7daTRRlS0846K9kdja6KcRaWQ-3pqK6Yx6dsKQOtUoZ9idZMl9k5ahy4RJ7MyZXmBLS_jZGdi2lJCNzw-YRwbfNcnqeWTYZxinJkagCGvrbLdTuhVdzwqE7CZrMJptNYJyYLUGn98TCfNKaVndyu6qBPGYd3r-br7BeS2Esv9NBDXlUYH1BvhvUDHnt9CHZrzsiDR9Z26vJTAXKXC9yXlGukr9OnXbdsw37PQgGjgNebgaSsBrc"/>
+</div>
+</div>
+<div class="space-y-4">
+<label class="block text-sm font-semibold mb-2 text-slate-700 dark:text-slate-300">Attachments &amp; Documentation</label>
+<div class="h-full min-h-[200px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg flex flex-col items-center justify-center p-8 text-center hover:border-primary/50 transition-colors bg-slate-50/30 dark:bg-slate-800/30 cursor-pointer">
+<div class="bg-primary/10 p-4 rounded-full mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+</div>
+<p class="text-sm font-bold text-slate-700 dark:text-slate-300">Drag &amp; Drop files here</p>
+<p class="text-xs text-slate-500 mt-1">Upload site photos or official assessment documents (Max 10MB)</p>
+<button class="mt-4 text-primary text-sm font-bold underline" type="button">Browse Files</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Visibility -->
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+<h3 class="font-display text-xl font-bold">3. Visibility Settings</h3>
+</div>
+<div class="p-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<label class="relative flex p-4 border rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group border-primary bg-primary/5">
+<input checked="" class="sr-only" name="visibility" type="radio" value="public"/>
+<div class="mr-4 text-primary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1">public</span>
+</div>
+<div>
+<p class="text-sm font-bold">Public Request</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Broadcast to all verified volunteers in the platform network.</p>
+</div>
+<div class="ml-auto">
+<div class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-2.5 h-2.5 bg-primary rounded-full"></div>
+</div>
+</div>
+</label>
+<label class="relative flex p-4 border rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-all border-slate-200 dark:border-slate-700">
+<input class="sr-only" name="visibility" type="radio" value="internal"/>
+<div class="mr-4 text-slate-400 group-hover:text-slate-600">
+<span class="material-symbols-outlined text-3xl">lock</span>
+</div>
+<div>
+<p class="text-sm font-bold">Internal NGO Staff</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Restricted visibility. Only accessible by authorized team members.</p>
+</div>
+<div class="ml-auto">
+<div class="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600"></div>
+</div>
+</label>
+</div>
+</div>
+</section>
+<!-- Submit Footer -->
+<div class="pt-4 flex items-center gap-4">
+<button class="flex-1 py-4 bg-primary text-slate-900 font-bold rounded-lg shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined">add_task</span>
+                            CREATE HELP REQUEST
+                        </button>
+<button class="px-8 py-4 bg-slate-200 dark:bg-slate-800 font-bold rounded-lg hover:bg-slate-300 transition-all" type="button">
+                            Save Draft
+                        </button>
+</div>
+</form>
+</div>
+</main>
+</div>
+</body></html>

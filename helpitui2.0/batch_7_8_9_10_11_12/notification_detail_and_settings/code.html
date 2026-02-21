@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notification Detail and Settings - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-hover": "#16c5b6",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        /* Custom toggle styles */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #1de2d1;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #1de2d1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-slate-900 dark:text-slate-100 font-display transition-colors duration-200">
+<!-- Main Layout Container -->
+<div class="flex h-full min-h-screen flex-col">
+<!-- Header / Nav placeholder (Optional for context) -->
+<header class="w-full border-b border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">health_and_safety</span>
+<span class="text-xl font-bold tracking-tight">Helpit</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-sm">person</span>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Breadcrumbs -->
+<nav class="flex items-center text-sm font-medium text-slate-500 dark:text-slate-400 mb-6">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[18px]">home</span>
+                    Home
+                </a>
+<span class="mx-2 text-slate-300 dark:text-slate-600">/</span>
+<a class="hover:text-primary transition-colors" href="#">Notifications</a>
+<span class="mx-2 text-slate-300 dark:text-slate-600">/</span>
+<span class="text-slate-900 dark:text-slate-100">Ticket #402 Detail</span>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Notification Detail (Takes up 2/3 space on large screens) -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Notification Detail Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+<!-- Hero Image/Visual Context -->
+<div class="h-32 w-full bg-slate-100 dark:bg-slate-800 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 dark:from-teal-900/40 dark:to-cyan-900/40"></div>
+<!-- Decorative pattern -->
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#1de2d1 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="absolute bottom-4 left-6 flex items-center gap-2">
+<span class="bg-primary/20 text-teal-700 dark:text-teal-300 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider backdrop-blur-sm">Escalation</span>
+</div>
+<!-- Required data-alt -->
+<img alt="Abstract header" class="absolute inset-0 w-full h-full object-cover opacity-0" data-alt="Abstract gradient header showing teal and cyan hues" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7SFNtLpQlbmxnly7TdNHDe_Rum4-c0PPR4Louxs2rKC9Te9liIBzhOBvE_rUMi-q2TC3qth-tyFR7u30E5qdnHxESZBIfi8n6HJYPw5ZI64joT_RQtJdLI_SI_wNd6Wxbc3Wb1f1l09aP5b-0V9S0kNQxnuvcSpLVpJJULf4btcxyL2PSTEM3QkMQ772qthlCAN6q4MAKROUh70EP-knNGaR4et5jhaXfpkt7AO-jZmSg1TA9w0cUJM1kW8W5D7zVaN67onpzbdk"/>
+</div>
+<div class="p-6 md:p-8">
+<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+<div>
+<h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-50 mb-2">Ticket #402 has been escalated</h1>
+<div class="flex items-center text-slate-500 dark:text-slate-400 text-sm gap-4">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                                            Oct 24, 2:30 PM
+                                        </span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">person</span>
+                                            From: System Admin
+                                        </span>
+</div>
+</div>
+<div class="shrink-0">
+<span class="inline-flex items-center rounded-full bg-red-50 dark:bg-red-900/30 px-3 py-1 text-xs font-medium text-red-700 dark:text-red-300 ring-1 ring-inset ring-red-600/10">High Priority</span>
+</div>
+</div>
+<div class="prose prose-slate dark:prose-invert max-w-none mb-8">
+<p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    The support ticket regarding server latency in the US-East region has been moved to Tier 2 support for further investigation. Initial diagnostics indicate a potential load balancer configuration issue. 
+                                </p>
+<p class="text-slate-600 dark:text-slate-300 leading-relaxed mt-4">
+                                    Please review the attached server logs and provide an update within 4 hours. If you need immediate assistance, please contact the on-call engineer via Slack.
+                                </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+<a class="inline-flex justify-center items-center gap-2 rounded-lg bg-primary hover:bg-primary-hover text-slate-900 px-5 py-2.5 text-sm font-semibold shadow-sm transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" href="#">
+                                    View Ticket Details
+                                    <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</a>
+<button class="inline-flex justify-center items-center gap-2 rounded-lg bg-white dark:bg-surface-dark px-5 py-2.5 text-sm font-semibold text-slate-900 dark:text-slate-200 shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all" type="button">
+                                    Mark as Read
+                                </button>
+</div>
+</div>
+</div>
+<!-- Related Activity (Optional Context) -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 p-6">
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                            Recent Activity on Ticket #402
+                        </h3>
+<div class="space-y-4">
+<div class="flex gap-4 items-start">
+<div class="mt-1 h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-600 shrink-0"></div>
+<div>
+<p class="text-sm text-slate-900 dark:text-slate-200 font-medium">Ticket Created</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Oct 24, 10:00 AM by User_12</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="mt-1 h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-600 shrink-0"></div>
+<div>
+<p class="text-sm text-slate-900 dark:text-slate-200 font-medium">Comment Added</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Oct 24, 11:15 AM by Support_Agent</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="mt-1 h-2 w-2 rounded-full bg-primary shrink-0 animate-pulse"></div>
+<div>
+<p class="text-sm text-slate-900 dark:text-slate-200 font-medium">Escalated to Tier 2</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Oct 24, 2:30 PM by System</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Settings (Takes up 1/3 space on large screens) -->
+<div class="lg:col-span-1">
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 sticky top-24">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Notification Preferences</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage how you receive alerts for this ticket.</p>
+</div>
+<div class="p-6 space-y-6">
+<!-- Toggle 1 -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-200">Push Notifications</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Instant browser alerts</span>
+</div>
+<label class="flex items-center cursor-pointer relative" for="toggle-push">
+<input checked="" class="sr-only peer" id="toggle-push" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle 2 -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-200">Email Summaries</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Daily digest at 9am</span>
+</div>
+<label class="flex items-center cursor-pointer relative" for="toggle-email">
+<input class="sr-only peer" id="toggle-email" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<hr class="border-slate-100 dark:border-slate-800"/>
+<!-- Quiet Hours -->
+<div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">bedtime</span>
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-200">Quiet Hours</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1" for="start-time">Start</label>
+<input class="block w-full rounded-lg border-0 bg-slate-50 dark:bg-slate-800/50 py-1.5 px-3 text-slate-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6" id="start-time" type="time" value="22:00"/>
+</div>
+<div>
+<label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1" for="end-time">End</label>
+<input class="block w-full rounded-lg border-0 bg-slate-50 dark:bg-slate-800/50 py-1.5 px-3 text-slate-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-slate-300 dark:ring-slate-700 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6" id="end-time" type="time" value="07:00"/>
+</div>
+</div>
+<p class="text-xs text-slate-400 dark:text-slate-500 mt-2">Notifications will be muted during these hours.</p>
+</div>
+</div>
+<div class="p-4 bg-slate-50 dark:bg-black/20 rounded-b-xl">
+<button class="w-full rounded-lg bg-primary hover:bg-primary-hover px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                                Save Preferences
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

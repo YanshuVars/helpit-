@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Account Settings and Public Requests</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#16b8aa",
+                        "background-light": "#f8fbfb",
+                        "background-dark": "#112120",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-muted": "#4f9690",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased min-h-screen flex flex-col">
+<!-- Navbar -->
+<header class="sticky top-0 z-50 w-full border-b border-[#e8f3f2] bg-background-light/80 backdrop-blur-md dark:border-slate-800 dark:bg-background-dark/80 px-4 py-3 md:px-10">
+<div class="mx-auto flex max-w-7xl items-center justify-between">
+<div class="flex items-center gap-4 text-text-main dark:text-white">
+<div class="size-8 text-primary">
+<svg class="h-full w-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_330)">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</g>
+<defs>
+<clippath id="clip0_6_330"><rect fill="white" height="48" width="48"></rect></clippath>
+</defs>
+</svg>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">Helpit</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex size-10 items-center justify-center rounded-lg bg-[#e8f3f2] text-text-main transition hover:bg-[#d0e6e4] dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="relative flex size-10 items-center justify-center rounded-lg bg-[#e8f3f2] text-text-main transition hover:bg-[#d0e6e4] dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute right-2 top-2 size-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-800"></span>
+</button>
+<div class="h-10 w-10 overflow-hidden rounded-full bg-gray-200 ring-2 ring-primary/20">
+<img alt="User Profile" class="h-full w-full object-cover" data-alt="Close up portrait of a young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUoUsb5VQu5_RgFqvRrhLRbY-POmtdXKKbRDatrazm6VraqNk-QYRqAkDFJsksM5XMvSxQOutoz3w2quAJ1YoY4c0Hzet-ulaU_sOZihHX3PNwOstDTK5pWna5RAS9lOCT4l8EYYoAWYtKn1HFRcat1G-TanxsB9ugGEzQdxOQaaiSCNfrs3_oWXI6uNy9wHdqKejIOasUaWsK_7GKsapZuH3hIpA8AhAvfF96yEd5gUdg2iU26aLQeE-j4H0wSvHWblpHDIYFfWI"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow">
+<!-- Top Section: Settings Hub -->
+<section class="border-b border-[#e8f3f2] bg-white px-4 py-10 dark:border-slate-800 dark:bg-card-dark md:px-10">
+<div class="mx-auto max-w-7xl">
+<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-text-main dark:text-white md:text-4xl">Account Settings</h1>
+<p class="mt-2 text-lg text-text-muted dark:text-slate-400">Manage your profile, preferences, and security.</p>
+</div>
+<button class="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-600 transition hover:bg-red-100 hover:text-red-700 dark:border-red-900/30 dark:bg-red-900/10 dark:text-red-400 dark:hover:bg-red-900/20">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span>Log Out</span>
+</button>
+</div>
+<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+<!-- Profile Card -->
+<a class="group flex flex-col justify-between rounded-xl border border-transparent bg-background-light p-6 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 dark:bg-slate-800/50" href="#">
+<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+<span class="material-symbols-outlined text-2xl">person</span>
+</div>
+<div>
+<h3 class="mb-1 text-lg font-bold text-text-main dark:text-white group-hover:text-primary">Profile</h3>
+<p class="mb-4 text-sm text-text-muted dark:text-slate-400">Personal details &amp; photo</p>
+</div>
+<div class="flex justify-end">
+<span class="material-symbols-outlined text-gray-300 transition-colors group-hover:text-primary dark:text-slate-600">arrow_forward</span>
+</div>
+</a>
+<!-- Notifications Card -->
+<a class="group flex flex-col justify-between rounded-xl border border-transparent bg-background-light p-6 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 dark:bg-slate-800/50" href="#">
+<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+<span class="material-symbols-outlined text-2xl">notifications_active</span>
+</div>
+<div>
+<h3 class="mb-1 text-lg font-bold text-text-main dark:text-white group-hover:text-primary">Notifications</h3>
+<p class="mb-4 text-sm text-text-muted dark:text-slate-400">Email &amp; push preferences</p>
+</div>
+<div class="flex justify-end">
+<span class="material-symbols-outlined text-gray-300 transition-colors group-hover:text-primary dark:text-slate-600">arrow_forward</span>
+</div>
+</a>
+<!-- Privacy Card -->
+<a class="group flex flex-col justify-between rounded-xl border border-transparent bg-background-light p-6 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 dark:bg-slate-800/50" href="#">
+<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+<span class="material-symbols-outlined text-2xl">security</span>
+</div>
+<div>
+<h3 class="mb-1 text-lg font-bold text-text-main dark:text-white group-hover:text-primary">Privacy</h3>
+<p class="mb-4 text-sm text-text-muted dark:text-slate-400">Password &amp; security</p>
+</div>
+<div class="flex justify-end">
+<span class="material-symbols-outlined text-gray-300 transition-colors group-hover:text-primary dark:text-slate-600">arrow_forward</span>
+</div>
+</a>
+<!-- Help Card -->
+<a class="group flex flex-col justify-between rounded-xl border border-transparent bg-background-light p-6 transition-all hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 dark:bg-slate-800/50" href="#">
+<div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
+<span class="material-symbols-outlined text-2xl">help</span>
+</div>
+<div>
+<h3 class="mb-1 text-lg font-bold text-text-main dark:text-white group-hover:text-primary">Help</h3>
+<p class="mb-4 text-sm text-text-muted dark:text-slate-400">FAQs &amp; Support</p>
+</div>
+<div class="flex justify-end">
+<span class="material-symbols-outlined text-gray-300 transition-colors group-hover:text-primary dark:text-slate-600">arrow_forward</span>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Public Requests Browser -->
+<section class="px-4 py-10 md:px-10">
+<div class="mx-auto max-w-7xl">
+<!-- Hero & Search -->
+<div class="mb-10">
+<h2 class="mb-6 text-3xl font-black tracking-tight text-text-main dark:text-white">Volunteer Opportunities</h2>
+<div class="flex flex-col gap-4 lg:flex-row lg:items-center">
+<!-- Search Input -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="w-full rounded-xl border-0 bg-white py-4 pl-12 pr-4 text-base text-text-main shadow-sm ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-card-dark dark:text-white dark:ring-slate-700 dark:placeholder:text-slate-500" placeholder="Search causes, locations, or keywords..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
+<button class="flex items-center gap-2 whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm shadow-primary/30 transition hover:bg-primary-dark">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+                                All
+                            </button>
+<button class="flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-gray-200 transition hover:bg-gray-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700">
+                                Urgent
+                            </button>
+<button class="flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-gray-200 transition hover:bg-gray-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700">
+                                Remote
+                            </button>
+<button class="flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-gray-200 transition hover:bg-gray-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700">
+                                Local
+                            </button>
+<button class="flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-gray-200 transition hover:bg-gray-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined text-[18px]">pets</span>
+                                Animals
+                            </button>
+<button class="flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-text-main ring-1 ring-gray-200 transition hover:bg-gray-50 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined text-[18px]">school</span>
+                                Education
+                            </button>
+</div>
+</div>
+</div>
+<!-- Request Grid -->
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+<!-- Card 1 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:bg-card-dark dark:shadow-none dark:ring-1 dark:ring-slate-800">
+<div class="h-40 w-full overflow-hidden bg-gray-100 relative">
+<img alt="Volunteers cleaning up a beach with bags" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" data-alt="People cleaning plastic from beach sand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4avwuH6pRbebLPAN7wsnNOOyqzjxPCQB9TsCrmRrSEYSudzDJSRtYBeSkphZYxSHBG2SZK30zn3PsrAua5zSw7ZOddCd1cHKeS2AI11RwhljigMZIq0NC8p_WFsUbQStLqCgBGreh-dZwpSwlZ-FiiGXL2JvIGUrm1xJKVzpAuokr8jD3Eju06WzdlkRUilne2TRSIcGQiQfEGZYI_MPyMMPrkJnKMQJuEBFHS840aJ08iuS_OXX6rFjm_omh2LSpjj-lyc6sBj4"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/70 backdrop-blur px-2 py-1 rounded text-xs font-bold uppercase tracking-wider text-text-main dark:text-white">Local</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-2 flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wide">
+<span class="material-symbols-outlined text-[16px]">nature_people</span>
+                                Environment
+                            </div>
+<h3 class="mb-1 text-lg font-bold leading-tight text-text-main dark:text-white">Beach Cleanup Crew</h3>
+<p class="mb-3 text-sm text-text-muted dark:text-slate-400">Join us this Saturday to help restore Santa Monica beach.</p>
+<div class="mt-auto flex flex-col gap-3">
+<div class="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                    Santa Monica, CA
+                                </div>
+<button class="mt-2 w-full rounded-lg bg-primary/10 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white dark:bg-primary/20 dark:hover:bg-primary">
+                                    Learn More
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:bg-card-dark dark:shadow-none dark:ring-1 dark:ring-slate-800">
+<div class="h-40 w-full overflow-hidden bg-gray-100 relative">
+<img alt="Books stacked on a table in a library" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" data-alt="Stack of educational books" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz5GoGVC3eGLFxZ9f2QQ-qGf-sk2R9uFl6CDeEr2_EhH_l_wwpKqHWZyhZqBXS-DtRBYWSk8TVAYLJ3ibQ6N4rCu4tbnMx_PcbDPXq8k-ZU5mtOL4lr0A9FrbDZsugClwiqGQtT4AgUg5BQfkUzDQTzihqHbyQB-nUbsYhe4SSBMOCwtHO9F2fK3L728WPGFmkMCL_tk85_a-75DJ2mBB-3gN2k-3jSiG9m1TYSfg3eK7KXABvAHo9BaQIiNYT6xpScAvalNmDV78"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/70 backdrop-blur px-2 py-1 rounded text-xs font-bold uppercase tracking-wider text-text-main dark:text-white">Remote</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-2 flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wide">
+<span class="material-symbols-outlined text-[16px]">school</span>
+                                Education
+                            </div>
+<h3 class="mb-1 text-lg font-bold leading-tight text-text-main dark:text-white">Math Tutor Needed</h3>
+<p class="mb-3 text-sm text-text-muted dark:text-slate-400">Help high school students master algebra online.</p>
+<div class="mt-auto flex flex-col gap-3">
+<div class="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+<span class="material-symbols-outlined text-[16px]">laptop_mac</span>
+                                    Online / Zoom
+                                </div>
+<button class="mt-2 w-full rounded-lg bg-primary/10 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white dark:bg-primary/20 dark:hover:bg-primary">
+                                    Learn More
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:bg-card-dark dark:shadow-none dark:ring-1 dark:ring-slate-800">
+<div class="h-40 w-full overflow-hidden bg-gray-100 relative">
+<img alt="People packing food boxes" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" data-alt="Charity food packing event" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFDlX-4rRSVL8C75ut2Kqk4s45g0j2QHhiJM25i3jMCVDgE84cb_ZIEHv_42q6a44JePAG21a3OiEWwoaDf5suxInpyQe7sowvcOZc55laYmE3V_oTMzSEh6CVtwK8ixkGLB8--P1JXSEl7aRjOx2HXhvn8R0ygP_rADaKagTs4e5Kx0UhO3BbIe-Ufh3f9h8gcZgkHoka9g8InxBMRzOpb_GQCa1MXvILUdxm1V9s0-Q7sxrNwwiev5Jl0eHwSH6iQ-8HoeWp7GA"/>
+<div class="absolute top-2 right-2 bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold uppercase tracking-wider">Urgent</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-2 flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wide">
+<span class="material-symbols-outlined text-[16px]">volunteer_activism</span>
+                                Community
+                            </div>
+<h3 class="mb-1 text-lg font-bold leading-tight text-text-main dark:text-white">Food Bank Assistant</h3>
+<p class="mb-3 text-sm text-text-muted dark:text-slate-400">Sort and pack food donations for local families.</p>
+<div class="mt-auto flex flex-col gap-3">
+<div class="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                    Downtown Center
+                                </div>
+<button class="mt-2 w-full rounded-lg bg-primary/10 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white dark:bg-primary/20 dark:hover:bg-primary">
+                                    Learn More
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:bg-card-dark dark:shadow-none dark:ring-1 dark:ring-slate-800">
+<div class="h-40 w-full overflow-hidden bg-gray-100 relative">
+<img alt="Team meeting around a table" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" data-alt="Group of people working together on laptops" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACUvApLuR3BFY59PD8LA7gbbOoYTIauMPUkj1Z-PTXeUDK-MCdm5Vq4SJeQCKG8jOAc9xmpNo8zbUWcmOIdpyLVa7GOh5nSR67n9qXmcU5btwSf80ZOn1_RggUp7PXGRJMPLdInL08fimUadDxS-PKLhLoGN7gqMx-Ik4PWuNmo2xMyVoQzUAQeraDTH5YnyMCEXuMOVTj2oKQTc2Yei_C5UNSgUmCHfEGZb3Ew7lLcT0zLmHW9sYI3DUQpHhNmbH0c0CPujs_XWU"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/70 backdrop-blur px-2 py-1 rounded text-xs font-bold uppercase tracking-wider text-text-main dark:text-white">Hybrid</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-2 flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wide">
+<span class="material-symbols-outlined text-[16px]">code</span>
+                                Tech Support
+                            </div>
+<h3 class="mb-1 text-lg font-bold leading-tight text-text-main dark:text-white">Website Update</h3>
+<p class="mb-3 text-sm text-text-muted dark:text-slate-400">Help a non-profit update their WordPress site.</p>
+<div class="mt-auto flex flex-col gap-3">
+<div class="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                    San Francisco, CA
+                                </div>
+<button class="mt-2 w-full rounded-lg bg-primary/10 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white dark:bg-primary/20 dark:hover:bg-primary">
+                                    Learn More
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:bg-card-dark dark:shadow-none dark:ring-1 dark:ring-slate-800">
+<div class="h-40 w-full overflow-hidden bg-gray-100 relative">
+<img alt="Dog in a shelter cage" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" data-alt="Brown puppy looking at camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTP1iWJ4V9tCW0WCgqJdwlImIMK9tQjy3qE2QWp5RqYnSx0uglcI4EAtix2MwTgRrYkL3rGB56dls4GFjJdzUR22TGANLNMUfKIS9YD0iSWpIsAYIqccB7_yBE81ZuC_AygFF0mhhadMh4FERWr6JHs1s2senKif2YpHXhXvOyxxqUj_Mn1NEmHOTeORqiLDFh8tlo-mtibvwU_h43fN0xul_G-uG-y_uVuVZIF6rauPMXs37GWN_nUJvYJXyMbtNVWOAhGe5FnGU"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/70 backdrop-blur px-2 py-1 rounded text-xs font-bold uppercase tracking-wider text-text-main dark:text-white">Local</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-2 flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wide">
+<span class="material-symbols-outlined text-[16px]">pets</span>
+                                Animal Care
+                            </div>
+<h3 class="mb-1 text-lg font-bold leading-tight text-text-main dark:text-white">Dog Walker</h3>
+<p class="mb-3 text-sm text-text-muted dark:text-slate-400">Exercise shelter dogs on weekends.</p>
+<div class="mt-auto flex flex-col gap-3">
+<div class="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                    Austin, TX
+                                </div>
+<button class="mt-2 w-full rounded-lg bg-primary/10 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white dark:bg-primary/20 dark:hover:bg-primary">
+                                    Learn More
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:bg-card-dark dark:shadow-none dark:ring-1 dark:ring-slate-800">
+<div class="h-40 w-full overflow-hidden bg-gray-100 relative">
+<img alt="Senior citizen smiling" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" data-alt="Elderly person smiling outdoors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxHkyUsvjjF67eHK2_RvO0C_cmHovvJ2LHRfSxT5SutLZpUnvkqh9TeW6NdHifObcVsyilzqHDTq0pB7bdx44Ssgh2q3y4uzY742GMkW_4t20wOFgfEe9LRao7c1jJvkeYcjYX37HkXTmxxiGaE4L2PznxJjPWDDMxjYCxdZuzu0RE27BBCwkwcRnHP14tPDDK7EyDFxq3hwTJ-k0Q6HXW2Df0uK1zaR0DFjqfnHDyqzQ4OOmUlzxeUDD7s_rrSxyfq0F4GBgP7tw"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/70 backdrop-blur px-2 py-1 rounded text-xs font-bold uppercase tracking-wider text-text-main dark:text-white">Local</div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-2 flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wide">
+<span class="material-symbols-outlined text-[16px]">elderly</span>
+                                Senior Care
+                            </div>
+<h3 class="mb-1 text-lg font-bold leading-tight text-text-main dark:text-white">Companion Program</h3>
+<p class="mb-3 text-sm text-text-muted dark:text-slate-400">Visit and chat with seniors at local care home.</p>
+<div class="mt-auto flex flex-col gap-3">
+<div class="flex items-center gap-2 text-xs text-gray-500 dark:text-slate-500">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                    Seattle, WA
+                                </div>
+<button class="mt-2 w-full rounded-lg bg-primary/10 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white dark:bg-primary/20 dark:hover:bg-primary">
+                                    Learn More
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

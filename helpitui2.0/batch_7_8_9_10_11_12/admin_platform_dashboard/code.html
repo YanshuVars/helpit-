@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1de2d1",
+              "primary-dark": "#16b0a3",
+              "background-light": "#f6f8f8",
+              "background-dark": "#112120",
+              "surface-light": "#ffffff",
+              "surface-dark": "#1a2c2b",
+            },
+            fontFamily: {
+              "display": ["Public Sans", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.375rem",
+              "md": "0.375rem", 
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+            },
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- Sidebar -->
+<aside class="w-full md:w-64 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0 h-auto md:h-screen md:sticky md:top-0">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary-dark dark:text-primary">admin_panel_settings</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-base font-bold text-slate-900 dark:text-white">Helpit Admin</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">Platform Management</p>
+</div>
+</div>
+<nav class="flex-1 px-4 flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary-dark dark:text-primary font-medium transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span>NGOs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span>Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium" href="#">
+<span class="material-symbols-outlined">description</span>
+<span>Audit Logs</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 mt-auto">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+<div class="w-8 h-8 rounded-full bg-slate-300 dark:bg-slate-700 bg-center bg-cover" data-alt="Admin profile picture showing a smiling man" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBV2wa8O1wYqXVGUwzcxhi-H_CPXaR5JYdyCawZy7RLhsw31zRe2aZQOWpfBO9tXySknSQ-u2KH4TMQTJEPkkR4C_LqWSFP94pDKYLMblauCxu0-zJgGJdZc_lM6b85ATW7XFMntjKK_pmkK-Ue2p6X9AJVzc2dKfv3RXyinbu1ic2VG0y3aP0XqkvuzF6liy5xQf4lcNJbv6gUBeMEzUng25TDv0YmMUpezRviuGvlqSA76PhFxT7AmPXwt4yohCgjVq0juqnrQjg');"></div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-900 dark:text-white">Admin User</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">superadmin@helpit.org</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Header -->
+<header class="h-16 bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 sticky top-0 z-10">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                Platform Overview
+            </h2>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64 placeholder-slate-400 text-slate-900 dark:text-white" placeholder="Search platform..." type="text"/>
+</div>
+<button class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+</button>
+<button class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 p-6 overflow-y-auto">
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Card 1 -->
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">group</span>
+</div>
+<span class="text-xs font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 12%
+                        </span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Users</span>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">12,450</h3>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined">domain</span>
+</div>
+<span class="text-xs font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 5%
+                        </span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total NGOs</span>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">540</h3>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col relative overflow-hidden">
+<div class="absolute right-0 top-0 w-16 h-16 bg-orange-100 dark:bg-orange-900/20 rounded-bl-full -mr-4 -mt-4 opacity-50"></div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-orange-600 dark:text-orange-400">
+<span class="material-symbols-outlined">pending_actions</span>
+</div>
+<span class="text-xs font-medium text-orange-600 bg-orange-50 dark:bg-orange-900/20 px-2 py-1 rounded-full flex items-center gap-1">
+                            Action needed
+                        </span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Pending Verifications</span>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">18</h3>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg text-primary-dark dark:text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="text-xs font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 8%
+                        </span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Donations</span>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">₹1.2Cr</h3>
+</div>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<!-- Pending Verifications Table (2/3 width) -->
+<div class="xl:col-span-2 bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Pending NGO Verifications</h3>
+<button class="text-sm font-medium text-primary-dark dark:text-primary hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
+<tr>
+<th class="px-6 py-4">NGO Name</th>
+<th class="px-6 py-4">Reg. Date</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-500">CF</div>
+                                            Care Foundation
+                                        </div>
+</td>
+<td class="px-6 py-4">Oct 12, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                                            Pending
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="text-xs font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-1.5 rounded bg-slate-100 dark:bg-slate-800">Details</button>
+<button class="text-xs font-medium text-white bg-primary hover:bg-primary-dark px-3 py-1.5 rounded shadow-sm">Verify</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-xs font-bold text-emerald-600">GE</div>
+                                            Green Earth
+                                        </div>
+</td>
+<td class="px-6 py-4">Oct 11, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                                            Pending
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="text-xs font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-1.5 rounded bg-slate-100 dark:bg-slate-800">Details</button>
+<button class="text-xs font-medium text-white bg-primary hover:bg-primary-dark px-3 py-1.5 rounded shadow-sm">Verify</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-xs font-bold text-blue-600">HH</div>
+                                            Helping Hands
+                                        </div>
+</td>
+<td class="px-6 py-4">Oct 10, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
+                                            Reviewing
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="text-xs font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-1.5 rounded bg-slate-100 dark:bg-slate-800">Details</button>
+<button class="text-xs font-medium text-white bg-primary hover:bg-primary-dark px-3 py-1.5 rounded shadow-sm">Verify</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-xs font-bold text-purple-600">EF</div>
+                                            EduForAll
+                                        </div>
+</td>
+<td class="px-6 py-4">Oct 09, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                                            Pending
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="text-xs font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-1.5 rounded bg-slate-100 dark:bg-slate-800">Details</button>
+<button class="text-xs font-medium text-white bg-primary hover:bg-primary-dark px-3 py-1.5 rounded shadow-sm">Verify</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center text-xs font-bold text-red-600">AS</div>
+                                            Animal Shelter
+                                        </div>
+</td>
+<td class="px-6 py-4">Oct 08, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">
+                                            Urgent
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="text-xs font-medium text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-1.5 rounded bg-slate-100 dark:bg-slate-800">Details</button>
+<button class="text-xs font-medium text-white bg-primary hover:bg-primary-dark px-3 py-1.5 rounded shadow-sm">Verify</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Recent Activity Feed (1/3 width) -->
+<div class="xl:col-span-1 bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col h-full">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Recent Platform Activity</h3>
+</div>
+<div class="p-6 flex-1 overflow-y-auto">
+<ul class="relative border-l border-slate-200 dark:border-slate-700 space-y-8 ml-2">
+<li class="mb-10 ml-6">
+<span class="absolute flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full -left-4 ring-4 ring-white dark:ring-slate-900">
+<span class="material-symbols-outlined text-blue-600 text-sm">person_add</span>
+</span>
+<h4 class="flex items-center mb-1 text-sm font-semibold text-slate-900 dark:text-white">New User Registration</h4>
+<p class="text-sm font-normal text-slate-500 dark:text-slate-400">Sarah Jenkins joined the platform.</p>
+<time class="block mb-2 text-xs font-normal leading-none text-slate-400 dark:text-slate-500 mt-1">Just now</time>
+</li>
+<li class="mb-10 ml-6">
+<span class="absolute flex items-center justify-center w-8 h-8 bg-emerald-100 dark:bg-emerald-900 rounded-full -left-4 ring-4 ring-white dark:ring-slate-900">
+<span class="material-symbols-outlined text-emerald-600 text-sm">volunteer_activism</span>
+</span>
+<h4 class="flex items-center mb-1 text-sm font-semibold text-slate-900 dark:text-white">Large Donation Received</h4>
+<p class="text-sm font-normal text-slate-500 dark:text-slate-400">₹50,000 donated to Clean Water Initiative.</p>
+<time class="block mb-2 text-xs font-normal leading-none text-slate-400 dark:text-slate-500 mt-1">2 hours ago</time>
+</li>
+<li class="mb-10 ml-6">
+<span class="absolute flex items-center justify-center w-8 h-8 bg-orange-100 dark:bg-orange-900 rounded-full -left-4 ring-4 ring-white dark:ring-slate-900">
+<span class="material-symbols-outlined text-orange-600 text-sm">edit_document</span>
+</span>
+<h4 class="flex items-center mb-1 text-sm font-semibold text-slate-900 dark:text-white">NGO Profile Update</h4>
+<p class="text-sm font-normal text-slate-500 dark:text-slate-400">Care Foundation updated their legal documents.</p>
+<time class="block mb-2 text-xs font-normal leading-none text-slate-400 dark:text-slate-500 mt-1">5 hours ago</time>
+</li>
+<li class="mb-10 ml-6">
+<span class="absolute flex items-center justify-center w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full -left-4 ring-4 ring-white dark:ring-slate-900">
+<span class="material-symbols-outlined text-red-600 text-sm">warning</span>
+</span>
+<h4 class="flex items-center mb-1 text-sm font-semibold text-slate-900 dark:text-white">System Alert</h4>
+<p class="text-sm font-normal text-slate-500 dark:text-slate-400">High traffic detected on donation gateway.</p>
+<time class="block mb-2 text-xs font-normal leading-none text-slate-400 dark:text-slate-500 mt-1">Yesterday</time>
+</li>
+<li class="ml-6">
+<span class="absolute flex items-center justify-center w-8 h-8 bg-slate-100 dark:bg-slate-700 rounded-full -left-4 ring-4 ring-white dark:ring-slate-900">
+<span class="material-symbols-outlined text-slate-600 text-sm">verified</span>
+</span>
+<h4 class="flex items-center mb-1 text-sm font-semibold text-slate-900 dark:text-white">NGO Verified</h4>
+<p class="text-sm font-normal text-slate-500 dark:text-slate-400">Hope International was approved by Admin.</p>
+<time class="block mb-2 text-xs font-normal leading-none text-slate-400 dark:text-slate-500 mt-1">Yesterday</time>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Volunteers Directory | Helpit NGO</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Public Sans -->
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#1de2d1",
+                "background-light": "#f6f8f8",
+                "background-dark": "#112120",
+              },
+              fontFamily: {
+                "display": ["Public Sans"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 flex-shrink-0 bg-white dark:bg-background-dark border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-slate-900 shadow-sm">
+<span class="material-symbols-outlined font-bold">volunteer_activism</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-black tracking-tight leading-none">Helpit</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Admin Dashboard</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-semibold tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-primary/10 text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">group</span>
+<span class="text-sm font-semibold tracking-tight">Volunteers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[22px]">calendar_today</span>
+<span class="text-sm font-semibold tracking-tight">Events</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[22px]">favorite</span>
+<span class="text-sm font-semibold tracking-tight">Donations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[22px]">analytics</span>
+<span class="text-sm font-semibold tracking-tight">Reports</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+<span class="text-sm font-semibold tracking-tight">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Top Bar -->
+<header class="h-16 bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8">
+<div class="flex items-center gap-2">
+<span class="text-slate-400 text-sm">Directory</span>
+<span class="material-symbols-outlined text-slate-300 text-sm">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-100 text-sm font-medium">Volunteers</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+<input class="pl-10 pr-4 py-1.5 rounded-full border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-sm focus:ring-primary focus:border-primary w-64" placeholder="Quick search..." type="text"/>
+</div>
+<button class="relative text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 size-2 bg-red-500 border-2 border-white dark:border-background-dark rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-6">
+<div class="flex flex-col text-right hidden lg:flex">
+<span class="text-sm font-bold leading-none">Alex Rivera</span>
+<span class="text-[10px] text-slate-500 font-medium">Coordinator</span>
+</div>
+<div class="size-9 rounded-full bg-slate-200 border-2 border-primary overflow-hidden">
+<img alt="" data-alt="Profile picture of male administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTZVo3hpUtuRMWqynp8pu-ISt_bOCZWZ0L2HYmXlboJnqxAL2JRrmwcLCzsMpzYpXV9q8KnxvzFoObZvTyhhQsIcpb06-VMNYoOqBXkqD3acXLUzVKHwDbEbqpNxlOs2Veq9QfYkVfS_AU58D3lDOBAy5YIn_r3NHMumhfm1xowOsG30drTmHH8Sjdkx2QA1giSFconbB9xb3GScvpRJ3gidyNqZcJEKf_OL-1Vc1LqAwjdu8HQELCAYrgDisrCPoZ5D9ia6X41EQ"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto bg-slate-50 dark:bg-background-dark p-8">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="text-3xl font-black text-slate-900 dark:text-slate-100 tracking-tight">Volunteers</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1 font-medium">Manage and track 2,481 active volunteers across all programs.</p>
+</div>
+<button class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-slate-900 font-bold px-6 py-2.5 rounded-lg shadow-sm transition-all active:scale-95">
+<span class="material-symbols-outlined font-bold text-[20px]">person_add</span>
+<span>Invite Volunteer</span>
+</button>
+</div>
+<!-- Filter Bar -->
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-wrap items-center gap-4 mb-6">
+<div class="flex-1 min-w-[240px] relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border-transparent rounded-lg focus:ring-primary focus:border-primary text-sm" placeholder="Search by name, email, or skill..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<select class="bg-slate-50 dark:bg-slate-800 border-transparent rounded-lg text-sm px-4 py-2 focus:ring-primary focus:border-primary text-slate-600 dark:text-slate-300 min-w-[140px]">
+<option value="">All Statuses</option>
+<option value="active">Active</option>
+<option value="away">On Break</option>
+<option value="inactive">Inactive</option>
+</select>
+<select class="bg-slate-50 dark:bg-slate-800 border-transparent rounded-lg text-sm px-4 py-2 focus:ring-primary focus:border-primary text-slate-600 dark:text-slate-300 min-w-[140px]">
+<option value="">All Skills</option>
+<option value="first-aid">First Aid</option>
+<option value="teaching">Teaching</option>
+<option value="logistics">Logistics</option>
+<option value="marketing">Marketing</option>
+</select>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Name</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Email</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Skills</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Hours</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">Status</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Joined</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-sm">
+                                                JD
+                                            </div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Jane Dorsey</p>
+<p class="text-[11px] text-slate-500 font-medium">Volunteer ID: #8291</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">jane.dorsey@email.com</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">First Aid</span>
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Teaching</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">142 hrs</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+<span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Active</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right">Oct 12, 2023</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-sm">
+                                                MK
+                                            </div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Marcus Kaine</p>
+<p class="text-[11px] text-slate-500 font-medium">Volunteer ID: #7721</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">m.kaine@corp.net</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Events</span>
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Logistics</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">89 hrs</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-amber-500"></span>
+<span class="text-xs font-semibold text-amber-600 dark:text-amber-400">On Break</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right">Nov 05, 2023</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-sm">
+                                                SL
+                                            </div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Sarah Lee</p>
+<p class="text-[11px] text-slate-500 font-medium">Volunteer ID: #9021</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">slee@edu.org</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Teaching</span>
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Mentoring</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">215 hrs</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+<span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Active</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right">Aug 28, 2023</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-sm">
+                                                TB
+                                            </div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Tom Baker</p>
+<p class="text-[11px] text-slate-500 font-medium">Volunteer ID: #6112</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">baker.t@provider.com</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Logistics</span>
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Driving</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">54 hrs</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-rose-500"></span>
+<span class="text-xs font-semibold text-rose-600 dark:text-rose-400">Inactive</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right">Jan 14, 2024</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-sm">
+                                                EW
+                                            </div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Elena White</p>
+<p class="text-[11px] text-slate-500 font-medium">Volunteer ID: #8834</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">elena.w@studio.io</td>
+<td class="px-6 py-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Marketing</span>
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Design</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">31 hrs</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+<span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Active</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right">Feb 22, 2024</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+<td class="px-6 py-4 border-none">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold text-sm">
+                                                RK
+                                            </div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Ryan Kim</p>
+<p class="text-[11px] text-slate-500 font-medium">Volunteer ID: #4401</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400 border-none">ryan.k@freemail.com</td>
+<td class="px-6 py-4 border-none">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Events</span>
+<span class="px-2 py-0.5 rounded-full border border-primary text-[10px] font-bold text-primary">Admin</span>
+</div>
+</td>
+<td class="px-6 py-4 border-none">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">12 hrs</span>
+</td>
+<td class="px-6 py-4 border-none">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-emerald-500"></span>
+<span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Active</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right border-none">Mar 01, 2024</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<p class="text-sm text-slate-500 dark:text-slate-400">Showing 1-6 of 2,481 volunteers</p>
+<div class="flex items-center gap-2">
+<button class="p-2 border border-slate-200 dark:border-slate-800 rounded hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-400">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="size-8 flex items-center justify-center bg-primary text-slate-900 text-sm font-bold rounded">1</button>
+<button class="size-8 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium rounded">2</button>
+<button class="size-8 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium rounded">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="size-8 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium rounded">414</button>
+<button class="p-2 border border-slate-200 dark:border-slate-800 rounded hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-400">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

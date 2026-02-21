@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Events Management List</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#1de2d1", // Teal from the request
+                        "primary-content": "#0e1b1a",
+                        "primary-light": "#d0e6e5",
+                        "background-light": "#f8fbfb",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-sub": "#4f9690",
+                    },
+                    fontFamily: {
+                        display: ["Newsreader", "serif"],
+                        sans: ["Newsreader", "serif"], // Overriding sans to use Newsreader as requested for consistency
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem", // rounded-lg
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Newsreader', serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 min-h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-background-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 flex-shrink-0 hidden md:flex flex-col h-screen sticky top-0">
+<div class="flex flex-col h-full p-4 justify-between">
+<div class="flex flex-col gap-6">
+<!-- Brand -->
+<div class="flex items-center gap-3 px-2">
+<div class="bg-primary/20 aspect-square rounded-full h-10 w-10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-text-main dark:text-white text-lg font-bold leading-tight">Helpit</h1>
+<p class="text-text-sub dark:text-slate-400 text-xs font-medium">Admin Console</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:group-hover:text-primary">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary-content dark:text-primary dark:bg-primary/20" href="#">
+<span class="material-symbols-outlined fill">calendar_month</span>
+<span class="text-sm font-bold">Events</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:group-hover:text-primary">group</span>
+<span class="text-sm font-medium">Donors</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:group-hover:text-primary">favorite</span>
+<span class="text-sm font-medium">Volunteers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:group-hover:text-primary">bar_chart</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Settings -->
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary dark:group-hover:text-primary">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<div class="px-3 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3 mt-2">
+<img alt="Profile" class="w-8 h-8 rounded-full bg-slate-200 object-cover" data-alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzKd3oyjY9rKHoQVDphHFS_dS5cR9uU0bJ253fZVrpl4j85_SAcxOvGh_3x03fu2DmOQl1yXHy8Z3gKEpTy3lv4xvgwtgU4PDy4Z91ZR1Dr6nm1DrkMWjc8W_1MDhr_h_c8bZVAKumOkTx3SPObqfqv4V8-GTztEknDxfJ_rfC1pXk07j_g1rY66YhA7Jo3Oc2yFzWCttEj9Nsj99FaQ4mLw2sO599WSS3LFTYdBtbNLJXhWa3R0QNrwZlGg8vDMFt4NIVRpln_XQ"/>
+<div class="flex flex-col overflow-hidden">
+<span class="text-sm font-bold truncate dark:text-white">Sarah Jenkins</span>
+<span class="text-xs text-text-sub truncate">Event Coordinator</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto h-screen relative">
+<div class="w-full max-w-7xl mx-auto px-6 py-8 md:px-12 md:py-10">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h1 class="text-4xl font-display font-bold text-text-main dark:text-white tracking-tight">Events</h1>
+<p class="text-text-sub mt-1 text-lg">Manage your upcoming activities and fundraisers.</p>
+</div>
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-teal-400 text-primary-content font-bold py-2.5 px-6 rounded-lg transition-all shadow-sm hover:shadow-md active:scale-95 group">
+<span class="material-symbols-outlined text-[20px] group-hover:rotate-90 transition-transform">add</span>
+                    Create Event
+                </button>
+</header>
+<!-- Filter Tabs -->
+<div class="mb-8 border-b border-slate-200 dark:border-slate-700">
+<div class="flex gap-8">
+<button class="relative pb-3 px-1 text-sm font-bold text-text-main dark:text-white border-b-[3px] border-primary transition-colors">
+                        Upcoming
+                    </button>
+<button class="relative pb-3 px-1 text-sm font-medium text-text-sub dark:text-slate-400 border-b-[3px] border-transparent hover:text-text-main hover:border-slate-300 dark:hover:text-slate-200 transition-colors">
+                        Ongoing
+                    </button>
+<button class="relative pb-3 px-1 text-sm font-medium text-text-sub dark:text-slate-400 border-b-[3px] border-transparent hover:text-text-main hover:border-slate-300 dark:hover:text-slate-200 transition-colors">
+                        Past
+                    </button>
+</div>
+</div>
+<!-- Event Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+<!-- Card 1 -->
+<div class="group bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
+<!-- Image Banner -->
+<div class="h-40 w-full bg-cover bg-center relative" data-alt="Elegant gala dinner setup with blurred lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJ9PZIKjL65jzB_UTo3jYdy5hIeWTbSmcTgNxouBODnpet7ri7Kk3Sz-h7AsL5YSDEAUKnK3h0mDPEwxP8FOtS4uUvLqa7W3GjTcwzdecwgssiwwEYhqQ0Byi8O56CIxPluIhFM9LL5_13KZYYTaW8IxEvHyxTippY-YwBhA_t8WSwVKoHdnljYiqdutx_I4XAu5t-wyp25ZtjHOIMbXB9j4a0O9SVcJODny5RsEBRJpDyBPff1VwvCx5jwaWfKJH5-079Ov7wNdo');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute top-4 right-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800 border border-green-200 shadow-sm backdrop-blur-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
+                                Upcoming
+                            </span>
+</div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="text-xs font-medium uppercase tracking-wider opacity-90">Fundraiser</p>
+</div>
+</div>
+<!-- Content -->
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-text-main dark:text-white group-hover:text-primary transition-colors">Annual Charity Gala</h3>
+<button class="text-slate-400 hover:text-text-main dark:hover:text-white">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col gap-3 mb-6">
+<div class="flex items-center gap-2 text-text-sub text-sm">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Oct 24, 2023 • 6:00 PM</span>
+</div>
+<div class="flex items-center gap-2 text-text-sub text-sm">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span>Grand Ballroom, Downtown</span>
+</div>
+</div>
+<!-- Footer / Metrics -->
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<img alt="Attendee 1" class="w-7 h-7 rounded-full border-2 border-white dark:border-surface-dark object-cover" data-alt="User portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDu32SlHFmrI92Amsgw5Heohk9Bd6r-Fs3fXzVLnCmHDe4WZQTEgV9HxwjN6S7M8ZjgDFKFUpzYKOipEaDvpw5Rp_jhSkLpKNgFnpQhCZFhkz8ZvDHwnai067qX-GuKcD4XJwwml3ZyexWdwm3yonQqwEmgKxwk7GtuTnbqvSMIoTjaRA7UBsXuPBL3AeBoa34oJ3B6sm-DDuuOy3SBVQg9GUiYXCb2p_G60JYNe-hdofA7ta9y2_PucsNjJP7jcdeOtthlTzHCcc"/>
+<img alt="Attendee 2" class="w-7 h-7 rounded-full border-2 border-white dark:border-surface-dark object-cover" data-alt="User portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCUh1iSowNJgCi6T86F4N-hSuizk7l3DS9CNeHRg7PY-zCMLJxDRT4PIGXWdyNhUXF8_fTbVoa5D0Q-mujqbR-CdF5gklgBgJZGW84hBBgGsSkTt-RhyUNTlXyw4j7OA0WWQQMab8nWoaawMliuAeWD0oLCCP1BgEiP8obcsJYnrRuminsl1uvT1wjBYmxn7RFpfQVfA68rYwQQroOGMFKsU498whhm3Kt65pj3ym8HC9fJX8zulzbtjHSHCc0s7-8znrdbhJxmdI"/>
+<img alt="Attendee 3" class="w-7 h-7 rounded-full border-2 border-white dark:border-surface-dark object-cover" data-alt="User portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpT0_jOSfF_VAbOEtR-tfVwMOkHXmhYFm-SN0WqGOqo4W55W8Jm3mcfg6Xp3kjjR1z-IBzbD3L30QmDqnaGyTr1EG4NUaKzXm3RiJBvnRSbM_3VhFcJUJt7MBaXoPFznaoWJx3Fln6tIv9VHYKrFHRAenm9cj08ugH2D68mG2H8uZ6ejUM_e7SsicWpggtmPhC8c6kd8M_vKoCf7JCSa239tMmZLLq2q0MFaxDNeG1iq9eI022F8foMX7MI92KnVkQPSuogoq3bc0"/>
+<div class="w-7 h-7 rounded-full border-2 border-white dark:border-surface-dark bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-500">+147</div>
+</div>
+<span class="text-xs font-medium text-text-sub ml-1">150/200 Reg.</span>
+</div>
+<button class="text-sm font-bold text-primary hover:text-teal-600 dark:hover:text-teal-300">Manage</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
+<div class="h-40 w-full bg-cover bg-center relative" data-alt="People collaborating in a bright workshop room" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDW7tMhx8FHEuvfx99l-Xm2CNEesoKkc9IYM8z-I39z8Lp29RzpXjKy4EENt5uZfOmUEUtUDZicDwR87825H9BUMwCR_CZXtqv1zskSrNtJ8GMJ1vIbqL8agYq-cV6RZD1HQIXVRyZSFaTb5s5mE81G_9ETNk9NZfhgfTN1wpi0zJzcj2sAX8rJ_0Znqq05RZcwZ_0BuePfROLejwb1qWBp45d797x3MpaiP-BuOMm_twFXATvlI7zPdfjiGmOFEpf6CetYH7Ob4_I');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute top-4 right-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 border border-blue-200 shadow-sm backdrop-blur-sm">
+                                Open
+                            </span>
+</div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="text-xs font-medium uppercase tracking-wider opacity-90">Education</p>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-text-main dark:text-white group-hover:text-primary transition-colors">Volunteer Training</h3>
+<button class="text-slate-400 hover:text-text-main dark:hover:text-white">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col gap-3 mb-6">
+<div class="flex items-center gap-2 text-text-sub text-sm">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Nov 02, 2023 • 10:00 AM</span>
+</div>
+<div class="flex items-center gap-2 text-text-sub text-sm">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span>Community Center, Room B</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<img alt="Attendee 1" class="w-7 h-7 rounded-full border-2 border-white dark:border-surface-dark object-cover" data-alt="User portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzIGFh1gNYLUBmyrd6NHu2473Lb0R6WkhyTKXK9_xPDK5VwtMFoUb18IEYyGFp9vZ-pDtN739zU2W9vAhm1SYRjF_AotD9hSAnGVxSaXiN3kyYMm7IBwSHlVepzOC93P5hmeNLrPYDv6gvAu28vsaLgbmc_KgaKYbkus4QNm-h2AO9clO2a3RdbEM8q0vCxaBuplV_gBz7MRtpFjpCHKX5BBe4E77DvchztW-3prUpltLXoDT7mWw6EWemLSg_0m4DK5K_nNZN2vE"/>
+<img alt="Attendee 2" class="w-7 h-7 rounded-full border-2 border-white dark:border-surface-dark object-cover" data-alt="User portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ2XlEvDGgbHs6J-5--Cem0jgrqDHO8mxjiafOy_g_jMhc5K-WQBzhGVsxlrsdk4HrH0MCNX7ut0lRptB5FHfrm3gADrAiaHqrmtocEmLYoDw6NWfMGLXAIJM6S9O4evd5fbbj0rN3Q-jS1dZejK5UidC-oBGjbPDopxHT44gNDNpjLcTejVXCa1CHaUjcwphcBadq-my3Vimp8D74_ToEERN0d7f5WXrozSN8OK-Qya8J_s0aBdSNdV7cxy9qFp53CnlSwfu1j-Q"/>
+</div>
+<span class="text-xs font-medium text-text-sub ml-1">12/30 Slots</span>
+</div>
+<button class="text-sm font-bold text-primary hover:text-teal-600 dark:hover:text-teal-300">Manage</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
+<div class="h-40 w-full bg-cover bg-center relative" data-alt="Cardboard boxes filled with food donations" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCV7AicNotcYaKvSLEVQzTMXe8t9ABZf7Pdd8wavD_L5lYM6Iqrhfkbw9KHaZTvywhed_0V2Kzoub5Gzcr-A6DUcqZUSQbHd8GHB3r6ZxP2kmXoctQOuUvEAopiTiYAy5dy8LWFijHuydZZMOABxgocndlQExJBcd80Moh9U5k3tE4ByylqqFL_bgjL2jaaJ5VzTNSIrYvymhZHJrkhj72DRXrTLdcJ0Yxj6NrvrWmQAixfYPZmvfyiZ_XqDORc8UpINnQKpva71qw');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute top-4 right-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 shadow-sm backdrop-blur-sm">
+                                Planning
+                            </span>
+</div>
+<div class="absolute bottom-4 left-4 text-white">
+<p class="text-xs font-medium uppercase tracking-wider opacity-90">Community</p>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-text-main dark:text-white group-hover:text-primary transition-colors">Winter Food Drive</h3>
+<button class="text-slate-400 hover:text-text-main dark:hover:text-white">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col gap-3 mb-6">
+<div class="flex items-center gap-2 text-text-sub text-sm">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Dec 15, 2023 • All Day</span>
+</div>
+<div class="flex items-center gap-2 text-text-sub text-sm">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span>City Park Pavilion</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 border border-dashed border-slate-300 dark:border-slate-600">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</span>
+<span class="text-xs font-medium text-text-sub ml-1">0 Volunteers</span>
+</div>
+<button class="text-sm font-bold text-primary hover:text-teal-600 dark:hover:text-teal-300">Manage</button>
+</div>
+</div>
+</div>
+<!-- Card 4 (Added to balance grid) -->
+<div class="group bg-surface-light dark:bg-surface-dark rounded-xl border border-dashed border-slate-300 dark:border-slate-700 shadow-sm hover:border-primary/50 hover:bg-primary/5 transition-all overflow-hidden flex flex-col items-center justify-center min-h-[350px] cursor-pointer">
+<div class="bg-primary/10 rounded-full p-4 mb-4 text-primary group-hover:bg-primary group-hover:text-primary-content transition-colors">
+<span class="material-symbols-outlined text-4xl">add</span>
+</div>
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-1">Create New Event</h3>
+<p class="text-sm text-text-sub max-w-[200px] text-center">Start planning your next campaign or meeting.</p>
+</div>
+</div>
+</div>
+</main>
+</body></html>

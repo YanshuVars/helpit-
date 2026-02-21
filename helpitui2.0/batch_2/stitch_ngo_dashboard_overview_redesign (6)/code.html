@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit - Role Selection</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Merriweather:wght@700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                "primary": "#0f756d",
+                "background-light": "#f6f8f8",
+                "background-dark": "#112120",
+                },
+                fontFamily: {
+                "display": ["Inter", "sans-serif"],
+                "serif": ["Merriweather", "serif"],
+                },
+                borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1.5rem", "full": "9999px"},
+            },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        
+        /* Smooth transitions for card hover effects */
+        .role-card {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Invert colors on hover */
+        .role-card:hover {
+            background-color: #0f756d; /* Primary color */
+            border-color: #0f756d;
+        }
+        .role-card:hover h3, 
+        .role-card:hover p,
+        .role-card:hover .material-symbols-outlined {
+            color: #ffffff;
+        }
+        
+        /* Active state style simulation for the purpose of the demo if one was selected */
+        .role-card.active {
+            background-color: #0f756d;
+            border-color: #0f756d;
+        }
+        .role-card.active h3, 
+        .role-card.active p,
+        .role-card.active .material-symbols-outlined {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- Left Panel: Branding -->
+<div class="hidden md:flex md:w-1/2 bg-primary flex-col justify-between p-12 lg:p-20 relative overflow-hidden">
+<!-- Abstract decorative pattern overlay -->
+<div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 20% 150%, white 0%, transparent 50%), radial-gradient(circle at 80% -50%, white 0%, transparent 50%);">
+</div>
+<!-- Logo Area -->
+<div class="z-10 flex items-center gap-3">
+<div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">volunteer_activism</span>
+</div>
+<span class="text-white text-2xl font-bold tracking-tight font-display">Helpit</span>
+</div>
+<!-- Mission Content -->
+<div class="z-10 max-w-md">
+<h2 class="text-white text-4xl lg:text-5xl font-serif font-bold leading-tight mb-6">Empowering communities through connection.</h2>
+<p class="text-white/90 text-lg leading-relaxed font-display">
+                Join a global network of changemakers. Whether you are offering time, resources, or organizational support, Helpit bridges the gap between intention and impact.
+            </p>
+</div>
+<!-- Footer / Copyright -->
+<div class="z-10 text-white/60 text-sm font-display">
+            © 2023 Helpit Organization. All rights reserved.
+        </div>
+</div>
+<!-- Right Panel: Role Selection Form -->
+<div class="w-full md:w-1/2 h-screen flex flex-col items-center justify-center p-6 md:p-12 lg:p-24 overflow-y-auto bg-white dark:bg-background-dark">
+<!-- Mobile Header (Logo only visible on mobile here) -->
+<div class="md:hidden w-full flex justify-center mb-8">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl">volunteer_activism</span>
+<span class="text-2xl font-bold tracking-tight font-display">Helpit</span>
+</div>
+</div>
+<div class="w-full max-w-md">
+<!-- Headers -->
+<div class="mb-10 text-center md:text-left">
+<h1 class="text-slate-900 dark:text-white text-3xl md:text-4xl font-serif font-bold mb-3">Join Helpit</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg font-normal">Choose how you'd like to contribute</p>
+</div>
+<!-- Selection Cards -->
+<div class="flex flex-col gap-4 mb-8">
+<!-- Card 1: Volunteer -->
+<button class="role-card group w-full text-left p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+<div class="flex items-center gap-5">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 group-hover:bg-white/20 flex items-center justify-center transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl text-primary transition-colors duration-300">sentiment_satisfied</span>
+</div>
+<div class="flex flex-col">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1 transition-colors duration-300">I'm a Volunteer</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">Join projects and help out directly.</p>
+</div>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined text-white">arrow_forward</span>
+</div>
+</div>
+</button>
+<!-- Card 2: NGO -->
+<button class="role-card group w-full text-left p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+<div class="flex items-center gap-5">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 group-hover:bg-white/20 flex items-center justify-center transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl text-primary transition-colors duration-300">corporate_fare</span>
+</div>
+<div class="flex flex-col">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1 transition-colors duration-300">I'm an NGO</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">Find volunteers and support for causes.</p>
+</div>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined text-white">arrow_forward</span>
+</div>
+</div>
+</button>
+<!-- Card 3: Donor -->
+<button class="role-card group w-full text-left p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+<div class="flex items-center gap-5">
+<div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 group-hover:bg-white/20 flex items-center justify-center transition-colors duration-300">
+<span class="material-symbols-outlined text-3xl text-primary transition-colors duration-300">favorite</span>
+</div>
+<div class="flex flex-col">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1 transition-colors duration-300">I'm a Donor</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 transition-colors duration-300">Support initiatives with funding.</p>
+</div>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined text-white">arrow_forward</span>
+</div>
+</div>
+</button>
+</div>
+<!-- Footer Link -->
+<div class="text-center mt-6">
+<p class="text-slate-600 dark:text-slate-400 text-sm">
+                    Already have an account? 
+                    <a class="text-primary hover:text-primary/80 font-semibold hover:underline transition-colors" href="#">Sign In</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

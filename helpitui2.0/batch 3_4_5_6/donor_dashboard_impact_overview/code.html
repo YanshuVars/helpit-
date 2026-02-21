@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donor Dashboard Impact Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#14b0a2",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-muted": "#4f9690",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased min-h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between h-screen sticky top-0 z-20 transition-all duration-300">
+<!-- Logo & Nav -->
+<div class="flex flex-col gap-6 p-6">
+<!-- Brand -->
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-sm" data-alt="Helpit Logo Icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuACGo2MHHmQCx4JZPjg8_uJJBGl4ufcb326J2NPifgFBxGy9pUptZWoqWpuP0fWh-4dDrUt-6-m8b-6mLSYYObDGxOp732TCNUT1mzV-pmjOb7xHgpkxoxVZmalP_IdHR83PbEm9fhcvikWP8K2Dy8wJeJAXZwGovSMNbElzzpQdjC5YTyj4wd3ayhq9a6_yeqBic2z6L-06nwpVrW7Vkog4Fon980X6IPI3etjY_ODqowE7vskg6UeDtctSgzD78ABZ-2kOjJrvrw");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-none tracking-tight">Helpit</h1>
+<p class="text-primary text-xs font-medium leading-normal mt-0.5">Donor Platform</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-2 mt-4">
+<!-- Dashboard (Active) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined filled text-[24px]">dashboard</span>
+<span class="text-sm font-semibold">Dashboard</span>
+</a>
+<!-- Discover NGOs -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">explore</span>
+<span class="text-sm font-medium">Discover NGOs</span>
+</a>
+<!-- Donate -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">volunteer_activism</span>
+<span class="text-sm font-medium">Donate</span>
+</a>
+<!-- History -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">history</span>
+<span class="text-sm font-medium">History</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<!-- User Profile (Bottom) -->
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<button class="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left group">
+<div class="relative">
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-center bg-cover border-2 border-white dark:border-slate-600 shadow-sm" data-alt="Portrait of Rajesh Mehta" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA6wBzA6sVW32gNoTX-w_Q3QmgzVE1Jcw4L8Q5j7z1lm8OAxo03hefhGs4E4Gfd3PDsYWOaJveTleQJvGAakyQ0ZtOw1S0neC7f_im1i3RyZB6pa3fZNp13LcW4SfVEbj6eapdBqDN5FRk8e00ylJgFS-XRo1XmL6JgY8R2o3wXVjYm6lak3KvcwMrQahFe-tv6vYqzIFwN7VmEyGQDqwH22EkO2dX8upQELOFyOjbUS_4aMX2Oks-cdTl29pSjIoirjMklFp4405g");'></div>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"></div>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<p class="text-sm font-semibold text-slate-900 dark:text-white truncate">Rajesh Mehta</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">rajesh@example.com</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 text-lg">more_vert</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto h-screen relative">
+<div class="max-w-7xl mx-auto px-6 py-8 md:px-10 md:py-10 flex flex-col gap-8">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="flex flex-col gap-2">
+<h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">Welcome back, Rajesh <span class="inline-block animate-pulse">👋</span></h2>
+<p class="text-slate-500 dark:text-slate-400 text-lg max-w-2xl">Here is the summary of your kindness journey and the impact you've made this year.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="inline-flex h-12 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 font-semibold text-slate-900 dark:text-white shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+                        Browse NGOs
+                    </button>
+<button class="inline-flex h-12 items-center justify-center rounded-xl bg-primary px-6 font-bold text-slate-900 shadow-md shadow-primary/20 transition-all hover:bg-primary-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+<span class="material-symbols-outlined text-[20px] mr-2">favorite</span>
+                        Donate Now
+                    </button>
+</div>
+</header>
+<!-- Stat Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1: Total Donated -->
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-slate-100 dark:border-slate-800 group hover:shadow-md transition-shadow">
+<div class="absolute right-0 top-0 h-24 w-24 translate-x-8 translate-y--8 rounded-full bg-primary/10 transition-transform group-hover:scale-110"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary-dark dark:text-primary">
+<span class="material-symbols-outlined text-[28px]">payments</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Donated</p>
+<h3 class="mt-1 text-2xl font-bold text-slate-900 dark:text-white">₹2,45,000</h3>
+</div>
+</div>
+</div>
+<!-- Card 2: NGOs Supported -->
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-slate-100 dark:border-slate-800 group hover:shadow-md transition-shadow">
+<div class="absolute right-0 top-0 h-24 w-24 translate-x-8 translate-y--8 rounded-full bg-blue-500/10 transition-transform group-hover:scale-110"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined text-[28px]">diversity_1</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">NGOs Supported</p>
+<h3 class="mt-1 text-2xl font-bold text-slate-900 dark:text-white">8</h3>
+</div>
+</div>
+</div>
+<!-- Card 3: Tax Saved -->
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-slate-100 dark:border-slate-800 group hover:shadow-md transition-shadow">
+<div class="absolute right-0 top-0 h-24 w-24 translate-x-8 translate-y--8 rounded-full bg-emerald-500/10 transition-transform group-hover:scale-110"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined text-[28px]">savings</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Tax Saved</p>
+<h3 class="mt-1 text-2xl font-bold text-slate-900 dark:text-white">₹61,250</h3>
+</div>
+</div>
+</div>
+<!-- Card 4: Donations Count -->
+<div class="relative overflow-hidden rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-slate-100 dark:border-slate-800 group hover:shadow-md transition-shadow">
+<div class="absolute right-0 top-0 h-24 w-24 translate-x-8 translate-y--8 rounded-full bg-amber-500/10 transition-transform group-hover:scale-110"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400">
+<span class="material-symbols-outlined text-[28px]">receipt_long</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Donations Count</p>
+<h3 class="mt-1 text-2xl font-bold text-slate-900 dark:text-white">15</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Section -->
+<section class="flex flex-col gap-4 mt-2">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Recent Donations</h3>
+<a class="text-sm font-semibold text-primary hover:text-primary-dark flex items-center gap-1 transition-colors" href="#">
+                        View All History
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+<div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-surface-dark shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400">
+<tr>
+<th class="px-6 py-4 font-semibold" scope="col">Organization</th>
+<th class="px-6 py-4 font-semibold" scope="col">Category</th>
+<th class="px-6 py-4 font-semibold" scope="col">Amount</th>
+<th class="px-6 py-4 font-semibold" scope="col">Date</th>
+<th class="px-6 py-4 font-semibold text-right" scope="col">Receipt</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
+<img alt="Smile Foundation Logo" class="h-full w-full object-cover" data-alt="Child smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKHQR5VSJDJvEs3HH1aYNTMUWVKitYn2SOlVBp9d4h9cl3CfehrIYMf0Fp6E3r6SbdWQD10qhM3NXreckLxnZHRzVzCvjcPdX6BcTLLXVBcrLuJKry3jct9PwxA_WjBFzdChozPMRXStQv5CQ3GMz2X3lxmcqWsJ9D-zIHk3lw-Mkac2DH_WDhfv9odBce8nah4gFIhY0LK7UMuagSm_M3O_RiBr0BlIUyZ59gkfP5_xn8VmUR_NsgLYOx62WmVWHuf-Y-u_aHA6o"/>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Smile Foundation</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">ID: #DN-88392</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/30 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:text-amber-300">
+                                            Education
+                                        </span>
+</td>
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+                                        ₹10,000
+                                    </td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">
+                                        Oct 24, 2023
+                                    </td>
+<td class="px-6 py-4 text-right">
+<button class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                            View
+                                        </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
+<img alt="Goonj Logo" class="h-full w-full object-cover" data-alt="Hands holding supplies" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkK9YNw_-dTp-acxvnQtNfS9LnateAUoXLBynf6cyoc6LM_0FFRuWZf6f1VbdEojaA8S06tcRe2ZVXa1AC5yN3r9IKWLMtR1wZwF05MfZaNiDxhR2RFP4atpbETphyPK16aq6OA2l70pmlGUGKltQnc15iQrefx3AuBMmq5l5caCLEyYMPuc5ABOimKS6OfGQa7-h5Wxmej9_F25rBiKbWAf6n_YyXJdcCcaaCtTRDP-5GsnEosO8FF8Kzz6O4XEo1a9AH0UdDNQU"/>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Goonj</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">ID: #DN-88345</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-red-100 dark:bg-red-900/30 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:text-red-300">
+                                            Disaster Relief
+                                        </span>
+</td>
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+                                        ₹5,000
+                                    </td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">
+                                        Oct 12, 2023
+                                    </td>
+<td class="px-6 py-4 text-right">
+<button class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                            View
+                                        </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
+<img alt="Akshaya Patra Logo" class="h-full w-full object-cover" data-alt="Bowl of food" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfmembZsDk3K_WYNy5tSTMIA4k_BAVuwW_owpXuRM_Kb5VGlM1lRs0si5D3pUQsYiwt0048cU3VMea9KkA8ORAkdlb9O7hQc5VmXGSpNSZ5sv23ST90BOmmgCQHJyAZKnftMHLusBq1NrY9o72oRm3Oj-G0kQOlPGseI9uTb73BAlZ_op7hIBF2pto0k1HeUnwlQNKnEt2pOuEd9n8keCgxmBY5V98lh2MEKtlGWGNLDQOSeM1ZIST9cY6KVfhks-u70EtPrwiwqk"/>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Akshaya Patra</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">ID: #DN-88102</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-300">
+                                            Hunger
+                                        </span>
+</td>
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+                                        ₹2,500
+                                    </td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">
+                                        Sept 05, 2023
+                                    </td>
+<td class="px-6 py-4 text-right">
+<button class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                            View
+                                        </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">forest</span>
+</div>
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Green Earth</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">ID: #DN-87990</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:text-emerald-300">
+                                            Environment
+                                        </span>
+</td>
+<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">
+                                        ₹1,500
+                                    </td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">
+                                        Aug 21, 2023
+                                    </td>
+<td class="px-6 py-4 text-right">
+<button class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                            View
+                                        </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit - Forgot Password</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;family=Merriweather:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#14b3a6",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "text-main": "#0e1b1a",
+                        "text-muted": "#4a5b5a",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "serif": ["Merriweather", "serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Utilities for smooth transitions */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Main Container: Split Screen -->
+<div class="flex flex-col lg:flex-row min-h-screen w-full overflow-hidden">
+<!-- LEFT PANEL: Branding -->
+<!-- Hidden on mobile, takes 40% width on large screens -->
+<div class="relative hidden lg:flex lg:w-5/12 bg-primary/20 flex-col justify-between p-12 overflow-hidden">
+<!-- Background Image/Overlay -->
+<div class="absolute inset-0 z-0 opacity-10" style="background-image: radial-gradient(#1de2d1 1px, transparent 1px); background-size: 24px 24px;">
+</div>
+<!-- Abstract Shapes -->
+<div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-primary/30 rounded-full blur-3xl"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+<!-- Logo Area -->
+<div class="relative z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-dark text-4xl">volunteer_activism</span>
+<span class="font-serif text-3xl font-bold text-gray-800 tracking-tight">Helpit</span>
+</div>
+</div>
+<!-- Hero Text -->
+<div class="relative z-10 mb-20">
+<h2 class="font-serif text-4xl font-bold text-gray-900 leading-tight mb-6">
+                    Empowering change,<br/>one click at a time.
+                </h2>
+<p class="text-lg text-gray-700 max-w-sm">
+                    Join our community of changemakers and help us build a better future for everyone, everywhere.
+                </p>
+</div>
+<!-- Footer/Copyright -->
+<div class="relative z-10 text-sm text-gray-500 font-medium">
+                © 2023 Helpit NGO. All rights reserved.
+            </div>
+</div>
+<!-- RIGHT PANEL: Interaction Area -->
+<div class="flex-1 flex flex-col items-center justify-center p-6 sm:p-12 lg:p-24 bg-background-light dark:bg-background-dark relative">
+<!-- Mobile Logo (Visible only on small screens) -->
+<div class="lg:hidden absolute top-6 left-6 flex items-center gap-2 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">volunteer_activism</span>
+<span class="font-serif text-2xl font-bold text-gray-900 dark:text-white">Helpit</span>
+</div>
+<!-- Back Link -->
+<div class="w-full max-w-[480px] mb-8">
+<a class="inline-flex items-center text-text-muted hover:text-primary transition-colors text-sm font-medium gap-1" href="#">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+                    Back to Sign In
+                </a>
+</div>
+<!-- Content Container -->
+<div class="w-full max-w-[480px] space-y-8 fade-in">
+<!-- 
+                     NOTE: For demonstration purposes, I am displaying the FORM STATE first.
+                     In a real app, this would be swapped with the success state upon submission.
+                     I'll include the Success State markup below in a hidden div or comment format? 
+                     Actually, the prompt asks for a "Variant 2" which implies a specific screen. 
+                     I will render the FORM state primarily, and append the SUCCESS state 
+                     below it visually separated for the user to review both states as requested in the plan.
+                -->
+<!-- STATE 1: Forgot Password Form -->
+<div class="bg-white dark:bg-[#1a2c2b] p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="mb-6">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary-dark">
+<span class="material-symbols-outlined text-2xl">lock_reset</span>
+</div>
+<h1 class="text-text-main dark:text-white text-3xl font-bold tracking-tight mb-3">Forgot Password?</h1>
+<p class="text-text-muted dark:text-slate-400 text-base leading-relaxed">
+                            No worries, we'll send you reset instructions. Enter the email associated with your account.
+                        </p>
+</div>
+<form class="space-y-5" onsubmit="event.preventDefault();">
+<label class="block space-y-2">
+<span class="text-text-main dark:text-slate-200 text-sm font-semibold">Email Address</span>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[20px]">mail</span>
+<input class="form-input w-full rounded-lg border-slate-200 dark:border-slate-700 bg-background-light dark:bg-background-dark focus:border-primary focus:ring-primary/20 pl-11 h-12 text-base placeholder:text-slate-400 dark:text-white" placeholder="name@example.com" type="email" value=""/>
+</div>
+</label>
+<button class="w-full h-12 bg-primary hover:bg-[#1bd1c1] text-text-main font-bold text-base rounded-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 mt-2">
+<span>Send Reset Link</span>
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
+</form>
+</div>
+<!-- SEPARATOR FOR DEMO PURPOSES ONLY -->
+<div class="py-8 flex items-center gap-4 text-xs text-slate-400 uppercase tracking-widest font-semibold justify-center">
+<span class="w-12 h-px bg-slate-200 dark:bg-slate-700"></span>
+<span>Success State View</span>
+<span class="w-12 h-px bg-slate-200 dark:bg-slate-700"></span>
+</div>
+<!-- STATE 2: Success Confirmation -->
+<div class="bg-white dark:bg-[#1a2c2b] p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 text-center">
+<div class="mx-auto w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary-dark text-5xl">mark_email_read</span>
+</div>
+<h2 class="text-text-main dark:text-white text-2xl font-bold tracking-tight mb-3">Check your email</h2>
+<p class="text-text-muted dark:text-slate-400 text-base leading-relaxed mb-8">
+                        We have sent password recovery instructions to <span class="font-semibold text-text-main dark:text-slate-200">name@example.com</span>.
+                    </p>
+<div class="space-y-4">
+<button class="w-full h-12 bg-primary hover:bg-[#1bd1c1] text-text-main font-bold text-base rounded-lg shadow-sm hover:shadow transition-all">
+                            Open Email App
+                        </button>
+<div class="text-sm text-text-muted dark:text-slate-400">
+                            Did not receive the email? <br/>
+<span class="text-slate-500">Check your spam filter, or</span>
+<a class="text-primary-dark font-semibold hover:underline decoration-2 underline-offset-2 ml-1" href="#">Resend Email</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Links -->
+<div class="mt-12 text-center">
+<p class="text-sm text-slate-400">
+                    Remember your password? <a class="text-primary-dark font-semibold hover:text-primary transition-colors" href="#">Log in</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

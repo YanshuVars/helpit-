@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit - NGO Management Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "sidebar-navy": "#1E3A5F",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .sidebar-item-active {
+            background-color: rgba(29, 226, 209, 0.15);
+            border-left: 4px solid #1de2d1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-sidebar-navy text-slate-100 flex flex-col shrink-0">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center text-sidebar-navy">
+<span class="material-symbols-outlined font-bold">volunteer_activism</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight">Helpit</h1>
+<p class="text-xs text-primary/80 font-medium">NGO Management</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg sidebar-item-active text-primary" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors text-slate-300" href="#">
+<span class="material-symbols-outlined text-[22px]">pending_actions</span>
+<span class="text-sm font-medium">Requests</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors text-slate-300" href="#">
+<span class="material-symbols-outlined text-[22px]">group</span>
+<span class="text-sm font-medium">Volunteers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors text-slate-300" href="#">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+<span class="text-sm font-medium">Donations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors text-slate-300" href="#">
+<span class="material-symbols-outlined text-[22px]">calendar_month</span>
+<span class="text-sm font-medium">Events</span>
+</a>
+<div class="pt-4 pb-2 px-3">
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">System</p>
+</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors text-slate-300" href="#">
+<span class="material-symbols-outlined text-[22px]">assessment</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/10 transition-colors text-slate-300" href="#">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-white/10">
+<div class="bg-white/5 rounded-xl p-3 flex items-center gap-3">
+<div class="size-9 rounded-full bg-slate-500 overflow-hidden shrink-0 border border-white/20">
+<img class="w-full h-full object-cover" data-alt="User profile avatar of the administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX9mYKjQx5NXwYVxYzk9CI2cPDGzs0K9WSfQR8bgcR6e14chuyqm48jNgcwdAkFY6D75IDp_P8gsogqT2Vxlk5QedzbDuB3MhYeJhN6J-f8BI2Cu_zUNjgvcASIb7A2FFfm9mjJu99sZLdnVg0sB2gSuCeUf7A0dR8DzYh7uIn5LtsX1YIaoVXoeFqA7UK40muGBLza18e6rbm9WfVAVDyxTfysK2KHWKZXPD0CrR92XEXncUYcYbDaRLQ6X6vkXQWfe_eT5nIRgc"/>
+</div>
+<div class="overflow-hidden">
+<p class="text-xs font-bold truncate">Admin User</p>
+<p class="text-[10px] text-slate-400 truncate">admin@helpit.org</p>
+</div>
+<span class="material-symbols-outlined text-sm ml-auto text-slate-400">logout</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Top Bar -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 shrink-0">
+<h2 class="text-xl font-bold text-slate-800 dark:text-slate-100">Dashboard Overview</h2>
+<div class="flex items-center gap-6">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/50 transition-all" placeholder="Search data, volunteers..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center relative transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Stat Card 1 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="size-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined">description</span>
+</div>
+<span class="flex items-center text-xs font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span>12%
+                        </span>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Requests</p>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">24</h3>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="size-10 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600">
+<span class="material-symbols-outlined">person_check</span>
+</div>
+<span class="flex items-center text-xs font-bold text-rose-500 bg-rose-50 dark:bg-rose-900/20 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm mr-1">trending_down</span>5%
+                        </span>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Active Volunteers</p>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">156</h3>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="size-10 rounded-lg bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="flex items-center text-xs font-bold text-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span>18%
+                        </span>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Donations</p>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">₹4.2L</h3>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="size-10 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined">event</span>
+</div>
+<span class="flex items-center text-xs font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded-full">
+                            0%
+                        </span>
+</div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Upcoming Events</p>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100">8</h3>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Recent Activity Feed -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<h4 class="font-bold text-slate-800 dark:text-slate-100">Recent Activity</h4>
+<button class="text-xs font-bold text-primary hover:underline">View All</button>
+</div>
+<div class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Item 1 -->
+<div class="px-6 py-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="size-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 shrink-0">
+<span class="material-symbols-outlined text-[20px]">add_card</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-slate-800 dark:text-slate-100 line-clamp-1">New donation received</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">Rahul Sharma donated ₹5,000 for the Education Fund</p>
+</div>
+<div class="text-right shrink-0">
+<p class="text-[11px] font-medium text-slate-400">2 mins ago</p>
+<p class="text-[11px] font-bold text-slate-300">14:30</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="px-6 py-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="size-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 shrink-0">
+<span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-slate-800 dark:text-slate-100 line-clamp-1">Request #402 updated</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">Medical supply request has been marked as 'Dispatched'</p>
+</div>
+<div class="text-right shrink-0">
+<p class="text-[11px] font-medium text-slate-400">15 mins ago</p>
+<p class="text-[11px] font-bold text-slate-300">14:17</p>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="px-6 py-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="size-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 shrink-0">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-slate-800 dark:text-slate-100 line-clamp-1">New volunteer application</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">Priya Patel applied for the Weekend Outreach program</p>
+</div>
+<div class="text-right shrink-0">
+<p class="text-[11px] font-medium text-slate-400">1 hour ago</p>
+<p class="text-[11px] font-bold text-slate-300">13:30</p>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="px-6 py-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="size-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 shrink-0">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-slate-800 dark:text-slate-100 line-clamp-1">Event reminder</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">Food Drive starts in 4 hours at the South Community Center</p>
+</div>
+<div class="text-right shrink-0">
+<p class="text-[11px] font-medium text-slate-400">2 hours ago</p>
+<p class="text-[11px] font-bold text-slate-300">12:30</p>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="px-6 py-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="size-10 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-rose-600 shrink-0">
+<span class="material-symbols-outlined text-[20px]">feedback</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-semibold text-slate-800 dark:text-slate-100 line-clamp-1">System alert</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">Volunteer registration is nearing storage limits</p>
+</div>
+<div class="text-right shrink-0">
+<p class="text-[11px] font-medium text-slate-400">4 hours ago</p>
+<p class="text-[11px] font-bold text-slate-300">10:30</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions Panel -->
+<div class="space-y-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="font-bold text-slate-800 dark:text-slate-100 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">bolt</span>
+                            Quick Actions
+                        </h4>
+<div class="space-y-3">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-primary text-sidebar-navy font-bold rounded-lg hover:brightness-105 active:scale-[0.98] transition-all text-sm group">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">add_box</span>
+                                Create New Request
+                            </button>
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-[0.98] transition-all text-sm group">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:scale-110 transition-transform">person_add</span>
+                                Invite Volunteer
+                            </button>
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-[0.98] transition-all text-sm group">
+<span class="material-symbols-outlined text-[20px] text-slate-500 group-hover:scale-110 transition-transform">summarize</span>
+                                View Reports
+                            </button>
+</div>
+</div>
+<!-- Small Promotion/Alert Card -->
+<div class="bg-sidebar-navy rounded-xl p-6 text-white relative overflow-hidden group">
+<div class="relative z-10">
+<h5 class="font-bold text-lg mb-2">Annual Impact Report</h5>
+<p class="text-slate-300 text-xs mb-4 leading-relaxed">Generate your NGO's yearly transparency report for donors and stakeholders.</p>
+<button class="text-xs font-bold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+                                Generate Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-7xl text-white/5 rotate-12">auto_awesome</span>
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-50"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

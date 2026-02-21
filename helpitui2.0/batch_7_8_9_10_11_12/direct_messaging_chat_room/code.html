@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Direct Messaging Chat Room</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#14b5a7",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2a",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: #334155;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display flex flex-col h-screen overflow-hidden">
+<!-- Header Section -->
+<header class="flex-none flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark px-6 py-4 z-10 shadow-sm">
+<div class="flex items-center gap-4">
+<!-- Back Button (Mobile/Context) -->
+<button class="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<!-- User Info -->
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-white dark:border-slate-700 shadow-sm" data-alt="Portrait of Sarah Jenkins smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBFlze3SkWQzl8fJjc3Z_QsCy2dDNc-PQtwZBFcMA56g_1JZXva-3QZRpoyysBsexaEoRhjODLP_2wSkBfDu_3AuYWisolcf6Ad6Hrvot08w6qmBYzxCyDSBwJmqq6OZt-aq5XkEHPsWzfDLPM1H06XfImdJlfQTiES4PdJ9pOky1v6b7LQxU8ef5bduTS9SXplQ7RPhga0lPJLUslJYmVl19zyoT9olPVnN1dMG05-NYlDvAVE1s6q2u6ubUEi8-5QMp2K_E-gT6w");'></div>
+<div class="absolute bottom-0 right-0 size-3.5 bg-green-500 rounded-full border-2 border-white dark:border-surface-dark"></div>
+</div>
+<div>
+<h2 class="text-lg font-bold leading-tight text-slate-900 dark:text-white">Sarah Jenkins</h2>
+<p class="text-sm text-green-600 dark:text-green-400 font-medium flex items-center gap-1">
+<span class="inline-block size-1.5 rounded-full bg-green-500"></span> Online
+                    </p>
+</div>
+</div>
+</div>
+<!-- Header Actions -->
+<div class="flex gap-2">
+<button class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors" title="Call">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors" title="Video Call">
+<span class="material-symbols-outlined">videocam</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors" title="More Options">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Chat Area -->
+<main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-background-light dark:bg-background-dark relative">
+<!-- Date Divider -->
+<div class="flex justify-center my-4">
+<span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-medium px-3 py-1 rounded-full">
+                Today, October 24
+            </span>
+</div>
+<!-- Message: Received -->
+<div class="flex items-end gap-3 max-w-3xl">
+<div class="size-8 rounded-full bg-cover bg-center shrink-0 mb-1" data-alt="Portrait of Sarah Jenkins" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCmT30qsb9qSwvH7XmcYdcAo2vhDQ_3I1P9gZBaVnsnpvyy9ULJq2mXfKiOtnEp7bWCFu65cMsGAQZ0eiM8Qla1mZe4DROHtDSQTE4VMcphxfgkmhiX6TMB0ztm--m28EAhlLYWSUwCOFrIym6tba-T6DNxcMc3CjvaxelejTqlzvTxn5k9KViBgCXFDY3CAf76P7wBqzjhKS0iooo59VejI37oj2S8TYV-jbtLucafGEjUhiGLBjc3prf1TcVSV9336j5bND4924g");'></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="bg-white dark:bg-surface-dark text-slate-800 dark:text-slate-200 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm border border-slate-100 dark:border-slate-800 max-w-[85%] md:max-w-[480px]">
+<p class="text-[15px] leading-relaxed">Hi there! I saw your request for help with the garden. I'd love to assist you with weeding those flower beds.</p>
+</div>
+<span class="text-xs text-slate-400 ml-1">10:00 AM</span>
+</div>
+</div>
+<!-- Message: Sent -->
+<div class="flex items-end gap-3 justify-end max-w-3xl ml-auto">
+<div class="flex flex-col gap-1 items-end">
+<div class="bg-primary text-slate-900 px-4 py-3 rounded-2xl rounded-br-none shadow-sm max-w-[85%] md:max-w-[480px]">
+<p class="text-[15px] leading-relaxed font-medium">Yes! That would be amazing. I really need someone to help weed the flower beds this weekend. Are you available?</p>
+</div>
+<span class="text-xs text-slate-400 mr-1 flex items-center gap-1">
+                    10:02 AM
+                    <span class="material-symbols-outlined text-[14px]">done_all</span>
+</span>
+</div>
+<!-- Self Avatar (Optional, often omitted in modern chat UIs for self, but included per request structure) -->
+<div class="size-8 rounded-full bg-cover bg-center shrink-0 mb-1" data-alt="Portrait of current user" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQnMML1m50Qq-5TtkzVWx_39_OGT14uJWlf47yhcm24Imh_QdZ1aekIK54VxA45_JccWI7KAbikmmRF9fq12YXGwe9MkE1Q3VSeZqx3SbOzZ_Zlt_VDB3ccSGmIUH3piu0Yy6vTNDLEqUNQtSD0JJnenRD8ejwUy2CAMVGeUreXkxjCvAdoGsRTyg6E2bcFiEEXTQe339tqgriISYblEfRF2e8X7Jm0NrOlBAtFyitIr-Ec73JBPkeaWow80L6qVMXZdlxB5mYTRQ");'></div>
+</div>
+<!-- Message: Received -->
+<div class="flex items-end gap-3 max-w-3xl">
+<div class="size-8 rounded-full bg-cover bg-center shrink-0 mb-1" data-alt="Portrait of Sarah Jenkins" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBIJ7UUV_9b4_yr8hY4uvlrZHBvyMCuxljzzP6_pogA_QmF8BTcj643Kv_G0YyJ8e9RosckoMLp4kH6jgAGyMgk7Tstp1eSuYBmN2rHEmi3UqTSbNBwloujEzI7qUvqJcp8YBRetLeewRa1VqD-qGDaxe2wtumhDRHoSGk1UmmaOlKcLQcX7Qx4MSp2_gC4rmSpwEVRF6WvpT34tnkI_kSRFKPg2rCxyar04QfabhaLpMu1FYNqXFHFHkcS6kQnB9Ibb18CFB9qHT8");'></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="bg-white dark:bg-surface-dark text-slate-800 dark:text-slate-200 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm border border-slate-100 dark:border-slate-800 max-w-[85%] md:max-w-[480px]">
+<p class="text-[15px] leading-relaxed">I can definitely help with that. Does Saturday morning work for you? Say around 9 AM?</p>
+</div>
+<span class="text-xs text-slate-400 ml-1">10:05 AM</span>
+</div>
+</div>
+<!-- Message: Sent -->
+<div class="flex items-end gap-3 justify-end max-w-3xl ml-auto">
+<div class="flex flex-col gap-1 items-end">
+<div class="bg-primary text-slate-900 px-4 py-3 rounded-2xl rounded-br-none shadow-sm max-w-[85%] md:max-w-[480px]">
+<p class="text-[15px] leading-relaxed font-medium">Saturday at 9am is perfect. Thanks so much, Sarah! See you then.</p>
+</div>
+<span class="text-xs text-slate-400 mr-1 flex items-center gap-1">
+                    10:06 AM
+                    <span class="material-symbols-outlined text-[14px] text-primary">done_all</span>
+</span>
+</div>
+<div class="size-8 rounded-full bg-cover bg-center shrink-0 mb-1" data-alt="Portrait of current user" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAzMmm7NfyfYYyFlLOFuJzSWUd3yJotvYD4PA32k-XWPiVvRJV2VtPSxBTtyF_l2zqfCMj2fYMt8iPEfKf8VdPxlLCkT9XMih4rNiAL5FiAAcM43quQKgllDMHVECADJUu2eliLg4yWFf3qp2nnbkPlsf3BR3FcX4CHqX4lP089SZXs_NoINEXN6j_c3JAN79wXXyv3Uh1fya-0QsgSdarn5zi0Q38oPLnuswQXTTdAbAQZif8XxHe_NQI4BFMigxMJXrIyKDkpw50");'></div>
+</div>
+<!-- Typing Indicator -->
+<div class="flex items-end gap-3 max-w-3xl animate-pulse">
+<div class="size-8 rounded-full bg-cover bg-center shrink-0 mb-1 opacity-50" data-alt="Portrait of Sarah Jenkins" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDlm3MTs16ULqj80gjLdfaqGF8vM5fiUDiqSWsjr_JBQzP10pcVqqHQ4oqxhh2DyeHcW_WhMXqBsno5m3x2JaVM2AmQ0ktA4AEzfjVQb3pwTE5qJIIKyuMzbJQydwbfu_MDKfDhFFeOZvbxia-OZCDJL5KAVQAMnQzjmC597TKRrqRChrG0lMKIxHxZDBDRnhJE_V3G0Qus3TVhO76vLcztqhgkd1wOaDAttlt7Tv5nyrtC1BWATBgms_oOAxrStHI7Z7yjlcDo1y4");'></div>
+<div class="flex flex-col gap-1 items-start">
+<div class="bg-white dark:bg-surface-dark text-slate-800 dark:text-slate-200 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex gap-1">
+<span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+<span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+<span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Input Area -->
+<footer class="flex-none p-4 md:px-6 md:py-5 bg-surface-light dark:bg-surface-dark border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-end gap-3 max-w-5xl mx-auto">
+<button class="p-3 text-slate-400 hover:text-primary dark:text-slate-500 dark:hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all shrink-0">
+<span class="material-symbols-outlined block">add_circle</span>
+</button>
+<div class="flex-1 relative bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center min-h-[52px]">
+<textarea class="w-full bg-transparent border-0 focus:ring-0 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 py-3 pl-4 pr-12 resize-none h-[52px] max-h-32 overflow-y-auto leading-6" placeholder="Type a message..." rows="1"></textarea>
+<div class="absolute right-2 flex gap-1">
+<button class="p-2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 rounded-full transition-colors">
+<span class="material-symbols-outlined text-[20px] block">sentiment_satisfied</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 rounded-full transition-colors">
+<span class="material-symbols-outlined text-[20px] block">attach_file</span>
+</button>
+</div>
+</div>
+<button class="p-3 bg-primary hover:bg-primary-dark text-slate-900 rounded-full transition-all shadow-md hover:shadow-lg shrink-0 flex items-center justify-center size-[52px]">
+<span class="material-symbols-outlined block">send</span>
+</button>
+</div>
+</footer>
+</body></html>

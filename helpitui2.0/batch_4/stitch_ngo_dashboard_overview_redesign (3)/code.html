@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assign Volunteers - Helpit NGO</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-link {
+            background-color: rgba(29, 226, 209, 0.15);
+            border-left: 4px solid #1de2d1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col fixed h-full">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight">Helpit</h1>
+<p class="text-xs text-slate-500 font-medium uppercase tracking-wider">NGO Admin</p>
+</div>
+</div>
+<nav class="flex-1 mt-4 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-900 dark:text-slate-100 active-link rounded-lg" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-sm font-medium">Requests</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Volunteers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">volunteer_activism</span>
+<span class="text-sm font-medium">Donations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<button class="w-full py-2.5 bg-primary text-slate-900 font-bold text-sm rounded-lg hover:brightness-95 transition-all">
+                    Create New Request
+                </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 flex-1">
+<!-- Top Bar -->
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-10 flex items-center justify-between px-8">
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-bold">Assign Volunteers</h2>
+<span class="text-slate-300 dark:text-slate-700">|</span>
+<nav class="flex items-center gap-4 text-sm font-medium text-slate-500">
+<a class="hover:text-primary transition-colors" href="#">All Requests</a>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 dark:text-white">Emergency Food Relief</span>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary/50" placeholder="Search dashboard..." type="text"/>
+</div>
+<button class="relative p-1.5 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-6">
+<div class="text-right">
+<p class="text-sm font-bold leading-none">Sarah Jenkins</p>
+<p class="text-xs text-slate-500">NGO Coordinator</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
+<img alt="" class="w-full h-full object-cover" data-alt="Portrait of a female NGO coordinator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAvlKmHZ-8IRHS6nnmbP5ICItoYMqsJOkYW2ZJggVIgde4PIhzOd4DEuvbagwtHeD80e_u31RAu29CuIkKkLkccpBg1DFfCKqFFSCAX7KU-RPWlDp8w5qPCr-Nq-J6mDatrF-LCHflenMw3CO_Bokk-NNvBW0ntU5vuIVCi5BTWiMCjq8namJseqQUV7Kj2PRKwVvdnbE4l16w8cRst9QNhjwMPqDHD19w7zKby1KM64kVvx6YfUFuseY8H1CHy7Q0SPeZ6WeWyC8"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Body -->
+<div class="p-8 max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+<div>
+<h1 class="text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-2">Emergency Food Relief</h1>
+<p class="text-slate-500 text-lg">Assign and manage specialized volunteers for this high-priority response.</p>
+</div>
+<button class="px-6 py-2.5 border-2 border-slate-200 dark:border-slate-800 rounded-lg text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        View Request Details
+                    </button>
+</div>
+<!-- Main Search -->
+<div class="mb-10">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary text-2xl group-focus-within:scale-110 transition-transform">person_search</span>
+<input class="w-full pl-14 pr-6 py-4 bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 rounded-xl text-lg shadow-sm focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="Search volunteers by name, skill, or availability..." type="text"/>
+</div>
+</div>
+<!-- Section: Currently Assigned -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-sm font-black uppercase tracking-[0.2em] text-slate-400">Currently Assigned (3)</h3>
+</div>
+<div class="flex flex-wrap gap-4">
+<!-- Horizontal Assigned Card 1 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm min-w-[320px] flex-1">
+<div class="w-14 h-14 rounded-lg overflow-hidden shrink-0">
+<img alt="" class="w-full h-full object-cover" data-alt="Volunteer man with short hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRhDpEY-ZEpTQYBi23BwzPz81DpZX3JmifO6sjC7FXztFI5VmledOX-kiDxwbZ3TOhCUBJG8EFLg7mdSim6ujGxztd-fILVMAQ6kZBYPM6jsMjd2CKqk_KC4fuaSrUn9pIukdccgJ1Qa7BgtR1n5FRIzjk7bYnDW0hToUi-3b_VFEChOSKnE6rg2za9bP86OfiyDsndz4LUhYpWmgJWdLmCz7W7-L98ZvpuE9r5UigoHUHPSfr2aRKFvRS9ifzYdpNFNwUfljg7Kc"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">David Miller</p>
+<div class="flex flex-wrap gap-1 mt-1">
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase">Driving</span>
+<span class="px-2 py-0.5 bg-blue-100 text-blue-600 text-[10px] font-bold rounded uppercase">Logistics</span>
+</div>
+</div>
+<button class="p-2 text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">person_remove</span>
+</button>
+</div>
+<!-- Horizontal Assigned Card 2 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm min-w-[320px] flex-1">
+<div class="w-14 h-14 rounded-lg overflow-hidden shrink-0">
+<img alt="" class="w-full h-full object-cover" data-alt="Volunteer woman smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKPTnBYBIY03FUE4bRpvPR5fPWX2olrY9dro2RlLelgXmYtkLyML1qwOra9kKZ_bmZAYIzkFZGP3CWCiWfOtnf6e1Q4_9yJN6nOC6ewdLRMElqPqcME0qImJwPdjiOewEbPPvicukGA_DKmpaDPEjurCb1i3TGNXFUegsm4DEMS7JFc4BEnXWMmITLgaqwKeCxx7dpNgvLA902uCweMIxbRQU6rn4Vlmuq-rUiv1vyoloILBCIq_gnrvo6WQhE7bM_WM3xB7JFTYQ"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Elena Rodriguez</p>
+<div class="flex flex-wrap gap-1 mt-1">
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase">First Aid</span>
+<span class="px-2 py-0.5 bg-blue-100 text-blue-600 text-[10px] font-bold rounded uppercase">Medical</span>
+</div>
+</div>
+<button class="p-2 text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">person_remove</span>
+</button>
+</div>
+<!-- Horizontal Assigned Card 3 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm min-w-[320px] flex-1">
+<div class="w-14 h-14 rounded-lg overflow-hidden shrink-0">
+<img alt="" class="w-full h-full object-cover" data-alt="Volunteer man with glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANjo3xXliN6jqLn63yWIyZb9TA_bsfwqaS9QY1fs7lP07EGVQEFToONoweVqFoKbqSD9OevaJ-wagPn880RWHh-MV79UQqrl8zZe3cOzEpybRSPu3UaG1rqfw1XSxRM2nymy9mAMUrFAfJ4Gct5tvTtirChAshexeCfdT1MY0FbGcf2xYf2yFMBTgp2SF_fCEtApJ62rryolRSXTVikpByPI7GIDbBRWED8187PaxMab42hpOff7NIMbx27EUTh9iE17TJb2IRdFk"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Marcus Chen</p>
+<div class="flex flex-wrap gap-1 mt-1">
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase">Driving</span>
+<span class="px-2 py-0.5 bg-blue-100 text-blue-600 text-[10px] font-bold rounded uppercase">Navigation</span>
+</div>
+</div>
+<button class="p-2 text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-xl">person_remove</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section: Available Volunteers -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-sm font-black uppercase tracking-[0.2em] text-slate-400">Available Volunteers (5)</h3>
+<div class="flex gap-2">
+<button class="p-1.5 border border-slate-200 dark:border-slate-800 rounded hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+<button class="p-1.5 border border-slate-200 dark:border-slate-800 rounded hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-sm">sort</span>
+</button>
+</div>
+</div>
+<div class="space-y-3">
+<!-- Volunteer Row 1 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm hover:border-primary/40 transition-all group">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
+<img alt="" class="w-full h-full object-cover" data-alt="Volunteer female profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxUGvgvjyVJs4VRPTnMMP3hyho506kEHMrTpQUhnR649XXR9jFmuj9Y2O1aCM0qzkbt53hpBJ69ktvyCwzc2nKkfWQGMgq9RXvq2JUZdXEeEuw5eaBqoYbTvyMoI6kvjSKkIA9PTLiVC3xzO15sc1M31I1yo4jzeanbCwtEJY4GAk90Rc0NG_QKdR5w1SouF3dcGTX1qJ0PVpvqONYYhclifAAzhAPHBPxxsW-_fk91l5rz0saQpMKuLyy_5rsT44tXEgwFEKAQQE"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+</div>
+<div class="grid grid-cols-3 flex-1 items-center">
+<div>
+<h4 class="text-sm font-bold">Sophie Taylor</h4>
+<p class="text-xs text-slate-500">sophie.t@helpit.org</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Medical</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Counseling</span>
+</div>
+<div class="text-right pr-8">
+<span class="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded">Online</span>
+</div>
+</div>
+</div>
+<button class="bg-primary text-slate-900 px-5 py-2 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                                Assign
+                            </button>
+</div>
+<!-- Volunteer Row 2 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm hover:border-primary/40 transition-all group">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
+<img alt="" class="w-full h-full object-cover" data-alt="Volunteer male profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuATMnDffX_G7x4ZhKPdgksjseB0fvY3oxlbMYJ9muUxB3oXcKOKRzjPfoIfu-m7j2ckBi2_1dPtMSO1s2I5wW2VwZK5HfOwu4_EkgRwsdvtZnWBHs4bqoGWOzcF3OjUapBYQfXekBcj-Dhgs1UVMNU2TvHD1LvZldchngPWdZzDQcNnzJtGwbDm6rPoZ6zPn660qV-eJy5x8fAAqW7RXQF147LLmw3Fvpg5KJDdwGJlI6ILNSNBcwySmeZKLwfJBX4CleFUDB8tQ"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+</div>
+<div class="grid grid-cols-3 flex-1 items-center">
+<div>
+<h4 class="text-sm font-bold">Robert King</h4>
+<p class="text-xs text-slate-500">robert.k@helpit.org</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Heavy Lifting</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Emergency</span>
+</div>
+<div class="text-right pr-8">
+<span class="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded">Online</span>
+</div>
+</div>
+</div>
+<button class="bg-primary text-slate-900 px-5 py-2 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                                Assign
+                            </button>
+</div>
+<!-- Volunteer Row 3 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm hover:border-primary/40 transition-all group">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
+<img alt="" class="w-full h-full object-cover" data-alt="Volunteer female profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDws2MDsBJ2I3SUdz4c8ukiVfvBFq6R1tbIFjiB_RJvCj9IFoGe86E8Qq_Ge04EzoWhv5zkt_wq0fJwKb3irAvc2N3D276hD3C3WG2xqBE6gs-m5h7a1q6SBzF4J0vaJ-WyLmRcSfZXQa5t4EMNiz1BP0_QtQuJbDu0KmCdoDZW-a0X9geuwLs7NEMLLdU72kYwPvmtnD3ujVn37V7yN7R8PeKZsLoQNnINbt3ZOdBvWj3nRX94Ek-u7PF97DRKTrSP40itqTrCcR4"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-slate-300 border-2 border-white dark:border-slate-900 rounded-full"></div>
+</div>
+<div class="grid grid-cols-3 flex-1 items-center">
+<div>
+<h4 class="text-sm font-bold">Lina Patel</h4>
+<p class="text-xs text-slate-500">lina.p@helpit.org</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Data Entry</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Spanish</span>
+</div>
+<div class="text-right pr-8">
+<span class="text-xs font-medium text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded">Offline</span>
+</div>
+</div>
+</div>
+<button class="bg-primary text-slate-900 px-5 py-2 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                                Assign
+                            </button>
+</div>
+<!-- Volunteer Row 4 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm hover:border-primary/40 transition-all group">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
+<img alt="" class="w-full h-full object-cover" data-alt="Volunteer male profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2Xl0fsnk7FFuJetq3MMxqawQGsxw1OquTEqZe4_s3CS3wZULo7W51fJFLFJb6ZiH3Vwh9BdwltTio4vivVa_dty2y9D3YktpxFkBBKw1QQQd0bf0CHJom-P6BaBOcm-TwabomokJRdvzbsP2XjYW8L3oOAm53v1oltXKkB1NaKKE5HlCEVs49TNv1SEy_B3x86ffYVJleeOM6jL9K9wRnACr0klAHvznj2vcXfTM1EQUrhFBxwBf58iG1iDfUSF8CbmehKGpjobw"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+</div>
+<div class="grid grid-cols-3 flex-1 items-center">
+<div>
+<h4 class="text-sm font-bold">James Wilson</h4>
+<p class="text-xs text-slate-500">james.w@helpit.org</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Chef</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Kitchen Ops</span>
+</div>
+<div class="text-right pr-8">
+<span class="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded">Online</span>
+</div>
+</div>
+</div>
+<button class="bg-primary text-slate-900 px-5 py-2 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                                Assign
+                            </button>
+</div>
+<!-- Volunteer Row 5 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm hover:border-primary/40 transition-all group">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-slate-100">
+<img alt="" class="w-full h-full object-cover" data-alt="Volunteer female profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZKQkPgkMur2ntuKVM8L3RDRs2GPAuGw47NAnI0tHka8vGc8kj2y49DZnSuAk3y6V2QZiR4cBUpN05UYVe8a9GIserE5sWFnWRU_4qjuMUtREXVtFxuE4mxdWsPpYG_frPdccQwADDvFwtSR9W0qv_JjkQmBtDpjkedW75m7yk37-CVnenkFwpI4ptMU5bNE3YpI-1zBdNzLf8H3yQGpmoZJakv9gQY0DIMQGxsaGMZ9VhMBGhcJW1XJEy4N9ETx44iysVisGzdOI"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+</div>
+<div class="grid grid-cols-3 flex-1 items-center">
+<div>
+<h4 class="text-sm font-bold">Emily Brown</h4>
+<p class="text-xs text-slate-500">emily.b@helpit.org</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Nursing</span>
+<span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold rounded uppercase">Pediatrics</span>
+</div>
+<div class="text-right pr-8">
+<span class="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded">Online</span>
+</div>
+</div>
+</div>
+<button class="bg-primary text-slate-900 px-5 py-2 rounded-lg text-sm font-bold hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                                Assign
+                            </button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

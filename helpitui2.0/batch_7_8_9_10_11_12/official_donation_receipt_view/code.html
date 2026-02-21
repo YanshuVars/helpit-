@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Official Donation Receipt - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        @media print {
+            body {
+                background-color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Top Navigation / Action Bar -->
+<header class="no-print sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-6 py-4">
+<div class="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-2 text-slate-900 dark:text-white group" href="#">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_330)">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</g>
+<defs>
+<clippath id="clip0_6_330"><rect fill="white" height="48" width="48"></rect></clippath>
+</defs>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tight">Helpit Dashboard</h1>
+</a>
+<span class="hidden sm:inline-block text-slate-300 dark:text-slate-600">/</span>
+<span class="hidden sm:inline-block text-sm font-medium text-slate-500 dark:text-slate-400">Receipt #R-2023-0892</span>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 h-10 px-4 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" onclick="window.print()">
+<span class="material-symbols-outlined text-[20px]">print</span>
+<span>Print</span>
+</button>
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 h-10 px-4 rounded-lg bg-primary hover:bg-teal-400 text-slate-900 text-sm font-bold transition-colors shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span>Download PDF</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 w-full py-8 px-4 sm:px-6 flex justify-center overflow-x-hidden">
+<!-- Receipt Container (Paper) -->
+<div class="print-container relative flex flex-col w-full max-w-[800px] bg-white dark:bg-slate-900 shadow-xl rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800">
+<!-- Decorative Top Border -->
+<div class="h-2 w-full bg-primary"></div>
+<!-- Receipt Content -->
+<div class="p-8 sm:p-12 flex flex-col gap-8 relative z-10">
+<!-- Background Pattern/Watermark (Absolute) -->
+<div class="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none flex items-center justify-center overflow-hidden">
+<svg class="w-[500px] h-[500px] text-slate-900 dark:text-white" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<!-- Header Section -->
+<div class="flex flex-col sm:flex-row justify-between items-start gap-6 border-b border-slate-100 dark:border-slate-800 pb-8 relative z-10">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3 text-slate-900 dark:text-white mb-2">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="text-2xl font-bold tracking-tight">Helpit Foundation</span>
+</div>
+<div class="text-sm text-slate-500 dark:text-slate-400 space-y-1">
+<p>123 Charity Lane, Block C</p>
+<p>Bangalore, Karnataka, 560001</p>
+<p>contact@helpit.org | +91 98765 43210</p>
+</div>
+</div>
+<div class="text-right">
+<h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-2">Donation Receipt</h2>
+<div class="inline-flex flex-col items-end gap-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Receipt No:</span>
+<span class="text-sm font-semibold text-slate-900 dark:text-white font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">R-2023-0892</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Date:</span>
+<span class="text-sm font-medium text-slate-900 dark:text-white">Oct 24, 2023</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Info Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+<!-- Donor Details -->
+<div class="flex flex-col gap-4">
+<h3 class="text-xs font-bold text-primary uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Donor Details</h3>
+<div class="space-y-3">
+<div>
+<p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-semibold">Received with thanks from</p>
+<p class="text-lg font-bold text-slate-900 dark:text-white mt-0.5">Mr. Rajesh Kumar</p>
+</div>
+<div>
+<p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-semibold">Address</p>
+<p class="text-sm text-slate-600 dark:text-slate-300 mt-0.5">45/A, Green Park Residency, Indiranagar, Bangalore - 560038</p>
+</div>
+<div>
+<p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-semibold">PAN Number</p>
+<p class="text-sm font-mono text-slate-900 dark:text-white mt-0.5">ABCDE1234F</p>
+</div>
+</div>
+</div>
+<!-- Payment Details -->
+<div class="flex flex-col gap-4">
+<h3 class="text-xs font-bold text-primary uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Payment Details</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-baseline">
+<div>
+<p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-semibold">Amount</p>
+<p class="text-2xl font-bold text-primary mt-0.5">₹ 5,000.00</p>
+</div>
+<div class="text-right">
+<p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-semibold">Mode</p>
+<p class="text-sm font-medium text-slate-900 dark:text-white mt-0.5">Credit Card</p>
+</div>
+</div>
+<div>
+<p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-semibold">Transaction ID</p>
+<p class="text-sm font-mono text-slate-600 dark:text-slate-300 mt-0.5">TXN-77382910</p>
+</div>
+<div>
+<p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-semibold">Amount In Words</p>
+<p class="text-sm italic text-slate-600 dark:text-slate-300 mt-0.5">Rupees Five Thousand Only</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Purpose Section -->
+<div class="relative z-10 bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 border border-slate-100 dark:border-slate-800/50">
+<p class="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold mb-1">Purpose of Donation</p>
+<p class="text-base font-medium text-slate-900 dark:text-white">Child Education Fund - Support for Underprivileged Schools</p>
+</div>
+<!-- Footer Section -->
+<div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700 relative z-10">
+<div class="flex flex-col sm:flex-row justify-between items-end gap-8">
+<!-- Tax Info -->
+<div class="max-w-sm space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+<span class="text-sm font-bold text-slate-900 dark:text-white">Tax Exemption Details</span>
+</div>
+<div class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+<p><strong>Reg. No:</strong> TRUST-123/2020-21</p>
+<p><strong>80G Approval No:</strong> AAATE1234EF20214</p>
+<p class="mt-2 italic">Donations to Helpit Foundation are exempt from tax under section 80G of the Income Tax Act, 1961.</p>
+</div>
+</div>
+<!-- Signature -->
+<div class="flex flex-col items-center sm:items-end gap-2 min-w-[200px]">
+<!-- Digital Signature Image Placeholder -->
+<div class="h-12 w-32 relative">
+<img alt="Digital Signature script" class="w-full h-full object-contain object-right opacity-80 dark:invert" data-alt="Stylized handwritten signature in black ink" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMGReRTrygHfCK4FqAJCyqc9ktz5vDUxAzbMSdZlaD51hYqlElKtnTcbA78Shuub0lxJXlRny39wIXli_FhcY6YuBHrqUqJsD8HePNIS43teN3cgFwsFKZIJ7BFcQTlbph4UjUPSm-vNozw26L9lnAiYP4jo9sblkIpdw4MrXUfy_cW9iCcs3dfKyQ2eQZqZRFbg5v5SmY8eNScEA8RitDMlanIm9eWTjJzL7D-WPyqpKamXJOWcki3asZwNaHBl6GQMLEvdFH2rg"/>
+</div>
+<div class="w-full h-px bg-slate-300 dark:bg-slate-600"></div>
+<p class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Authorized Signatory</p>
+<p class="text-[10px] text-slate-400">Helpit Foundation</p>
+</div>
+</div>
+<div class="mt-8 text-center">
+<p class="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-widest">This is a computer generated receipt</p>
+</div>
+</div>
+</div>
+</div>
+<div class="h-20 no-print"></div> <!-- Spacing for bottom scrolling -->
+</main>
+</body></html>

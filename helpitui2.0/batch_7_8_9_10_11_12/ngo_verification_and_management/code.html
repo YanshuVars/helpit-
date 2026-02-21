@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit Admin - NGO Management</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#16b0a3", 
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased">
+<div class="relative flex h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark">
+<!-- Sidebar -->
+<div class="flex h-full w-72 flex-col justify-between border-r border-slate-200 bg-white dark:bg-[#1a2c2a] dark:border-[#2a3c3a] p-4 flex-shrink-0">
+<div class="flex flex-col gap-4">
+<!-- User/Brand Profile -->
+<div class="flex gap-3 items-center px-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Abstract geometric logo in blue and green gradients" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBj3R7-fc4HsI8vQ1NIYLGXF-dhMYnRI0wA3WEcX6g0-aiXXtWq_Bn8ZM0Hv3Hb3rqvUrE7j6EXKHoeXq3wJoTcH1i7BsVN7C2ZF3zenyQx7K8G1MLr2kICr4UW2huM8dh5HFminnaG6c71qPuwubdfnZgHL5chgYkc5Ba_k29Zap58MRTiiwFin5s85v2Y2N3279Jf9Moe5E_oRtfjKJHhb7v0ozi-Ank7wskdK5bPSVKYY-OZCbUEgT1ozgA6t5Yp0B9h_13OaA0");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-normal">Helpit Admin</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Management Portal</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#253836] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">dashboard</span>
+<p class="text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#253836] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">group</span>
+<p class="text-sm font-medium leading-normal">Users</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary-dark dark:text-primary" href="#">
+<span class="material-symbols-outlined fill">domain</span>
+<p class="text-sm font-medium leading-normal">NGOs</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#253836] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">description</span>
+<p class="text-sm font-medium leading-normal">Reports</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#253836] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</nav>
+</div>
+<!-- Bottom User Info -->
+<div class="mt-auto px-3 py-4 border-t border-slate-100 dark:border-[#2a3c3a]">
+<div class="flex items-center gap-3">
+<div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">AD</div>
+<div class="flex flex-col">
+<p class="text-xs font-bold text-slate-900 dark:text-white">Admin User</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">admin@helpit.org</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col h-full overflow-hidden">
+<!-- Scrollable Area -->
+<div class="flex-1 overflow-y-auto p-8">
+<div class="mx-auto max-w-6xl flex flex-col gap-6">
+<!-- Breadcrumbs & Header -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-slate-900 dark:text-white font-medium">NGO Management</span>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex flex-col gap-1">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">NGO Management</h1>
+<p class="text-slate-500 dark:text-slate-400">Review and verify NGO registration applications.</p>
+</div>
+<button class="bg-primary hover:bg-primary-dark text-slate-900 font-medium py-2 px-4 rounded-lg flex items-center gap-2 transition-colors shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                            Add Manual Entry
+                        </button>
+</div>
+</div>
+<!-- Filters & Controls -->
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-2">
+<!-- Tabs -->
+<div class="flex border-b border-slate-200 dark:border-[#2a3c3a] w-full sm:w-auto">
+<a class="flex items-center gap-2 px-4 py-3 border-b-2 border-primary text-primary-dark dark:text-primary font-medium text-sm" href="#">
+                            Pending Verification
+                            <span class="bg-primary/20 text-primary-dark dark:text-primary text-xs font-bold px-2 py-0.5 rounded-full">14</span>
+</a>
+<a class="flex items-center gap-2 px-4 py-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-sm transition-colors" href="#">
+                            Verified
+                        </a>
+<a class="flex items-center gap-2 px-4 py-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-medium text-sm transition-colors" href="#">
+                            Suspended
+                        </a>
+</div>
+<!-- Search -->
+<div class="relative w-full sm:max-w-xs">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-white dark:bg-[#1a2c2a] border border-slate-200 dark:border-[#2a3c3a] rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-slate-400 dark:placeholder-slate-500 text-slate-900 dark:text-white transition-all shadow-sm" placeholder="Search organization..." type="text"/>
+</div>
+</div>
+<!-- Table Card -->
+<div class="bg-white dark:bg-[#1a2c2a] rounded-xl border border-slate-200 dark:border-[#2a3c3a] shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-slate-100 dark:border-[#2a3c3a] bg-slate-50/50 dark:bg-[#203230]">
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Organization Name</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Reg. Number</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Submitted</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+<th class="py-4 px-6 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-[#2a3c3a]">
+<!-- Row 1 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#203230] transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-lg bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-600">
+<img alt="Green Earth Initiative logo" class="h-full w-full object-cover" data-alt="Abstract green leaf logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUEtsrIRX9sebm-LelJHVEb7vpFLjx0evV8bScGVHEG3iNtPQpNbxAA7U4Tg9KCiBJBa3yDYaUT6XozmeE1VseatB_xkNooiBijpdCPvwlYGWv6U5rh19-GQOjXdHmEcMx1BaulWMD7XjFh3WqH4dUIJ-wCgvZH3SII1GgNA1mkwAT6t3znWEZJJ6DdadjFm0XlIfAibOlRpj3_BjgD_guongzJJpAB-tjbJtlz8dibXTG96SI-wDQ3NfcjaBz2P-1OkGB1wO7rOY"/>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Green Earth Initiative</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Environmental Protection</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300 font-mono">NGO-8821-X</span>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-300">Oct 24, 2023</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800">
+<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                            Pending
+                                        </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Reject">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<button class="flex items-center gap-1 bg-primary/10 hover:bg-primary/20 text-primary-dark dark:text-primary px-3 py-1.5 rounded text-sm font-medium transition-colors border border-primary/20">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                                Verify
+                                            </button>
+<button class="p-1.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="More options">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#203230] transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-lg bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-600">
+<img alt="Hope for Children logo" class="h-full w-full object-cover" data-alt="Simple line art logo of a child holding a balloon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWmJf_zijgbNxa4dyvMZuHbqFsmNH0RqeSyy9rdQB4ix8O8to1BTeC7m2RKqnZAf-mIgxbJ3Zz48KY18fYQPfFgpb2g8DXy5sD3oPGqeMZW1eN_BKCKqLlSSqbT4KPqaeLnloptKckxYPUNBhcq4sxhz3W5eKq0m8M0f51xhNs59O4qbSBERkWswxMfOx42k0OquNHgJZjH78DBPN0s1-u7wG3ogb_iQJ-HWTN813Kt26mHbI2a5cDqMM7VtmhjTn0-qaQCE3N0HY"/>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Hope for Children</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Child Welfare</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300 font-mono">NGO-9942-A</span>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-300">Oct 23, 2023</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800">
+<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                            Pending
+                                        </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Reject">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<button class="flex items-center gap-1 bg-primary/10 hover:bg-primary/20 text-primary-dark dark:text-primary px-3 py-1.5 rounded text-sm font-medium transition-colors border border-primary/20">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                                Verify
+                                            </button>
+<button class="p-1.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="More options">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#203230] transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 flex-shrink-0 border border-indigo-200 dark:border-indigo-800">
+<span class="font-bold text-sm">WS</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Water Solutions Inc.</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Sanitation &amp; Health</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300 font-mono">NGO-1120-Z</span>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-300">Oct 22, 2023</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800">
+<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                            Pending
+                                        </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Reject">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<button class="flex items-center gap-1 bg-primary/10 hover:bg-primary/20 text-primary-dark dark:text-primary px-3 py-1.5 rounded text-sm font-medium transition-colors border border-primary/20">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                                Verify
+                                            </button>
+<button class="p-1.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="More options">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#203230] transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0 border border-emerald-200 dark:border-emerald-800">
+<span class="material-symbols-outlined text-[24px]">forest</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Urban Forestry</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Environment</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300 font-mono">NGO-3490-B</span>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-300">Oct 21, 2023</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800">
+<span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                                            Reviewing
+                                        </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Reject">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<button class="flex items-center gap-1 bg-primary/10 hover:bg-primary/20 text-primary-dark dark:text-primary px-3 py-1.5 rounded text-sm font-medium transition-colors border border-primary/20">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                                Verify
+                                            </button>
+<button class="p-1.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="More options">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-[#203230] transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-lg bg-rose-100 dark:bg-rose-900/50 flex items-center justify-center text-rose-600 dark:text-rose-400 flex-shrink-0 border border-rose-200 dark:border-rose-800">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Care For All</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Healthcare</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-300 font-mono">NGO-1192-Q</span>
+</td>
+<td class="py-4 px-6">
+<span class="text-sm text-slate-600 dark:text-slate-300">Oct 20, 2023</span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800">
+<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                            Pending
+                                        </span>
+</td>
+<td class="py-4 px-6 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Reject">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<button class="flex items-center gap-1 bg-primary/10 hover:bg-primary/20 text-primary-dark dark:text-primary px-3 py-1.5 rounded text-sm font-medium transition-colors border border-primary/20">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                                Verify
+                                            </button>
+<button class="p-1.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="More options">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 flex items-center justify-between border-t border-slate-100 dark:border-[#2a3c3a]">
+<span class="text-sm text-slate-500 dark:text-slate-400">
+                            Showing <span class="font-medium text-slate-900 dark:text-white">1</span> to <span class="font-medium text-slate-900 dark:text-white">5</span> of <span class="font-medium text-slate-900 dark:text-white">14</span> entries
+                        </span>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-sm border border-slate-200 dark:border-[#2a3c3a] rounded-md text-slate-500 disabled:opacity-50 hover:bg-slate-50 dark:hover:bg-[#203230] transition-colors" disabled="">Previous</button>
+<button class="px-3 py-1 text-sm border border-slate-200 dark:border-[#2a3c3a] rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#203230] transition-colors">Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

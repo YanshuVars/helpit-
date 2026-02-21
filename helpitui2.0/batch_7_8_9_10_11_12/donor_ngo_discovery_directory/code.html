@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donor NGO Discovery Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#16b0a3", // Darker shade for better contrast on hover or text
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1a2c2a",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-full md:w-64 flex-shrink-0 bg-white dark:bg-card-dark border-r border-slate-200 dark:border-slate-800 flex flex-col h-screen overflow-y-auto fixed md:relative z-20 hidden md:flex">
+<div class="p-6 flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary-dark dark:text-primary">
+<span class="material-symbols-outlined text-2xl">volunteer_activism</span>
+</div>
+<div>
+<h1 class="font-bold text-lg leading-tight">Helpit</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">Donor Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 py-4 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary-dark dark:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined fill-1">explore</span>
+<span class="font-medium">Discover</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" href="#">
+<span class="material-symbols-outlined">volunteer_activism</span>
+<span class="font-medium">My Donations</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium">Impact Reports</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-600 bg-cover bg-center" data-alt="User profile photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDt--lO68ukv6XXHsxgzyKv-T1CeRLhrda6b_FPDBZHkvudQqS7F9nkJfDDfdbW46gUSmw72rnET4ZEb07fsyj6Kyvsalbde0eynL48Zq8RXdDt1gpPZMpYxiuJUCj3_4PMfydZ313_gq2-fmFmQSnLWJm6C7xPH_1szATsJfWyCFUm-ePYrvMu3xjClW8-nBwvekf1VIE1-zCZIgpoDyfLrlQ2zFEKErDPdzRq5x0n93hK9-qIcLmSCYrIPCf3h9_oozrRPvEmQXw');"></div>
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-900 dark:text-slate-100">Alex Morgan</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Donor Account</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Mobile Header -->
+<div class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-card-dark border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">volunteer_activism</span>
+<span class="font-bold text-lg">Helpit</span>
+</div>
+<button class="text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<!-- Top Bar -->
+<header class="flex-shrink-0 bg-white dark:bg-card-dark border-b border-slate-200 dark:border-slate-800 h-16 flex items-center justify-between px-6 md:px-10 z-10">
+<div class="flex items-center text-sm text-slate-500 dark:text-slate-400">
+<span>Home</span>
+<span class="material-symbols-outlined text-sm mx-1">chevron_right</span>
+<span class="font-semibold text-slate-900 dark:text-slate-100">Discover</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 size-2 bg-red-500 rounded-full border border-white dark:border-card-dark"></span>
+</button>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
+<button class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium hidden sm:block">Support</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth">
+<div class="max-w-7xl mx-auto space-y-8 pb-10">
+<!-- Page Title -->
+<div>
+<h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-50">Discover NGOs</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Find and support verified organizations making a real impact.</p>
+</div>
+<!-- Search and Filters -->
+<div class="bg-white dark:bg-card-dark p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 space-y-4">
+<!-- Search Bar -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-700 rounded-lg leading-5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-card-dark focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all sm:text-sm" placeholder="Search for a cause, organization, or location..." type="text"/>
+</div>
+<!-- Category Pills -->
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full bg-primary text-slate-900 font-medium text-sm hover:opacity-90 transition-opacity ring-1 ring-primary/50">
+                            All
+                        </button>
+<button class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">school</span>
+                                Education
+                            </span>
+</button>
+<button class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">medical_services</span>
+                                Healthcare
+                            </span>
+</button>
+<button class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">eco</span>
+                                Environment
+                            </span>
+</button>
+<button class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">emergency</span>
+                                Disaster Relief
+                            </span>
+</button>
+<button class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">pets</span>
+                                Animal Welfare
+                            </span>
+</button>
+<button class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">diversity_3</span>
+                                Human Rights
+                            </span>
+</button>
+</div>
+</div>
+<!-- Results Count -->
+<div class="flex items-center justify-between">
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Showing 24 verified organizations</p>
+<div class="flex items-center gap-2">
+<label class="text-sm text-slate-500 dark:text-slate-400">Sort by:</label>
+<select class="form-select bg-transparent border-none text-sm font-medium text-slate-700 dark:text-slate-200 focus:ring-0 cursor-pointer pr-8">
+<option>Relevance</option>
+<option>Newest</option>
+<option>Most Funded</option>
+</select>
+</div>
+</div>
+<!-- NGO Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1: Clean Water -->
+<article class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow duration-300 flex flex-col overflow-hidden group">
+<div class="h-32 bg-slate-100 dark:bg-slate-800 relative">
+<img alt="Water stream" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Clean water source in nature" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC6qTzqR_zLimnggiBrLLbx6PusCgHyOmUdps1t0Qz7shN9Uq_yRtjrf5LTZFLGFQHBWMq1CEltmkVr4SCvD3w4eYUQiVK-21xX4ahIiI_lfms-hKzm-n77C6-UcZO46Qk3gSQdRvGlsebfY_HfplvK-Vpj9C1oVdBGlWW3DRqGjDaY6Q56BpuOEGzhrv8Z8EOqFrSdoUY3hW5ZnGhBmK16ITDs89-Jfcw1XHZc-V05KPWAXvFbSRS_BghDWKPWa0ggiw-g-EMe_E"/>
+<div class="absolute top-3 right-3 bg-white dark:bg-black/50 backdrop-blur-sm rounded-full p-1 shadow-sm">
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-[20px] block p-0.5">favorite</span>
+</button>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col relative">
+<div class="absolute -top-8 left-5">
+<div class="size-14 rounded-lg bg-white dark:bg-card-dark p-1 shadow-md">
+<div class="w-full h-full rounded bg-blue-100 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-2xl">water_drop</span>
+</div>
+</div>
+</div>
+<div class="mt-6 flex flex-col flex-1">
+<div class="flex items-start justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                        Environment
+                                    </span>
+</div>
+<h3 class="mt-2 text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                                    Clean Water Initiative
+                                    <span class="material-symbols-outlined text-primary text-lg" title="Verified Organization">verified</span>
+</h3>
+<p class="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+                                    Providing sustainable clean water solutions to rural communities in Sub-Saharan Africa. We build wells and educate on hygiene.
+                                </p>
+<div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Details</a>
+<button class="bg-primary hover:bg-primary-dark text-slate-900 text-sm font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm shadow-primary/30">
+                                        Donate
+                                    </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 2: Education -->
+<article class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow duration-300 flex flex-col overflow-hidden group">
+<div class="h-32 bg-slate-100 dark:bg-slate-800 relative">
+<img alt="Classroom" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Children learning in a classroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGs48HX0rDySxLXsJLKP9AXkGrHi_2CGR-SnHqAHkDY4KGmaw89mfEbE4G0Vwbqr6elRlgNKUCIE09Ptr38iXSQJCDLRA1T6OJ2Z1Jm3Lgfzq0gREgi2CorYwKqwvi8Jia_o2vOd54hs67gNeT_xOP6EsjtxxfPeQyExDIppfWuNsuR_W-cQkRlkQT6zixcauQJrNRf8c_4fVnXMhrzSb7kMok4SZf9DvbXWswsDUlk_S_CiMy5RvfdhmiIPT_ZNeUoZIaFdUNjv8"/>
+<div class="absolute top-3 right-3 bg-white dark:bg-black/50 backdrop-blur-sm rounded-full p-1 shadow-sm">
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-[20px] block p-0.5">favorite</span>
+</button>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col relative">
+<div class="absolute -top-8 left-5">
+<div class="size-14 rounded-lg bg-white dark:bg-card-dark p-1 shadow-md">
+<div class="w-full h-full rounded bg-orange-100 flex items-center justify-center text-orange-600">
+<span class="material-symbols-outlined text-2xl">school</span>
+</div>
+</div>
+</div>
+<div class="mt-6 flex flex-col flex-1">
+<div class="flex items-start justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
+                                        Education
+                                    </span>
+</div>
+<h3 class="mt-2 text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                                    Scholars Tomorrow
+                                    <span class="material-symbols-outlined text-primary text-lg" title="Verified Organization">verified</span>
+</h3>
+<p class="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+                                    Funding scholarships for underprivileged youth in urban centers to attend vocational schools and colleges.
+                                </p>
+<div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Details</a>
+<button class="bg-primary hover:bg-primary-dark text-slate-900 text-sm font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm shadow-primary/30">
+                                        Donate
+                                    </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 3: Healthcare -->
+<article class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow duration-300 flex flex-col overflow-hidden group">
+<div class="h-32 bg-slate-100 dark:bg-slate-800 relative">
+<img alt="Medical care" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Doctor holding stethoscope" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqxuIM-NE04PyPh4-C_SMgyT1vV7Y_hrKK-dsrC_jlmzjCmfMrEFO1-oCY1LdaRuGlU7puc2FARVVt9KgxEUtjj5Xikms7GVwCb_ruFdvPOXKJOsP4jHK8d1byNfJIVxMN4x0fNu63y-OQtKXG6SVwVx6x_jZt5I3yToqLaDqqjvmVQ7yVDKWzsUbISq9xuIm6mt4pjBKNE65RdWIR7chIOUEmnfY0YKRk9tGEc8e1loBTdKSadapyIAE4woN0XEm9WqK2Lto1h5M"/>
+<div class="absolute top-3 right-3 bg-white dark:bg-black/50 backdrop-blur-sm rounded-full p-1 shadow-sm">
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-[20px] block p-0.5">favorite</span>
+</button>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col relative">
+<div class="absolute -top-8 left-5">
+<div class="size-14 rounded-lg bg-white dark:bg-card-dark p-1 shadow-md">
+<div class="w-full h-full rounded bg-red-100 flex items-center justify-center text-red-600">
+<span class="material-symbols-outlined text-2xl">local_hospital</span>
+</div>
+</div>
+</div>
+<div class="mt-6 flex flex-col flex-1">
+<div class="flex items-start justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">
+                                        Healthcare
+                                    </span>
+</div>
+<h3 class="mt-2 text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                                    Medics Without Borders
+                                    <span class="material-symbols-outlined text-primary text-lg" title="Verified Organization">verified</span>
+</h3>
+<p class="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+                                    Delivering emergency medical aid to people affected by conflict, epidemics, disasters, or exclusion from healthcare.
+                                </p>
+<div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Details</a>
+<button class="bg-primary hover:bg-primary-dark text-slate-900 text-sm font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm shadow-primary/30">
+                                        Donate
+                                    </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 4: Animal Welfare -->
+<article class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow duration-300 flex flex-col overflow-hidden group">
+<div class="h-32 bg-slate-100 dark:bg-slate-800 relative">
+<img alt="Dogs playing" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Two dogs playing in a field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDetYg6BmwbRVLEmjPK_z88yVaOBkha8c0MeE-0yW7Wnlse3-MWh3uqhvWy0DbTvcPXF_uGqPICfnWu1n3H-c7_-Fe5_gNIcO-KdRvlzKdOGkC0q8FMHQEhXndEEC4RJTdkGxLIKOryZpYG_UsUmNVNt1aM4k1N9ZZhFmYTxvScD_9m90B1cvXXDqcMLZBNwiy7nz4TL2jPrNl0O_n8oeNw30k0QRGWAN67vbxhhAXgIKPprNNBe89E3STHFmBrFKQDVCunyUl-hns"/>
+<div class="absolute top-3 right-3 bg-white dark:bg-black/50 backdrop-blur-sm rounded-full p-1 shadow-sm">
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-[20px] block p-0.5">favorite</span>
+</button>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col relative">
+<div class="absolute -top-8 left-5">
+<div class="size-14 rounded-lg bg-white dark:bg-card-dark p-1 shadow-md">
+<div class="w-full h-full rounded bg-amber-100 flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined text-2xl">pets</span>
+</div>
+</div>
+</div>
+<div class="mt-6 flex flex-col flex-1">
+<div class="flex items-start justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+                                        Animal Welfare
+                                    </span>
+</div>
+<h3 class="mt-2 text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                                    Paws &amp; Protect
+                                    <span class="material-symbols-outlined text-primary text-lg" title="Verified Organization">verified</span>
+</h3>
+<p class="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+                                    Rescuing stray animals and providing shelter, medical care, and adoption services across the country.
+                                </p>
+<div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Details</a>
+<button class="bg-primary hover:bg-primary-dark text-slate-900 text-sm font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm shadow-primary/30">
+                                        Donate
+                                    </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 5: Disaster Relief -->
+<article class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow duration-300 flex flex-col overflow-hidden group">
+<div class="h-32 bg-slate-100 dark:bg-slate-800 relative">
+<img alt="Disaster relief" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Emergency vehicle lights at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgybLWkr5OUpqeFr7cXZRXyMtrFzONcuh1iAZR1HwrWYE4nmlFTBCZCW2YMPTWp9hWYH2k8tjyHBFLGB-pD4v-pkOCyBKnQSYUqY3sjyqwzsG_0zXy4p3z1mUxvOmFV3pddBDd0AKDgG04BhrG44ZtkgyX3awYomBtv6rovHn4IpDR3FXKeGrXQiy0fGsRVaCZZ58IzN5GoxLNyzW2rdnVDoIYZIoaNsG-ehhXZpVuRd8CC0FQc6UWzH_C9QBF7FgtaF173jlnCM8"/>
+<div class="absolute top-3 right-3 bg-white dark:bg-black/50 backdrop-blur-sm rounded-full p-1 shadow-sm">
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-[20px] block p-0.5">favorite</span>
+</button>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col relative">
+<div class="absolute -top-8 left-5">
+<div class="size-14 rounded-lg bg-white dark:bg-card-dark p-1 shadow-md">
+<div class="w-full h-full rounded bg-purple-100 flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined text-2xl">emergency</span>
+</div>
+</div>
+</div>
+<div class="mt-6 flex flex-col flex-1">
+<div class="flex items-start justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                                        Relief
+                                    </span>
+</div>
+<h3 class="mt-2 text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                                    Global Crisis Response
+                                    <span class="material-symbols-outlined text-primary text-lg" title="Verified Organization">verified</span>
+</h3>
+<p class="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+                                    Rapid deployment teams for earthquake, flood, and hurricane zones providing food, shelter, and medical aid.
+                                </p>
+<div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Details</a>
+<button class="bg-primary hover:bg-primary-dark text-slate-900 text-sm font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm shadow-primary/30">
+                                        Donate
+                                    </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 6: Human Rights -->
+<article class="bg-white dark:bg-card-dark rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow duration-300 flex flex-col overflow-hidden group">
+<div class="h-32 bg-slate-100 dark:bg-slate-800 relative">
+<img alt="Unity hands" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" data-alt="Hands holding together in unity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPBHNgYIDi6as0iHtwpNlzzNCoGxTXMB3zUgci17d9hXEWqL-jNs39eD2SO4b7cuk_LTTHmu0Pt6k4V56RdhKoV9crDnWh0e7Je5sTuwQLGbw2XvA24iQE27nmS89FkFz7-xhnCHdpV9-le97ahnEVWIwMPD7tYNY9ptGfVEAwBul3STyx1fm-NVZwTYIlVDqW1vDhvRJlEF8quAaS5q9fpQFShxriAWmXGg2DVJ6kgqczzVl7DyAdojn3bIBxDq3Vw86-gFKD8KE"/>
+<div class="absolute top-3 right-3 bg-white dark:bg-black/50 backdrop-blur-sm rounded-full p-1 shadow-sm">
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-[20px] block p-0.5">favorite</span>
+</button>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col relative">
+<div class="absolute -top-8 left-5">
+<div class="size-14 rounded-lg bg-white dark:bg-card-dark p-1 shadow-md">
+<div class="w-full h-full rounded bg-teal-100 flex items-center justify-center text-teal-600">
+<span class="material-symbols-outlined text-2xl">diversity_3</span>
+</div>
+</div>
+</div>
+<div class="mt-6 flex flex-col flex-1">
+<div class="flex items-start justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300">
+                                        Human Rights
+                                    </span>
+</div>
+<h3 class="mt-2 text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                                    Justice For All
+                                    <span class="material-symbols-outlined text-primary text-lg" title="Verified Organization">verified</span>
+</h3>
+<p class="mt-2 text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+                                    Advocating for fair legal representation and protecting the civil liberties of marginalized communities globally.
+                                </p>
+<div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between gap-4">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Details</a>
+<button class="bg-primary hover:bg-primary-dark text-slate-900 text-sm font-semibold py-2 px-4 rounded-lg transition-colors shadow-sm shadow-primary/30">
+                                        Donate
+                                    </button>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination / Load More -->
+<div class="flex justify-center pt-6">
+<button class="flex items-center gap-2 px-6 py-3 bg-white dark:bg-card-dark border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                        Load more organizations
+                        <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

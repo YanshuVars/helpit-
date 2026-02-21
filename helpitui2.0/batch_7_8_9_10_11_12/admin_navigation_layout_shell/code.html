@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit Admin Console</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "sans": ["Public Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased">
+<div class="flex h-screen w-full overflow-hidden">
+<!-- Sidebar -->
+<aside class="flex w-72 flex-col justify-between border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-[#1a2c2a] transition-all duration-300">
+<div class="flex flex-col gap-6 p-4">
+<!-- Logo Area -->
+<div class="flex items-center gap-3 px-2 py-2">
+<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-2xl">grid_view</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-lg font-bold leading-tight tracking-tight text-slate-900 dark:text-white">Helpit</h1>
+<p class="text-xs font-medium text-slate-500 dark:text-slate-400">Admin Console</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-1">
+<!-- Dashboard (Active) -->
+<a class="group flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2.5 text-slate-900 dark:bg-primary/20 dark:text-white" href="#">
+<span class="material-symbols-outlined text-primary group-hover:text-primary transition-colors">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<!-- Users -->
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
+<span class="text-sm font-medium">Users</span>
+</a>
+<!-- NGOs -->
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">handshake</span>
+<span class="text-sm font-medium">NGOs</span>
+</a>
+<!-- Reports -->
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">description</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<!-- Audit Logs -->
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">receipt_long</span>
+<span class="text-sm font-medium">Audit Logs</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Profile Section -->
+<div class="border-t border-slate-200 p-4 dark:border-slate-800">
+<a class="flex items-center gap-3 rounded-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<div class="h-10 w-10 overflow-hidden rounded-full bg-slate-200 border border-slate-100 dark:border-slate-700">
+<img alt="Admin profile picture" class="h-full w-full object-cover" data-alt="Professional headshot of a woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgPN1snVT-BXXJjg3AHyemZo9zFYnSswnOERRI-ifYnpzE4-wn5wJYS6cBdpM8FwL1Wl7Qc9oDvidIueZWi47QAkfv714vH2t4Pyh4ffAHv2c5AzBxKgfT4n_MQVnldLt9fKg56fEDHVjWoR02kTFFH8pAqZb4riP53cXH2tRujW9FmdNeLOd7Pc02c2APqwMAWSzKWkRIEpbqyumFi-7Cw-wT23exLbfwyFRzggLT7zNVN8a6LPOmao7j_mavz2kLDgjTmUpnLXw"/>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="truncate text-sm font-bold text-slate-900 dark:text-white">Sarah Jenkins</span>
+<span class="truncate text-xs text-slate-500 dark:text-slate-400">Super Admin</span>
+</div>
+<div class="ml-auto text-slate-400">
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</div>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex flex-1 flex-col overflow-hidden">
+<!-- Top Header -->
+<header class="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8 dark:border-slate-800 dark:bg-[#1a2c2a]">
+<!-- Left: Page Title -->
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white lg:hidden">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Dashboard Overview</h2>
+</div>
+<!-- Right: Search & Actions -->
+<div class="flex items-center gap-6">
+<!-- Search Bar -->
+<div class="hidden w-64 lg:block">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400">search</span>
+<input class="w-full rounded-lg border-none bg-slate-100 py-2 pl-10 pr-4 text-sm text-slate-900 placeholder-slate-500 focus:bg-white focus:ring-2 focus:ring-primary dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:bg-slate-800" placeholder="Search..." type="text"/>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-3">
+<button class="relative flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-primary ring-2 ring-white dark:ring-[#1a2c2a]"></span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white lg:hidden transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Area -->
+<main class="flex-1 overflow-y-auto bg-background-light p-8 dark:bg-background-dark">
+<!-- Content Placeholder Example -->
+<div class="mx-auto max-w-7xl">
+<!-- Stats Grid -->
+<div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#1a2c2a]">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Total NGOs</h3>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg text-xl">handshake</span>
+</div>
+<p class="mt-4 text-3xl font-bold text-slate-900 dark:text-white">1,248</p>
+<div class="mt-2 flex items-center text-xs text-emerald-500">
+<span class="material-symbols-outlined text-base">trending_up</span>
+<span class="ml-1 font-medium">+12% from last month</span>
+</div>
+</div>
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#1a2c2a]">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Active Volunteers</h3>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg text-xl">diversity_1</span>
+</div>
+<p class="mt-4 text-3xl font-bold text-slate-900 dark:text-white">8,502</p>
+<div class="mt-2 flex items-center text-xs text-emerald-500">
+<span class="material-symbols-outlined text-base">trending_up</span>
+<span class="ml-1 font-medium">+4% from last month</span>
+</div>
+</div>
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#1a2c2a]">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Donations Raised</h3>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg text-xl">payments</span>
+</div>
+<p class="mt-4 text-3xl font-bold text-slate-900 dark:text-white">$432.5k</p>
+<div class="mt-2 flex items-center text-xs text-red-500">
+<span class="material-symbols-outlined text-base">trending_down</span>
+<span class="ml-1 font-medium">-2.1% from last month</span>
+</div>
+</div>
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#1a2c2a]">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-medium text-slate-500 dark:text-slate-400">Pending Approvals</h3>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg text-xl">pending_actions</span>
+</div>
+<p class="mt-4 text-3xl font-bold text-slate-900 dark:text-white">43</p>
+<div class="mt-2 flex items-center text-xs text-slate-500">
+<span class="font-medium">Requires immediate action</span>
+</div>
+</div>
+</div>
+<!-- Chart/Table Area Placeholder -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#1a2c2a] min-h-[400px]">
+<div class="mb-6 flex items-center justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Donation Trends</h3>
+<button class="text-sm text-primary font-medium hover:text-primary/80">View Report</button>
+</div>
+<div class="flex h-64 w-full items-end justify-between gap-2 px-4">
+<!-- Dummy Bar Chart Visualization -->
+<div class="h-[40%] w-full rounded-t bg-slate-100 dark:bg-slate-700"></div>
+<div class="h-[65%] w-full rounded-t bg-slate-100 dark:bg-slate-700"></div>
+<div class="h-[50%] w-full rounded-t bg-slate-100 dark:bg-slate-700"></div>
+<div class="h-[75%] w-full rounded-t bg-primary/40 dark:bg-primary/30"></div>
+<div class="h-[55%] w-full rounded-t bg-slate-100 dark:bg-slate-700"></div>
+<div class="h-[80%] w-full rounded-t bg-primary dark:bg-primary"></div>
+<div class="h-[60%] w-full rounded-t bg-slate-100 dark:bg-slate-700"></div>
+<div class="h-[90%] w-full rounded-t bg-slate-100 dark:bg-slate-700"></div>
+</div>
+<div class="flex justify-between mt-4 text-xs text-slate-400">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
+</div>
+</div>
+<div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#1a2c2a]">
+<div class="mb-4 flex items-center justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Recent Activities</h3>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4">
+<div class="mt-1 h-2 w-2 rounded-full bg-primary flex-shrink-0"></div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">New NGO Registered</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Green Earth Initiative submitted documentation.</p>
+<p class="mt-1 text-xs text-slate-400">2 mins ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1 h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-600 flex-shrink-0"></div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">User Report Filed</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Ticket #2094 marked as high priority.</p>
+<p class="mt-1 text-xs text-slate-400">1 hour ago</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1 h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-600 flex-shrink-0"></div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">Audit Log Export</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">System admin generated monthly report.</p>
+<p class="mt-1 text-xs text-slate-400">3 hours ago</p>
+</div>
+</div>
+</div>
+<button class="mt-6 w-full rounded-lg border border-slate-200 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors">
+                                View All Activity
+                            </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

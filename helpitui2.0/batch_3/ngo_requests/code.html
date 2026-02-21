@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Requests List Management - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col">
+<div class="p-6 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800">
+<div class="bg-primary rounded-lg p-2 text-slate-900">
+<span class="material-symbols-outlined block">volunteer_activism</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-tight tracking-tight">Helpit</h1>
+<p class="text-xs text-slate-500 font-medium">NGO Management</p>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-slate-900 dark:text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">list_alt</span>
+<span class="text-sm font-bold">Requests</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Volunteers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="text-sm font-medium">Programs</span>
+</a>
+<div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</div>
+</nav>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar showing a professional person" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtygwxerdWprVvKHpReqF4hpU1vUj5zWlk-A1FZymiuSGcv3ZERr6rQlHGwR4OjIW4vgVGlHfqmKF8ZSUU331ZNj0KMZ4nbiqUWOc2EACF-8xTArE3-UpVz-sEVit-090Q40gRnLhf3GpyGFlte6X9f46RNYe2cj1VNehwr3KaMMBny4gdTq0Pbvhpi0ZdMYVBAn7ufdbxh1dTwfRwJ1tWgncJIFZvywdQUMwZBs5KRYxHcKyVpBIiZWWHCp3exW2BvhuZ9DCGzk8"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold truncate">Alex Johnson</p>
+<p class="text-[10px] text-slate-500 truncate">Admin Coordinator</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- Header -->
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-bold tracking-tight">Requests List Management</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-slate-900 px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+                        Create New Request
+                    </button>
+<div class="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-2"></div>
+<button class="text-slate-500 hover:text-slate-900 dark:hover:text-white">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Area -->
+<div class="flex-1 overflow-y-auto bg-slate-50 dark:bg-background-dark p-8">
+<div class="max-w-6xl mx-auto space-y-6">
+<!-- Tabs & Filters -->
+<div class="space-y-4">
+<div class="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto scrollbar-hide">
+<button class="px-6 py-3 text-sm font-bold border-b-2 border-primary text-slate-900 dark:text-primary whitespace-nowrap">All (24)</button>
+<button class="px-6 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 whitespace-nowrap">Active (8)</button>
+<button class="px-6 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 whitespace-nowrap">Pending (5)</button>
+<button class="px-6 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 whitespace-nowrap">Completed (11)</button>
+</div>
+<div class="flex flex-col md:flex-row gap-4">
+<div class="flex-1 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-sm transition-all" placeholder="Search requests by title or description..." type="text"/>
+</div>
+<div class="flex gap-3">
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                        Category: All
+                                        <span class="material-symbols-outlined text-[20px]">expand_more</span>
+</button>
+</div>
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                        Urgency: All
+                                        <span class="material-symbols-outlined text-[20px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- List View -->
+<div class="space-y-3">
+<!-- Request Card 1 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h3 class="font-bold text-lg group-hover:text-primary transition-colors">Emergency Food Distribution</h3>
+<span class="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Urgent</span>
+</div>
+<span class="text-xs text-slate-400 font-medium">Oct 24, 2023</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-4">Coordination of dry ration kits distribution for 200 families affected by recent flash floods in the riverbank settlement areas.</p>
+<div class="flex flex-wrap items-center gap-y-2 justify-between border-t border-slate-50 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 bg-primary/10 text-slate-700 dark:text-primary px-2.5 py-1 rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">medical_services</span>
+                                        Healthcare
+                                    </div>
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                        Downtown Center
+                                    </div>
+</div>
+<div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[16px]">groups</span>
+                                    12 Volunteers
+                                </div>
+</div>
+</div>
+<!-- Request Card 2 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h3 class="font-bold text-lg group-hover:text-primary transition-colors">After School Tutoring</h3>
+<span class="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Medium</span>
+</div>
+<span class="text-xs text-slate-400 font-medium">Oct 22, 2023</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-4">Weekly mathematics and science tutoring for primary school students from underprivileged backgrounds at the local library.</p>
+<div class="flex flex-wrap items-center gap-y-2 justify-between border-t border-slate-50 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 bg-primary/10 text-slate-700 dark:text-primary px-2.5 py-1 rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">school</span>
+                                        Education
+                                    </div>
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                        Community Library
+                                    </div>
+</div>
+<div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[16px]">groups</span>
+                                    8 Volunteers
+                                </div>
+</div>
+</div>
+<!-- Request Card 3 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h3 class="font-bold text-lg group-hover:text-primary transition-colors">Green City Initiative</h3>
+<span class="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Low</span>
+</div>
+<span class="text-xs text-slate-400 font-medium">Oct 20, 2023</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-4">Community tree planting event and waste management awareness workshop in the North District public parks.</p>
+<div class="flex flex-wrap items-center gap-y-2 justify-between border-t border-slate-50 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 bg-primary/10 text-slate-700 dark:text-primary px-2.5 py-1 rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">eco</span>
+                                        Environment
+                                    </div>
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                        North District Park
+                                    </div>
+</div>
+<div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[16px]">groups</span>
+                                    25 Volunteers
+                                </div>
+</div>
+</div>
+<!-- Request Card 4 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h3 class="font-bold text-lg group-hover:text-primary transition-colors">Medical Camp Logistics</h3>
+<span class="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Urgent</span>
+</div>
+<span class="text-xs text-slate-400 font-medium">Oct 18, 2023</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-4">Set up and coordination of a mobile healthcare clinic providing free checkups for senior citizens this weekend.</p>
+<div class="flex flex-wrap items-center gap-y-2 justify-between border-t border-slate-50 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 bg-primary/10 text-slate-700 dark:text-primary px-2.5 py-1 rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">medical_services</span>
+                                        Healthcare
+                                    </div>
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                        East Community Hall
+                                    </div>
+</div>
+<div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[16px]">groups</span>
+                                    5 Volunteers
+                                </div>
+</div>
+</div>
+<!-- Request Card 5 -->
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<h3 class="font-bold text-lg group-hover:text-primary transition-colors">Youth Sports Day</h3>
+<span class="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Medium</span>
+</div>
+<span class="text-xs text-slate-400 font-medium">Oct 15, 2023</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2 mb-4">Organizing a community-wide sports day to encourage physical activity and foster social bonding among local youth.</p>
+<div class="flex flex-wrap items-center gap-y-2 justify-between border-t border-slate-50 dark:border-slate-800 pt-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 bg-primary/10 text-slate-700 dark:text-primary px-2.5 py-1 rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">sports_soccer</span>
+                                        Social
+                                    </div>
+<div class="flex items-center gap-1 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                        Municipal Stadium
+                                    </div>
+</div>
+<div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-xs font-medium bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[16px]">groups</span>
+                                    15 Volunteers
+                                </div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-center gap-2 pt-4 pb-12">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:text-primary hover:border-primary transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-slate-900 font-bold">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:text-primary hover:border-primary transition-colors">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:text-primary hover:border-primary transition-colors">3</button>
+<div class="w-10 h-10 flex items-center justify-center text-slate-400">...</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:text-primary hover:border-primary transition-colors">5</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:text-primary hover:border-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

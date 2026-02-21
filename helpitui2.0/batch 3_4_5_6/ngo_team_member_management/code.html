@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NGO Team Member Management</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#15a89c",
+                        "background-light": "#f8fbfb",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-secondary": "#4f9690",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Serif", "serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body text-text-main antialiased min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- Sidebar -->
+<aside class="w-full md:w-64 flex-shrink-0 border-r border-[#e8f3f2] bg-surface-light dark:bg-surface-dark flex flex-col h-auto md:h-screen sticky top-0 z-20">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-10 w-10 bg-gray-200" data-alt="Helpit Logo Abstract" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDnAGjIipKEo2ITDyKQ1IgHf928RMEmKPfzHKtsgpKyIPAiIVmpalJirLWUjzFO7oWiKTT9E1g4V9G-sgy3Jf5IXDQcg7UoIcpv8UCgTmsDKDNfkfrL0FaO89vG-1m42GGz65CL1LlZ9eGJYWDY2smYdzCtInLlQg2uWMu2cbPzDaq0uqvox_DJwwYtub8E_jZ7joinD6GgF9loBJxNOocgF4LZ8_yCRXMS1klFZzmCvleD9OXu2Z73onQARRDgGdzGotgTTjXVCqY");'></div>
+<div class="flex flex-col">
+<h1 class="font-display font-bold text-lg text-text-main dark:text-white leading-tight">Helpit</h1>
+<p class="text-text-secondary text-xs">NGO Platform</p>
+</div>
+</div>
+<nav class="flex-1 px-4 flex flex-col gap-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-gray-200 hover:bg-[#e8f3f2] dark:hover:bg-white/10 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] text-gray-500 group-hover:text-primary transition-colors">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-gray-200 hover:bg-[#e8f3f2] dark:hover:bg-white/10 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] text-gray-500 group-hover:text-primary transition-colors">folder</span>
+<span class="text-sm font-medium">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#e8f3f2] dark:bg-primary/20 text-text-main dark:text-primary font-medium" href="#">
+<span class="material-symbols-outlined text-[20px] text-primary">group</span>
+<span class="text-sm">Team</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-gray-200 hover:bg-[#e8f3f2] dark:hover:bg-white/10 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] text-gray-500 group-hover:text-primary transition-colors">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-[#e8f3f2] dark:border-white/10">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0 bg-background-light dark:bg-background-dark">
+<!-- Top Bar -->
+<header class="flex items-center justify-between px-6 py-4 border-b border-[#e8f3f2] dark:border-white/10 bg-surface-light dark:bg-surface-dark sticky top-0 z-10">
+<div class="flex flex-col">
+<h2 class="font-display text-2xl font-bold text-text-main dark:text-white">Team Members</h2>
+<p class="text-sm text-text-secondary hidden sm:block">Manage permissions and access for your organization.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:flex items-center justify-center h-10 px-4 bg-primary hover:bg-primary-dark text-text-main font-bold text-sm rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+<span class="material-symbols-outlined text-[20px] mr-2">add</span>
+                    Invite Member
+                </button>
+<button class="sm:hidden flex items-center justify-center h-10 w-10 bg-primary hover:bg-primary-dark text-text-main rounded-lg transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-gray-200 bg-cover bg-center border-2 border-white dark:border-gray-700 shadow-sm" data-alt="User Avatar Profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDu-_YgrBKxvG02y7_HtSBHTAdQHlSDyRTl9eQtgl5y1sVonkbyQ54m60nBPL1mLE5P0YS107p6CwIo3onHsBVsCzWPGkgT8GvURM1R30SEq291CUz8GcoVT9-3wta5cXoqbvf2UUbb88fBmV8PsEtCle9zVdP370oqDlflLTsbeUF-8pGTJrbvrZzcdbStWJfWwBOcgKdYVFpSHKEne6Ey3li_RygCjXX0Q-Qbc1r5GSq8cRwM0CuF98T2ilHe3xBDfbqenJTKHqg");'></div>
+</div>
+</header>
+<div class="p-6 md:p-8 max-w-7xl mx-auto w-full flex flex-col gap-8">
+<!-- Quick Invite Card -->
+<section class="bg-[#f0f4f4] dark:bg-surface-dark rounded-xl p-6 border border-[#e0ebea] dark:border-white/5 shadow-sm">
+<div class="flex flex-col md:flex-row gap-6 items-start md:items-end justify-between">
+<div class="flex-1 w-full max-w-3xl">
+<h3 class="font-display text-lg font-bold text-text-main dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">mail</span>
+                            Invite New Member
+                        </h3>
+<div class="flex flex-col md:flex-row gap-3">
+<div class="flex-1">
+<label class="sr-only" for="email">Email address</label>
+<input class="w-full h-11 px-4 rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-black/20 text-text-main dark:text-white placeholder-gray-400 focus:border-primary focus:ring-primary shadow-sm" id="email" placeholder="colleague@ngo.org" type="email"/>
+</div>
+<div class="w-full md:w-48">
+<label class="sr-only" for="role">Role</label>
+<div class="relative">
+<select class="w-full h-11 pl-4 pr-10 rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-black/20 text-text-main dark:text-white focus:border-primary focus:ring-primary appearance-none shadow-sm cursor-pointer" id="role">
+<option value="admin">Admin</option>
+<option selected="" value="editor">Editor</option>
+<option value="viewer">Viewer</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+<button class="h-11 px-6 bg-text-main dark:bg-white text-white dark:text-text-main font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-md flex items-center justify-center whitespace-nowrap">
+                                Send Invite
+                            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Members Table -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="font-display text-xl font-bold text-text-main dark:text-white tracking-tight">Current Members <span class="text-text-secondary text-lg font-normal ml-2">(5)</span></h3>
+<div class="flex items-center gap-2">
+<div class="relative">
+<input class="h-9 pl-9 pr-4 text-sm rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark text-text-main dark:text-white placeholder-gray-400 focus:border-primary focus:ring-primary w-40 md:w-64" placeholder="Search members..." type="text"/>
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-[18px] text-gray-400">search</span>
+</div>
+<button class="h-9 w-9 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-[#e8f3f2] dark:border-white/10 shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#f8fbfb] dark:bg-white/5 border-b border-[#e8f3f2] dark:border-white/10">
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary font-body">Member</th>
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary font-body w-32">Role</th>
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary font-body w-40">Joined Date</th>
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary font-body text-right w-48">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#e8f3f2] dark:divide-white/5">
+<!-- Row 1: Owner -->
+<tr class="group hover:bg-[#f8fbfb] dark:hover:bg-white/5 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-sm bg-cover bg-center" data-alt="Sarah Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCsmnGix_Wv4t4fLZ-ntAaxOiUKz4MQ5GDxHKPRnQbCIFPo-s_FzDZFTwOuO0UveMQVp8zzx801Sl0k1xAlyL63OJX5c7oHyz7hCCqbCeKupb1DDEP8otwI1QRwGqrOZrzsptqhIfYmn3kplVHMnkoPxEvkyJ2TwhB8i9Py_UEla19AkoO9JrQQa_-3bQhvjFY6zVtYH7k4SIkyTpUolFmmXQtBVrOas-dckYPPLXJ8Hl2I-QUt4D32leIeHROWGZYmFHezSwj5_SI");'></div>
+<div>
+<div class="font-medium text-text-main dark:text-white">Sarah Admin</div>
+<div class="text-sm text-text-secondary">sarah@ngo.org</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-[14px]">shield_person</span>
+                                            Owner
+                                        </span>
+</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-gray-300">Jan 12, 2023</td>
+<td class="py-4 px-6 text-right">
+<span class="text-xs text-gray-400 italic">No actions available</span>
+</td>
+</tr>
+<!-- Row 2: Admin -->
+<tr class="group hover:bg-[#f8fbfb] dark:hover:bg-white/5 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm bg-cover bg-center" data-alt="Mark Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_7SkOdOFu5IB5nEB4FIpiMnChErB6YS9XjQOapz0ZWHcs0SoGVH3qn45DgT9iQDlBlw_UyWE1fFRXZwlLXTOCl2X0vSSGj4G4bkqYdH9oqeLLcoW8PBAXJnvwWkbB4zZxQmyHO9WPjjHNS0B-zybh44Nzm90Wp28hSDgr28Q3kb4uG2KwE3v88qSSpKE4A4fikzu5LQxptAI6cElTxnFOrWx_YDMHI7VurDDAzTRLp7lCbAgrG2VWWAtCTRhsBDQtFglwt8AoRLE");'></div>
+<div>
+<div class="font-medium text-text-main dark:text-white">Mark Johnson</div>
+<div class="text-sm text-text-secondary">mark@ngo.org</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                                            Admin
+                                        </span>
+</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-gray-300">Feb 04, 2023</td>
+<td class="py-4 px-6">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-xs font-medium text-text-secondary hover:text-primary transition-colors flex items-center gap-1 bg-transparent hover:bg-gray-100 dark:hover:bg-white/10 px-2 py-1.5 rounded">
+                                                Edit Role
+                                                <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button class="h-8 w-8 flex items-center justify-center rounded text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Remove Member">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Editor -->
+<tr class="group hover:bg-[#f8fbfb] dark:hover:bg-white/5 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm bg-cover bg-center" data-alt="Emily Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA7etaSHGzfepwGo0lfjNcjL4I5nINRt0W2888iZlwm6YIobQb1APc0jmXHKZU6aJ8OvwK4LCzaNAhF1OfBDhhX7Q6NTKzhb59OkeEDCvElgPqVmvHeuflCNmo04Ky3ZtdUglCjqTv6cHvKTpzWVqQE2hc3FUXyIymn1Im3NR8hEGwXH5qwzz89p0t1o6osyd81qCP5y44nHYD8hmvDv_lm5xZWew4Qi92JFR4c4v1CQMoGzImyd08tc6Z0BDZjOh0zvmJULTXLPpg");'></div>
+<div>
+<div class="font-medium text-text-main dark:text-white">Emily Chen</div>
+<div class="text-sm text-text-secondary">emily@ngo.org</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                            Editor
+                                        </span>
+</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-gray-300">Mar 22, 2023</td>
+<td class="py-4 px-6">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-xs font-medium text-text-secondary hover:text-primary transition-colors flex items-center gap-1 bg-transparent hover:bg-gray-100 dark:hover:bg-white/10 px-2 py-1.5 rounded">
+                                                Edit Role
+                                                <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button class="h-8 w-8 flex items-center justify-center rounded text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Remove Member">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Viewer -->
+<tr class="group hover:bg-[#f8fbfb] dark:hover:bg-white/5 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-700 font-bold text-sm bg-cover bg-center" data-alt="David Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBtA3ts4IXGgZGUZgZDwXHigfjGW6zTxQc4uO_uxxsWg6Ogwckkactoxbx71fHfLUFhXhTIfyG1WDPrXKlFXI56Wsd3Is7xOHEfiJyl-VehBrXz-b96aYoKai4mwDdDTsFPXsEpUTy4udNrXeifKMQ7jssZidXkGRLv9_iuO-HMJ_APGPgdrSGX4muV9EnU3skQz96-oMF2gLpIjxUXBv2kzc__h_dAieO0dkt8qSBxFpphuoXftm8z7AjlbFF6JbGkLlEwMnXuXSU");'></div>
+<div>
+<div class="font-medium text-text-main dark:text-white">David Smith</div>
+<div class="text-sm text-text-secondary">david@ngo.org</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                            Viewer
+                                        </span>
+</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-gray-300">Apr 15, 2023</td>
+<td class="py-4 px-6">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-xs font-medium text-text-secondary hover:text-primary transition-colors flex items-center gap-1 bg-transparent hover:bg-gray-100 dark:hover:bg-white/10 px-2 py-1.5 rounded">
+                                                Edit Role
+                                                <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button class="h-8 w-8 flex items-center justify-center rounded text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Remove Member">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Viewer -->
+<tr class="group hover:bg-[#f8fbfb] dark:hover:bg-white/5 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-700 font-bold text-sm bg-cover bg-center" data-alt="Lisa Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCItBBE_-orVAwx2s8YXM3sA73xpBi4m5KD4BCPjgxJ8wgINu5fdWtEp_19pvdmQwLzRY_I24um5bp3Q4dZovtQCM37L3eviynn24LXQ0fh1QYOv0vpQ-Q0AAPNlQ4KCqD3zQCRe9o-d12RYGI6vXJz1Q7aFC6OgTWYyywxrZh5S_riSvUjrC1rOpA3WeLW3Y53VWbY7BuO2sRvepxaoQ4ylXJ6RsT1g3kI6X-p3_c61g-j2-f6yQDgJNzn_M4JxGEoLDjRU5noMg8");'></div>
+<div>
+<div class="font-medium text-text-main dark:text-white">Lisa Wong</div>
+<div class="text-sm text-text-secondary">lisa@ngo.org</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                            Viewer
+                                        </span>
+</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-gray-300">May 10, 2023</td>
+<td class="py-4 px-6">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-xs font-medium text-text-secondary hover:text-primary transition-colors flex items-center gap-1 bg-transparent hover:bg-gray-100 dark:hover:bg-white/10 px-2 py-1.5 rounded">
+                                                Edit Role
+                                                <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button class="h-8 w-8 flex items-center justify-center rounded text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Remove Member">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination (Optional but good for completeness) -->
+<div class="border-t border-[#e8f3f2] dark:border-white/10 px-6 py-4 flex items-center justify-between">
+<span class="text-sm text-text-secondary">Showing 1 to 5 of 5 results</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 text-sm rounded border border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 text-sm rounded border border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-50 dark:hover:bg-white/5 disabled:opacity-50" disabled="">Next</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

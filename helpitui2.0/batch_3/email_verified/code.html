@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Email Verified - Helpit NGO</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;family=Merriweather:wght@700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "serif": ["Merriweather", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .serif-heading {
+            font-family: 'Merriweather', serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen">
+<div class="flex flex-col md:flex-row h-screen w-full overflow-hidden">
+<!-- Left Side: Branding Panel -->
+<div class="hidden md:flex w-1/2 bg-primary dark:bg-primary/20 flex-col justify-between p-12 relative overflow-hidden">
+<!-- Decorative Pattern Overlay -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<div class="relative z-10 flex items-center gap-3 text-slate-900 dark:text-slate-100">
+<div class="size-10 bg-white dark:bg-slate-800 rounded-lg flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl">volunteer_activism</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight">Helpit</h1>
+</div>
+<div class="relative z-10 max-w-md">
+<h2 class="text-4xl font-bold text-slate-900 dark:text-slate-100 leading-tight mb-6">Empowering communities, one step at a time.</h2>
+<p class="text-slate-800 dark:text-slate-300 text-lg">Thank you for joining our mission to create a sustainable future for everyone. Your verification helps us keep our community safe and trusted.</p>
+</div>
+<div class="relative z-10 flex items-center gap-4">
+<div class="flex -space-x-3">
+<img class="size-10 rounded-full border-2 border-white dark:border-slate-800" data-alt="Volunteer profile picture smiling young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVK_vCdzAlQ1IjgltAL7Ti2yrD9ZwdTJXiEawrG9ikpYWn_mWrwC2DyPuqf9BDPa09p-nK_VP1RASwwtcs6Z0QHp04RhmgyMhLXFFkNJeUWw4_YLZZ-ZGFDXh-rR_nrxu4yQ-jLGillKBuTyRQvTQgWt3D33QP34UcQ4qRxrV4u4dU0uHTP1vTljytYyfI3-zhy1KQh41AdQmW0cx1s_BAy9Wv6q0l8a-VwgpuWI3OFWR0fxrrqO4LkwJrdWFy7PXUShcsemzJkc8"/>
+<img class="size-10 rounded-full border-2 border-white dark:border-slate-800" data-alt="Volunteer profile picture smiling middle aged man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAHHq9Y4FlcTdI6_CZPlQ2URA6oTeTFHIazPo8iz2VhApiUMYpVaIOB8QSboNUznnf7SHFxEGEB6uV-SSu6LYeAcfGbpKGlu16Kj2nDeQ1FzsdZjA_umdB87lYUAq6AD_eC3IBkE88FG9Ur8nD-_3y6vZL0dJqe5so_A7IVgb8IGB1buZ55a0u2Ig3yyDj-G2DvMWnpwiBCYN0SXW_MwlGtbRZItJ39Ac42YOJiRiFjkv0S6-Gp4kigmKLmk1zg6rRn4fBg1015WY"/>
+<img class="size-10 rounded-full border-2 border-white dark:border-slate-800" data-alt="Volunteer profile picture young professional woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe2dI3_boTa7uF7CJgnA_OpuMXB3UYv_z_MIeRF7Febp9tyoDDIIZrITDPZ4Cnj60CcnSTDjyaZIVsIeGwxG5x_RhJew4DGl88diDF8yZuoC2CIWs7Amt-7vIF6YcDyrBQuYZOtmuzD0fbpoyaVpD7aP45CnmEYZiAAR8J_qj7NiD9BotuYM_2YUtvWf-RdpxczgL-H0aJz_-QTLxub_LAIYSTDbYAb2--356_LPW-MQjB41tTcnPnsvOP2DDB96xHX5uncvMWo_A"/>
+</div>
+<p class="text-sm font-medium text-slate-800 dark:text-slate-300">Join 5,000+ active volunteers</p>
+</div>
+</div>
+<!-- Right Side: Success Content -->
+<div class="flex-1 bg-white dark:bg-background-dark flex flex-col justify-center items-center px-6 md:px-20 text-center">
+<!-- Mobile Logo (Visible only on small screens) -->
+<div class="md:hidden mb-12 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">volunteer_activism</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold">Helpit</h2>
+</div>
+<div class="max-w-md w-full">
+<!-- Success Icon -->
+<div class="mb-8 inline-flex items-center justify-center size-24 bg-primary/10 dark:bg-primary/5 rounded-full">
+<span class="material-symbols-outlined text-primary text-6xl" style="font-variation-settings: 'FILL' 1">check_circle</span>
+</div>
+<!-- Verification Message -->
+<h2 class="serif-heading text-3xl md:text-[28px] text-slate-900 dark:text-slate-100 mb-4">Email Verified!</h2>
+<p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed mb-10">
+                    Your account is ready. Welcome to Helpit! You can now start exploring projects and making a difference.
+                </p>
+<!-- Primary CTA -->
+<button class="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-4 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 mb-6">
+                    Go to Dashboard
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<!-- Secondary Info -->
+<div class="space-y-4">
+<p class="text-sm text-slate-500 dark:text-slate-500">
+                        Redirecting in 5 seconds...
+                    </p>
+<div class="pt-8 border-t border-slate-100 dark:border-slate-800">
+<p class="text-sm text-slate-500 dark:text-slate-500">
+                            Need help? <a class="text-primary hover:underline font-medium" href="#">Contact Support</a>
+</p>
+</div>
+</div>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute bottom-10 right-10 opacity-5 pointer-events-none hidden lg:block">
+<span class="material-symbols-outlined text-9xl text-slate-900 dark:text-slate-100">verified</span>
+</div>
+</div>
+</div>
+</body></html>

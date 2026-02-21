@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global User Management Console</title>
+<!-- Google Fonts: Public Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#16b0a3", 
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-secondary": "#4f9690",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "sans": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", sans-serif;
+        }
+        /* Custom scrollbar for table if needed */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased">
+<div class="flex h-screen w-full overflow-hidden bg-background-light dark:bg-background-dark">
+<!-- Sidebar -->
+<aside class="flex w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark hidden md:flex">
+<div class="flex h-16 items-center px-6 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 text-primary font-bold text-xl">
+<span class="material-symbols-outlined text-3xl">admin_panel_settings</span>
+<span>AdminPanel</span>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-between overflow-y-auto px-3 py-4">
+<nav class="space-y-1">
+<div class="px-3 mb-2 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                        Main Menu
+                    </div>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-primary dark:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined fill-1">group</span>
+<span class="font-medium">User Management</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">corporate_fare</span>
+<span class="font-medium">Organizations</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">description</span>
+<span class="font-medium">Reports</span>
+</a>
+</nav>
+<nav class="space-y-1 mt-6">
+<div class="px-3 mb-2 text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                        System
+                    </div>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-main dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">verified_user</span>
+<span class="font-medium">Audit Logs</span>
+</a>
+</nav>
+</div>
+<div class="border-t border-slate-100 dark:border-slate-800 p-4">
+<div class="flex items-center gap-3">
+<img alt="Administrator profile picture" class="h-9 w-9 rounded-full object-cover ring-2 ring-white dark:ring-slate-700" data-alt="Close up of a man with a beard smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiNW3072FRpMlLUb2M8AlGkNyELzPC2031GYTGJWl2q3atbBr3orXTvR5v_P9l8XX8NJyXcZ6MTbJYirFzJSQWmPxshKnscXDqCITEiEFmkbcHDj33YTstX52_Ub5sjNStLlfLr6lfKZpglJSMj-ebcXRC4Z_RYi4ZLwIAN8q6IPb5haY3kZJzWMFZognpZsRRM96cBpIW7urrwjvtv7_zrUtDz5cUXemj8tyodGd3VIV_ory6n3VwBj-qFYlu7OBFuSq6pJhBVO0"/>
+<div class="flex flex-col">
+<p class="text-sm font-medium text-slate-900 dark:text-white">Admin User</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">admin@platform.com</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Mobile Header -->
+<header class="flex md:hidden h-16 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark px-4">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span>AdminPanel</span>
+</div>
+<button class="text-slate-500">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
+<div class="mx-auto max-w-7xl">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">User Management</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Manage access, roles, and status for all platform users.</p>
+</div>
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-slate-900 font-semibold px-4 py-2.5 rounded-lg shadow-sm transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Add New User</span>
+</button>
+</div>
+<!-- Filters & Search Toolbar -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 mb-6">
+<div class="flex flex-col lg:flex-row gap-4">
+<!-- Search -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-sm" placeholder="Search by name or email..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex flex-col sm:flex-row gap-3">
+<div class="relative">
+<select class="appearance-none w-full sm:w-40 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 py-2.5 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm cursor-pointer">
+<option>All Roles</option>
+<option>Volunteer</option>
+<option>NGO</option>
+<option>Donor</option>
+<option>Admin</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg">expand_more</span>
+</div>
+<div class="relative">
+<select class="appearance-none w-full sm:w-40 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 py-2.5 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm cursor-pointer">
+<option>All Statuses</option>
+<option>Active</option>
+<option>Suspended</option>
+<option>Pending</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg">expand_more</span>
+</div>
+<button class="flex items-center justify-center w-full sm:w-auto px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="Export Data">
+<span class="material-symbols-outlined text-lg">download</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Data Table -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[30%]">User</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[25%] hidden sm:table-cell">Email</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[15%]">Role</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[15%]">Status</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[15%] hidden lg:table-cell">Joined</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%] text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+<!-- Row 1 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<img alt="Sarah Jenkins profile" class="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-700" data-alt="Portrait of a smiling woman with long hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6H8xV2yCNXXefQ5QORtL8-iu7tHhHdYwqCb80gpVelnutjIBj_ge_4YWj4snfzd2R1omiTuGHPF_5YBwRbfjAQauh0ILWFPmyK6vhppfbQSw4nZ-v_j8p90NrLdNJEVNCnLvsnNALcMHTBuhoa9GRY20P3hpKgRfYEU9o-KgSoWZlCN3ehB6CH93Ip0hlpDFZFPBr7AnjKtI5rguURIC9U51r8_bAgTbTxDyDmov7kB8XEO9Gom0giasY3E5ut9m3gl8X5122DdY"/>
+<div>
+<div class="text-sm font-medium text-slate-900 dark:text-white">Sarah Jenkins</div>
+<div class="text-xs text-slate-500 sm:hidden">sarah@volunteer.org</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden sm:table-cell">
+                                            sarah@volunteer.org
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                                                Volunteer
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary-dark dark:text-primary border border-primary/20">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden lg:table-cell">
+                                            Oct 24, 2023
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-3">
+<button class="text-rose-500 hover:text-rose-700 text-xs font-semibold uppercase tracking-wide">Suspend</button>
+<button class="text-slate-400 hover:text-rose-500 transition-colors" title="Delete User">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors bg-slate-50/30 dark:bg-slate-800/20">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold ring-2 ring-white dark:ring-slate-700">
+                                                    GA
+                                                </div>
+<div>
+<div class="text-sm font-medium text-slate-900 dark:text-white">Global Aid Fdn</div>
+<div class="text-xs text-slate-500 sm:hidden">contact@globalaid.org</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden sm:table-cell">
+                                            contact@globalaid.org
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                NGO
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+<span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>
+                                                Suspended
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden lg:table-cell">
+                                            Sep 12, 2023
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-3">
+<button class="text-primary-dark dark:text-primary hover:underline text-xs font-semibold uppercase tracking-wide">Activate</button>
+<button class="text-slate-400 hover:text-rose-500 transition-colors" title="Delete User">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<img alt="Michael Ross profile" class="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-700" data-alt="Portrait of a man looking forward" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEoPD0BGnQG637vcpEi4MEwN0_j7_wMW-1vtORnu4s6Iu0zeFOx8_LgkLmmxI4BGMAYCflblURpTBaTb6ejuBB70cxUFakoCK1f8tXAK7P0arQ8edyy96xZFgYT9n5-qRUiRsi6hRMljQF4u_H_QRqYquKB1nSufiMjO2guMj95OKpJdEhKS7bCYzdUPPkzP6BSem5CHg8JOT72gZ54g_PA2YynSsKTudWx8gXQ_TJjaHavanVCNxSLn81edqngA9s7cOaykEcB-I"/>
+<div>
+<div class="text-sm font-medium text-slate-900 dark:text-white">Michael Ross</div>
+<div class="text-xs text-slate-500 sm:hidden">mike.ross@donor.net</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden sm:table-cell">
+                                            mike.ross@donor.net
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+                                                Donor
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary-dark dark:text-primary border border-primary/20">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden lg:table-cell">
+                                            Nov 01, 2023
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-3">
+<button class="text-rose-500 hover:text-rose-700 text-xs font-semibold uppercase tracking-wide">Suspend</button>
+<button class="text-slate-400 hover:text-rose-500 transition-colors" title="Delete User">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<img alt="Elena Gomez profile" class="h-10 w-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-700" data-alt="Portrait of a woman with a neutral expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMFRbMv7sQDS8hzjdOJebcXI8ISwcGx0oqBGMW_EvxEwjuYpprh0yfB260vPyL6_5gTutvf6Z1Vgybf-GZG5BQv8AbGfVFXFx8xUPUyq3-Sq95ceVuYApyOEKYlCnrr8lsL0Ucv8LESd7Bdra7dHVjP0MkiJhMeAfmIUKFIROFuNmfXMMhDaqNe84-ZTWQnQ4xfdxC40zhmpYTYE-5kOprASq6gfBWjruwykwbP8ks2rWQCkG2eJrdoMuAR8kO4p4KTzAQWOmcY60"/>
+<div>
+<div class="text-sm font-medium text-slate-900 dark:text-white">Elena Gomez</div>
+<div class="text-xs text-slate-500 sm:hidden">elena@ngo.org</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden sm:table-cell">
+                                            elena@ngo.org
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                NGO
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary-dark dark:text-primary border border-primary/20">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden lg:table-cell">
+                                            Nov 05, 2023
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-3">
+<button class="text-rose-500 hover:text-rose-700 text-xs font-semibold uppercase tracking-wide">Suspend</button>
+<button class="text-slate-400 hover:text-rose-500 transition-colors" title="Delete User">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-orange-100 dark:bg-orange-900/50 flex items-center justify-center text-orange-600 dark:text-orange-300 font-bold ring-2 ring-white dark:ring-slate-700">
+                                                    DC
+                                                </div>
+<div>
+<div class="text-sm font-medium text-slate-900 dark:text-white">David Chen</div>
+<div class="text-xs text-slate-500 sm:hidden">david.chen@vol.net</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden sm:table-cell">
+                                            david.chen@vol.net
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                                                Volunteer
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary-dark dark:text-primary border border-primary/20">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+                                                Active
+                                            </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 hidden lg:table-cell">
+                                            Nov 10, 2023
+                                        </td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex items-center justify-end gap-3">
+<button class="text-rose-500 hover:text-rose-700 text-xs font-semibold uppercase tracking-wide">Suspend</button>
+<button class="text-slate-400 hover:text-rose-500 transition-colors" title="Delete User">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-surface-dark flex flex-col sm:flex-row items-center justify-between gap-4">
+<p class="text-sm text-slate-500 dark:text-slate-400">
+                                Showing <span class="font-medium text-slate-900 dark:text-white">1</span> to <span class="font-medium text-slate-900 dark:text-white">5</span> of <span class="font-medium text-slate-900 dark:text-white">1,248</span> results
+                            </p>
+<nav aria-label="Pagination" class="flex gap-1 rounded-md">
+<button class="relative inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+                                    Previous
+                                </button>
+<button class="relative inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-primary border border-primary rounded-md z-10">
+                                    1
+                                </button>
+<button class="relative inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700">
+                                    2
+                                </button>
+<button class="relative inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700 hidden sm:inline-flex">
+                                    3
+                                </button>
+<span class="relative inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-400 bg-transparent">...</span>
+<button class="relative inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700">
+                                    Next
+                                    <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Volunteer Registration - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#14b5a7",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for better aesthetic in side panel if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- Left Branding Panel -->
+<div class="relative w-full md:w-5/12 lg:w-4/12 bg-primary dark:bg-[#0d6e66] flex flex-col justify-between p-8 md:p-12 text-slate-900 overflow-hidden md:fixed md:h-full z-10">
+<!-- Abstract Background Pattern -->
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-teal-900/10 to-transparent pointer-events-none"></div>
+<!-- Logo Area -->
+<div class="relative z-10 flex items-center gap-2 mb-12">
+<div class="w-10 h-10 rounded-lg bg-slate-900 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">volunteer_activism</span>
+</div>
+<span class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Helpit</span>
+</div>
+<!-- Hero Content -->
+<div class="relative z-10 flex-1 flex flex-col justify-center">
+<h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tight mb-6 text-slate-900 dark:text-white">
+                Join our community of changemakers.
+            </h1>
+<p class="text-lg md:text-xl font-medium opacity-90 mb-8 max-w-md text-slate-800 dark:text-slate-100">
+                Your time can change lives. Sign up today and start making a tangible difference in your local community.
+            </p>
+<div class="mt-8 flex gap-4 items-center">
+<div class="flex -space-x-4 rtl:space-x-reverse">
+<img alt="Smiling volunteer woman portrait" class="w-10 h-10 border-2 border-primary rounded-full object-cover" data-alt="Portrait of a young female volunteer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTPORyuvwklBC0mVqy-1k44Vdmq9NglwQ90NC2nwLZ-tSc45G-6D-ZH_qatbgiH0HwSGJ51yiqXsDcl1qvESWm9gcqdLnxbTEwimNPJyNnuLJWVRFolO1hdnCQk2p-BzZ10XiQ3GNFL9uWbMdE2UW9tOjjmHqlt_DDxHISRXQvJqPY5-9_XpAAGaCUdBRenFh0raG9NpODjvlV6H23JSLkbF3ru2q2ne_OB84ej9Hqpn6iEJOtULzDxb_bCdCccT7-2T7d1KMRkW4"/>
+<img alt="Smiling volunteer man portrait" class="w-10 h-10 border-2 border-primary rounded-full object-cover" data-alt="Portrait of a young male volunteer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4C8uoPT9fzFqWTORXCK-pqCyFLUCm3-fVb3GO42z8qu-0tt3Wu_9eEVQIXoUnf2SCPoByuV0NWFZ1aLwS6ttc5SR58N-XXbcQKC8kG4-vnAxsZGqXW49upNonpMg9cipxB0wxvVHdaQAqrVQNCZIjWYtlxZhGMbRdXkuxx79O_MF0GzInnzV6r_UbcjWFVGNsr5R71Qzwn7TsLAxe4dSNLd_CUDaujID-ds7CSe4rF7H9781cMlOZPQTPkXvT9L5s5FvDyaDYhts"/>
+<img alt="Smiling volunteer man portrait" class="w-10 h-10 border-2 border-primary rounded-full object-cover" data-alt="Portrait of a middle-aged male volunteer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQdRjS6DzdSt69Waxafn1p098xS6Svpb3wZyMPZKikARjPkAhE9KSyrivuISaAXHvvYjq9dSI-nK6jMMePwQqwaUs6TGDBz_rm2O-GSjlap-DYOrXsGV9ZvheA6uEthA_q_8IleRPQ914eowFqE9RW8PBD_ZGeVXcKaEzAzblfRopzzkf2aQTYK7lJcsEkaUjruuMaF7DBCUrjajT-2uWF-3BAnlNOglI0I0Er5ranYLltaZ-6ruSSUipBw7LufiWUURGmuVLv3ds"/>
+<div class="flex items-center justify-center w-10 h-10 text-xs font-bold text-white bg-slate-900 border-2 border-primary rounded-full hover:bg-slate-800 transition-colors cursor-pointer">+2k</div>
+</div>
+<span class="text-sm font-semibold text-slate-900 dark:text-white">Active Volunteers</span>
+</div>
+</div>
+<!-- Footer / Legal Links -->
+<div class="relative z-10 mt-12 text-sm font-medium opacity-75 text-slate-800 dark:text-slate-200">
+            © 2023 Helpit NGO. All rights reserved.
+        </div>
+</div>
+<!-- Right Form Panel -->
+<main class="flex-1 w-full md:ml-[41.666667%] bg-background-light dark:bg-background-dark min-h-screen flex flex-col justify-center py-12 px-4 sm:px-8 lg:px-16 xl:px-24">
+<div class="max-w-3xl w-full mx-auto">
+<!-- Mobile Header Only -->
+<div class="md:hidden mb-8">
+<h2 class="text-3xl font-bold text-slate-900 dark:text-white">Volunteer Registration</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-2">Sign up to start helping today.</p>
+</div>
+<!-- Desktop Header -->
+<div class="hidden md:block mb-10">
+<h2 class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">Volunteer Registration</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-3 text-lg">Complete the form below to join our network.</p>
+</div>
+<form class="space-y-8">
+<!-- Personal Details Section -->
+<div class="space-y-6">
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary">person</span>
+                        Personal Details
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Full Name -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="fullname">Full Name</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-600 rounded-lg leading-5 bg-white dark:bg-surface-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-shadow" id="fullname" name="fullname" placeholder="Jane Doe" type="text"/>
+</div>
+</div>
+<!-- Email -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="email">Email Address</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-600 rounded-lg leading-5 bg-white dark:bg-surface-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-shadow" id="email" name="email" placeholder="jane@example.com" type="email"/>
+</div>
+</div>
+<!-- Phone -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="phone">Phone Number</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-600 rounded-lg leading-5 bg-white dark:bg-surface-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-shadow" id="phone" name="phone" placeholder="(555) 123-4567" type="tel"/>
+</div>
+</div>
+<!-- City Dropdown -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="city">City</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">location_on</span>
+</div>
+<select class="block w-full pl-10 pr-10 py-3 border border-slate-200 dark:border-slate-600 rounded-lg leading-5 bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm appearance-none transition-shadow" id="city" name="city">
+<option disabled="" selected="" value="">Select your city</option>
+<option value="ny">New York</option>
+<option value="la">Los Angeles</option>
+<option value="ch">Chicago</option>
+<option value="ho">Houston</option>
+</select>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Skills & Availability Section -->
+<div class="space-y-6">
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary">handyman</span>
+                        Skills &amp; Availability
+                    </h3>
+<!-- Skills Checkboxes -->
+<div class="space-y-3">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Select Your Skills</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+<!-- Skill Item -->
+<label class="relative flex items-center p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark cursor-pointer hover:border-primary/50 transition-colors group">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary/20 dark:border-slate-600 dark:bg-slate-700" type="checkbox"/>
+<span class="ml-3 text-sm text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white">Teaching</span>
+</label>
+<!-- Skill Item -->
+<label class="relative flex items-center p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark cursor-pointer hover:border-primary/50 transition-colors group">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary/20 dark:border-slate-600 dark:bg-slate-700" type="checkbox"/>
+<span class="ml-3 text-sm text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white">Medical Support</span>
+</label>
+<!-- Skill Item -->
+<label class="relative flex items-center p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark cursor-pointer hover:border-primary/50 transition-colors group">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary/20 dark:border-slate-600 dark:bg-slate-700" type="checkbox"/>
+<span class="ml-3 text-sm text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white">Logistics</span>
+</label>
+<!-- Skill Item -->
+<label class="relative flex items-center p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark cursor-pointer hover:border-primary/50 transition-colors group">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary/20 dark:border-slate-600 dark:bg-slate-700" type="checkbox"/>
+<span class="ml-3 text-sm text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white">Fundraising</span>
+</label>
+<!-- Skill Item -->
+<label class="relative flex items-center p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark cursor-pointer hover:border-primary/50 transition-colors group">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary/20 dark:border-slate-600 dark:bg-slate-700" type="checkbox"/>
+<span class="ml-3 text-sm text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white">Tech Support</span>
+</label>
+</div>
+</div>
+<!-- Availability Dropdown -->
+<div class="space-y-1.5 pt-2">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="availability">Availability</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+</div>
+<select class="block w-full pl-10 pr-10 py-3 border border-slate-200 dark:border-slate-600 rounded-lg leading-5 bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm appearance-none transition-shadow" id="availability" name="availability">
+<option disabled="" selected="" value="">Select availability</option>
+<option value="weekdays">Weekdays</option>
+<option value="weekends">Weekends</option>
+<option value="flexible">Flexible</option>
+</select>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Security Section -->
+<div class="space-y-6">
+<h3 class="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary">lock</span>
+                        Security
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Password -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="password">Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-600 rounded-lg leading-5 bg-white dark:bg-surface-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-shadow" id="password" name="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<!-- Confirm Password -->
+<div class="space-y-1.5">
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="confirm_password">Confirm Password</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<span class="material-symbols-outlined text-[20px]">lock_reset</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-600 rounded-lg leading-5 bg-white dark:bg-surface-dark text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-shadow" id="confirm_password" name="confirm_password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Terms and Submit -->
+<div class="pt-4 space-y-6">
+<div class="flex items-start">
+<div class="flex items-center h-5">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary/20 dark:border-slate-600 dark:bg-slate-700" id="terms" name="terms" type="checkbox"/>
+</div>
+<div class="ml-3 text-sm">
+<label class="font-medium text-slate-700 dark:text-slate-300" for="terms">I agree to the <a class="text-primary hover:text-primary-dark underline" href="#">Terms of Service</a> and <a class="text-primary hover:text-primary-dark underline" href="#">Privacy Policy</a>.</label>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<button class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-slate-900 bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors" type="button">
+                            Create Account
+                        </button>
+<p class="text-center text-sm text-slate-600 dark:text-slate-400">
+                            Already have an account? 
+                            <a class="font-semibold text-primary hover:text-primary-dark transition-colors" href="#">Log in</a>
+</p>
+</div>
+</div>
+</form>
+</div>
+</main>
+</body></html>

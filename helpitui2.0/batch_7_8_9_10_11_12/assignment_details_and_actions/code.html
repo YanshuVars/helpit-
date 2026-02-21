@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Volunteer Assignment Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-content": "#0e4b46",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-muted": "#4f9690",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-slate-100 min-h-screen flex overflow-hidden">
+<!-- Side Navigation -->
+<aside class="w-64 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 hidden lg:flex flex-col flex-shrink-0 transition-all duration-300">
+<div class="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined text-3xl">volunteer_activism</span>
+<span class="text-text-main dark:text-white text-lg font-bold tracking-tight">Volunteer Portal</span>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-6 flex-1 overflow-y-auto">
+<!-- User Profile Snippet -->
+<div class="flex items-center gap-3 p-2 rounded-xl bg-background-light dark:bg-background-dark/50">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 flex-shrink-0" data-alt="Portrait of a smiling young woman" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDNh-IKLdasmqJrcvpUmeqykJXIRqrRMgGH6xBxx2T17PFF86Ka2Hxt88Mq2s6YLnzOtWKbnuqDroAIurJbVFcK-J3C8vGpoLPQg4ZN-LqyN81Nd6gMAUNN4uV8VWZRi8UNJ1qSN4uIyDJJ4QcsZwyUgfUoN6325fY1DPuGMlE__m-BjwB5VGW4RYj6Vy0xX_Td49WKPSd7hGPI154ZqareUrID9R30kgtYcHXLddAK7mx24f7KZUATiMa_gFv_8pv5GnEpoPnbico");'></div>
+<div class="flex flex-col overflow-hidden">
+<h1 class="text-text-main dark:text-white text-sm font-semibold truncate">Jane Doe</h1>
+<p class="text-text-muted text-xs truncate">Gold Volunteer</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-slate-200 hover:bg-background-light dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary-content dark:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-primary fill-current">assignment</span>
+<span class="text-sm font-semibold">My Assignments</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-slate-200 hover:bg-background-light dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">calendar_month</span>
+<span class="text-sm font-medium">Schedule</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-slate-200 hover:bg-background-light dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-slate-200 hover:bg-background-light dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main dark:text-slate-200 hover:bg-background-light dark:hover:bg-slate-800 transition-colors group" href="#">
+<span class="material-symbols-outlined text-text-muted group-hover:text-primary transition-colors">help</span>
+<span class="text-sm font-medium">Help Center</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Top Header -->
+<header class="h-16 bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 z-10 flex-shrink-0">
+<!-- Mobile Menu Toggle -->
+<button class="lg:hidden text-text-main dark:text-white mr-4">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search -->
+<div class="hidden md:flex flex-1 max-w-md">
+<div class="relative w-full">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="w-full bg-background-light dark:bg-background-dark text-sm rounded-lg pl-10 pr-4 py-2 border-none focus:ring-2 focus:ring-primary/50 text-text-main dark:text-white placeholder-text-muted" placeholder="Search assignments, organizations..." type="text"/>
+</div>
+</div>
+<!-- Right Actions -->
+<div class="flex items-center gap-3 ml-auto">
+<button class="p-2 rounded-lg hover:bg-background-light dark:hover:bg-slate-800 text-text-muted hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-surface-dark"></span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-1"></div>
+<div class="flex items-center gap-2 cursor-pointer p-1 rounded-lg hover:bg-background-light dark:hover:bg-slate-800">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8" data-alt="Small profile picture of user" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCJIVZXp-NE9Fp3LF37u84xr9qGb6zl9il-roihdfgdA0rZW4HVlYNboMlOv2KZ8vfhA7whaZufrKOl4jFQpkr4oUzIDTS5UKyGCMJzSMkhxN3dM1qIVqOSyXGtsCMnOYgnOuYthXR7IkxqKS_4mIZDMxkYmeN5JvF83iC8i-7F1iY3_6H9DyI-SHIpOFXBZfU7Dj7GtV9oORpdCtRs5OC-fOnrAlq4EGOOpSx8hGsuYA-7TiLoO4sc0lcdBaRcAUonm2HECCoivQI");'></div>
+<span class="material-symbols-outlined text-text-muted text-sm">expand_more</span>
+</div>
+</div>
+</header>
+<!-- Content Scroll Area -->
+<main class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
+<div class="max-w-6xl mx-auto space-y-6">
+<!-- Breadcrumbs & Header -->
+<div class="flex flex-col gap-4">
+<nav class="flex items-center gap-2 text-sm text-text-muted">
+<a class="hover:text-primary transition-colors" href="#">Assignments</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="font-medium text-text-main dark:text-slate-200">Blood Donation Camp Support</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+<div class="space-y-1">
+<h1 class="text-3xl md:text-4xl font-bold text-text-main dark:text-white tracking-tight">Blood Donation Camp Support</h1>
+<div class="flex items-center gap-2 text-text-muted">
+<span class="material-symbols-outlined text-[20px]">corporate_fare</span>
+<span class="font-medium">Organized by Red Cross India</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-sm font-semibold border border-blue-200 dark:border-blue-800">
+<span class="size-2 rounded-full bg-current animate-pulse"></span>
+                                Active
+                            </span>
+</div>
+</div>
+</div>
+<!-- Main Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column (Details) -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Description Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+<h2 class="text-lg font-bold text-text-main dark:text-white mb-4">About the Assignment</h2>
+<p class="text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                                We are organizing a large-scale blood donation camp at the City Community Center to support local hospitals facing critical shortages. We need enthusiastic volunteers to help manage donor flow, assist with registration forms, and ensure donors are comfortable and hydrated post-donation. Your support will directly impact lives in our community.
+                            </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="p-4 rounded-lg bg-background-light dark:bg-background-dark border border-slate-200 dark:border-slate-700 flex items-start gap-3">
+<div class="p-2 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-text-muted mb-0.5">Time Commitment</p>
+<p class="font-semibold text-text-main dark:text-white">4 Hours Required</p>
+<p class="text-xs text-slate-500">Saturday, 9:00 AM - 1:00 PM</p>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-background-light dark:bg-background-dark border border-slate-200 dark:border-slate-700 flex items-start gap-3">
+<div class="p-2 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined">group</span>
+</div>
+<div>
+<p class="text-xs font-bold uppercase tracking-wider text-text-muted mb-0.5">Team Size</p>
+<p class="font-semibold text-text-main dark:text-white">12 Volunteers</p>
+<p class="text-xs text-slate-500">8 spots filled</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Requirements -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+<h2 class="text-lg font-bold text-text-main dark:text-white mb-4">Requirements &amp; Prerequisites</h2>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span>Medical background preferred (Nursing/EMT students welcome)</span>
+</li>
+<li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span>Must be 18 years or older</span>
+</li>
+<li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span>Comfortable standing for extended periods</span>
+</li>
+<li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span>Bring a valid photo ID for security clearance</span>
+</li>
+</ul>
+</div>
+<!-- Action Bar (Sticky on Mobile, inline on Desktop) -->
+<div class="sticky bottom-4 z-20 md:static">
+<div class="bg-surface-light dark:bg-surface-dark p-4 md:p-6 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row gap-3 items-center justify-between">
+<div class="flex gap-3 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">login</span>
+                                        Check In
+                                    </button>
+<button class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">assignment_add</span>
+                                        Report
+                                    </button>
+</div>
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-primary hover:bg-teal-400 text-primary-content font-bold shadow-md shadow-primary/20 transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined fill-current">check_circle</span>
+                                    Mark Complete
+                                </button>
+</div>
+</div>
+</div>
+<!-- Right Column (Context) -->
+<div class="lg:col-span-1 space-y-6">
+<!-- Map Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col">
+<div class="h-48 bg-slate-200 relative group">
+<!-- Placeholder Map Image -->
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Abstract map view of city streets" data-location="New Delhi" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBk85L6WPQmtNV6MqXmlxRxorIfFroEumIBamT9okdcEVXExGp8_Dt2vs6h5bXvrr61cP2jJwxtfgT0eSiuFi-HzduLfJHVcPsJXGCVHr9jFgvLk_KKTVEehUV52ARbB4lCs9mna-hz8P9-48W25jmHc7Kc6XT-566LJdBNJ5XbZR14KoSfVFqXgKDiJ6qJrZIIcz6FTy_xU9wQ9TsY6yQCylgPzSGjexwlSfnQgJEayVnc50kBG4fbyqF3oKEhMflkmDHoXwAHHR0');">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<div class="flex items-center gap-1 mb-1">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="font-bold text-sm tracking-wide uppercase">Location</span>
+</div>
+</div>
+</div>
+<div class="p-5">
+<h3 class="font-bold text-text-main dark:text-white mb-1">City Community Center</h3>
+<p class="text-sm text-slate-500 mb-4">124 Park Avenue, Block C, Green Park, New Delhi, 110016</p>
+<button class="w-full py-2 rounded-lg bg-background-light dark:bg-background-dark text-primary font-medium text-sm hover:bg-primary/10 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">directions</span>
+                                    Get Directions
+                                </button>
+</div>
+</div>
+<!-- Coordinator Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-800">
+<h3 class="text-xs font-bold uppercase tracking-wider text-text-muted mb-4">Coordinator</h3>
+<div class="flex items-center gap-4 mb-4">
+<div class="size-12 rounded-full bg-cover bg-center border-2 border-primary/20" data-alt="Portrait of Sarah Jenkins, the coordinator" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDoJRDxJOSwNiiNIYfgpCvaGHUQJcPIJbBq8M_2fIJd8ur2T-6KlkQzIPbMxSFbASagtH96vhhk2YiSsk7vJwYcSryByY-lYpeDS7Ka-IaDp4LTcxBoBpE5sJg68YH4Ej_AGAHlRUbYBPJRYzUWSDHklJdkxT2MCx0zuMhoRGA3OPrzz7EFv8mA3UcBIgH1SPrIpOv09YNlMeKtAUaDZdrTx2bG6FiuKtm_aM5hCCPk86rS-cARRWk4f9-mHP1m6tipS2Sr_7K8gTE');">
+</div>
+<div>
+<p class="font-bold text-text-main dark:text-white">Sarah Jenkins</p>
+<p class="text-xs text-slate-500">Project Lead, Red Cross</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">call</span>
+                                    Call
+                                </button>
+<button class="flex-1 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+                                    Email
+                                </button>
+</div>
+</div>
+<!-- Attachments Card (Optional Extra) -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-800">
+<h3 class="text-xs font-bold uppercase tracking-wider text-text-muted mb-4">Resources</h3>
+<a class="flex items-center gap-3 p-3 rounded-lg hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors group" href="#">
+<div class="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-2 rounded-lg">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-medium text-text-main dark:text-white truncate group-hover:text-primary transition-colors">Safety_Guidelines.pdf</p>
+<p class="text-xs text-slate-500">2.4 MB</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">download</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Spacer for bottom safe area on mobile -->
+<div class="h-8 md:h-0"></div>
+</div>
+</main>
+</div>
+</body></html>

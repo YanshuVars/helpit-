@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Volunteer Opportunities - Helpit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;family=Merriweather:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#14b0a3",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "text-main": "#0e1b1a",
+                        "text-secondary": "#4f9690",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "serif": ["Merriweather", "serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased min-h-screen flex flex-col">
+<!-- Navbar -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-[#112120]/80 backdrop-blur-md px-4 sm:px-10 py-3">
+<div class="flex items-center gap-4 text-text-main dark:text-white">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_330)">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</g>
+<defs>
+<clippath id="clip0_6_330"><rect fill="white" height="48" width="48"></rect></clippath>
+</defs>
+</svg>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-[-0.015em]">Helpit</h2>
+</div>
+<div class="flex gap-3">
+<button class="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-transparent border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-text-main dark:text-white text-sm font-bold transition-colors">
+<span class="truncate">Sign In</span>
+</button>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary-dark text-slate-900 text-sm font-bold shadow-sm transition-colors">
+<span class="truncate">Sign Up</span>
+</button>
+</div>
+</header>
+<main class="flex-grow flex flex-col">
+<!-- Hero Section -->
+<div class="relative w-full bg-slate-900 overflow-hidden">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-0">
+<img alt="Diverse group of volunteers planting trees in a park" class="w-full h-full object-cover opacity-40" data-alt="Group of volunteers working together outdoors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCll1KyAGQPI1KP8o1CkfanuivPzPrpCvBDzxMLywFsfq7nebNklnWPqIElsUoRo37MQ0vnYN8KX2adTjQWGx2Tg3jjEORckN95kDz8PMIxXzfLLgHuhtVYhPAeyg6l3I4PWWx3u-HHbaIVdK7v-10QgvmymKgqMV7d3CJBhX4BRnN3imoSRm8_sMtbjnQmD-kyuEduWkh7NGYO8HP5W1sFiI3g_aFukA1kDlHv44gM55jPymTXJWhfxoxPYUg7XXhgDSI7J5AKtOc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+</div>
+<div class="relative z-10 container mx-auto px-4 py-20 sm:py-32 flex flex-col items-center text-center">
+<span class="inline-flex items-center rounded-full bg-primary/20 px-3 py-1 text-sm font-medium text-primary mb-6 backdrop-blur-sm border border-primary/20">
+                    Join 10,000+ Volunteers
+                </span>
+<h1 class="text-white font-serif text-4xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight mb-6 max-w-4xl">
+                    Volunteer Opportunities
+                </h1>
+<p class="text-slate-200 text-lg sm:text-xl max-w-2xl font-light leading-relaxed mb-10">
+                    Connect with local NGOs and make a tangible difference in your community today. Find causes you care about and lend a helping hand.
+                </p>
+<!-- Search Box Floating on Hero/Section Boundary -->
+<div class="w-full max-w-4xl bg-white dark:bg-[#1e2e2d] rounded-2xl shadow-xl p-2 sm:p-3 flex flex-col sm:flex-row gap-3 transform translate-y-8 sm:translate-y-12 transition-all">
+<div class="flex-1 flex items-center bg-slate-50 dark:bg-[#112120] rounded-xl px-4 py-3 border border-slate-100 dark:border-slate-700 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary transition-all group">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary mr-3">search</span>
+<input class="bg-transparent border-none w-full text-slate-900 dark:text-white placeholder-slate-400 focus:ring-0 p-0 text-base" placeholder="Search by keyword..." type="text"/>
+</div>
+<div class="flex-1 sm:max-w-[200px] flex items-center bg-slate-50 dark:bg-[#112120] rounded-xl px-4 py-3 border border-slate-100 dark:border-slate-700 relative group cursor-pointer hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
+<span class="material-symbols-outlined text-slate-400 mr-3">category</span>
+<select class="bg-transparent border-none w-full text-slate-900 dark:text-white focus:ring-0 p-0 text-base appearance-none cursor-pointer">
+<option disabled="" selected="" value="">Category</option>
+<option value="education">Education</option>
+<option value="environment">Environment</option>
+<option value="health">Health</option>
+<option value="community">Community</option>
+</select>
+<span class="material-symbols-outlined text-slate-400 absolute right-3 pointer-events-none text-sm">expand_more</span>
+</div>
+<div class="flex-1 sm:max-w-[200px] flex items-center bg-slate-50 dark:bg-[#112120] rounded-xl px-4 py-3 border border-slate-100 dark:border-slate-700 relative group cursor-pointer hover:border-slate-300 dark:hover:border-slate-600 transition-colors">
+<span class="material-symbols-outlined text-slate-400 mr-3">location_on</span>
+<select class="bg-transparent border-none w-full text-slate-900 dark:text-white focus:ring-0 p-0 text-base appearance-none cursor-pointer">
+<option disabled="" selected="" value="">City</option>
+<option value="ny">New York</option>
+<option value="la">Los Angeles</option>
+<option value="ch">Chicago</option>
+<option value="sf">San Francisco</option>
+</select>
+<span class="material-symbols-outlined text-slate-400 absolute right-3 pointer-events-none text-sm">expand_more</span>
+</div>
+<button class="bg-primary hover:bg-primary-dark text-slate-900 font-bold py-3 px-8 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span>Search</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Spacer for Search Box overlap -->
+<div class="h-20 sm:h-24 bg-background-light dark:bg-background-dark"></div>
+<!-- Main Content -->
+<div class="container mx-auto px-4 sm:px-10 pb-20">
+<!-- Filter Tags (Quick Access) -->
+<div class="flex flex-wrap gap-3 mb-10 justify-center sm:justify-start">
+<button class="px-4 py-2 rounded-full bg-white dark:bg-[#1e2e2d] border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary dark:hover:text-primary transition-colors shadow-sm">
+                    All Requests
+                </button>
+<button class="px-4 py-2 rounded-full bg-primary/10 border border-primary text-sm font-medium text-slate-900 dark:text-primary transition-colors shadow-sm">
+                    Urgent Needs
+                </button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-[#1e2e2d] border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary dark:hover:text-primary transition-colors shadow-sm">
+                    Remote Friendly
+                </button>
+<button class="px-4 py-2 rounded-full bg-white dark:bg-[#1e2e2d] border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary dark:hover:text-primary transition-colors shadow-sm">
+                    Weekend Only
+                </button>
+</div>
+<!-- Header -->
+<div class="flex flex-col sm:flex-row justify-between items-end mb-8 gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Latest Requests</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Showing 124 opportunities near you</p>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+<span>Sort by:</span>
+<button class="flex items-center gap-1 font-semibold text-slate-900 dark:text-white hover:text-primary transition-colors">
+                        Newest <span class="material-symbols-outlined text-base">arrow_drop_down</span>
+</button>
+</div>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<article class="group bg-white dark:bg-[#1e2e2d] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
+<div class="relative h-48 overflow-hidden">
+<img alt="Beach cleanup event with volunteers" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Volunteers cleaning up a beach" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX3j0eaPbc0AbQgOOQcBhu-3IzXfZ6QPEu85M7qbRoqb95vU50yP9WCpwAwyxJOxGkZ-cl4BCKVln_DXc1pBvuKcnJVzjEYPkaNi-exU2qEgqOh13bW2VGIBtRnivpqptsScaXp5_ruHInPmT98OS9ohgkhlpOQQn-oxqhboMsTeVMBo12cwmetOZOv98aqKXYq8R1t5UogT70IwUV7S5Xxt72AmG54HuEu1rw8D7tq3BVaJh7bFk4b-GlV2Njz2DDEU4HzBVoWEM"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-white/90 text-slate-800 backdrop-blur-sm shadow-sm">
+                                Environment
+                            </span>
+</div>
+<div class="absolute top-3 right-3">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-rose-500 text-white shadow-sm">
+                                High Urgency
+                            </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-300 text-xs font-bold">
+                                OG
+                            </div>
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Ocean Guardians</span>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            Weekend Beach Cleanup Drive
+                        </h3>
+<div class="flex items-center text-slate-500 dark:text-slate-400 text-sm mb-4">
+<span class="material-symbols-outlined text-base mr-1.5 text-primary">location_on</span>
+                            Santa Monica, CA
+                        </div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-6 line-clamp-3">
+                            Join us for our monthly beach cleanup! We provide bags and gloves. Great for families and groups.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:border-primary hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
+                                Learn More
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="group bg-white dark:bg-[#1e2e2d] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
+<div class="relative h-48 overflow-hidden">
+<img alt="Teaching children in a classroom" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Volunteer teaching a child to read" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzrl2vMfwtj-7VWKP2nnx0ZCbqXB8ZwTZ8KVyZyX0XCCaL1HStu6IOwTQzz5HPpKpR9McvpPUhnMTnIqmI_l4JbsmCloX9km5HbkhMnOxRhOIEkHGdjp04Uzfm089Ge6dFz_0-eUYGlAufJR9qaW83lHxP-c9I4r9sQUgo46mMvlsgVrqUHneX-rbdAHCG3EOdysfyksbrRquIOMXy13ogbDRossWsYY6oe5DUNsAEoujeCMH72iYdP-pTES_G7ZY2eO6nX-7Brbs"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-white/90 text-slate-800 backdrop-blur-sm shadow-sm">
+                                Education
+                            </span>
+</div>
+<div class="absolute top-3 right-3">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-400 text-slate-900 shadow-sm">
+                                Medium Urgency
+                            </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-600 dark:text-emerald-300 text-xs font-bold">
+                                LF
+                            </div>
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Literacy First</span>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            After-School Reading Tutor
+                        </h3>
+<div class="flex items-center text-slate-500 dark:text-slate-400 text-sm mb-4">
+<span class="material-symbols-outlined text-base mr-1.5 text-primary">location_on</span>
+                            Chicago, IL
+                        </div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-6 line-clamp-3">
+                            Help elementary students improve their reading skills. Commitment of 2 hours per week required.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:border-primary hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
+                                Learn More
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="group bg-white dark:bg-[#1e2e2d] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
+<div class="relative h-48 overflow-hidden">
+<img alt="Packing food boxes at a food bank" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Volunteers packing food boxes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXLmdzh8LqWCgemYjHtkNnJxtTY_KQGvFW0K_qnm59ycMv6LCWKzUaLYGX_Hz6ua7pCQeKOZzt7GEEl3ZKynxPFTC45DLFGox4w747gjOFRq8lSz_wu-73vtJT-lB1VOBjJAb6WSyIdTJbiu_3WyKJD5dvyvXD0mO7TibfcesphF0dKQSe9w9A2tKYq-sPmgBldO_Bp6eC9dh_zA_do_jsKeFOVQylrTfM3046qQr_2z5Bf3CjOdjFsG1sD8cWy47VM_HXnUS2i3o"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-white/90 text-slate-800 backdrop-blur-sm shadow-sm">
+                                Community
+                            </span>
+</div>
+<div class="absolute top-3 right-3">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-rose-500 text-white shadow-sm">
+                                High Urgency
+                            </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900 flex items-center justify-center text-orange-600 dark:text-orange-300 text-xs font-bold">
+                                FB
+                            </div>
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">City Food Bank</span>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            Emergency Food Distribution
+                        </h3>
+<div class="flex items-center text-slate-500 dark:text-slate-400 text-sm mb-4">
+<span class="material-symbols-outlined text-base mr-1.5 text-primary">location_on</span>
+                            New York, NY
+                        </div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-6 line-clamp-3">
+                            Urgent need for volunteers to help pack and distribute food boxes to families in need this weekend.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:border-primary hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
+                                Learn More
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="group bg-white dark:bg-[#1e2e2d] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
+<div class="relative h-48 overflow-hidden">
+<img alt="Senior care volunteer talking with elderly person" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Volunteer assisting an elderly person" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAQe92KITfm0j4J3LRgKyemVW8nPhO3Sd8RdZPcIGPP6WICcZz8kiPu-Ml566rkaFNdPRJi0627juA4rzmBmHlVoOs5r-vHA0mkMPA7h792zd_z2cF4iqLasAzLwO4s4XVDki9Eu9awwzhcajRH8cIRC9D3pTF-Fkw9nvLNaf-aTLYSpCWyZzqL75nodvCSsKXPrbPTHRfX_uFhCcGnD8kklOYIflviSjj5VqwSgk9Pv3kNPGpMF9MDMTDSoLKIBwpBfPuPdZACl0"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-white/90 text-slate-800 backdrop-blur-sm shadow-sm">
+                                Health
+                            </span>
+</div>
+<div class="absolute top-3 right-3">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-400 text-white shadow-sm">
+                                Low Urgency
+                            </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-pink-100 dark:bg-pink-900 flex items-center justify-center text-pink-600 dark:text-pink-300 text-xs font-bold">
+                                SC
+                            </div>
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Senior Connect</span>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            Companion for Seniors
+                        </h3>
+<div class="flex items-center text-slate-500 dark:text-slate-400 text-sm mb-4">
+<span class="material-symbols-outlined text-base mr-1.5 text-primary">location_on</span>
+                            Seattle, WA
+                        </div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-6 line-clamp-3">
+                            Spend quality time with seniors in assisted living. Read books, play games, or just chat.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:border-primary hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
+                                Learn More
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="group bg-white dark:bg-[#1e2e2d] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
+<div class="relative h-48 overflow-hidden">
+<img alt="Business meeting with diverse team" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="People collaborating on a project around a table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQUHnhIfR_pDK-xiC5O_M576GJql7T00J0PXY9XUruvyw8sqIcxXUt5-EEzIOqT0YgHPpk3qdadm7BXosiJNOM4i44J21-fSwCs-Zu-FuHxwatDIgI0Reu2PIlvOzfOS7reiT5lZ52NqiskraB5R5LyGx0oIeJ17PbYNV6cFi1XvgStH-XRH2NBYJtOinAHhp5nLmq2F4yAHTDo_MsFxFeZ6lQymuXaiqtYby2t4CoBwfo86OP7DNFUBpk1PrUpOKHbz5-pGuJNOo"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-white/90 text-slate-800 backdrop-blur-sm shadow-sm">
+                                Administrative
+                            </span>
+</div>
+<div class="absolute top-3 right-3">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-400 text-slate-900 shadow-sm">
+                                Medium Urgency
+                            </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-300 text-xs font-bold">
+                                HA
+                            </div>
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Housing Aid</span>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            Grant Writer Assistant
+                        </h3>
+<div class="flex items-center text-slate-500 dark:text-slate-400 text-sm mb-4">
+<span class="material-symbols-outlined text-base mr-1.5 text-primary">location_on</span>
+                            Remote
+                        </div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-6 line-clamp-3">
+                            Assist our fundraising team by researching and drafting grant proposals. Excellent writing skills needed.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:border-primary hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
+                                Learn More
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="group bg-white dark:bg-[#1e2e2d] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
+<div class="relative h-48 overflow-hidden">
+<img alt="Dog shelter volunteer with a dog" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Volunteer petting a dog at a shelter" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBftZR6Ebj97BDNoSxmBGf8pu8YIwdjIHkIgi8HZcy7zewaIeqLJ6hvwoESVPcTBSp_YRX9ebjfGITLmUr1_k5k0GrRhxCcBP7_VpKRsNu5CidRz_0pYxGda36_Y70YpFcZVV9T2yTaO4rlpZ4-7BZyyugkMS_LxxVwXJuDjWh-xPcMWgt8cOCQ7FpO61ZzpO0bpmF8RnsGywqtq-OsxBkSVLYgqEunRB2-YRWmkTsTukWesZdhlb6tXSVA8Q0128W-T9DTFSXAPm0"/>
+<div class="absolute top-3 left-3 flex flex-col gap-2">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-white/90 text-slate-800 backdrop-blur-sm shadow-sm">
+                                Animal Welfare
+                            </span>
+</div>
+<div class="absolute top-3 right-3">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-rose-500 text-white shadow-sm">
+                                High Urgency
+                            </span>
+</div>
+</div>
+<div class="p-5 flex flex-col flex-grow">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center text-teal-600 dark:text-teal-300 text-xs font-bold">
+                                PS
+                            </div>
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Paws Shelter</span>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            Dog Walker &amp; Socializer
+                        </h3>
+<div class="flex items-center text-slate-500 dark:text-slate-400 text-sm mb-4">
+<span class="material-symbols-outlined text-base mr-1.5 text-primary">location_on</span>
+                            Austin, TX
+                        </div>
+<p class="text-sm text-slate-600 dark:text-slate-300 mb-6 line-clamp-3">
+                            Our shelter is at capacity and we need dog lovers to walk and play with our pups to keep them happy.
+                        </p>
+<div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<button class="w-full py-2.5 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:border-primary hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2">
+                                Learn More
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-16 flex justify-center">
+<button class="bg-white dark:bg-[#1e2e2d] hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-bold py-3 px-8 rounded-full transition-all shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined">refresh</span>
+                    Load More Opportunities
+                </button>
+</div>
+</div>
+</main>
+<!-- Simple Footer -->
+<footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-[#112120] pt-12 pb-8">
+<div class="container mx-auto px-10">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
+<div class="flex items-center gap-3 text-text-main dark:text-white">
+<div class="size-6 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="text-lg font-bold">Helpit</span>
+</div>
+<div class="flex gap-6 text-sm font-medium text-slate-500 dark:text-slate-400">
+<a class="hover:text-primary transition-colors" href="#">About Us</a>
+<a class="hover:text-primary transition-colors" href="#">For NGOs</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+<div class="text-center text-xs text-slate-400 dark:text-slate-500">
+                © 2023 Helpit Platform. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

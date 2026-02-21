@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Volunteer Opportunities Browser</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#16b2a4", 
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-primary-light": "#0e1b1a",
+                        "text-primary-dark": "#e2e8e8",
+                        "text-secondary-light": "#4f9690",
+                        "text-secondary-dark": "#88b3b0",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-primary-light dark:text-text-primary-dark antialiased transition-colors duration-300">
+<div class="flex min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 bg-surface-light dark:border-slate-800 dark:bg-surface-dark lg:flex">
+<div class="flex h-20 items-center gap-3 px-6">
+<div class="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary-dark dark:text-primary">
+<span class="material-symbols-outlined text-2xl">volunteer_activism</span>
+</div>
+<div>
+<h1 class="text-base font-bold leading-tight text-text-primary-light dark:text-text-primary-dark">VolunteerConnect</h1>
+<p class="text-xs font-normal text-text-secondary-light dark:text-text-secondary-dark">Find your cause</p>
+</div>
+</div>
+<nav class="flex flex-1 flex-col gap-2 px-3 py-4">
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="group flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-primary-dark dark:text-primary" href="#">
+<span class="material-symbols-outlined font-fill text-2xl" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="text-sm font-medium">Opportunities</span>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined text-2xl">description</span>
+<span class="text-sm font-medium">My Applications</span>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined text-2xl">chat_bubble</span>
+<span class="text-sm font-medium">Messages</span>
+</a>
+</nav>
+<div class="border-t border-slate-200 px-3 py-4 dark:border-slate-800">
+<div class="flex flex-col gap-1">
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="group flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined text-2xl">logout</span>
+<span class="text-sm font-medium">Log Out</span>
+</a>
+</div>
+<div class="mt-4 flex items-center gap-3 px-3">
+<div class="size-10 overflow-hidden rounded-full bg-slate-200">
+<img alt="User profile picture" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXbU_BpjZ25j-jUlLnlYCtOr_4U82a4N8-he6DvQinQGwJpAet08mhaaMw8a2SR7zkAVC3uh919VGGhWMBySVVEoJJgaU-ql3FamEmfpGhL3rR0wdj-ISSRpgX9opi6UsrPBQ6w3KC-GaC9r89-GMETzDSuoT84FtJ_YjtfNHac5FJHdS_zl5Hq2pH7a6B_MGLY2INmPfQahKzPntH5uUeOoaWYbZouoI-INHP6TlrvlzPKl3EZPZbtNeI1dYllGWltZtO17W81AA"/>
+</div>
+<div class="flex flex-col">
+<p class="text-sm font-semibold text-text-primary-light dark:text-text-primary-dark">Sarah Jenkins</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Volunteer</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex h-screen flex-1 flex-col overflow-y-auto bg-background-light dark:bg-background-dark">
+<!-- Mobile Header -->
+<div class="sticky top-0 z-20 flex h-16 items-center justify-between bg-surface-light px-4 shadow-sm dark:bg-surface-dark lg:hidden">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-dark dark:text-primary">volunteer_activism</span>
+<span class="text-lg font-bold text-text-primary-light dark:text-text-primary-dark">VolunteerConnect</span>
+</div>
+<button class="rounded-lg p-2 text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div class="container mx-auto max-w-7xl p-4 md:p-8">
+<!-- Header Section -->
+<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+<div>
+<h2 class="text-3xl font-bold tracking-tight text-text-primary-light dark:text-text-primary-dark">Find Opportunities</h2>
+<p class="mt-2 text-text-secondary-light dark:text-text-secondary-dark">Browse and apply for roles that match your skills and interests.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 rounded-lg border border-slate-200 bg-surface-light px-4 py-2.5 text-sm font-medium text-text-primary-light hover:bg-slate-50 dark:border-slate-700 dark:bg-surface-dark dark:text-text-primary-dark dark:hover:bg-slate-800">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+                            Advanced Filters
+                        </button>
+</div>
+</div>
+<!-- Search and Filters Bar -->
+<div class="mb-8 rounded-xl bg-surface-light p-4 shadow-sm ring-1 ring-slate-900/5 dark:bg-surface-dark dark:ring-white/10">
+<div class="flex flex-col gap-4 lg:flex-row lg:items-center">
+<!-- Search Input -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark">search</span>
+<input class="h-12 w-full rounded-lg border-slate-200 bg-slate-50 pl-12 pr-4 text-sm text-text-primary-light placeholder:text-text-secondary-light focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-text-primary-dark dark:placeholder:text-text-secondary-dark" placeholder="Search by keyword, role, or NGO..." type="text"/>
+</div>
+<!-- Filters Group -->
+<div class="flex flex-wrap items-center gap-3">
+<!-- City Dropdown -->
+<div class="relative min-w-[160px]">
+<select class="h-12 w-full appearance-none rounded-lg border-slate-200 bg-slate-50 px-4 text-sm text-text-primary-light focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-text-primary-dark">
+<option value="">All Cities</option>
+<option value="new-york">New York, NY</option>
+<option value="san-francisco">San Francisco, CA</option>
+<option value="chicago">Chicago, IL</option>
+<option value="austin">Austin, TX</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark">expand_more</span>
+</div>
+<!-- Category Dropdown -->
+<div class="relative min-w-[160px]">
+<select class="h-12 w-full appearance-none rounded-lg border-slate-200 bg-slate-50 px-4 text-sm text-text-primary-light focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:text-text-primary-dark">
+<option value="">All Categories</option>
+<option value="education">Education</option>
+<option value="health">Health</option>
+<option value="environment">Environment</option>
+<option value="crisis">Crisis Support</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark">expand_more</span>
+</div>
+<button class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-background-dark hover:bg-primary-dark transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Urgency Toggles -->
+<div class="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-4 dark:border-slate-700">
+<span class="mr-2 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">Urgency:</span>
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<span class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 peer-checked:border-green-200 peer-checked:bg-green-50 peer-checked:text-green-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:peer-checked:bg-green-900/30 dark:peer-checked:border-green-800 dark:peer-checked:text-green-400">
+                                Low
+                            </span>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" type="checkbox"/>
+<span class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 peer-checked:border-yellow-200 peer-checked:bg-yellow-50 peer-checked:text-yellow-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:peer-checked:bg-yellow-900/30 dark:peer-checked:border-yellow-800 dark:peer-checked:text-yellow-400">
+                                Medium
+                            </span>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" type="checkbox"/>
+<span class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 peer-checked:border-orange-200 peer-checked:bg-orange-50 peer-checked:text-orange-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:peer-checked:bg-orange-900/30 dark:peer-checked:border-orange-800 dark:peer-checked:text-orange-400">
+                                High
+                            </span>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" type="checkbox"/>
+<span class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 peer-checked:border-red-200 peer-checked:bg-red-50 peer-checked:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:peer-checked:bg-red-900/30 dark:peer-checked:border-red-800 dark:peer-checked:text-red-400">
+                                Critical
+                            </span>
+</label>
+</div>
+</div>
+<!-- Opportunities Grid -->
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+<!-- Card 1 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-surface-light shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-surface-dark dark:ring-white/10 dark:hover:shadow-lg dark:hover:shadow-primary/5">
+<div class="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Volunteers packing food" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Food donation boxes organization" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb4dBqKYSfPP1bW-MzGQUanbY_zhbTLhxKobOY0MpJvEVzLrO2bzmKDReAgRvEh4Y_-3ODL8w2Tj0c7goXXT4bQV893vz0CcBARBnmRyHwPNSYjcxeMtbR77opVw0zsPs2DS__5t2ZXhZwX7nTjo8iQTOFIHGrgXV4iEUINXTl4Vh80ThSxKYgX73PHmrtLBVQAsTJ4fw9RckWrvX9y8VFD7j-fhW5NMTUyJOb60_WGeaUaqbfc5hr4vWiOsleqoYfNPt4oLGJi20"/>
+<div class="absolute right-3 top-3 rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700 shadow-sm dark:bg-red-900/80 dark:text-red-300 backdrop-blur-sm">
+                                Critical
+                             </div>
+<div class="absolute left-3 top-3 rounded-full bg-surface-light/90 px-3 py-1 text-xs font-semibold text-text-primary-light shadow-sm dark:bg-surface-dark/90 dark:text-text-primary-dark backdrop-blur-sm">
+                                Crisis Support
+                             </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-3 flex items-start justify-between">
+<div>
+<h3 class="line-clamp-1 text-lg font-bold text-text-primary-light dark:text-text-primary-dark">Emergency Food Distribution</h3>
+<p class="text-sm font-medium text-primary-dark dark:text-primary">Community First NGO</p>
+</div>
+</div>
+<div class="mb-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="text-sm">Chicago, IL (On-site)</span>
+</div>
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="text-sm">Weekends, 4-6 hours</span>
+</div>
+</div>
+<p class="mb-6 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">
+                                Help distribute emergency food supplies to families affected by recent flooding in the downtown area.
+                            </p>
+<div class="mt-auto">
+<button class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-background-dark transition-colors hover:bg-primary-dark hover:text-white">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-surface-light shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-surface-dark dark:ring-white/10 dark:hover:shadow-lg dark:hover:shadow-primary/5">
+<div class="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Classroom teaching" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Students learning in a classroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCapla3w6N18FSPUUR7BgXG5bydfeSEBzS6gscCbyvZXdm7Zrtl8n4jJSsB5_fCINxV9zkmWuGE4fF6prEhSx3e4twI-k-sgcpgwh5AoYDoO57Jn4DZUVBY-R3NuFFI_vuHMnc2Hnqv3OFbvUQH9_m2v_EOGxwHpq4ReqJloOeuek5c2Eo3Fqmn4EACsFeZj3xveUaedIWmJV4oyjoicaePGCSTumenwXuMs-8C8R-IdOHsDZlE3s1D7lYwTeH83rn6ynLbumImOPI"/>
+<div class="absolute right-3 top-3 rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700 shadow-sm dark:bg-green-900/80 dark:text-green-300 backdrop-blur-sm">
+                                Low Urgency
+                             </div>
+<div class="absolute left-3 top-3 rounded-full bg-surface-light/90 px-3 py-1 text-xs font-semibold text-text-primary-light shadow-sm dark:bg-surface-dark/90 dark:text-text-primary-dark backdrop-blur-sm">
+                                Education
+                             </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-3 flex items-start justify-between">
+<div>
+<h3 class="line-clamp-1 text-lg font-bold text-text-primary-light dark:text-text-primary-dark">Math Tutor for Kids</h3>
+<p class="text-sm font-medium text-primary-dark dark:text-primary">Bright Future Foundation</p>
+</div>
+</div>
+<div class="mb-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">videocam</span>
+<span class="text-sm">Remote</span>
+</div>
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="text-sm">Flexible, 2 hours/week</span>
+</div>
+</div>
+<p class="mb-6 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">
+                                Provide one-on-one math tutoring for underprivileged middle school students via video call.
+                            </p>
+<div class="mt-auto">
+<button class="w-full rounded-lg bg-surface-light border border-primary text-primary-dark px-4 py-2.5 text-sm font-semibold hover:bg-primary hover:text-background-dark dark:bg-surface-dark dark:text-primary dark:hover:bg-primary dark:hover:text-background-dark transition-colors">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-surface-light shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-surface-dark dark:ring-white/10 dark:hover:shadow-lg dark:hover:shadow-primary/5">
+<div class="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Planting trees" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Hands planting a tree seedling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF6P5Igkk9kGuOL0i-pPd1dvc1MBnrJTB-3CenIBseM7hutFEx3RYW28pnJciWrqNRoXT7-_7-VwGZEh5VwHixW0wIl8-5ApUfxo_do_NI5Fi3lksUTC2qEzGZngoB5U6snmXvWve0e_0rxgrEh6BaDKYVqc9cjBrNQCjQDHc8Oa4B6bWK1Ci48KdwDT61vTVPqHZwxdWP1wPJL85LUBBsL5S8-QoHNdWxeA-bQLEpIR4QGJeU97Xs4fx6yvA8kLl-G9y61yHaibo"/>
+<div class="absolute right-3 top-3 rounded-full bg-orange-100 px-3 py-1 text-xs font-bold text-orange-700 shadow-sm dark:bg-orange-900/80 dark:text-orange-300 backdrop-blur-sm">
+                                High Urgency
+                             </div>
+<div class="absolute left-3 top-3 rounded-full bg-surface-light/90 px-3 py-1 text-xs font-semibold text-text-primary-light shadow-sm dark:bg-surface-dark/90 dark:text-text-primary-dark backdrop-blur-sm">
+                                Environment
+                             </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-3 flex items-start justify-between">
+<div>
+<h3 class="line-clamp-1 text-lg font-bold text-text-primary-light dark:text-text-primary-dark">Urban Tree Planting</h3>
+<p class="text-sm font-medium text-primary-dark dark:text-primary">Green Earth Alliance</p>
+</div>
+</div>
+<div class="mb-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="text-sm">Austin, TX</span>
+</div>
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="text-sm">Saturday Morning</span>
+</div>
+</div>
+<p class="mb-6 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">
+                                Join us this weekend to plant 500 trees in the downtown park area. Gloves and tools provided.
+                            </p>
+<div class="mt-auto">
+<button class="w-full rounded-lg bg-surface-light border border-primary text-primary-dark px-4 py-2.5 text-sm font-semibold hover:bg-primary hover:text-background-dark dark:bg-surface-dark dark:text-primary dark:hover:bg-primary dark:hover:text-background-dark transition-colors">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-surface-light shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-surface-dark dark:ring-white/10 dark:hover:shadow-lg dark:hover:shadow-primary/5">
+<div class="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Medical professional" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Doctor holding stethoscope" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxCL4qhKt-3uMJrbpDLOnoQCc6-BJW3fBhW7qKLFwaAgu2oypVL56yAuGUjQr_jJSe4UOxj_6uTe5j9JqUPVDLwQZRd3RKY8rtKU9aLCot-iWvh0nUD9rhbZqvzylBnHlseDK6TGBQWC-i-8NeQ7win8q8ir4OKJrHBVUYbIvgEJnZwzHF1wS9aDvUBnKt9oO8CHfV7z4d0gzRr5B1UTO0skmTmub7sLl2WgRxXwWfkcYz34jH32Ake4zr5n0eS2cbUtwz5v1n8kQ"/>
+<div class="absolute right-3 top-3 rounded-full bg-yellow-100 px-3 py-1 text-xs font-bold text-yellow-700 shadow-sm dark:bg-yellow-900/80 dark:text-yellow-300 backdrop-blur-sm">
+                                Medium Urgency
+                             </div>
+<div class="absolute left-3 top-3 rounded-full bg-surface-light/90 px-3 py-1 text-xs font-semibold text-text-primary-light shadow-sm dark:bg-surface-dark/90 dark:text-text-primary-dark backdrop-blur-sm">
+                                Health
+                             </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-3 flex items-start justify-between">
+<div>
+<h3 class="line-clamp-1 text-lg font-bold text-text-primary-light dark:text-text-primary-dark">Vaccination Clinic Support</h3>
+<p class="text-sm font-medium text-primary-dark dark:text-primary">City Health Dept.</p>
+</div>
+</div>
+<div class="mb-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="text-sm">San Francisco, CA</span>
+</div>
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="text-sm">Weekdays, 9am - 5pm</span>
+</div>
+</div>
+<p class="mb-6 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">
+                                Assist with patient registration and flow management at our downtown vaccination clinic.
+                            </p>
+<div class="mt-auto">
+<button class="w-full rounded-lg bg-surface-light border border-primary text-primary-dark px-4 py-2.5 text-sm font-semibold hover:bg-primary hover:text-background-dark dark:bg-surface-dark dark:text-primary dark:hover:bg-primary dark:hover:text-background-dark transition-colors">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-surface-light shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-surface-dark dark:ring-white/10 dark:hover:shadow-lg dark:hover:shadow-primary/5">
+<div class="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Social media planning" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Laptop with social media graphs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDENSHibE-ZIKiDmykhmX02vlasj-dG7iam14YFsg2hPXysYv_GNdUSwUdirPKTBOyNlyUJXuQ82-qYljm0fP-bv-MQtUICy7iiFKTdJgpCEItF2aaZNFp-pbruMb44PHDJ7NthkdMraam4jSpQuKQ-V-mhX2B7iKUki-eyt2s__y--6USHH0WFPtNQ_Uosq7QIt3PvyLXG0KCC5c9miMKbkuNLi39QbA5_2Lcy607_kDWoYIYrStFo_ZUSWn2TJ5jQ1GHPDDFSvgw"/>
+<div class="absolute right-3 top-3 rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700 shadow-sm dark:bg-green-900/80 dark:text-green-300 backdrop-blur-sm">
+                                Low Urgency
+                             </div>
+<div class="absolute left-3 top-3 rounded-full bg-surface-light/90 px-3 py-1 text-xs font-semibold text-text-primary-light shadow-sm dark:bg-surface-dark/90 dark:text-text-primary-dark backdrop-blur-sm">
+                                Marketing
+                             </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-3 flex items-start justify-between">
+<div>
+<h3 class="line-clamp-1 text-lg font-bold text-text-primary-light dark:text-text-primary-dark">Social Media Mentor</h3>
+<p class="text-sm font-medium text-primary-dark dark:text-primary">Tech for Good</p>
+</div>
+</div>
+<div class="mb-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">videocam</span>
+<span class="text-sm">Remote</span>
+</div>
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="text-sm">Flexible</span>
+</div>
+</div>
+<p class="mb-6 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">
+                                Guide non-profits on how to effectively use social media to reach more donors and volunteers.
+                            </p>
+<div class="mt-auto">
+<button class="w-full rounded-lg bg-surface-light border border-primary text-primary-dark px-4 py-2.5 text-sm font-semibold hover:bg-primary hover:text-background-dark dark:bg-surface-dark dark:text-primary dark:hover:bg-primary dark:hover:text-background-dark transition-colors">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group flex flex-col overflow-hidden rounded-xl bg-surface-light shadow-sm ring-1 ring-slate-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:bg-surface-dark dark:ring-white/10 dark:hover:shadow-lg dark:hover:shadow-primary/5">
+<div class="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+<img alt="Senior care" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Senior care assistant holding hands" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCNhJnaxZ5q4B_Zj2MODsSoOOx_O0Z8KBYl2so7kt86tth1ENdxzggaIVwc7XdAOt-B3eOGl3yNhpjkw6ODAkrN9G-YQz6fSla8rEgsK9Tyo_1lRXdOdwOOkNeWGbJpyiDsVTfR8uXJZc1Ydj3myPLqgwYYSfasjEuNETWO1iHobZWhclJyunRzLVBZd3u6YirmqrC2O3HIyN4CjuF8UF5vb0odJiK3uItm0vQwFmtmnNrZ6pBTbhuEnXCHPMdlpwoxrMbwpzDigI"/>
+<div class="absolute right-3 top-3 rounded-full bg-orange-100 px-3 py-1 text-xs font-bold text-orange-700 shadow-sm dark:bg-orange-900/80 dark:text-orange-300 backdrop-blur-sm">
+                                High Urgency
+                             </div>
+<div class="absolute left-3 top-3 rounded-full bg-surface-light/90 px-3 py-1 text-xs font-semibold text-text-primary-light shadow-sm dark:bg-surface-dark/90 dark:text-text-primary-dark backdrop-blur-sm">
+                                Community
+                             </div>
+</div>
+<div class="flex flex-1 flex-col p-5">
+<div class="mb-3 flex items-start justify-between">
+<div>
+<h3 class="line-clamp-1 text-lg font-bold text-text-primary-light dark:text-text-primary-dark">Senior Companion</h3>
+<p class="text-sm font-medium text-primary-dark dark:text-primary">Golden Years Home</p>
+</div>
+</div>
+<div class="mb-4 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="text-sm">New York, NY</span>
+</div>
+<div class="flex items-center gap-2 text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span class="text-sm">Evenings</span>
+</div>
+</div>
+<p class="mb-6 line-clamp-2 text-sm text-slate-500 dark:text-slate-400">
+                                Spend quality time with seniors who have limited family contact. Reading, games, and conversation.
+                            </p>
+<div class="mt-auto">
+<button class="w-full rounded-lg bg-surface-light border border-primary text-primary-dark px-4 py-2.5 text-sm font-semibold hover:bg-primary hover:text-background-dark dark:bg-surface-dark dark:text-primary dark:hover:bg-primary dark:hover:text-background-dark transition-colors">
+                                    View Details
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-12 flex justify-center pb-8">
+<nav class="flex items-center gap-1 rounded-lg bg-surface-light p-1 shadow-sm ring-1 ring-slate-900/5 dark:bg-surface-dark dark:ring-white/10">
+<button class="flex size-10 items-center justify-center rounded-md text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800">
+<span class="material-symbols-outlined text-sm">arrow_back_ios_new</span>
+</button>
+<button class="flex size-10 items-center justify-center rounded-md bg-primary text-sm font-bold text-background-dark">1</button>
+<button class="flex size-10 items-center justify-center rounded-md text-sm font-medium text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800">2</button>
+<button class="flex size-10 items-center justify-center rounded-md text-sm font-medium text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800">3</button>
+<span class="flex size-10 items-center justify-center text-sm text-text-secondary-light dark:text-text-secondary-dark">...</span>
+<button class="flex size-10 items-center justify-center rounded-md text-sm font-medium text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800">8</button>
+<button class="flex size-10 items-center justify-center rounded-md text-text-secondary-light hover:bg-slate-100 dark:text-text-secondary-dark dark:hover:bg-slate-800">
+<span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</nav>
+</div>
+</div>
+</main>
+</div>
+</body></html>

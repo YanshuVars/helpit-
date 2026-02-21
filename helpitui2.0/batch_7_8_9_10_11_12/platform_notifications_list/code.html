@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Helpit - Notifications</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 overflow-x-hidden">
+<div class="flex min-h-screen w-full flex-row">
+<!-- Sidebar -->
+<div class="hidden md:flex w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1a2c2b]">
+<div class="flex h-full flex-col justify-between p-4">
+<div class="flex flex-col gap-4">
+<div class="flex gap-3 items-center px-2 mb-6">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-slate-200" data-alt="Helpit Logo Abstract Gradient" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuApXJq_6meN341ai60A81LiR_umFXlYJRbK0VR_st7Tc1NB7Rxt111X1K5y3ELpMpvz8KWlpg0PDo_fhA0ivuWWaJp3lIcj6iw6jlmTWfPtWZ8QuZxFOETS43Q0eoHC2J3zfHXAExncXdMpEGa-PO4-Z17ZMJcKo3qCOazfMqTZZaOi_607_bcIqOWD7y9c8l81QQ1gOrRe--8unxFvSuWEXGhgkKTqjZp75kl2zYcft9RUexYCkvFfZSeabQ43cUn_c4rztHKaaM8");'></div>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-normal">Helpit</h1>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Dashboard -->
+<a class="group flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary">grid_view</span>
+<p class="text-slate-600 dark:text-slate-300 font-medium text-sm group-hover:text-slate-900 dark:group-hover:text-white">Dashboard</p>
+</a>
+<!-- Tasks -->
+<a class="group flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary">check_box</span>
+<p class="text-slate-600 dark:text-slate-300 font-medium text-sm group-hover:text-slate-900 dark:group-hover:text-white">Tasks</p>
+</a>
+<!-- Notifications (Active) -->
+<a class="group flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20" href="#">
+<span class="material-symbols-outlined text-primary">notifications</span>
+<p class="text-slate-900 dark:text-white font-semibold text-sm">Notifications</p>
+<span class="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-[#0e1b1a]">3</span>
+</a>
+<!-- Messages -->
+<a class="group flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary">chat</span>
+<p class="text-slate-600 dark:text-slate-300 font-medium text-sm group-hover:text-slate-900 dark:group-hover:text-white">Messages</p>
+</a>
+<!-- Settings -->
+<a class="group flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 group-hover:text-primary">settings</span>
+<p class="text-slate-600 dark:text-slate-300 font-medium text-sm group-hover:text-slate-900 dark:group-hover:text-white">Settings</p>
+</a>
+</div>
+</div>
+<div class="mt-auto">
+<button class="flex w-full cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary/90 transition-colors text-[#0e1b1a] text-sm font-bold leading-normal">
+<span class="material-symbols-outlined text-lg">add</span>
+<span class="truncate">New Ticket</span>
+</button>
+<div class="mt-4 flex items-center gap-3 px-2 py-2 border-t border-slate-200 dark:border-slate-700">
+<div class="size-8 rounded-full bg-slate-300 dark:bg-slate-600 overflow-hidden">
+<img alt="User Avatar" class="h-full w-full object-cover" data-alt="Portrait of a user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc9BMB9atQ5SoF0rY4Nzcs3DBi5_nG4N3Se2anOlh5PUmK2a-y_LFilnbc6NTPj1TMQjpH-hB1iIWAsqIcUYp062ICF3GLXhTd-H8ohEaoFVILL4pxE8PQISHDDDZy7GUo6hfgoFZ6MdUxJpKwpF3joQK7upXwWHryNrUsogApQJY-_M1YqhMOiWTY_Z8p4OYjzmlJ5PsZrgfCwvJYeqTo0Y9yjG82Mcob7y9J2kh-0ItWLHzPPPKJ2ym6Qz-SQ05HrggdEqJnClA"/>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-900 dark:text-white">Alex Morgan</span>
+<span class="text-[10px] text-slate-500 dark:text-slate-400">Admin</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-y-auto relative">
+<!-- Mobile Header Placeholder -->
+<div class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-[#1a2c2b] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-900 dark:text-white">menu</span>
+<span class="font-bold text-lg dark:text-white">Helpit</span>
+</div>
+<div class="size-8 rounded-full bg-slate-300 overflow-hidden">
+<img alt="User Avatar" class="h-full w-full object-cover" data-alt="Portrait of a user" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtCbKMerNGZOynpy2UPOVQKKKSW3XOa5M-NmeFR4y-YgMFD_8Y_K0BVMQ6gDVnNvSMgvCvBJzUc_GJZy5By2du0cPxx96RcS8jiJpHLgfTu7fk7W7ckozXFE-16tAo6yhC4k8-UPThxrYf7SlIcVGR773uHXtcug0DDMSCwjpcxre4YRd9wkrbnreOCuzkoyzcjpKZxBMyhlLuLu9AEyjKsWuIx3ocwHE0saVTyzjgBPZ0MLNaSsGlL8h_nD7usNBdJcvvvq0zGqs"/>
+</div>
+</div>
+<div class="flex-1 w-full max-w-5xl mx-auto p-4 md:p-8 lg:p-10">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Notifications</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage your platform alerts and updates.</p>
+</div>
+<button class="flex items-center justify-center gap-2 h-10 px-5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-primary hover:text-[#0e1b1a] hover:bg-primary/20 hover:border-primary/20 transition-all font-semibold text-sm shadow-sm">
+<span class="material-symbols-outlined text-[20px]">done_all</span>
+<span>Mark all as read</span>
+</button>
+</div>
+<!-- Filters/Tabs (Optional Visual Polish) -->
+<div class="flex gap-6 border-b border-slate-200 dark:border-slate-800 mb-6 text-sm font-medium overflow-x-auto">
+<button class="pb-3 border-b-2 border-primary text-slate-900 dark:text-white px-1">All</button>
+<button class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors px-1">Unread</button>
+<button class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors px-1">Mentions</button>
+<button class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-colors px-1">System</button>
+</div>
+<!-- Notifications List -->
+<div class="flex flex-col gap-3">
+<!-- Notification Card 1 (Unread) -->
+<div class="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-white dark:bg-[#1a2c2b] shadow-sm border border-transparent hover:border-primary/30 transition-all cursor-pointer">
+<div class="shrink-0">
+<div class="flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 size-12 text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined">warning</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center gap-1">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">System Maintenance Alert</h3>
+<span class="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">System</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Scheduled maintenance will occur tonight at 02:00 AM EST. Please save your work as the platform will be unavailable for approximately 45 minutes.</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">10 min ago</p>
+</div>
+<div class="absolute top-4 right-4 sm:static sm:flex sm:items-center sm:justify-end sm:w-8">
+<div aria-label="Unread" class="size-3 rounded-full bg-primary ring-4 ring-primary/20"></div>
+</div>
+</div>
+<!-- Notification Card 2 (Unread) -->
+<div class="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-white dark:bg-[#1a2c2b] shadow-sm border border-transparent hover:border-primary/30 transition-all cursor-pointer">
+<div class="shrink-0">
+<div class="flex items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/20 size-12 text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">assignment_add</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center gap-1">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">New Ticket Assigned</h3>
+<span class="text-xs font-medium text-slate-500 bg-slate-100 dark:bg-slate-800 dark:text-slate-400 px-2 py-0.5 rounded-full">Ticket #4023</span>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Sarah Jenkins has assigned <span class="font-semibold text-slate-800 dark:text-slate-200">"Login issues on mobile app"</span> to your queue.</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">2 hours ago</p>
+</div>
+<div class="absolute top-4 right-4 sm:static sm:flex sm:items-center sm:justify-end sm:w-8">
+<div aria-label="Unread" class="size-3 rounded-full bg-primary ring-4 ring-primary/20"></div>
+</div>
+</div>
+<!-- Notification Card 3 (Unread) -->
+<div class="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-white dark:bg-[#1a2c2b] shadow-sm border border-transparent hover:border-primary/30 transition-all cursor-pointer">
+<div class="shrink-0">
+<div class="flex items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-900/20 size-12 text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined">forum</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center gap-1">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-bold text-slate-900 dark:text-white">New Message Received</h3>
+</div>
+<p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Reply from <span class="font-semibold text-slate-800 dark:text-slate-200">Support Team</span> regarding your access request for the Analytics dashboard.</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">5 hours ago</p>
+</div>
+<div class="absolute top-4 right-4 sm:static sm:flex sm:items-center sm:justify-end sm:w-8">
+<div aria-label="Unread" class="size-3 rounded-full bg-primary ring-4 ring-primary/20"></div>
+</div>
+</div>
+<!-- Notification Card 4 (Read) -->
+<div class="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-white/60 dark:bg-[#1a2c2b]/60 border border-slate-100 dark:border-slate-800 hover:bg-white dark:hover:bg-[#1a2c2b] transition-all cursor-pointer opacity-80 hover:opacity-100">
+<div class="shrink-0">
+<div class="flex items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 size-12 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">description</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center gap-1">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-semibold text-slate-700 dark:text-slate-200">Weekly Report Generated</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Your weekly performance report is ready to view. Download the PDF to see your metrics.</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">1 day ago</p>
+</div>
+<!-- Read state: No dot -->
+<div class="absolute top-4 right-4 sm:static sm:flex sm:items-center sm:justify-end sm:w-8"></div>
+</div>
+<!-- Notification Card 5 (Read) -->
+<div class="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-white/60 dark:bg-[#1a2c2b]/60 border border-slate-100 dark:border-slate-800 hover:bg-white dark:hover:bg-[#1a2c2b] transition-all cursor-pointer opacity-80 hover:opacity-100">
+<div class="shrink-0">
+<div class="flex items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 size-12 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center gap-1">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-semibold text-slate-700 dark:text-slate-200">Security Alert Resolved</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">The login attempt from a new device was verified as safe by you.</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">2 days ago</p>
+</div>
+<div class="absolute top-4 right-4 sm:static sm:flex sm:items-center sm:justify-end sm:w-8"></div>
+</div>
+<!-- Notification Card 6 (Read) -->
+<div class="group relative flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-white/60 dark:bg-[#1a2c2b]/60 border border-slate-100 dark:border-slate-800 hover:bg-white dark:hover:bg-[#1a2c2b] transition-all cursor-pointer opacity-80 hover:opacity-100">
+<div class="shrink-0">
+<div class="flex items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-900/20 size-12 text-purple-600 dark:text-purple-400">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center gap-1">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-semibold text-slate-700 dark:text-slate-200">Feature Update: Dark Mode</h3>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">We've just released Dark Mode for all users. You can enable it in your settings.</p>
+<p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium">3 days ago</p>
+</div>
+<div class="absolute top-4 right-4 sm:static sm:flex sm:items-center sm:justify-end sm:w-8"></div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-8 flex justify-center">
+<button class="text-sm font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors">Load older notifications</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

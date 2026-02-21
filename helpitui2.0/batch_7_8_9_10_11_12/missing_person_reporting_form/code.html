@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Report Missing Person - Helpit</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#14b0a2", 
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c2b",
+                        "text-main": "#0e1b1a",
+                        "text-muted": "#4f9690",
+                        "border-light": "#d0e6e5",
+                        "border-dark": "#2a403e",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark px-6 md:px-10 py-3 shadow-sm">
+<div class="flex items-center gap-4 text-text-main dark:text-white">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_330)">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</g>
+<defs>
+<clippath id="clip0_6_330"><rect fill="white" height="48" width="48"></rect></clippath>
+</defs>
+</svg>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-[-0.015em]">Helpit</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden md:flex items-center gap-9">
+<a class="text-text-main dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-text-main dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Community</a>
+<a class="text-text-main dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Support</a>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary-dark transition-colors text-text-main text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">My Account</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex justify-center py-8 md:py-12 px-4 md:px-6">
+<div class="layout-content-container flex flex-col max-w-[960px] w-full gap-8">
+<!-- Page Title & Intro -->
+<div class="flex flex-col gap-3 text-center md:text-left">
+<h1 class="text-text-main dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">Report a Missing Person</h1>
+<p class="text-text-muted dark:text-gray-400 text-base md:text-lg font-normal leading-normal max-w-2xl">
+                    Every detail helps. Please provide accurate information to assist the community and authorities in their search.
+                </p>
+</div>
+<!-- Progress Stepper (Visual Only for this view) -->
+<div class="hidden md:flex justify-between gap-4 p-4 bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark">
+<div class="flex flex-1 items-center gap-3">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-text-main font-bold text-sm">1</div>
+<span class="text-text-main dark:text-white font-semibold text-sm">Personal Details</span>
+<div class="h-[2px] flex-1 bg-primary"></div>
+</div>
+<div class="flex flex-1 items-center gap-3 opacity-60">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold text-sm">2</div>
+<span class="text-text-main dark:text-white font-medium text-sm">Physical</span>
+<div class="h-[2px] flex-1 bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<div class="flex flex-1 items-center gap-3 opacity-60">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold text-sm">3</div>
+<span class="text-text-main dark:text-white font-medium text-sm">Last Seen</span>
+<div class="h-[2px] flex-1 bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<div class="flex items-center gap-3 opacity-60">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold text-sm">4</div>
+<span class="text-text-main dark:text-white font-medium text-sm">Contact</span>
+</div>
+</div>
+<!-- Form Container -->
+<form class="flex flex-col gap-8 bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm p-6 md:p-10">
+<!-- Section 1: Personal Details -->
+<section class="flex flex-col gap-6">
+<div class="flex items-center gap-3 border-b border-border-light dark:border-border-dark pb-4">
+<span class="material-symbols-outlined text-primary text-3xl">person_search</span>
+<h2 class="text-primary text-xl md:text-2xl font-bold leading-tight tracking-[-0.015em]">1. Personal Details</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-6">
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Full Name <span class="text-red-500">*</span></span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="e.g. Jane Doe" required="" type="text"/>
+</label>
+<div class="flex gap-4">
+<label class="flex flex-col gap-2 flex-1">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Age</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="e.g. 34" type="number"/>
+</label>
+<label class="flex flex-col gap-2 flex-1">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Gender</span>
+<select class="form-select w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary">
+<option value="">Select...</option>
+<option value="female">Female</option>
+<option value="male">Male</option>
+<option value="non-binary">Non-binary</option>
+<option value="other">Other</option>
+</select>
+</label>
+</div>
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Nicknames / Aliases</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="e.g. Janie, JD" type="text"/>
+</label>
+</div>
+<!-- Photo Upload -->
+<div class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Recent Photograph</span>
+<div class="flex-1 min-h-[200px] border-2 border-dashed border-border-light dark:border-border-dark rounded-lg bg-background-light dark:bg-background-dark flex flex-col items-center justify-center gap-3 p-6 text-center hover:border-primary transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+<span class="material-symbols-outlined text-primary text-2xl">add_a_photo</span>
+</div>
+<div class="flex flex-col">
+<p class="text-text-main dark:text-white font-medium text-sm">Click to upload or drag and drop</p>
+<p class="text-text-muted text-xs">SVG, PNG, JPG or GIF (max. 5MB)</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Physical Description -->
+<section class="flex flex-col gap-6 pt-4">
+<div class="flex items-center gap-3 border-b border-border-light dark:border-border-dark pb-4">
+<span class="material-symbols-outlined text-primary text-3xl">accessibility_new</span>
+<h2 class="text-primary text-xl md:text-2xl font-bold leading-tight tracking-[-0.015em]">2. Physical Description</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Height (Approx)</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="e.g. 5'8&quot; or 173cm" type="text"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Hair Color</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="e.g. Dark Brown" type="text"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Eye Color</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="e.g. Hazel" type="text"/>
+</label>
+</div>
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Clothing &amp; Distinguishing Marks</span>
+<textarea class="form-textarea w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark min-h-[100px] p-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted resize-y" placeholder="Describe what they were wearing, tattoos, scars, or birthmarks..."></textarea>
+</label>
+</section>
+<!-- Section 3: Last Seen -->
+<section class="flex flex-col gap-6 pt-4">
+<div class="flex items-center gap-3 border-b border-border-light dark:border-border-dark pb-4">
+<span class="material-symbols-outlined text-primary text-3xl">location_on</span>
+<h2 class="text-primary text-xl md:text-2xl font-bold leading-tight tracking-[-0.015em]">3. Last Seen</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-6">
+<div class="flex gap-4">
+<label class="flex flex-col gap-2 flex-1">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Date</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary" type="date"/>
+</label>
+<label class="flex flex-col gap-2 flex-1">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Time (Approx)</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary" type="time"/>
+</label>
+</div>
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Location Details</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="e.g. Central Park, near the fountain" type="text"/>
+</label>
+</div>
+<!-- Mini Map Visual -->
+<div class="h-48 md:h-full min-h-[180px] rounded-lg bg-slate-200 dark:bg-slate-700 overflow-hidden relative">
+<img alt="Map view of city streets" class="w-full h-full object-cover opacity-60" data-alt="Map view of city streets for location selection" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACHOIAhOoqG2JysYhsp6lZvBpxihC3ys2oeUm2wcE002JjYAPRzLghzY2aCVCe-nFb8ehfKw6cJ3-xH3x4XUFD17XH39POXZq-CUWA0Yyvn0pVvfVtslSB7hiVKkV_OaV8JqcEcKoIpMGmLVFfPLUKRMgvmDz8Gl25IY8P1UrgunqA-j1S5XSU7-IIvOCRYrLtAvPstNfyxcijRCAbcCjHr4mvFGhiDw-yYbINDif6OwyUMXfUM6Rn8epOW0t0VvO26ZMlAPui5Gs"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="bg-surface-light dark:bg-surface-dark text-text-main dark:text-white px-4 py-2 rounded-lg shadow-md text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-primary text-sm">my_location</span>
+                                    Pinpoint on Map
+                                </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Contact Info -->
+<section class="flex flex-col gap-6 pt-4">
+<div class="flex items-center gap-3 border-b border-border-light dark:border-border-dark pb-4">
+<span class="material-symbols-outlined text-primary text-3xl">contact_phone</span>
+<h2 class="text-primary text-xl md:text-2xl font-bold leading-tight tracking-[-0.015em]">4. Reporter Contact Info</h2>
+</div>
+<div class="p-4 bg-primary/10 rounded-lg border border-primary/20 text-sm text-text-main dark:text-gray-200 flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">info</span>
+<p>Your details will be kept private and only shared with verified authorities if necessary.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Your Name</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="John Smith" type="text"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Phone Number</span>
+<input class="form-input w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary placeholder-text-muted" placeholder="(555) 123-4567" type="tel"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-text-main dark:text-gray-200 text-sm font-medium">Relationship</span>
+<select class="form-select w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark h-12 px-4 text-text-main dark:text-white focus:ring-2 focus:ring-primary focus:border-primary">
+<option value="">Select...</option>
+<option value="parent">Parent</option>
+<option value="sibling">Sibling</option>
+<option value="spouse">Spouse/Partner</option>
+<option value="friend">Friend</option>
+<option value="other">Other</option>
+</select>
+</label>
+</div>
+</section>
+<!-- Actions -->
+<div class="flex flex-col-reverse md:flex-row gap-4 pt-8 mt-4 border-t border-border-light dark:border-border-dark">
+<button class="md:w-auto w-full px-8 h-12 rounded-lg border border-border-light dark:border-border-dark bg-transparent text-text-main dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors font-bold text-sm" type="button">
+                        Save Draft
+                    </button>
+<div class="flex-1"></div>
+<button class="md:w-auto w-full px-10 h-14 rounded-lg bg-primary hover:bg-primary-dark transition-all text-text-main font-bold text-base shadow-lg shadow-primary/25 flex items-center justify-center gap-2" type="submit">
+                        Submit Report
+                        <span class="material-symbols-outlined text-lg">send</span>
+</button>
+</div>
+</form>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto py-8 bg-surface-light dark:bg-surface-dark border-t border-border-light dark:border-border-dark">
+<div class="flex flex-col items-center justify-center gap-4 text-center">
+<div class="flex items-center gap-2 text-text-main dark:text-white">
+<div class="size-6 text-primary opacity-80">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="font-bold text-lg">Helpit</span>
+</div>
+<p class="text-text-muted text-sm">Connecting communities to help bring loved ones home.</p>
+<div class="flex gap-6 text-sm text-text-muted">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Emergency Contacts</a>
+</div>
+</div>
+</footer>
+</body></html>

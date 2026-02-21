@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Volunteer Profile Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e2e2d",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+<div class="flex h-screen w-full overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col w-72 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 h-full justify-between p-4">
+<div class="flex flex-col gap-6">
+<!-- Brand -->
+<div class="flex gap-3 items-center px-2">
+<div class="bg-primary/20 bg-center bg-no-repeat bg-cover rounded-full h-10 w-10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">volunteer_activism</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">VolunteerHub</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Volunteer Portal</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">grid_view</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-primary" href="#">
+<span class="material-symbols-outlined text-primary font-variation-settings-'FILL'-1">person</span>
+<span class="text-sm font-bold">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">work</span>
+<span class="text-sm font-medium">Opportunities</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group" href="#">
+<div class="relative">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chat_bubble</span>
+<span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500 border border-white dark:border-slate-900"></span>
+</div>
+<span class="text-sm font-medium">Messages</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group" href="#">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<!-- User Mini Profile -->
+<div class="border-t border-slate-100 dark:border-slate-800 pt-4 px-2">
+<div class="flex items-center gap-3">
+<img alt="Profile picture of a smiling woman" class="h-10 w-10 rounded-full object-cover border border-slate-200 dark:border-slate-700" data-alt="Portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrYgLk4aOArgA9iznrmRi-sUj5Ikeg6HbNR9whHLUCWLOaFMLkj40TjgnrNqbCVZ1i-B5MZZRd2HUGJSUduVDoI-CcZ5MauBWgLn0kghhIhLGgSh9Ve1xZViedVp732YoYFOiW2Z1LrdHRSiNwsomrWhdimzSNoPxsEMEUQL6qPxKJTPMSLhnowVzWqMTpkVMfVczl9aNX5DATw42fY4UdOq6dlY7KFPyUeDMaH2tBPA06zbs0pXCxbasa5VpOrZACTYSEyKiSjvs"/>
+<div class="flex flex-col">
+<p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Jane Doe</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">jane@example.com</p>
+</div>
+<button class="ml-auto text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Top Header (Mobile menu trigger + Breadcrumbs) -->
+<header class="h-16 flex items-center justify-between px-6 bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800 shrink-0">
+<div class="flex items-center gap-4">
+<button class="lg:hidden p-2 -ml-2 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<nav class="flex items-center text-sm font-medium text-slate-500 dark:text-slate-400">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="mx-2 text-slate-300 dark:text-slate-600">/</span>
+<a class="hover:text-primary transition-colors" href="#">Profile</a>
+<span class="mx-2 text-slate-300 dark:text-slate-600">/</span>
+<span class="text-slate-900 dark:text-slate-100 font-semibold">Edit</span>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-4 lg:p-8">
+<div class="max-w-5xl mx-auto space-y-6">
+<!-- Header Section -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Edit Profile</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Manage your personal information and volunteer preferences.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                Cancel
+                            </button>
+<button class="px-4 py-2 text-sm font-bold text-slate-900 bg-primary hover:bg-primary/90 rounded-lg shadow-sm shadow-primary/20 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                                Save Changes
+                            </button>
+</div>
+</div>
+<!-- Main Form Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: Avatar & Basic Info -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Personal Info Card -->
+<section class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">badge</span>
+                                        Personal Information
+                                    </h2>
+</div>
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<!-- Avatar Upload -->
+<div class="flex flex-col items-center gap-3 min-w-[140px]">
+<div class="relative group cursor-pointer">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 ring-2 ring-primary/20">
+<img alt="Current profile photo" class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="Portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-EiTfipjZrZH_syAgGdXJQW3y3-j-jCRh13N-6u5lJtPbEM9s_5odwiTKkLfy_8KwjIcXZOazMTqB7PlwTsQmiHyjIzgc9wc4rcxIY4QulzCUsMwczyB3649lT1VDGAizFfK5IiAUqWOw6vRg-rt2TY9XHNEIiK_sXOnvHDHHg4Yg8XBtdQWTIRjUvghFEmwXvx85nYJYrvQt2EIRdyl1JQsvOh_Zd706RC1p24tujDwmzCKlyYlznzkrKyk8zfXHtWuF4Hh-BdY"/>
+</div>
+<div class="absolute inset-0 rounded-full bg-slate-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-3xl">photo_camera</span>
+</div>
+</div>
+<button class="text-xs font-bold text-primary hover:text-primary/80 uppercase tracking-wide">Change Photo</button>
+</div>
+<!-- Fields -->
+<div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="md:col-span-2 space-y-1.5">
+<label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Full Name</label>
+<input class="w-full bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all placeholder:text-slate-400" type="text" value="Jane Doe"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Phone Number</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[20px]">call</span>
+<input class="w-full pl-10 bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all placeholder:text-slate-400" type="tel" value="(555) 123-4567"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">City</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[20px]">location_on</span>
+<input class="w-full pl-10 bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all placeholder:text-slate-400" type="text" value="San Francisco, CA"/>
+</div>
+</div>
+<div class="md:col-span-2 space-y-1.5">
+<label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bio</label>
+<textarea class="w-full bg-slate-50 dark:bg-background-dark border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all placeholder:text-slate-400 resize-y" placeholder="Tell us a bit about yourself..." rows="4"></textarea>
+<div class="flex justify-end">
+<span class="text-xs text-slate-400">0/500 characters</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Skills & Availability (Stacked on Mobile, Split on Large if needed, but stacked is cleaner here) -->
+<section class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">school</span>
+                                        Skills &amp; Interests
+                                    </h2>
+</div>
+<div class="space-y-4">
+<p class="text-sm text-slate-500 dark:text-slate-400">Select the skills you can contribute to our community projects.</p>
+<div class="flex flex-wrap gap-2">
+<!-- Active Skill -->
+<label class="cursor-pointer group relative">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-primary-darker hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2">
+<span>First Aid</span>
+<span class="material-symbols-outlined text-[16px] hidden peer-checked:block text-primary">check</span>
+</div>
+</label>
+<label class="cursor-pointer group relative">
+<input checked="" class="peer sr-only" type="checkbox"/>
+<div class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-primary-darker hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2">
+<span>Teaching</span>
+<span class="material-symbols-outlined text-[16px] hidden peer-checked:block text-primary">check</span>
+</div>
+</label>
+<!-- Inactive Skills -->
+<label class="cursor-pointer group relative">
+<input class="peer sr-only" type="checkbox"/>
+<div class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-primary-darker hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2">
+<span>Logistics</span>
+<span class="material-symbols-outlined text-[16px] hidden peer-checked:block text-primary">check</span>
+</div>
+</label>
+<label class="cursor-pointer group relative">
+<input class="peer sr-only" type="checkbox"/>
+<div class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-primary-darker hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2">
+<span>Social Media</span>
+<span class="material-symbols-outlined text-[16px] hidden peer-checked:block text-primary">check</span>
+</div>
+</label>
+<label class="cursor-pointer group relative">
+<input class="peer sr-only" type="checkbox"/>
+<div class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-primary-darker hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2">
+<span>Cooking</span>
+<span class="material-symbols-outlined text-[16px] hidden peer-checked:block text-primary">check</span>
+</div>
+</label>
+<label class="cursor-pointer group relative">
+<input class="peer sr-only" type="checkbox"/>
+<div class="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-primary-darker hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-2">
+<span>Driving</span>
+<span class="material-symbols-outlined text-[16px] hidden peer-checked:block text-primary">check</span>
+</div>
+</label>
+<button class="px-4 py-2 rounded-full border border-dashed border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 text-sm font-medium hover:border-primary hover:text-primary transition-all flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                                            Add Skill
+                                        </button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Availability & Status -->
+<div class="space-y-6">
+<!-- Weekly Schedule -->
+<section class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm h-full">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+                                        Availability
+                                    </h2>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Click blocks to mark times you are free to volunteer.</p>
+<div class="space-y-2">
+<div class="grid grid-cols-8 gap-1 text-xs text-center font-medium text-slate-400 mb-2">
+<div></div>
+<div>M</div>
+<div>T</div>
+<div>W</div>
+<div>T</div>
+<div>F</div>
+<div>S</div>
+<div>S</div>
+</div>
+<!-- Morning -->
+<div class="grid grid-cols-8 gap-1 items-center">
+<span class="text-xs font-semibold text-slate-500 text-right pr-2">Morning</span>
+<!-- Cells -->
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-primary shadow-sm shadow-primary/30 text-white flex items-center justify-center"><span class="material-symbols-outlined text-[14px]">check</span></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+</div>
+<!-- Afternoon -->
+<div class="grid grid-cols-8 gap-1 items-center">
+<span class="text-xs font-semibold text-slate-500 text-right pr-2">Afternoon</span>
+<!-- Cells -->
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-primary shadow-sm shadow-primary/30 text-white flex items-center justify-center"><span class="material-symbols-outlined text-[14px]">check</span></button>
+<button class="aspect-square rounded bg-primary shadow-sm shadow-primary/30 text-white flex items-center justify-center"><span class="material-symbols-outlined text-[14px]">check</span></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-primary shadow-sm shadow-primary/30 text-white flex items-center justify-center"><span class="material-symbols-outlined text-[14px]">check</span></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+</div>
+<!-- Evening -->
+<div class="grid grid-cols-8 gap-1 items-center">
+<span class="text-xs font-semibold text-slate-500 text-right pr-2">Evening</span>
+<!-- Cells -->
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+<button class="aspect-square rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"></button>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-lg">
+<span class="material-symbols-outlined">info</span>
+<p class="text-xs leading-relaxed">
+                                            Volunteers with weekend availability are prioritized for event support roles.
+                                        </p>
+</div>
+</div>
+</section>
+<!-- Account Status / Extra -->
+<section class="bg-surface-light dark:bg-surface-dark rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+<h2 class="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider mb-4">Account Status</h2>
+<div class="flex items-center justify-between">
+<span class="text-sm text-slate-600 dark:text-slate-300">Profile Visibility</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+<span class="ml-3 text-sm font-medium text-slate-900 dark:text-slate-100">Public</span>
+</label>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-sm text-slate-600 dark:text-slate-300">Email Notifications</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</section>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

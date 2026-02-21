@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Donate: Payment Method Selection</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "primary-dark": "#15a89c",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased">
+<div class="relative flex min-h-screen w-full flex-row overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden w-64 flex-col border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 md:flex">
+<div class="flex h-16 items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-800">
+<div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xl">H</div>
+<div class="flex flex-col">
+<h1 class="text-base font-bold text-slate-900 dark:text-white leading-none">Helpit</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Donor Portal</p>
+</div>
+</div>
+<nav class="flex flex-1 flex-col gap-2 p-4">
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-sm font-medium">History</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px] fill-1">volunteer_activism</span>
+<span class="text-sm font-medium">Donate</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3 rounded-lg bg-slate-50 p-3 dark:bg-slate-800">
+<div class="h-10 w-10 overflow-hidden rounded-full bg-slate-200">
+<img alt="User Avatar" class="h-full w-full object-cover" data-alt="Portrait of a smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfmj69Wp9MGW0lD6iK4LJ4AObJN1eVHCXYNIIWhu-XjrhBB-ITGEKFyoLvkOCeWbJBMTKoTU61-1wggAhvVNg4lNN0iSqZlv7Em4c3c5PugXm5XDtLgBFlzSwU2gcgmxI9kiZg71ocwJl1clFm7Lf_rW2Rbv_PqJrl8Cz8ZAZEsvVHnh0u8SL58Idm1eP-1G2jOJZCjsmEWyVh4GyCl_T8tQ0JNDIwLI1WdlPxA6TMT4UfhDg94OKJw5ROWD1MD0tT9OwBCAkkvAg"/>
+</div>
+<div class="flex flex-col overflow-hidden">
+<p class="truncate text-sm font-medium text-slate-900 dark:text-white">Alex Morgan</p>
+<p class="truncate text-xs text-slate-500 dark:text-slate-400">alex@example.com</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex flex-1 flex-col h-screen overflow-y-auto">
+<!-- Top Bar -->
+<header class="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-6 dark:border-slate-800 dark:bg-slate-900">
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="hidden md:block text-sm font-medium">Donate</span>
+<span class="hidden md:block material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-sm font-medium text-slate-900 dark:text-white">Payment Method</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="md:hidden flex items-center justify-center rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 justify-center p-4 md:p-8">
+<div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Payment Selection -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Select Payment Method</h2>
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-[18px] text-green-500">lock</span>
+<span>Your transaction is secure and SSL encrypted.</span>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<!-- UPI Option -->
+<label class="group relative flex cursor-pointer items-start gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary/50 hover:shadow-md has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-1 has-[:checked]:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:hover:border-primary/50 dark:has-[:checked]:bg-primary/10">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-2xl">qr_code_scanner</span>
+</div>
+<div class="flex flex-1 flex-col">
+<div class="flex items-center justify-between">
+<p class="font-semibold text-slate-900 dark:text-white">UPI / QR Code</p>
+<input checked="" class="h-5 w-5 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-700" name="payment_method" type="radio"/>
+</div>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Instant payment using any UPI app.</p>
+<div class="mt-3 flex items-center gap-3">
+<div class="flex h-6 items-center rounded border border-slate-200 bg-white px-2 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">GPay</div>
+<div class="flex h-6 items-center rounded border border-slate-200 bg-white px-2 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">PhonePe</div>
+<div class="flex h-6 items-center rounded border border-slate-200 bg-white px-2 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">Paytm</div>
+</div>
+</div>
+</label>
+<!-- Card Option -->
+<label class="group relative flex cursor-pointer items-start gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary/50 hover:shadow-md has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-1 has-[:checked]:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:hover:border-primary/50 dark:has-[:checked]:bg-primary/10">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-2xl">credit_card</span>
+</div>
+<div class="flex flex-1 flex-col">
+<div class="flex items-center justify-between">
+<p class="font-semibold text-slate-900 dark:text-white">Credit or Debit Card</p>
+<input class="h-5 w-5 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-700" name="payment_method" type="radio"/>
+</div>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Visa, Mastercard, RuPay, and Maestro.</p>
+<div class="mt-3 flex items-center gap-3">
+<div class="flex h-6 items-center opacity-60 grayscale transition-all group-hover:opacity-100 group-hover:grayscale-0">
+<!-- Simplified Visa Icon Representation -->
+<svg class="h-4 w-auto" fill="none" viewbox="0 0 36 12" xmlns="http://www.w3.org/2000/svg"><path d="M15.429 0.707031L10.02 11.066H6.60602L4.05301 2.37603C3.90101 1.77703 3.76602 1.58303 3.30302 1.37603C1.72302 0.694031 0.812012 0.707031 0.812012 0.707031L0.865017 1.13003C1.76002 1.30603 3.79102 1.73203 5.17602 4.41603L7.54502 11.066H11.082L16.899 0.707031H15.428V0.707031H15.429ZM21.652 7.74903C21.666 4.93803 17.804 4.79303 17.846 3.49103C17.86 3.09003 18.256 2.66103 19.129 2.58503C19.569 2.54503 20.785 2.51303 22.051 3.01803L22.756 1.48703C21.803 1.18503 20.578 1.04103 19.034 1.04103C16.653 1.04103 14.964 2.12203 14.945 4.35403C14.927 6.01403 16.634 6.94503 17.927 7.48903C19.245 8.04603 19.689 8.39703 19.684 8.94803C19.675 9.79003 18.667 10.163 17.887 10.163C16.621 10.163 15.894 9.87703 15.317 9.64803L14.633 11.129C15.526 11.488 17.18 11.802 18.736 11.802C21.246 11.791 22.909 10.74 22.932 8.38403L21.652 7.74903ZM28.527 11.066H31.545L29.67 0.707031H26.832C26.195 0.707031 25.684 1.01803 25.446 1.51703L21.751 11.066H25.13L25.86 9.25903H29.155L29.462 11.066H28.527ZM26.606 7.45603L27.962 3.93103L28.775 7.45603H26.606ZM36.002 11.066L33.09 0.707031H29.9880L32.899 11.066H36.002Z" fill="currentColor"></path></svg>
+</div>
+<div class="flex h-6 items-center opacity-60 grayscale transition-all group-hover:opacity-100 group-hover:grayscale-0">
+<!-- Simplified MasterCard Icon Representation -->
+<svg class="h-6 w-auto" fill="none" viewbox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="8" fill="#EB001B" fill-opacity="0.8" r="7"></circle><circle cx="17" cy="8" fill="#F79E1B" fill-opacity="0.8" r="7"></circle></svg>
+</div>
+</div>
+</div>
+</label>
+<!-- Net Banking Option -->
+<label class="group relative flex cursor-pointer items-start gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-primary/50 hover:shadow-md has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-1 has-[:checked]:ring-primary dark:border-slate-700 dark:bg-slate-800 dark:hover:border-primary/50 dark:has-[:checked]:bg-primary/10">
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-2xl">account_balance</span>
+</div>
+<div class="flex flex-1 flex-col">
+<div class="flex items-center justify-between">
+<p class="font-semibold text-slate-900 dark:text-white">Net Banking</p>
+<input class="h-5 w-5 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-700" name="payment_method" type="radio"/>
+</div>
+<p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Pay directly from your bank account.</p>
+<p class="mt-2 text-xs text-slate-400 dark:text-slate-500">Supports HDFC, SBI, ICICI, Axis, and 50+ other banks.</p>
+</div>
+</label>
+</div>
+<!-- Info Alert -->
+<div class="rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-blue-600 dark:text-blue-400">info</span>
+<div>
+<h4 class="font-medium text-blue-900 dark:text-blue-100">Tax Exemption Available</h4>
+<p class="text-sm text-blue-700 dark:text-blue-300">Your donation to Helpit Foundation is eligible for 80G tax exemption. The receipt will be emailed to you instantly.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Order Summary -->
+<div class="lg:col-span-4">
+<div class="sticky top-6 flex flex-col gap-6">
+<div class="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800 overflow-hidden">
+<div class="bg-slate-50 p-4 border-b border-slate-100 dark:bg-slate-800/50 dark:border-slate-700">
+<h3 class="font-bold text-slate-900 dark:text-white">Donation Summary</h3>
+</div>
+<div class="p-6 flex flex-col gap-6">
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 overflow-hidden rounded-lg bg-slate-100 shrink-0">
+<img alt="Charity logo or children smiling" class="h-full w-full object-cover" data-alt="Children smiling in a classroom setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbX_ECSa21CPp3FzGd_SleS4m4zHV6QNm_1oeW_FmcZ08T-X7OSw1_T2IQJfnMFVTemREaJK3bfL8_rlL16EFvikAtNwxhDl2oU0jwn2HtZ5nrtfXPoqM71vxL3WULQ6yTWMO9ODGyYn5rCsB_6B4EkIfdPtyBnRMxcpVydy0MfFd_gKLHAnNpfveQ1B2Bl7aVTW8nSKS6LbjB_ADANRSXtc7iJgop-TM6vw43GtRrd5vZ2jPcAYJYPXatsC1IxwbWWx4_1FgTXKc"/>
+</div>
+<div class="flex flex-col">
+<p class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Beneficiary</p>
+<p class="font-bold text-slate-900 dark:text-white">Helpit Foundation</p>
+<div class="flex items-center gap-1 text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined text-[14px] fill-1">verified</span>
+<span class="text-xs font-medium">Verified NGO</span>
+</div>
+</div>
+</div>
+<hr class="border-slate-100 dark:border-slate-700"/>
+<div class="flex flex-col gap-3 text-sm">
+<div class="flex justify-between text-slate-600 dark:text-slate-400">
+<span>Donation Amount</span>
+<span class="font-medium text-slate-900 dark:text-white">₹25,000</span>
+</div>
+<div class="flex justify-between text-slate-600 dark:text-slate-400">
+<span>Processing Fee</span>
+<span class="font-medium text-green-600 dark:text-green-400">Free</span>
+</div>
+<div class="flex justify-between text-slate-600 dark:text-slate-400">
+<span>Platform Tip</span>
+<span class="font-medium text-slate-900 dark:text-white">₹0</span>
+</div>
+</div>
+<div class="rounded-lg bg-slate-50 p-4 dark:bg-slate-700/30">
+<div class="flex items-end justify-between">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">Total Payable</span>
+<span class="text-2xl font-bold text-slate-900 dark:text-white">₹25,000</span>
+</div>
+</div>
+<button class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3.5 text-base font-bold text-slate-900 shadow-md shadow-primary/20 transition-transform hover:scale-[1.02] active:scale-[0.98] dark:shadow-none">
+<span>Pay ₹25,000</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+<div class="border-t border-slate-100 bg-slate-50 p-4 text-center dark:border-slate-700 dark:bg-slate-800/50">
+<div class="flex items-center justify-center gap-4 opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="text-xs font-bold text-slate-900 dark:text-white">PCI DSS</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+<span class="text-xs font-bold text-slate-900 dark:text-white">256-bit SSL</span>
+</div>
+</div>
+</div>
+</div>
+<p class="text-center text-xs text-slate-400 dark:text-slate-500">
+                                By continuing, you agree to Helpit's <a class="underline hover:text-slate-600 dark:hover:text-slate-300" href="#">Terms of Service</a> and <a class="underline hover:text-slate-600 dark:hover:text-slate-300" href="#">Privacy Policy</a>.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

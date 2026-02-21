@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Edit Help Request - Helpit NGO Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1de2d1",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#112120",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header / Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-6 md:px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+<div class="size-8 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-tight">Helpit NGO</h2>
+</div>
+<div class="hidden md:flex items-center">
+<label class="relative flex items-center min-w-64">
+<span class="absolute left-3 text-slate-400 material-symbols-outlined">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-lg border-none bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search requests..." value=""/>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-xl">account_circle</span>
+</button>
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="User profile avatar showing professional staff" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjaps3stHRM2jX_xyJl6StyHP8A7FrNt_4GxNPjB9iAcPi3P7_eQ0vQOalk8jahPJ0B_7jArMtedDFFuKhMXZ5SFg3QtmtpUaN9d-qIejjrPqU12GP4mCLOOzijYMvvaDzcTYxGZjsdoLIrpEC1ZB4eqp73K3n187hwx52wI3Q_nYf_bkL4TaD7-BpzdczJQ-boyZcPeJ2OA5FnnDkWLKc0ZPf6Hzx1810sAMksIo6L19MKWJRGWWu9uCm5xAbp47VQDTRsmVQqR8"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1">
+<!-- Sidebar (Optional, but keeping consistent with dashboard feel) -->
+<aside class="hidden lg:flex w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark p-6 gap-6">
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary" href="#">
+<span class="material-symbols-outlined">volunteer_activism</span>
+<span class="text-sm font-semibold">Active Requests</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Volunteers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Impact Reports</span>
+</a>
+</nav>
+<div class="mt-auto p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+<p class="text-xs font-semibold text-slate-400 uppercase mb-2">System Status</p>
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-medium">Operational</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area (Split Layout) -->
+<main class="flex-1 flex flex-col min-w-0 bg-background-light dark:bg-background-dark overflow-y-auto">
+<!-- Breadcrumbs & Header -->
+<div class="px-6 md:px-10 py-6">
+<nav class="flex items-center gap-2 text-sm text-slate-500 mb-4">
+<a class="hover:text-primary" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<a class="hover:text-primary" href="#">Help Requests</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-100 font-medium">Edit Request</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">Edit Request</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Modify the details for the existing relief effort.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-bold hover:bg-slate-50 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">visibility</span>
+                                View Live
+                            </button>
+</div>
+</div>
+</div>
+<!-- Form Section (Split Layout) -->
+<div class="px-6 md:px-10 pb-24">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Panel: Context/Metadata -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-white dark:bg-slate-800/50 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Request Context</h3>
+<div class="space-y-4">
+<div>
+<p class="text-xs text-slate-500 mb-1">Request ID</p>
+<p class="text-sm font-semibold">REQ-2023-0891</p>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<div>
+<p class="text-xs text-slate-500">Created Date</p>
+<p class="text-sm font-bold text-slate-700 dark:text-slate-300">Oct 12, 2023</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="text-xs text-slate-500">Owner</p>
+<p class="text-sm font-bold text-slate-700 dark:text-slate-300">Sarah Jenkins</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 rounded-xl p-6 border border-primary/10">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-slate-100">Audit Trail</h4>
+<p class="text-xs text-slate-500 mt-1">Updates to this form are logged for transparency in humanitarian aid delivery.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: The Form -->
+<div class="lg:col-span-8">
+<form class="space-y-8 bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<!-- Title -->
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Request Title</label>
+<input class="w-full h-12 px-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary transition-all text-base" type="text" value="Emergency Food Relief"/>
+</div>
+<!-- Category & Urgency -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Category</label>
+<div class="relative">
+<select class="w-full h-12 px-4 appearance-none rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary transition-all text-base">
+<option>Medical</option>
+<option selected="">Food</option>
+<option>Water</option>
+<option>Shelter</option>
+<option>Education</option>
+</select>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined pointer-events-none text-slate-400">expand_more</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Urgency Level</label>
+<div class="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
+<button class="flex-1 py-2 text-xs font-bold rounded-md transition-all text-slate-500 hover:text-slate-700" type="button">LOW</button>
+<button class="flex-1 py-2 text-xs font-bold rounded-md transition-all text-slate-500 hover:text-slate-700" type="button">MEDIUM</button>
+<button class="flex-1 py-2 text-xs font-bold rounded-md bg-red-500 text-white shadow-lg shadow-red-500/30" type="button">CRITICAL</button>
+</div>
+</div>
+</div>
+<!-- Location -->
+<div class="space-y-2">
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Location</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">location_on</span>
+<input class="w-full h-12 pl-12 pr-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary transition-all text-base" type="text" value="Eastern District Community Center, Building B, Sector 4"/>
+</div>
+<div class="mt-4 rounded-xl overflow-hidden h-40 border border-slate-200 dark:border-slate-700 relative">
+<div class="absolute inset-0 bg-slate-100 flex items-center justify-center">
+<img class="w-full h-full object-cover opacity-60" data-alt="Abstract map showing Eastern District Community Center location" data-location="Eastern District Community Center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpOsad3SVHHrqLuvSSz2ujlUUcRqmbli8VlkN2p9SSn3bhXJar53Jq9RB7uzH4IeXS2TdhmtdSkfdTmG2Bh4ziH-_Hqkf8k9gm6FkCC_wsh0pxVzJwc50pjeJbuNOT12pPzyN2SFvANFQb7HpqHxxEsy2RkgxPnyB6NvNr7gFaKIb6-a7GoMb8OulR5GLA5Hq1mGKBAMxdkcukuAszruYoemfDygdAOj2NJNLz7dSUjX4MEY1FQi7Dy-xoO7Zq2YX4mkh95O0lUwY"/>
+<div class="absolute inset-0 bg-primary/10 pointer-events-none"></div>
+<div class="absolute z-10 flex flex-col items-center">
+<span class="material-symbols-outlined text-4xl text-red-500 animate-bounce">location_on</span>
+<div class="bg-white px-3 py-1 rounded shadow-sm text-xs font-bold mt-1">Drop-off Point</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Visibility -->
+<div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+<div>
+<label class="text-sm font-bold text-slate-700 dark:text-slate-300">Visibility Setting</label>
+<p class="text-xs text-slate-500">Public requests can be seen by all registered volunteers.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<label class="relative flex items-center gap-3 p-4 rounded-xl border-2 border-primary bg-primary/5 cursor-pointer">
+<input checked="" class="text-primary focus:ring-primary h-4 w-4" name="visibility" type="radio" value="public"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Public</span>
+<span class="text-xs text-slate-500">Open to everyone</span>
+</div>
+<span class="ml-auto material-symbols-outlined text-primary">public</span>
+</label>
+<label class="relative flex items-center gap-3 p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 cursor-pointer">
+<input class="text-primary focus:ring-primary h-4 w-4" name="visibility" type="radio" value="private"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Private</span>
+<span class="text-xs text-slate-500">Invite-only</span>
+</div>
+<span class="ml-auto material-symbols-outlined text-slate-400">lock</span>
+</label>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 right-0 lg:left-64 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-6 md:px-10 py-4 z-40">
+<div class="max-w-[1200px] mx-auto flex items-center justify-between gap-4">
+<div class="hidden md:flex items-center gap-2 text-slate-500">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-xs font-medium">Last saved: 2 minutes ago</span>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-6 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" type="button">
+                                Cancel
+                            </button>
+<button class="flex-1 md:flex-none px-8 py-2.5 rounded-lg bg-primary text-slate-900 text-sm font-bold shadow-lg shadow-primary/25 hover:brightness-105 transition-all flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-lg">save</span>
+                                Save Changes
+                            </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>
