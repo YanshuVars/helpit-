@@ -33,13 +33,17 @@ export default function DonorDashboardPage() {
             const { data: userData } = await supabase.from('users').select('id, full_name').eq('id', session.user.id).single();
             if (!userData) { setLoading(false); return; }
 
-            const { data: donorProfile } = await supabase.from('donor_profiles').select('total_donated, impact_count').eq('user_id', session.user.id).single();
+            // Compute donor stats from donations table (donor_profiles doesn't exist)
+            const { data: allDonations } = await supabase.from('donations').select('amount, status').eq('donor_id', session.user.id);
+            const completedDonations = (allDonations || []).filter((d: any) => d.status === 'COMPLETED');
+            const totalDonated = completedDonations.reduce((sum: number, d: any) => sum + (d.amount || 0), 0);
+            const impactCount = completedDonations.length;
 
-            const { data: followedNgos } = await supabase.from('ngo_followers').select('ngo:ngos(id, name, logo_url)').eq('user_id', session.user.id).limit(5);
-            const ngos = (followedNgos || []).map(f => ({
-                id: (f.ngo as unknown as { id: string })?.id,
-                name: (f.ngo as unknown as { name: string })?.name || 'Unknown',
-                logo_url: (f.ngo as unknown as { logo_url: string })?.logo_url,
+            const { data: followedNgos } = await supabase.from('follows').select('ngo:ngos(id, name, logo_url)').eq('follower_id', session.user.id).limit(5);
+            const ngos = (followedNgos || []).map((f: any) => ({
+                id: f.ngo?.id,
+                name: f.ngo?.name || 'Unknown',
+                logo_url: f.ngo?.logo_url,
             }));
 
             const { data: donations } = await supabase.from('donations').select('id, amount, status, created_at, ngo:ngos(name)').eq('donor_id', session.user.id).order('created_at', { ascending: false }).limit(5);
@@ -51,7 +55,7 @@ export default function DonorDashboardPage() {
 
             setData({
                 user: { id: userData.id, full_name: userData.full_name || 'Donor' },
-                stats: { totalDonated: donorProfile?.total_donated || 0, impactCount: donorProfile?.impact_count || 0 },
+                stats: { totalDonated: totalDonated, impactCount: impactCount },
                 followedNgos: ngos, recentDonations,
             });
             setLoading(false);

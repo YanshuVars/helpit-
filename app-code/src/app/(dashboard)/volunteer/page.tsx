@@ -24,47 +24,50 @@ export default function VolunteerDashboardPage() {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) { setLoading(false); return; }
 
-            const { data: userData } = await supabase.from('users').select('full_name, is_available').eq('id', session.user.id).single();
+            const { data: userData } = await supabase.from('users').select('full_name, availability').eq('id', session.user.id).single();
 
             const { data: completedAssignments } = await supabase.from('volunteer_assignments')
-                .select('hours_spent, request:requests(ngo_id)').eq('volunteer_id', session.user.id).eq('status', 'COMPLETED');
+                .select('hours_logged, request:help_requests(ngo_id)').eq('volunteer_id', session.user.id).eq('status', 'COMPLETED');
 
-            const totalHours = (completedAssignments || []).reduce((a, c) => a + (c.hours_spent || 0), 0);
+            const totalHours = (completedAssignments || []).reduce((a: number, c: any) => a + (c.hours_logged || 0), 0);
             const totalTasks = (completedAssignments || []).length;
             const uniqueNgos = new Set((completedAssignments || []).map((a: any) => a.request?.ngo_id).filter(Boolean));
 
             const { data: activeData } = await supabase.from('volunteer_assignments')
                 .select('id, status, request_id').eq('volunteer_id', session.user.id).in('status', ['ASSIGNED', 'IN_PROGRESS']).order('created_at', { ascending: false }).limit(5);
 
-            const requestIds = (activeData || []).map(a => a.request_id).filter(Boolean);
-            let requestMap: Record<string, any> = {};
-            if (requestIds.length > 0) {
-                const { data: requests } = await supabase.from('requests').select('id, title, ngo:ngos(name), scheduled_date').in('id', requestIds);
-                (requests || []).forEach(r => { requestMap[r.id] = r; });
-            }
+            // Fetch help_requests via API route to bypass RLS recursion
+            let allRequests: any[] = [];
+            try {
+                const res = await fetch('/api/volunteer/requests?status=ALL&limit=50');
+                const json = await res.json();
+                allRequests = json.data || [];
+            } catch (e) { console.error('Failed to fetch requests via API:', e); }
+
+            // Build request map for active assignments
+            const requestMap: Record<string, any> = {};
+            allRequests.forEach(r => { requestMap[r.id] = r; });
 
             const activeAssignments = (activeData || []).map(a => ({
                 id: a.id, status: a.status,
                 request_title: requestMap[a.request_id]?.title || 'Unknown',
                 ngo_name: (requestMap[a.request_id]?.ngo as any)?.name || 'Unknown NGO',
-                scheduled_date: requestMap[a.request_id]?.scheduled_date || '',
+                scheduled_date: requestMap[a.request_id]?.deadline || '',
             }));
 
-            const { data: urgentRequests } = await supabase.from('requests')
-                .select('id, title, ngo:ngos(name), urgency, location').eq('status', 'OPEN')
-                .order('created_at', { ascending: false }).limit(3);
-
-            const nearbyRequests = (urgentRequests || []).map(r => ({
+            // Get nearby/urgent open requests
+            const openRequests = allRequests.filter(r => r.status === 'OPEN');
+            const nearbyRequests = openRequests.slice(0, 3).map(r => ({
                 id: r.id, title: r.title,
-                ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO',
+                ngo_name: (r.ngo as any)?.name || 'Unknown NGO',
                 urgency: r.urgency || 'NORMAL', location: r.location || '',
             }));
 
-            setAvailability(userData?.is_available || false);
+            setAvailability(userData?.availability || false);
             setData({
                 user: { full_name: userData?.full_name || 'Volunteer' },
                 stats: { hours: totalHours, tasks: totalTasks, ngos: uniqueNgos.size },
-                isAvailable: userData?.is_available || false,
+                isAvailable: userData?.availability || false,
                 activeAssignments, nearbyRequests,
             });
             setLoading(false);
@@ -78,7 +81,7 @@ export default function VolunteerDashboardPage() {
         if (!session) return;
         const newVal = !availability;
         setAvailability(newVal);
-        await supabase.from('users').update({ is_available: newVal }).eq('id', session.user.id);
+        await supabase.from('users').update({ availability: newVal }).eq('id', session.user.id);
     };
 
     if (loading) {

@@ -2,7 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { signOut } from "@/lib/api/users";
 
 /* ── Breadcrumb generation from pathname ── */
 function generateBreadcrumbs(pathname: string) {
@@ -47,12 +49,49 @@ interface PageHeaderProps {
 
 export function PageHeader({ onMenuClick, actionButton }: PageHeaderProps) {
     const pathname = usePathname();
+    const router = useRouter();
     const breadcrumbs = generateBreadcrumbs(pathname);
     const pageTitle = getPageTitle(pathname);
 
     const [searchFocused, setSearchFocused] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const [userName, setUserName] = useState("");
+    const [userAvatar, setUserAvatar] = useState<string | null>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    /* Fetch current user's name and avatar */
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const supabase = createClient();
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session?.user) return;
+
+                const { data: userData } = await supabase
+                    .from('users')
+                    .select('full_name, avatar_url')
+                    .eq('id', session.user.id)
+                    .single();
+
+                if (userData) {
+                    setUserName(userData.full_name || '');
+                    setUserAvatar(userData.avatar_url || null);
+                }
+            } catch (err) {
+                console.error('Failed to fetch user:', err);
+            }
+        };
+        fetchUser();
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            await signOut();
+            router.push('/');
+        } catch (err) {
+            console.error('Logout failed:', err);
+        }
+    };
 
     /* Close user menu on click outside */
     useEffect(() => {
@@ -128,7 +167,7 @@ export function PageHeader({ onMenuClick, actionButton }: PageHeaderProps) {
                         aria-label="User menu"
                     >
                         <div className="page-header-avatar">
-                            <span>U</span>
+                            <span>{userName ? userName.charAt(0).toUpperCase() : 'U'}</span>
                         </div>
                     </button>
 
@@ -144,7 +183,7 @@ export function PageHeader({ onMenuClick, actionButton }: PageHeaderProps) {
                                 Settings
                             </Link>
                             <div className="dropdown-divider" />
-                            <button className="dropdown-item dropdown-item-danger" onClick={() => setUserMenuOpen(false)}>
+                            <button className="dropdown-item dropdown-item-danger" onClick={() => { setUserMenuOpen(false); handleLogout(); }}>
                                 <span className="material-symbols-outlined">logout</span>
                                 Sign Out
                             </button>

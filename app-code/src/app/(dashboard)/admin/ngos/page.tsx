@@ -37,7 +37,7 @@ export default function AdminNGOsPage() {
 
     async function verifyNGO(ngoId: string) {
         try {
-            const { error } = await supabase.from("ngos").update({ verification_status: "VERIFIED" }).eq("id", ngoId);
+            const { error } = await supabase.from("ngos").update({ verification_status: "APPROVED" }).eq("id", ngoId);
             if (error) throw error; fetchNGOs();
         } catch (e) { console.error("Error verifying NGO:", e); alert("Failed to verify NGO"); }
     }

@@ -73,6 +73,7 @@ export default function NGORegisterPage() {
             return;
         }
 
+        if (loading) return; // Prevent double-submit
         setLoading(true);
 
         try {
@@ -84,10 +85,37 @@ export default function NGORegisterPage() {
 
             if (!user) throw new Error('Failed to create admin account');
 
-            // 2. Create NGO record
+            // 2. Sign in immediately to get an active session
+            //    (signUp alone may not provide a session if email confirmation is enabled)
+            const supabase = createClient();
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email: formData.contactEmail,
+                password: formData.password,
+            });
+
+            // If sign-in fails (e.g. email confirmation required), create NGO without session
+            // by storing NGO data and redirecting to verify-email
+            if (signInError) {
+                // Store pending NGO data in localStorage so it can be created after email verification
+                localStorage.setItem('pending_ngo', JSON.stringify({
+                    name: formData.orgName,
+                    slug: generateSlug(formData.orgName),
+                    email: formData.contactEmail,
+                    phone: formData.contactPhone || null,
+                    address: formData.address || null,
+                    city: formData.city || null,
+                    state: formData.state || null,
+                    registration_number: formData.registrationNumber,
+                    categories: formData.orgType ? [formData.orgType] : [],
+                    description: formData.description || null,
+                }));
+                router.push('/verify-email');
+                return;
+            }
+
+            // 3. Now we have a session — create NGO record
             const slug = generateSlug(formData.orgName);
-            const supabaseClient = createClient();
-            const { data: ngo, error: ngoError } = await supabaseClient
+            const { data: ngo, error: ngoError } = await supabase
                 .from('ngos')
                 .insert({
                     name: formData.orgName,
@@ -101,30 +129,36 @@ export default function NGORegisterPage() {
                     categories: formData.orgType ? [formData.orgType] : [],
                     tags: [],
                     status: 'PENDING',
-                    verification_status: 'PENDING',
                     has_80g: false,
                     has_12a: false,
                     plan: 'FREE',
                     social_links: {},
                     country: 'India',
+                    description: formData.description || null,
                 } as Record<string, unknown>)
                 .select()
                 .single();
 
-            if (ngoError || !ngo) throw new Error('Failed to create NGO');
+            if (ngoError || !ngo) {
+                console.error('NGO creation error:', ngoError);
+                throw new Error(ngoError?.message || 'Failed to create NGO');
+            }
 
-            // 3. Add user as NGO admin member
-            const supabase = createClient();
+            // 4. Add user as NGO admin member
             await supabase.from('ngo_members').insert({
                 ngo_id: ngo.id,
                 user_id: user.id,
                 role: 'NGO_ADMIN',
             });
 
-            router.push('/verify-email');
+            router.push('/ngo');
         } catch (err: unknown) {
             const errorMessage = err instanceof Error ? err.message : 'Registration failed';
-            setError(errorMessage);
+            if (errorMessage.includes('Too Many Requests') || errorMessage.includes('429')) {
+                setError('Too many signup attempts. Please wait a few minutes and try again.');
+            } else {
+                setError(errorMessage);
+            }
         } finally {
             setLoading(false);
         }

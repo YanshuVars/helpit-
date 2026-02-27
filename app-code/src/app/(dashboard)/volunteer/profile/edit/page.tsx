@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "react-toastify";
 
 const availableSkills = [
     "First Aid", "CPR", "Driving", "Teaching", "Photography", "Video Editing",
@@ -18,25 +20,83 @@ const inputStyles = {
 };
 
 export default function EditVolunteerProfilePage() {
-    const [name, setName] = useState("Alex Johnson");
-    const [username, setUsername] = useState("@alexvolunteer");
-    const [bio, setBio] = useState("Passionate volunteer dedicated to helping communities in need.");
-    const [location, setLocation] = useState("Mumbai, Maharashtra");
-    const [phone, setPhone] = useState("+91 98765 43210");
-    const [skills, setSkills] = useState<string[]>(["First Aid", "Driving", "Teaching", "Photography"]);
+    const [name, setName] = useState("");
+    const [bio, setBio] = useState("");
+    const [location, setLocation] = useState("");
+    const [phone, setPhone] = useState("");
+    const [skills, setSkills] = useState<string[]>([]);
     const [isAvailable, setIsAvailable] = useState(true);
-    const [availabilityHours, setAvailabilityHours] = useState("Weekends");
+    const [availabilityHours, setAvailabilityHours] = useState("Flexible");
     const [isSaving, setIsSaving] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadProfile() {
+            const supabase = createClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { setLoading(false); return; }
+
+            const { data: user } = await supabase.from('users')
+                .select('full_name, bio, location, phone, skills, availability, availability_hours')
+                .eq('id', session.user.id).single();
+
+            if (user) {
+                setName(user.full_name || '');
+                setBio(user.bio || '');
+                setLocation(user.location || '');
+                setPhone(user.phone || '');
+                setSkills(user.skills || []);
+                setIsAvailable(user.availability !== false);
+                setAvailabilityHours(user.availability_hours || 'Flexible');
+            }
+            setLoading(false);
+        }
+        loadProfile();
+    }, []);
 
     const toggleSkill = (skill: string) => {
         if (skills.includes(skill)) setSkills(skills.filter(s => s !== skill));
         else setSkills([...skills, skill]);
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         setIsSaving(true);
-        setTimeout(() => { setIsSaving(false); window.history.back(); }, 1000);
+        try {
+            const supabase = createClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { toast.error('Not logged in'); return; }
+
+            const { error } = await supabase.from('users').update({
+                full_name: name,
+                bio,
+                location,
+                phone,
+                skills,
+                availability: isAvailable,
+                availability_hours: availabilityHours,
+            }).eq('id', session.user.id);
+
+            if (error) {
+                console.error('Save error:', error);
+                toast.error('Failed to save profile');
+            } else {
+                toast.success('Profile updated successfully!');
+                window.history.back();
+            }
+        } catch (e) {
+            toast.error('Something went wrong');
+        } finally {
+            setIsSaving(false);
+        }
     };
+
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+            </div>
+        );
+    }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 28, paddingBottom: 32 }}>
@@ -63,9 +123,9 @@ export default function EditVolunteerProfilePage() {
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         color: '#fff', fontSize: 36, fontWeight: 800,
                         boxShadow: '0 4px 16px rgba(29,226,209,0.3)',
-                    }}>{name.charAt(0)}</div>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }}>{name}</h3>
-                    <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 2 }}>{username}</p>
+                    }}>{name.charAt(0) || '?'}</div>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }}>{name || 'Your Name'}</h3>
+                    <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 2 }}>Volunteer</p>
                     <button style={{
                         marginTop: 16, display: 'inline-flex', alignItems: 'center', gap: 6,
                         padding: '8px 16px', borderRadius: 10,
@@ -107,7 +167,6 @@ export default function EditVolunteerProfilePage() {
                         <div className="r-grid-form">
                             {[
                                 { label: 'Full Name', value: name, onChange: setName, type: 'text' },
-                                { label: 'Username', value: username, onChange: setUsername, type: 'text' },
                                 { label: 'Location', value: location, onChange: setLocation, type: 'text' },
                                 { label: 'Phone', value: phone, onChange: setPhone, type: 'tel' },
                             ].map(f => (
@@ -168,28 +227,16 @@ export default function EditVolunteerProfilePage() {
                             <span className="material-symbols-outlined" style={{ fontSize: 20, verticalAlign: 'middle', marginRight: 8, color: '#1de2d1' }}>schedule</span>
                             Availability
                         </h3>
-                        <div className="r-grid-form">
-                            <div>
-                                <label style={{ fontSize: 12, fontWeight: 700, color: '#64748b', marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: '0.03em' }}>When are you available?</label>
-                                <select value={availabilityHours} onChange={e => setAvailabilityHours(e.target.value)}
-                                    style={{ ...inputStyles, cursor: 'pointer' } as React.CSSProperties}>
-                                    <option value="Weekdays Morning">Weekdays - Morning</option>
-                                    <option value="Weekdays Evening">Weekdays - Evening</option>
-                                    <option value="Weekends">Weekends</option>
-                                    <option value="Flexible">Flexible</option>
-                                    <option value="Anytime">Anytime</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label style={{ fontSize: 12, fontWeight: 700, color: '#64748b', marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: '0.03em' }}>Max Travel Distance</label>
-                                <select defaultValue="25" style={{ ...inputStyles, cursor: 'pointer' } as React.CSSProperties}>
-                                    <option value="5">Within 5 km</option>
-                                    <option value="10">Within 10 km</option>
-                                    <option value="25">Within 25 km</option>
-                                    <option value="50">Within 50 km</option>
-                                    <option value="any">Any distance</option>
-                                </select>
-                            </div>
+                        <div>
+                            <label style={{ fontSize: 12, fontWeight: 700, color: '#64748b', marginBottom: 6, display: 'block', textTransform: 'uppercase', letterSpacing: '0.03em' }}>When are you available?</label>
+                            <select value={availabilityHours} onChange={e => setAvailabilityHours(e.target.value)}
+                                style={{ ...inputStyles, cursor: 'pointer' } as React.CSSProperties}>
+                                <option value="Weekdays Morning">Weekdays - Morning</option>
+                                <option value="Weekdays Evening">Weekdays - Evening</option>
+                                <option value="Weekends">Weekends</option>
+                                <option value="Flexible">Flexible</option>
+                                <option value="Anytime">Anytime</option>
+                            </select>
                         </div>
                     </div>
 

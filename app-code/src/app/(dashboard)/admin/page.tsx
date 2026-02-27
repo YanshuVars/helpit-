@@ -42,7 +42,7 @@ export default function AdminDashboard() {
             const { count: totalUsers } = await supabase.from("users").select("*", { count: "exact", head: true });
             const { count: newUsers } = await supabase.from("users").select("*", { count: "exact", head: true }).gte("created_at", startDate.toISOString());
             const { count: totalNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true });
-            const { count: activeNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true }).eq("verification_status", "VERIFIED");
+            const { count: activeNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true }).eq("verification_status", "APPROVED");
             const { count: pendingNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true }).eq("verification_status", "PENDING");
             const { count: totalVolunteers } = await supabase.from("user_roles").select("*", { count: "exact", head: true }).eq("role", "VOLUNTEER");
             const { count: totalDonors } = await supabase.from("user_roles").select("*", { count: "exact", head: true }).eq("role", "INDIVIDUAL");
@@ -75,7 +75,7 @@ export default function AdminDashboard() {
 
             const { data: topNgoData } = await supabase
                 .from("ngos").select("id, name, total_donations_received, volunteer_count, rating")
-                .eq("verification_status", "VERIFIED").order("total_donations_received", { ascending: false }).limit(5);
+                .eq("verification_status", "APPROVED").order("total_donations_received", { ascending: false }).limit(5);
             if (topNgoData) {
                 setTopNGOs(topNgoData.map(n => ({
                     id: n.id, name: n.name, donations: n.total_donations_received || 0,

@@ -4,15 +4,15 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { formatDistanceToNow, formatCurrency } from '@/lib/utils';
+import { useNgoContext } from '@/lib/hooks/use-ngo-context';
 
 interface NGODashboardData {
     ngo: {
         id: string;
         name: string;
-        total_requests: number;
+        total_requests_resolved: number;
         total_volunteers: number;
         total_donations: number;
-        total_events: number;
     } | null;
     stats: {
         activeRequests: number;
@@ -29,30 +29,35 @@ interface NGODashboardData {
 }
 
 export default function NGODashboardPage() {
+    const { ngoId, loading: ctxLoading } = useNgoContext();
     const [data, setData] = useState<NGODashboardData | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchDashboardData() {
+            if (ctxLoading || !ngoId) {
+                if (!ctxLoading) setLoading(false);
+                return;
+            }
+
             const supabase = createClient();
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) { setLoading(false); return; }
-
-            const { data: membership } = await supabase
-                .from('ngo_members')
-                .select('ngo_id')
-                .eq('user_id', session.user.id)
-                .single();
-
-            if (!membership) { setLoading(false); return; }
-            const ngoId = membership.ngo_id;
 
             const { data: ngoData } = await supabase
                 .from('ngos').select('*').eq('id', ngoId).single();
-
-            const { count: activeRequests } = await supabase
-                .from('requests').select('*', { count: 'exact', head: true })
-                .eq('ngo_id', ngoId).eq('status', 'ACTIVE');
+            // Use API route to bypass RLS recursion on help_requests
+            let activeRequests = 0;
+            let recentRequests: any[] = [];
+            try {
+                const reqRes = await fetch(`/api/ngo/requests?ngo_id=${ngoId}`);
+                if (reqRes.ok) {
+                    const reqJson = await reqRes.json();
+                    const allReqs = reqJson.data || [];
+                    activeRequests = allReqs.filter((r: any) => r.status === 'OPEN' || r.status === 'IN_PROGRESS').length;
+                    recentRequests = allReqs.slice(0, 3);
+                }
+            } catch (e) {
+                console.error('Error fetching requests for dashboard:', e);
+            }
 
             const { count: pendingDonations } = await supabase
                 .from('donations').select('*', { count: 'exact', head: true })
@@ -61,10 +66,6 @@ export default function NGODashboardPage() {
             const { count: upcomingEvents } = await supabase
                 .from('events').select('*', { count: 'exact', head: true })
                 .eq('ngo_id', ngoId).gte('start_date', new Date().toISOString());
-
-            const { data: recentRequests } = await supabase
-                .from('requests').select('id, title, status, created_at')
-                .eq('ngo_id', ngoId).order('created_at', { ascending: false }).limit(3);
 
             const { data: recentDonations } = await supabase
                 .from('donations').select('id, amount, donor_name, created_at')
@@ -82,18 +83,17 @@ export default function NGODashboardPage() {
             setData({
                 ngo: ngoData ? {
                     id: ngoData.id, name: ngoData.name,
-                    total_requests: ngoData.total_requests || 0,
+                    total_requests_resolved: ngoData.total_requests_resolved || 0,
                     total_volunteers: ngoData.total_volunteers || 0,
                     total_donations: ngoData.total_donations || 0,
-                    total_events: ngoData.total_events || 0,
                 } : null,
-                stats: { activeRequests: activeRequests || 0, pendingDonations: pendingDonations || 0, upcomingEvents: upcomingEvents || 0 },
+                stats: { activeRequests: activeRequests, pendingDonations: pendingDonations || 0, upcomingEvents: upcomingEvents || 0 },
                 recentActivity: activity.slice(0, 5),
             });
             setLoading(false);
         }
         fetchDashboardData();
-    }, []);
+    }, [ngoId, ctxLoading]);
 
     const getActivityIcon = (type: string) => {
         switch (type) {
@@ -115,7 +115,7 @@ export default function NGODashboardPage() {
         }
     };
 
-    if (loading) {
+    if (loading || ctxLoading) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
                 <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
@@ -125,15 +125,14 @@ export default function NGODashboardPage() {
 
     const ngo = data?.ngo;
     const stats = [
-        { label: 'Total Requests', value: ngo?.total_requests || 0, icon: 'description', iconBg: 'rgba(59,130,246,0.08)', iconColor: '#2563eb', trend: '+12%', trendUp: true },
-        { label: 'Active Volunteers', value: ngo?.total_volunteers || 0, icon: 'person_check', iconBg: 'rgba(16,185,129,0.08)', iconColor: '#059669', trend: '-5%', trendUp: false },
-        { label: 'Donations', value: formatCurrency(ngo?.total_donations || 0), icon: 'payments', iconBg: 'rgba(245,158,11,0.08)', iconColor: '#d97706', trend: '+18%', trendUp: true },
-        { label: 'Upcoming Events', value: data?.stats.upcomingEvents || 0, icon: 'event', iconBg: 'rgba(139,92,246,0.08)', iconColor: '#7c3aed', trend: '0%', trendUp: null },
+        { label: 'Requests Resolved', value: ngo?.total_requests_resolved || 0, icon: 'description', iconBg: 'rgba(59,130,246,0.08)', iconColor: '#2563eb' },
+        { label: 'Active Volunteers', value: ngo?.total_volunteers || 0, icon: 'person_check', iconBg: 'rgba(16,185,129,0.08)', iconColor: '#059669' },
+        { label: 'Donations', value: formatCurrency(ngo?.total_donations || 0), icon: 'payments', iconBg: 'rgba(245,158,11,0.08)', iconColor: '#d97706' },
+        { label: 'Upcoming Events', value: data?.stats.upcomingEvents || 0, icon: 'event', iconBg: 'rgba(139,92,246,0.08)', iconColor: '#7c3aed' },
     ];
 
     return (
         <div>
-            {/* Header */}
             <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1e293b', marginBottom: 24 }}>
                 Dashboard Overview
             </h2>
@@ -153,20 +152,6 @@ export default function NGODashboardPage() {
                             }}>
                                 <span className="material-symbols-outlined" style={{ fontSize: 22, color: stat.iconColor }}>{stat.icon}</span>
                             </div>
-                            {stat.trendUp !== null && (
-                                <span style={{
-                                    display: 'inline-flex', alignItems: 'center', gap: 2,
-                                    fontSize: 11, fontWeight: 700, borderRadius: 20,
-                                    padding: '3px 8px',
-                                    background: stat.trendUp ? 'rgba(16,185,129,0.08)' : 'rgba(244,63,94,0.08)',
-                                    color: stat.trendUp ? '#059669' : '#f43f5e',
-                                }}>
-                                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
-                                        {stat.trendUp ? 'trending_up' : 'trending_down'}
-                                    </span>
-                                    {stat.trend}
-                                </span>
-                            )}
                         </div>
                         <p style={{ fontSize: 13, fontWeight: 500, color: '#64748b', marginBottom: 4 }}>{stat.label}</p>
                         <h3 style={{ fontSize: 24, fontWeight: 700, color: '#0f172a' }}>{stat.value}</h3>
@@ -188,7 +173,7 @@ export default function NGODashboardPage() {
                         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     }}>
                         <h4 style={{ fontWeight: 700, color: '#1e293b' }}>Recent Activity</h4>
-                        <button style={{ fontSize: 12, fontWeight: 700, color: '#1de2d1', background: 'none', border: 'none', cursor: 'pointer' }}>View All</button>
+                        <Link href="/ngo/requests" style={{ fontSize: 12, fontWeight: 700, color: '#1de2d1', textDecoration: 'none' }}>View All</Link>
                     </div>
                     <div>
                         {(data?.recentActivity || []).length === 0 ? (
@@ -257,36 +242,38 @@ export default function NGODashboardPage() {
                                 <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#64748b' }}>person_add</span>
                                 Invite Volunteer
                             </Link>
-                            <button style={{
+                            <Link href="/ngo/donations" style={{
                                 display: 'flex', alignItems: 'center', gap: 10,
                                 padding: '10px 14px', borderRadius: 8,
                                 background: '#f1f5f9', color: '#475569',
-                                fontWeight: 700, fontSize: 13, border: 'none', cursor: 'pointer', textAlign: 'left',
+                                fontWeight: 700, fontSize: 13, textDecoration: 'none',
                             }}>
                                 <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#64748b' }}>summarize</span>
                                 View Reports
-                            </button>
+                            </Link>
                         </div>
                     </div>
 
-                    {/* Annual Impact Report Card */}
+                    {/* Active Requests Summary */}
                     <div style={{
                         background: '#1E3A5F', borderRadius: 12, padding: 20,
                         color: '#fff', position: 'relative', overflow: 'hidden',
                     }}>
                         <div style={{ position: 'relative', zIndex: 10 }}>
-                            <h5 style={{ fontWeight: 700, fontSize: 17, marginBottom: 8 }}>Annual Impact Report</h5>
-                            <p style={{ color: '#94a3b8', fontSize: 12, marginBottom: 14, lineHeight: 1.5 }}>
-                                Generate your NGO&apos;s yearly transparency report for donors and stakeholders.
+                            <h5 style={{ fontWeight: 700, fontSize: 17, marginBottom: 8 }}>Active Requests</h5>
+                            <p style={{ fontSize: 36, fontWeight: 900, color: '#1de2d1', marginBottom: 4 }}>
+                                {data?.stats.activeRequests || 0}
                             </p>
-                            <button style={{
+                            <p style={{ color: '#94a3b8', fontSize: 12, marginBottom: 14 }}>
+                                requests currently open or in progress
+                            </p>
+                            <Link href="/ngo/requests" style={{
                                 fontSize: 12, fontWeight: 700, color: '#1de2d1',
-                                background: 'none', border: 'none', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', gap: 4,
+                                display: 'flex', alignItems: 'center', gap: 4, textDecoration: 'none',
                             }}>
-                                Generate Now
+                                View All
                                 <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_forward</span>
-                            </button>
+                            </Link>
                         </div>
                         <span className="material-symbols-outlined" style={{
                             position: 'absolute', bottom: -16, right: -16,

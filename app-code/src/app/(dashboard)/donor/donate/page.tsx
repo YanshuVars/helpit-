@@ -1,12 +1,50 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+
+interface NGOOption {
+    id: string;
+    name: string;
+    logo_url: string | null;
+    verification_status: string;
+}
 
 export default function DonatePage() {
+    const router = useRouter();
+    const [ngos, setNgos] = useState<NGOOption[]>([]);
+    const [selectedNgo, setSelectedNgo] = useState("");
     const [amount, setAmount] = useState<number | null>(1000);
     const [customAmount, setCustomAmount] = useState("");
+    const [loading, setLoading] = useState(true);
     const presetAmounts = [500, 1000, 2500, 5000, 10000];
+
+    useEffect(() => {
+        async function fetchNgos() {
+            const supabase = createClient();
+            const { data } = await supabase.from('ngos')
+                .select('id, name, logo_url, verification_status')
+                .eq('verification_status', 'APPROVED')
+                .order('name', { ascending: true });
+            setNgos(data || []);
+            setLoading(false);
+        }
+        fetchNgos();
+    }, []);
+
+    const displayAmount = customAmount ? parseInt(customAmount) || 0 : (amount || 0);
+
+    const handleContinue = () => {
+        const ngoId = selectedNgo;
+        if (!ngoId) return;
+        const params = new URLSearchParams({
+            ngoId,
+            amount: displayAmount.toString(),
+        });
+        router.push(`/donor/donate/details?${params.toString()}`);
+    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -20,12 +58,19 @@ export default function DonatePage() {
             {/* Select NGO */}
             <div className="card" style={{ padding: 16 }}>
                 <label className="field-label">Select an NGO to donate to:</label>
-                <select className="field-input" style={{ marginTop: 8 }}>
-                    <option value="">Choose an NGO</option>
-                    <option value="n1">Hope Foundation</option>
-                    <option value="n2">GreenEarth</option>
-                    <option value="n3">EduChild</option>
-                </select>
+                {loading ? (
+                    <div style={{ padding: 12, textAlign: 'center' }}>
+                        <span className="material-symbols-outlined animate-spin" style={{ fontSize: 20, color: '#1de2d1' }}>progress_activity</span>
+                    </div>
+                ) : (
+                    <select className="field-input" style={{ marginTop: 8 }}
+                        value={selectedNgo} onChange={e => setSelectedNgo(e.target.value)}>
+                        <option value="">Choose an NGO</option>
+                        {ngos.map(ngo => (
+                            <option key={ngo.id} value={ngo.id}>{ngo.name}</option>
+                        ))}
+                    </select>
+                )}
             </div>
 
             {/* Amount Selection */}
@@ -34,7 +79,7 @@ export default function DonatePage() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, margin: '10px 0 14px' }}>
                     {presetAmounts.map(preset => (
                         <button key={preset} onClick={() => { setAmount(preset); setCustomAmount(""); }}
-                            className={amount === preset ? "btn btn-primary" : "btn btn-secondary"}
+                            className={amount === preset && !customAmount ? "btn btn-primary" : "btn btn-secondary"}
                             style={{ justifyContent: 'center', fontSize: 13 }}
                         >₹{preset.toLocaleString()}</button>
                     ))}
@@ -48,21 +93,19 @@ export default function DonatePage() {
                 </div>
             </div>
 
-            {/* Monthly Toggle */}
-            <div className="card" style={{ padding: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                    <p style={{ fontWeight: 600, fontSize: 14 }}>Make it monthly</p>
-                    <p style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>Support consistently for more impact</p>
-                </div>
-                <div style={{ width: 44, height: 24, borderRadius: 12, background: 'var(--color-border)', cursor: 'pointer', position: 'relative' }}>
-                    <span style={{ position: 'absolute', left: 2, top: 2, width: 20, height: 20, borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow-sm)', transition: 'transform 0.2s' }} />
-                </div>
-            </div>
-
             {/* Continue Button */}
-            <Link href="/donor/donate/details" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 15, fontWeight: 700, textDecoration: 'none' }}>
-                Continue • ₹{(amount || parseInt(customAmount) || 0).toLocaleString()}
-            </Link>
+            <button
+                onClick={handleContinue}
+                disabled={!selectedNgo || displayAmount <= 0}
+                className="btn btn-primary"
+                style={{
+                    width: '100%', justifyContent: 'center', height: 46, fontSize: 15, fontWeight: 700,
+                    opacity: (!selectedNgo || displayAmount <= 0) ? 0.5 : 1,
+                    cursor: (!selectedNgo || displayAmount <= 0) ? 'not-allowed' : 'pointer',
+                }}
+            >
+                Continue • ₹{displayAmount.toLocaleString()}
+            </button>
         </div>
     );
 }

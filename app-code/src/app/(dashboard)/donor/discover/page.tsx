@@ -10,6 +10,11 @@ interface NGO {
     description?: string;
 }
 
+interface FollowCount {
+    following_ngo_id: string;
+    count: number;
+}
+
 type CategoryType = 'ALL' | 'EDUCATION' | 'ENVIRONMENT' | 'MEDICAL' | 'COMMUNITY' | 'ANIMAL_CARE' | 'OTHER';
 
 const categories = [
@@ -43,20 +48,30 @@ export default function DonorDiscoverPage() {
             const { data: { session } } = await supabase.auth.getSession();
 
             if (session) {
-                const { data: followed } = await supabase.from('ngo_followers').select('ngo_id').eq('user_id', session.user.id);
-                if (followed) setFollowedNgoIds(new Set(followed.map(f => f.ngo_id)));
+                const { data: followed } = await supabase.from('follows').select('following_ngo_id').eq('follower_id', session.user.id);
+                if (followed) setFollowedNgoIds(new Set(followed.map(f => f.following_ngo_id)));
             }
 
-            let query = supabase.from('ngos').select('id, name, categories, followers_count, verification_status, logo_url, description').eq('status', 'ACTIVE').order('followers_count', { ascending: false });
+            let query = supabase.from('ngos').select('id, name, categories, verification_status, logo_url, description').eq('verification_status', 'APPROVED').order('created_at', { ascending: false });
             if (activeCategory !== 'ALL') query = query.contains('categories', [activeCategory]);
             if (searchQuery) query = query.ilike('name', `%${searchQuery}%`);
 
             const { data } = await query.limit(20);
             const ngosData = (data || []).map(n => ({
                 id: n.id, name: n.name, category: n.categories?.[0] || 'Other',
-                followers_count: n.followers_count || 0, verification_status: n.verification_status,
+                followers_count: 0, verification_status: n.verification_status,
                 logo_url: n.logo_url, description: n.description || '',
             }));
+
+            // Fetch follower counts for these NGOs
+            if (ngosData.length > 0) {
+                const ngoIds = ngosData.map(n => n.id);
+                for (const ngo of ngosData) {
+                    const { count } = await supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following_ngo_id', ngo.id);
+                    ngo.followers_count = count || 0;
+                }
+            }
+
             setNgos(ngosData);
             setLoading(false);
         }
@@ -70,10 +85,10 @@ export default function DonorDiscoverPage() {
         if (!session) return;
         const isFollowing = followedNgoIds.has(ngoId);
         if (isFollowing) {
-            await supabase.from('ngo_followers').delete().eq('user_id', session.user.id).eq('ngo_id', ngoId);
+            await supabase.from('follows').delete().eq('follower_id', session.user.id).eq('following_ngo_id', ngoId);
             setFollowedNgoIds(prev => { const next = new Set(prev); next.delete(ngoId); return next; });
         } else {
-            await supabase.from('ngo_followers').insert({ user_id: session.user.id, ngo_id: ngoId });
+            await supabase.from('follows').insert({ follower_id: session.user.id, following_ngo_id: ngoId });
             setFollowedNgoIds(prev => new Set(prev).add(ngoId));
         }
     };
@@ -189,7 +204,7 @@ export default function DonorDiscoverPage() {
                                         background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)',
                                         fontSize: 11, fontWeight: 600, color: cc.text,
                                     }}>{ngo.category}</span>
-                                    {ngo.verification_status === 'VERIFIED' && (
+                                    {ngo.verification_status === 'APPROVED' && (
                                         <span style={{
                                             position: 'absolute', top: 12, right: 12,
                                             display: 'inline-flex', alignItems: 'center', gap: 4,

@@ -16,6 +16,12 @@ export async function signUp(email: string, password: string, userData: Partial<
             data: {
                 full_name: userData.full_name,
                 role: userData.role || 'INDIVIDUAL',
+                phone: userData.phone || null,
+                skills: userData.skills || null,
+                availability: userData.availability ?? false,
+                pan_number: userData.pan_number || null,
+                bio: userData.bio || null,
+                location: userData.location || null,
             },
         },
     });
@@ -263,15 +269,15 @@ export async function getDonorStats() {
 
     if (!authUser) throw new Error('Not authenticated');
 
-  const { data: donations } = await supabase
-    .from('donations')
-    .select('amount, status')
-    .eq('donor_id', authUser.id);
-  
-  const totalDonations = donations?.filter((d: { status: string }) => d.status === 'COMPLETED').length || 0;
-  const totalAmount = donations
-    ?.filter((d: { status: string }) => d.status === 'COMPLETED')
-    .reduce((sum: number, d: { amount: number }) => sum + d.amount, 0) || 0;
+    const { data: donations } = await supabase
+        .from('donations')
+        .select('amount, status')
+        .eq('donor_id', authUser.id);
+
+    const totalDonations = donations?.filter((d: { status: string }) => d.status === 'COMPLETED').length || 0;
+    const totalAmount = donations
+        ?.filter((d: { status: string }) => d.status === 'COMPLETED')
+        .reduce((sum: number, d: { amount: number }) => sum + d.amount, 0) || 0;
 
     // Get following count
     const { count: followingCount } = await supabase

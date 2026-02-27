@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signIn } from '@/lib/api/users';
+import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -24,8 +25,25 @@ export default function LoginPage() {
                 throw new Error('Invalid email or password');
             }
 
-            // Redirect based on role
-            router.push('/ngo');
+            // Fetch role from users table and redirect to correct dashboard
+            const supabase = createClient();
+            const { data: profile } = await supabase
+                .from('users')
+                .select('role')
+                .eq('id', result.user.id)
+                .single();
+
+            const role = profile?.role || 'DONOR';
+            const dashboardMap: Record<string, string> = {
+                PLATFORM_ADMIN: '/admin',
+                NGO_ADMIN: '/ngo',
+                NGO_COORDINATOR: '/ngo',
+                NGO_MEMBER: '/ngo',
+                VOLUNTEER: '/volunteer',
+                DONOR: '/donor',
+                INDIVIDUAL: '/donor',
+            };
+            router.push(dashboardMap[role] || '/donor');
         } catch (err: unknown) {
             const errorMessage = err instanceof Error ? err.message : 'Invalid credentials';
             setError(errorMessage);

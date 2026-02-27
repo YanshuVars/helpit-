@@ -2,41 +2,104 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useNgoContext } from "@/lib/hooks/use-ngo-context";
 
 interface AuditEntry {
     id: string;
     action: string;
-    actor_name: string;
-    details: string;
-    created_at: string;
     category: string;
+    target_type: string;
+    target_id: string;
+    details: string;
+    actor_id: string;
+    actor_name: string;
+    created_at: string;
 }
 
 const catIcons: Record<string, { icon: string; bg: string; color: string }> = {
-    settings: { icon: "settings", bg: "rgba(100,116,139,0.1)", color: "#64748b" },
-    members: { icon: "group", bg: "rgba(59,130,246,0.1)", color: "#2563eb" },
-    requests: { icon: "assignment", bg: "rgba(29,226,209,0.1)", color: "#0f766e" },
-    donations: { icon: "payments", bg: "rgba(16,185,129,0.1)", color: "#059669" },
-    security: { icon: "shield", bg: "rgba(239,68,68,0.1)", color: "#dc2626" },
+    USER_MANAGEMENT: { icon: "group", bg: "rgba(59,130,246,0.1)", color: "#2563eb" },
+    NGO_MANAGEMENT: { icon: "business", bg: "rgba(29,226,209,0.1)", color: "#0f766e" },
+    DONATION: { icon: "payments", bg: "rgba(16,185,129,0.1)", color: "#059669" },
+    MODERATION: { icon: "gavel", bg: "rgba(239,68,68,0.1)", color: "#dc2626" },
+    PLATFORM: { icon: "settings", bg: "rgba(100,116,139,0.1)", color: "#64748b" },
 };
 
-// Placeholder data for demo; replace with Supabase query if audit_logs table exists
-const DEMO_ENTRIES: AuditEntry[] = [
-    { id: "1", action: "Updated organization profile", actor_name: "Admin User", details: "Changed description and contact email", created_at: new Date(Date.now() - 3600000).toISOString(), category: "settings" },
-    { id: "2", action: "Added team member", actor_name: "Admin User", details: "Invited priya@example.com as editor", created_at: new Date(Date.now() - 7200000).toISOString(), category: "members" },
-    { id: "3", action: "Created help request", actor_name: "Field Lead", details: "Medical supplies for relief camp", created_at: new Date(Date.now() - 86400000).toISOString(), category: "requests" },
-    { id: "4", action: "Processed donation", actor_name: "System", details: "₹50,000 from Rajesh Mehta via UPI", created_at: new Date(Date.now() - 172800000).toISOString(), category: "donations" },
-    { id: "5", action: "Password changed", actor_name: "Admin User", details: "Security credentials updated", created_at: new Date(Date.now() - 259200000).toISOString(), category: "security" },
-    { id: "6", action: "Assigned volunteer", actor_name: "Coordinator", details: "Assigned to Medical Camp request", created_at: new Date(Date.now() - 345600000).toISOString(), category: "requests" },
-];
-
 export default function AuditLogPage() {
-    const [entries, setEntries] = useState<AuditEntry[]>(DEMO_ENTRIES);
+    const { ngoId, loading: ctxLoading } = useNgoContext();
+    const [entries, setEntries] = useState<AuditEntry[]>([]);
+    const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
+    const [hasRealData, setHasRealData] = useState(false);
+
+    useEffect(() => {
+        async function load() {
+            if (ctxLoading) return;
+            if (!ngoId) { setLoading(false); return; }
+            const supabase = createClient();
+
+            // Query audit_logs using correct schema columns
+            const { data, error } = await supabase
+                .from("audit_logs")
+                .select("id, action, category, target_type, target_id, details, metadata, actor_id, created_at")
+                .order("created_at", { ascending: false })
+                .limit(50);
+
+            if (error) {
+                console.error("Audit logs query error:", error);
+                setEntries([]);
+                setHasRealData(false);
+                setLoading(false);
+                return;
+            }
+
+            if (data && data.length > 0) {
+                setHasRealData(true);
+                // Fetch actor names
+                const userIds = [...new Set(data.map(d => d.actor_id).filter(Boolean))];
+                let userMap: Record<string, string> = {};
+                if (userIds.length > 0) {
+                    const { data: users } = await supabase
+                        .from("users")
+                        .select("id, full_name")
+                        .in("id", userIds);
+                    if (users) {
+                        userMap = Object.fromEntries(users.map(u => [u.id, u.full_name]));
+                    }
+                }
+
+                setEntries(data.map(d => ({
+                    id: d.id,
+                    action: d.action || "Action",
+                    category: d.category || "PLATFORM",
+                    target_type: d.target_type || "",
+                    target_id: d.target_id || "",
+                    details: d.details || (d.metadata ? JSON.stringify(d.metadata).slice(0, 150) : ""),
+                    actor_id: d.actor_id || "",
+                    actor_name: userMap[d.actor_id] || "System",
+                    created_at: d.created_at,
+                })));
+            } else {
+                setHasRealData(false);
+                setEntries([]);
+            }
+            setLoading(false);
+        }
+        load();
+    }, [ngoId, ctxLoading]);
 
     const filtered = entries.filter(e =>
-        !search || e.action.toLowerCase().includes(search.toLowerCase()) || e.actor_name.toLowerCase().includes(search.toLowerCase())
+        !search || e.action.toLowerCase().includes(search.toLowerCase()) ||
+        e.actor_name.toLowerCase().includes(search.toLowerCase()) ||
+        e.category.toLowerCase().includes(search.toLowerCase())
     );
+
+    if (loading || ctxLoading) {
+        return (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: "#1de2d1" }}>progress_activity</span>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -44,6 +107,19 @@ export default function AuditLogPage() {
                 <h2 style={{ fontSize: 26, fontWeight: 900, color: "#0f172a" }}>Audit Log</h2>
                 <p style={{ fontSize: 14, color: "#64748b", marginTop: 4 }}>Complete record of all administrative actions for transparency.</p>
             </div>
+
+            {!hasRealData && (
+                <div style={{
+                    padding: 16, marginBottom: 20, borderRadius: 10,
+                    background: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.15)",
+                    display: "flex", alignItems: "center", gap: 10,
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#2563eb" }}>info</span>
+                    <p style={{ fontSize: 13, color: "#475569" }}>
+                        No audit entries recorded yet. Actions like creating requests, updating profiles, and managing team members will appear here automatically once the audit logging system is fully connected.
+                    </p>
+                </div>
+            )}
 
             {/* Search */}
             <div style={{ position: "relative", marginBottom: 20 }}>
@@ -61,53 +137,77 @@ export default function AuditLogPage() {
             </div>
 
             {/* Timeline */}
-            <div style={{
-                background: "#fff", borderRadius: 12,
-                border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
-                overflow: "hidden",
-            }}>
-                {filtered.map((e, i) => {
-                    const ci = catIcons[e.category] || catIcons.settings;
-                    const isLast = i === filtered.length - 1;
-                    return (
-                        <div key={e.id} style={{
-                            display: "flex", gap: 16, padding: "16px 20px",
-                            borderBottom: isLast ? "none" : "1px solid #f1f5f9",
-                        }}>
-                            <div style={{ position: "relative" }}>
-                                <div style={{
-                                    width: 36, height: 36, borderRadius: "50%",
-                                    background: ci.bg,
-                                    display: "flex", alignItems: "center", justifyContent: "center",
-                                }}>
-                                    <span className="material-symbols-outlined" style={{ fontSize: 18, color: ci.color }}>{ci.icon}</span>
-                                </div>
-                                {!isLast && (
+            {filtered.length === 0 ? (
+                <div style={{
+                    textAlign: "center", padding: 64,
+                    background: "#fff", borderRadius: 12, border: "1px solid #e2e8f0",
+                }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 48, color: "#cbd5e1" }}>history</span>
+                    <p style={{ marginTop: 12, color: "#94a3b8" }}>No audit entries found</p>
+                </div>
+            ) : (
+                <div style={{
+                    background: "#fff", borderRadius: 12,
+                    border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                    overflow: "hidden",
+                }}>
+                    {filtered.map((e, i) => {
+                        const ci = catIcons[e.category] || catIcons.PLATFORM;
+                        const isLast = i === filtered.length - 1;
+                        return (
+                            <div key={e.id} style={{
+                                display: "flex", gap: 16, padding: "16px 20px",
+                                borderBottom: isLast ? "none" : "1px solid #f1f5f9",
+                            }}>
+                                <div style={{ position: "relative" }}>
                                     <div style={{
-                                        position: "absolute", left: "50%", top: 40, bottom: -16,
-                                        width: 1, background: "#f1f5f9", transform: "translateX(-50%)",
-                                    }} />
-                                )}
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                    <p style={{ fontSize: 13, fontWeight: 700 }}>{e.action}</p>
-                                    <span style={{ fontSize: 11, color: "#94a3b8" }}>
-                                        {new Date(e.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                                        {" "}
-                                        {new Date(e.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
-                                    </span>
+                                        width: 36, height: 36, borderRadius: "50%",
+                                        background: ci.bg,
+                                        display: "flex", alignItems: "center", justifyContent: "center",
+                                    }}>
+                                        <span className="material-symbols-outlined" style={{ fontSize: 18, color: ci.color }}>{ci.icon}</span>
+                                    </div>
+                                    {!isLast && (
+                                        <div style={{
+                                            position: "absolute", left: "50%", top: 40, bottom: -16,
+                                            width: 1, background: "#f1f5f9", transform: "translateX(-50%)",
+                                        }} />
+                                    )}
                                 </div>
-                                <p style={{ fontSize: 12, color: "#64748b", marginTop: 3 }}>{e.details}</p>
-                                <p style={{ fontSize: 11, color: "#94a3b8", marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
-                                    <span className="material-symbols-outlined" style={{ fontSize: 12 }}>person</span>
-                                    {e.actor_name}
-                                </p>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                        <p style={{ fontSize: 13, fontWeight: 700 }}>{e.action}</p>
+                                        <span style={{ fontSize: 11, color: "#94a3b8" }}>
+                                            {new Date(e.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                                            {" "}
+                                            {new Date(e.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                                        </span>
+                                    </div>
+                                    {e.details && (
+                                        <p style={{ fontSize: 12, color: "#64748b", marginTop: 3 }}>{e.details}</p>
+                                    )}
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+                                        <p style={{ fontSize: 11, color: "#94a3b8", display: "flex", alignItems: "center", gap: 4 }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 12 }}>person</span>
+                                            {e.actor_name}
+                                        </p>
+                                        {e.target_type && (
+                                            <span style={{
+                                                fontSize: 10, padding: "2px 6px", borderRadius: 4,
+                                                background: "#f1f5f9", color: "#64748b",
+                                            }}>{e.target_type}</span>
+                                        )}
+                                        <span style={{
+                                            fontSize: 10, padding: "2px 6px", borderRadius: 4,
+                                            background: ci.bg, color: ci.color,
+                                        }}>{e.category.replace('_', ' ')}</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
-            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }

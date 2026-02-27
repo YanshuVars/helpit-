@@ -6,12 +6,12 @@ import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 interface AssignmentDetail {
-    id: string; status: string; hours_spent: number;
+    id: string; status: string; hours_logged: number;
     request: {
         id: string; title: string; description: string;
         ngo: { id: string; name: string };
-        scheduled_date: string; location: string;
-        required_volunteers: number; assigned_volunteers: number;
+        deadline: string; location: string;
+        volunteers_needed: number; assigned_volunteers: number;
     };
 }
 
@@ -28,10 +28,10 @@ export default function AssignmentDetailPage() {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) { setLoading(false); return; }
 
-            const { data: assignmentData } = await supabase.from('volunteer_assignments').select('id, status, hours_spent, request_id').eq('id', assignmentId).single();
+            const { data: assignmentData } = await supabase.from('volunteer_assignments').select('id, status, hours_logged, request_id').eq('id', assignmentId).single();
             if (!assignmentData) { setLoading(false); return; }
 
-            const { data: requestData } = await supabase.from('requests').select('id, title, description, ngo_id, scheduled_date, location, required_volunteers').eq('id', assignmentData.request_id).single();
+            const { data: requestData } = await supabase.from('help_requests').select('id, title, description, ngo_id, deadline, location, volunteers_needed').eq('id', assignmentData.request_id).single();
 
             let ngoName = 'Unknown NGO';
             if (requestData?.ngo_id) {
@@ -42,13 +42,13 @@ export default function AssignmentDetailPage() {
             const { count: assignedCount } = await supabase.from('volunteer_assignments').select('*', { count: 'exact', head: true }).eq('request_id', assignmentData.request_id);
 
             setAssignment({
-                id: assignmentData.id, status: assignmentData.status, hours_spent: assignmentData.hours_spent,
+                id: assignmentData.id, status: assignmentData.status, hours_logged: assignmentData.hours_logged,
                 request: {
                     id: requestData?.id, title: requestData?.title || 'Unknown Request',
                     description: requestData?.description || '',
                     ngo: { id: requestData?.ngo_id || '', name: ngoName },
-                    scheduled_date: requestData?.scheduled_date || '', location: requestData?.location || '',
-                    required_volunteers: requestData?.required_volunteers || 0, assigned_volunteers: assignedCount || 0,
+                    deadline: requestData?.deadline || '', location: requestData?.location || '',
+                    volunteers_needed: requestData?.volunteers_needed || 0, assigned_volunteers: assignedCount || 0,
                 },
             });
             setLoading(false);
@@ -92,8 +92,8 @@ export default function AssignmentDetailPage() {
     }
 
     const ss = statusConfig[assignment.status] || statusConfig.ASSIGNED;
-    const progress = assignment.request.required_volunteers
-        ? Math.round((assignment.request.assigned_volunteers / assignment.request.required_volunteers) * 100) : 0;
+    const progress = assignment.request.volunteers_needed
+        ? Math.round((assignment.request.assigned_volunteers / assignment.request.volunteers_needed) * 100) : 0;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
@@ -138,7 +138,7 @@ export default function AssignmentDetailPage() {
                             <div style={{ marginTop: 4 }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6, color: '#64748b' }}>
                                     <span>Team Progress</span>
-                                    <span style={{ fontWeight: 700, color: '#0f172a' }}>{assignment.request.assigned_volunteers} / {assignment.request.required_volunteers}</span>
+                                    <span style={{ fontWeight: 700, color: '#0f172a' }}>{assignment.request.assigned_volunteers} / {assignment.request.volunteers_needed}</span>
                                 </div>
                                 <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
                                     <div style={{
@@ -156,7 +156,7 @@ export default function AssignmentDetailPage() {
                                 background: '#dcfce7', borderRadius: 12, marginTop: 4,
                             }}>
                                 <span className="material-symbols-outlined" style={{ fontSize: 22, color: '#16a34a' }}>schedule</span>
-                                <span style={{ fontSize: 14, fontWeight: 600, color: '#166534' }}>{assignment.hours_spent || 0} hours contributed</span>
+                                <span style={{ fontSize: 14, fontWeight: 600, color: '#166534' }}>{assignment.hours_logged || 0} hours contributed</span>
                             </div>
                         )}
                     </div>
@@ -180,7 +180,7 @@ export default function AssignmentDetailPage() {
                         <h4 style={{ fontSize: 14, fontWeight: 700, color: '#0f172a', marginBottom: 16 }}>Event Details</h4>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                             {[
-                                { icon: 'calendar_today', label: 'Schedule', value: assignment.request.scheduled_date ? new Date(assignment.request.scheduled_date).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Not scheduled' },
+                                { icon: 'calendar_today', label: 'Schedule', value: assignment.request.deadline ? new Date(assignment.request.deadline).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Not scheduled' },
                                 { icon: 'location_on', label: 'Location', value: assignment.request.location || 'Location not specified' },
                                 { icon: 'domain', label: 'Organization', value: assignment.request.ngo.name },
                             ].map(d => (

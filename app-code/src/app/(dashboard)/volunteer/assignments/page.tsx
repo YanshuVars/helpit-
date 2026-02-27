@@ -6,8 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 import { formatDistanceToNow } from "@/lib/utils";
 
 interface Assignment {
-    id: string; status: string; hours_spent: number;
-    request: { id: string; title: string; description: string; ngo: { name: string }; scheduled_date: string; location: string };
+    id: string; status: string; hours_logged: number;
+    request: { id: string; title: string; description: string; ngo: { name: string }; deadline: string; location: string };
 }
 
 type TabType = 'ACTIVE' | 'COMPLETED';
@@ -25,26 +25,26 @@ export default function VolunteerAssignmentsPage() {
             if (!session) { setLoading(false); return; }
 
             const { data: assignmentsData } = await supabase.from('volunteer_assignments')
-                .select('id, status, hours_spent, request_id').eq('volunteer_id', session.user.id)
+                .select('id, status, hours_logged, request_id').eq('volunteer_id', session.user.id)
                 .in('status', activeTab === 'ACTIVE' ? ['ASSIGNED', 'IN_PROGRESS'] : ['COMPLETED'])
                 .order('created_at', { ascending: false });
 
             const requestIds = (assignmentsData || []).map(a => a.request_id).filter(Boolean);
             let requestsData: Record<string, any> = {};
             if (requestIds.length > 0) {
-                const { data: requests } = await supabase.from('requests').select('id, title, description, ngo:ngos(name), scheduled_date, location').in('id', requestIds);
+                const { data: requests } = await supabase.from('help_requests').select('id, title, description, ngo:ngos(name), deadline, location').in('id', requestIds);
                 (requests || []).forEach(r => {
-                    requestsData[r.id] = { title: r.title, description: r.description, ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO', scheduled_date: r.scheduled_date, location: r.location };
+                    requestsData[r.id] = { title: r.title, description: r.description, ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO', deadline: r.deadline, location: r.location };
                 });
             }
 
             const formatted: Assignment[] = (assignmentsData || []).map(a => ({
-                id: a.id, status: a.status, hours_spent: a.hours_spent,
+                id: a.id, status: a.status, hours_logged: a.hours_logged,
                 request: {
                     id: a.request_id, title: requestsData[a.request_id]?.title || 'Unknown Request',
                     description: requestsData[a.request_id]?.description || '',
                     ngo: { name: requestsData[a.request_id]?.ngo_name || 'Unknown NGO' },
-                    scheduled_date: requestsData[a.request_id]?.scheduled_date || '',
+                    deadline: requestsData[a.request_id]?.deadline || '',
                     location: requestsData[a.request_id]?.location || '',
                 },
             }));
@@ -133,7 +133,7 @@ export default function VolunteerAssignmentsPage() {
                                         fontSize: 11, fontWeight: 700, background: ss.bg, color: ss.text,
                                     }}>{a.status.replace('_', ' ')}</span>
                                     <p style={{ fontSize: 11, color: '#94a3b8', marginTop: 6 }}>
-                                        {a.request?.scheduled_date ? formatDistanceToNow(a.request.scheduled_date) : 'No date'}
+                                        {a.request?.deadline ? formatDistanceToNow(a.request.deadline) : 'No date'}
                                     </p>
                                 </div>
                                 <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#cbd5e1' }}>chevron_right</span>

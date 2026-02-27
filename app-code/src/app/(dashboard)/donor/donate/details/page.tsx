@@ -1,19 +1,70 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { Suspense } from 'react';
+
+interface NGOInfo {
+    id: string;
+    name: string;
+    logo_url: string | null;
+    categories: string[] | null;
+    verification_status: string;
+}
 
 const quickAmounts = [500, 1000, 2500, 5000, 10000, 25000];
 const purposes = ['Education Support', 'Medical Aid', 'Food & Nutrition', 'Disaster Relief', 'General Donation', 'Other'];
 
-export default function DonateDetailsPage() {
-    const [amount, setAmount] = useState(1000);
+function DonateDetailsContent() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const ngoId = searchParams.get('ngoId') || '';
+    const initialAmount = parseInt(searchParams.get('amount') || '1000');
+
+    const [ngo, setNgo] = useState<NGOInfo | null>(null);
+    const [amount, setAmount] = useState(initialAmount);
     const [customAmount, setCustomAmount] = useState('');
     const [purpose, setPurpose] = useState('General Donation');
     const [frequency, setFrequency] = useState('one-time');
     const [isAnonymous, setIsAnonymous] = useState(false);
+    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchNgo() {
+            if (!ngoId) { setLoading(false); return; }
+            const supabase = createClient();
+            const { data } = await supabase.from('ngos')
+                .select('id, name, logo_url, categories, verification_status')
+                .eq('id', ngoId).single();
+            setNgo(data);
+            setLoading(false);
+        }
+        fetchNgo();
+    }, [ngoId]);
 
     const displayAmount = customAmount ? parseInt(customAmount) || 0 : amount;
+
+    const handleProceed = () => {
+        const params = new URLSearchParams({
+            ngoId: ngo?.id || '',
+            amount: displayAmount.toString(),
+            purpose,
+            frequency,
+            isAnonymous: isAnonymous.toString(),
+            message,
+        });
+        router.push(`/donor/donate/payment?${params.toString()}`);
+    };
+
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+            </div>
+        );
+    }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
@@ -145,7 +196,7 @@ export default function DonateDetailsPage() {
                         </h3>
                         <textarea
                             placeholder="Add a message to the NGO (optional)"
-                            rows={3}
+                            rows={3} value={message} onChange={e => setMessage(e.target.value)}
                             style={{
                                 width: '100%', padding: 14, borderRadius: 12,
                                 border: '1px solid #e2e8f0', background: '#f8fafc',
@@ -179,13 +230,13 @@ export default function DonateDetailsPage() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20, padding: 14, background: '#f8fafc', borderRadius: 12 }}>
                         <div style={{
                             width: 44, height: 44, borderRadius: 12,
-                            background: 'linear-gradient(135deg, #1de2d1, #0ea5e9)',
+                            background: ngo?.logo_url ? `url("${ngo.logo_url}") center/cover` : 'linear-gradient(135deg, #1de2d1, #0ea5e9)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             color: '#fff', fontWeight: 800, fontSize: 18,
-                        }}>H</div>
+                        }}>{!ngo?.logo_url && (ngo?.name?.charAt(0) || 'N')}</div>
                         <div>
-                            <p style={{ fontWeight: 700, fontSize: 14, color: '#0f172a' }}>Hope Foundation</p>
-                            <p style={{ fontSize: 12, color: '#64748b' }}>Education · Verified</p>
+                            <p style={{ fontWeight: 700, fontSize: 14, color: '#0f172a' }}>{ngo?.name || 'Select an NGO'}</p>
+                            <p style={{ fontSize: 12, color: '#64748b' }}>{ngo?.categories?.[0] || ''} · {ngo?.verification_status === 'APPROVED' ? 'Verified' : ''}</p>
                         </div>
                     </div>
 
@@ -215,19 +266,28 @@ export default function DonateDetailsPage() {
                         <span style={{ fontSize: 24, fontWeight: 800, color: '#1de2d1' }}>₹{displayAmount.toLocaleString()}</span>
                     </div>
 
-                    <Link href="/donor/donate/payment" style={{
+                    <button onClick={handleProceed} disabled={!ngo || displayAmount <= 0} style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                         width: '100%', height: 48, borderRadius: 12, marginTop: 16,
                         background: '#1de2d1', color: '#0f172a',
-                        fontSize: 15, fontWeight: 700, textDecoration: 'none',
+                        fontSize: 15, fontWeight: 700, border: 'none', cursor: 'pointer',
                         boxShadow: '0 4px 16px rgba(29,226,209,0.2)',
                         transition: 'background 200ms',
+                        opacity: (!ngo || displayAmount <= 0) ? 0.5 : 1,
                     }}>
                         Proceed to Payment
                         <span className="material-symbols-outlined" style={{ fontSize: 20 }}>arrow_forward</span>
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function DonateDetailsPage() {
+    return (
+        <Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}><span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span></div>}>
+            <DonateDetailsContent />
+        </Suspense>
     );
 }

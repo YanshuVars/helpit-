@@ -1,40 +1,163 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
+import { useNgoContext } from "@/lib/hooks/use-ngo-context";
+import { toast } from "sonner";
+
+const editSchema = z.object({
+    title: z.string().min(3).max(200),
+    description: z.string().min(10).max(5000),
+    category: z.enum(['FOOD', 'MEDICAL', 'SHELTER', 'EDUCATION', 'CLOTHING', 'EMERGENCY', 'ENVIRONMENT', 'ELDERLY_CARE', 'CHILD_CARE', 'DISABILITY_SUPPORT', 'OTHER']),
+    urgency: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']),
+    status: z.enum(['OPEN', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'CLOSED']),
+    location: z.string().optional(),
+    address: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    pincode: z.string().optional(),
+    volunteers_needed: z.coerce.number().min(1),
+    estimated_hours: z.coerce.number().optional(),
+    deadline: z.string().optional(),
+    visibility: z.enum(['PUBLIC', 'PRIVATE', 'NGO_ONLY']),
+});
+
+type EditFormValues = z.infer<typeof editSchema>;
+
+const categories = [
+    { value: 'FOOD', label: 'Food & Nutrition' },
+    { value: 'MEDICAL', label: 'Medical Assistance' },
+    { value: 'SHELTER', label: 'Shelter' },
+    { value: 'EDUCATION', label: 'Education Support' },
+    { value: 'CLOTHING', label: 'Clothing' },
+    { value: 'EMERGENCY', label: 'Emergency / Disaster Relief' },
+    { value: 'ENVIRONMENT', label: 'Environment' },
+    { value: 'ELDERLY_CARE', label: 'Elderly Care' },
+    { value: 'CHILD_CARE', label: 'Child Care' },
+    { value: 'DISABILITY_SUPPORT', label: 'Disability Support' },
+    { value: 'OTHER', label: 'Other' },
+];
+
+const inputStyle = {
+    width: '100%', height: 42, padding: '0 14px', borderRadius: 8,
+    border: '1px solid #e2e8f0', fontSize: 14, outline: 'none',
+};
+
+const labelStyle = {
+    display: 'block' as const, fontSize: 13, fontWeight: 600, color: '#475569', marginBottom: 8,
+};
 
 export default function EditRequestPage() {
     const params = useParams();
     const router = useRouter();
     const id = params.id as string;
+    const { ngoId, canWrite, loading: ctxLoading } = useNgoContext();
     const [loading, setLoading] = useState(true);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [category, setCategory] = useState("");
-    const [urgency, setUrgency] = useState("HIGH");
-    const [location, setLocation] = useState("");
-    const [visibility, setVisibility] = useState("public");
+    const [submitting, setSubmitting] = useState(false);
+
+    const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<EditFormValues>({
+        resolver: zodResolver(editSchema) as any,
+    });
+
+    const selectedUrgency = watch('urgency');
 
     useEffect(() => {
-        async function load() {
-            const supabase = createClient();
-            const { data } = await supabase.from("requests").select("*").eq("id", id).single();
-            if (data) {
-                setTitle(data.title || "");
-                setDescription(data.description || "");
-                setCategory(data.category || "");
-                setUrgency(data.urgency || "HIGH");
-                setLocation(data.location || "");
-                setVisibility(data.visibility || "public");
-            }
-            setLoading(false);
-        }
-        if (id) load();
-    }, [id]);
+        async function fetchRequest() {
+            if (ctxLoading) return;
+            if (!ngoId) { setLoading(false); return; }
 
-    if (loading) {
+            try {
+                const res = await fetch(`/api/ngo/requests/${id}?ngo_id=${ngoId}`);
+                const json = await res.json();
+                if (!res.ok || !json.data) {
+                    console.error("Error fetching request:", json.error);
+                    toast.error("Request not found");
+                    router.push("/ngo/requests");
+                    return;
+                }
+                const data = json.data;
+
+                reset({
+                    title: data.title,
+                    description: data.description,
+                    category: data.category,
+                    urgency: data.urgency,
+                    status: data.status,
+                    location: data.location || '',
+                    address: data.address || '',
+                    city: data.city || '',
+                    state: data.state || '',
+                    pincode: data.pincode || '',
+                    volunteers_needed: data.volunteers_needed || 1,
+                    estimated_hours: data.estimated_hours || undefined,
+                    deadline: data.deadline ? new Date(data.deadline).toISOString().slice(0, 16) : '',
+                    visibility: data.visibility || 'PUBLIC',
+                });
+                setLoading(false);
+            } catch (err) {
+                console.error("Error fetching request:", err);
+                toast.error("Request not found");
+                router.push("/ngo/requests");
+            }
+        }
+        fetchRequest();
+    }, [id, ngoId, ctxLoading, reset, router]);
+
+    async function onSubmit(values: EditFormValues) {
+        if (!canWrite) {
+            toast.error("You don't have permission to edit requests.");
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            const updateData = {
+                title: values.title,
+                description: values.description,
+                category: values.category,
+                urgency: values.urgency,
+                status: values.status,
+                location: values.location || null,
+                address: values.address || null,
+                city: values.city || null,
+                state: values.state || null,
+                pincode: values.pincode || null,
+                volunteers_needed: values.volunteers_needed,
+                estimated_hours: values.estimated_hours || null,
+                deadline: values.deadline ? new Date(values.deadline).toISOString() : null,
+                visibility: values.visibility,
+                ngo_id: ngoId,
+            };
+
+            const res = await fetch(`/api/ngo/requests/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updateData),
+            });
+
+            if (!res.ok) {
+                const json = await res.json();
+                console.error("Error updating request:", json.error);
+                toast.error(`Failed to update: ${json.error}`);
+                return;
+            }
+
+            toast.success("Request updated successfully!");
+            router.push(`/ngo/requests/${id}`);
+        } catch (err) {
+            console.error("Unexpected error:", err);
+            toast.error("An unexpected error occurred.");
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
+    if (loading || ctxLoading) {
         return (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
                 <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: "#1de2d1" }}>progress_activity</span>
@@ -43,209 +166,135 @@ export default function EditRequestPage() {
     }
 
     return (
-        <div>
-            {/* Breadcrumbs */}
-            <nav style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#94a3b8", marginBottom: 24 }}>
-                <Link href="/ngo" style={{ color: "#94a3b8", textDecoration: "none" }}>Dashboard</Link>
-                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>chevron_right</span>
-                <Link href="/ngo/requests" style={{ color: "#94a3b8", textDecoration: "none" }}>Help Requests</Link>
-                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>chevron_right</span>
-                <span style={{ color: "#0f172a", fontWeight: 500 }}>Edit Request</span>
-            </nav>
+        <div style={{ maxWidth: 960, margin: "0 auto" }}>
+            <Link href={`/ngo/requests/${id}`} style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                color: "#1de2d1", fontSize: 13, fontWeight: 600,
+                textDecoration: "none", marginBottom: 20,
+            }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_back</span>
+                Back to request
+            </Link>
 
-            {/* Header */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
-                <div>
-                    <h1 style={{ fontSize: 30, fontWeight: 900, color: "#0f172a", letterSpacing: "-0.02em" }}>Edit Request</h1>
-                    <p style={{ color: "#64748b", fontSize: 14, marginTop: 4 }}>Modify the details for the existing relief effort.</p>
-                </div>
-                <Link href={`/ngo/requests/${id}`} style={{
-                    display: "inline-flex", alignItems: "center", gap: 6,
-                    padding: "9px 18px", borderRadius: 8,
-                    border: "1px solid #e2e8f0", background: "#fff",
-                    color: "#475569", fontSize: 13, fontWeight: 700, textDecoration: "none",
-                }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>visibility</span>
-                    View Live
-                </Link>
-            </div>
+            <h2 style={{ fontSize: 28, fontWeight: 900, color: "#0f172a", marginBottom: 6 }}>Edit Help Request</h2>
+            <p style={{ color: "#64748b", fontSize: 14, marginBottom: 32 }}>Update the details of this help request.</p>
 
-            {/* Split Layout */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 24, paddingBottom: 100 }}>
-                {/* Left: Context */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <div style={{
-                        background: "#fff", borderRadius: 12, padding: 20,
-                        border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
-                    }}>
-                        <h3 style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#94a3b8", marginBottom: 16 }}>Request Context</h3>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                            <div>
-                                <p style={{ fontSize: 11, color: "#94a3b8" }}>Request ID</p>
-                                <p style={{ fontSize: 13, fontWeight: 700 }}>{id.slice(0, 8).toUpperCase()}</p>
-                            </div>
-                            <div style={{
-                                display: "flex", alignItems: "center", gap: 10, padding: 10, borderRadius: 8,
-                                background: "#f8fafc", border: "1px solid #f1f5f9",
-                            }}>
-                                <div style={{
-                                    width: 36, height: 36, borderRadius: "50%",
-                                    background: "rgba(29,226,209,0.1)",
-                                    display: "flex", alignItems: "center", justifyContent: "center",
-                                }}>
-                                    <span className="material-symbols-outlined" style={{ fontSize: 20, color: "#1de2d1" }}>calendar_today</span>
-                                </div>
-                                <div>
-                                    <p style={{ fontSize: 11, color: "#94a3b8" }}>Created Date</p>
-                                    <p style={{ fontSize: 12, fontWeight: 700 }}>Recently</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style={{
-                        background: "rgba(29,226,209,0.04)", borderRadius: 12, padding: 16,
-                        border: "1px solid rgba(29,226,209,0.1)",
-                    }}>
-                        <div style={{ display: "flex", gap: 10 }}>
-                            <span className="material-symbols-outlined" style={{ color: "#1de2d1", fontSize: 20, marginTop: 2 }}>info</span>
-                            <div>
-                                <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>Audit Trail</h4>
-                                <p style={{ fontSize: 12, color: "#64748b", lineHeight: 1.5 }}>
-                                    Updates to this form are logged for transparency in humanitarian aid delivery.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right: Form */}
-                <form style={{
-                    background: "#fff", borderRadius: 12,
-                    border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
-                    padding: 24, display: "flex", flexDirection: "column", gap: 20,
-                }}>
-                    <div>
-                        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#475569", marginBottom: 8 }}>Request Title</label>
-                        <input type="text" value={title} onChange={e => setTitle(e.target.value)} style={{
-                            width: "100%", height: 46, padding: "0 14px", borderRadius: 8,
-                            border: "1px solid #e2e8f0", fontSize: 14, outline: "none",
-                        }} />
-                    </div>
-
+            <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: 24, paddingBottom: 80 }}>
+                <section style={{ background: "#fff", borderRadius: 12, border: "1px solid #e2e8f0", padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                        <div style={{ gridColumn: "1 / -1" }}>
+                            <label style={labelStyle}>Title *</label>
+                            <input {...register('title')} type="text" style={inputStyle} />
+                            {errors.title && <p style={{ color: "#dc2626", fontSize: 12, marginTop: 4 }}>{errors.title.message}</p>}
+                        </div>
+
+                        <div style={{ gridColumn: "1 / -1" }}>
+                            <label style={labelStyle}>Description *</label>
+                            <textarea {...register('description')} rows={5} style={{
+                                width: "100%", padding: 14, borderRadius: 8,
+                                border: "1px solid #e2e8f0", fontSize: 14, outline: "none", resize: "vertical",
+                            }} />
+                            {errors.description && <p style={{ color: "#dc2626", fontSize: 12, marginTop: 4 }}>{errors.description.message}</p>}
+                        </div>
+
                         <div>
-                            <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#475569", marginBottom: 8 }}>Category</label>
-                            <select value={category} onChange={e => setCategory(e.target.value)} style={{
-                                width: "100%", height: 46, padding: "0 14px", borderRadius: 8,
-                                border: "1px solid #e2e8f0", fontSize: 14, outline: "none", appearance: "none",
-                                background: `#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center`,
-                            }}>
-                                <option>Medical</option>
-                                <option>Food</option>
-                                <option>Water</option>
-                                <option>Shelter</option>
-                                <option>Education</option>
+                            <label style={labelStyle}>Category *</label>
+                            <select {...register('category')} style={inputStyle}>
+                                {categories.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                             </select>
                         </div>
+
                         <div>
-                            <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#475569", marginBottom: 8 }}>Urgency Level</label>
-                            <div style={{ display: "flex", gap: 0, background: "#f1f5f9", borderRadius: 8, padding: 4 }}>
-                                {["LOW", "MEDIUM", "CRITICAL"].map(u => (
-                                    <button key={u} type="button" onClick={() => setUrgency(u)}
-                                        style={{
-                                            flex: 1, padding: "8px 0", borderRadius: 6, fontSize: 11, fontWeight: 700,
-                                            border: "none", cursor: "pointer",
-                                            background: urgency === u
-                                                ? u === "CRITICAL" ? "#ef4444" : u === "MEDIUM" ? "#1de2d1" : "#f1f5f9"
-                                                : "transparent",
-                                            color: urgency === u
-                                                ? u === "CRITICAL" ? "#fff" : "#0f172a"
-                                                : "#64748b",
-                                            boxShadow: urgency === u ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
-                                        }}
-                                    >{u}</button>
-                                ))}
+                            <label style={labelStyle}>Urgency *</label>
+                            <div style={{ display: "flex", gap: 6 }}>
+                                {(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] as const).map(u => {
+                                    const colors: Record<string, string> = { LOW: "#64748b", MEDIUM: "#eab308", HIGH: "#f97316", CRITICAL: "#dc2626" };
+                                    return (
+                                        <button key={u} type="button" onClick={() => setValue('urgency', u)} style={{
+                                            padding: "8px 14px", borderRadius: 20, fontSize: 11, fontWeight: 700, cursor: "pointer",
+                                            border: selectedUrgency === u ? `1px solid ${colors[u]}` : "1px solid #e2e8f0",
+                                            background: selectedUrgency === u ? `${colors[u]}1a` : "#fff",
+                                            color: selectedUrgency === u ? colors[u] : "#64748b",
+                                        }}>{u}</button>
+                                    );
+                                })}
                             </div>
                         </div>
-                    </div>
 
-                    <div>
-                        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#475569", marginBottom: 8 }}>Location</label>
-                        <div style={{ position: "relative" }}>
-                            <span className="material-symbols-outlined" style={{
-                                position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)",
-                                color: "#94a3b8",
-                            }}>location_on</span>
-                            <input type="text" value={location} onChange={e => setLocation(e.target.value)}
-                                style={{
-                                    width: "100%", height: 46, paddingLeft: 40, paddingRight: 14, borderRadius: 8,
-                                    border: "1px solid #e2e8f0", fontSize: 14, outline: "none",
-                                }} />
+                        <div>
+                            <label style={labelStyle}>Status</label>
+                            <select {...register('status')} style={inputStyle}>
+                                <option value="OPEN">Open</option>
+                                <option value="IN_PROGRESS">In Progress</option>
+                                <option value="COMPLETED">Completed</option>
+                                <option value="CANCELLED">Cancelled</option>
+                                <option value="CLOSED">Closed</option>
+                            </select>
                         </div>
-                        <div style={{
-                            marginTop: 14, height: 140, borderRadius: 8,
-                            background: "#f1f5f9", border: "1px solid #e2e8f0",
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                        }}>
-                            <span className="material-symbols-outlined" style={{ fontSize: 36, color: "#cbd5e1" }}>map</span>
+
+                        <div>
+                            <label style={labelStyle}>Volunteers Needed</label>
+                            <input {...register('volunteers_needed')} type="number" min={1} style={inputStyle} />
+                        </div>
+
+                        <div>
+                            <label style={labelStyle}>Estimated Hours</label>
+                            <input {...register('estimated_hours')} type="number" min={1} style={inputStyle} />
+                        </div>
+
+                        <div>
+                            <label style={labelStyle}>Deadline</label>
+                            <input {...register('deadline')} type="datetime-local" style={inputStyle} />
+                        </div>
+
+                        <div>
+                            <label style={labelStyle}>Location</label>
+                            <input {...register('location')} type="text" style={inputStyle} />
+                        </div>
+
+                        <div>
+                            <label style={labelStyle}>City</label>
+                            <input {...register('city')} type="text" style={inputStyle} />
+                        </div>
+
+                        <div>
+                            <label style={labelStyle}>State</label>
+                            <input {...register('state')} type="text" style={inputStyle} />
+                        </div>
+
+                        <div>
+                            <label style={labelStyle}>Visibility</label>
+                            <select {...register('visibility')} style={inputStyle}>
+                                <option value="PUBLIC">Public</option>
+                                <option value="PRIVATE">Private</option>
+                                <option value="NGO_ONLY">NGO Only</option>
+                            </select>
                         </div>
                     </div>
+                </section>
 
-                    {/* Visibility */}
-                    <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: 20 }}>
-                        <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#475569", marginBottom: 4 }}>Visibility Setting</label>
-                        <p style={{ fontSize: 12, color: "#94a3b8", marginBottom: 14 }}>Public requests can be seen by all registered volunteers.</p>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                            <label onClick={() => setVisibility("public")} style={{
-                                display: "flex", alignItems: "center", gap: 10, padding: 14, borderRadius: 12, cursor: "pointer",
-                                border: visibility === "public" ? "2px solid #1de2d1" : "2px solid #e2e8f0",
-                                background: visibility === "public" ? "rgba(29,226,209,0.04)" : "#fff",
-                            }}>
-                                <span className="material-symbols-outlined" style={{ color: "#1de2d1" }}>public</span>
-                                <div><p style={{ fontSize: 13, fontWeight: 700 }}>Public</p><p style={{ fontSize: 11, color: "#64748b" }}>Open to everyone</p></div>
-                            </label>
-                            <label onClick={() => setVisibility("private")} style={{
-                                display: "flex", alignItems: "center", gap: 10, padding: 14, borderRadius: 12, cursor: "pointer",
-                                border: visibility === "private" ? "2px solid #1de2d1" : "2px solid #e2e8f0",
-                            }}>
-                                <span className="material-symbols-outlined" style={{ color: "#94a3b8" }}>lock</span>
-                                <div><p style={{ fontSize: 13, fontWeight: 700 }}>Private</p><p style={{ fontSize: 11, color: "#64748b" }}>Invite-only</p></div>
-                            </label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            {/* Sticky Bottom Bar */}
-            <div style={{
-                position: "fixed", bottom: 0, left: 0, right: 0,
-                background: "rgba(255,255,255,0.85)", backdropFilter: "blur(12px)",
-                borderTop: "1px solid #e2e8f0", padding: "12px 32px",
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                zIndex: 40,
-            }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#94a3b8", fontSize: 12 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>schedule</span>
-                    Last saved: 2 minutes ago
-                </div>
                 <div style={{ display: "flex", gap: 12 }}>
-                    <button onClick={() => router.back()} style={{
-                        padding: "9px 20px", borderRadius: 8,
-                        border: "1px solid #e2e8f0", background: "#fff",
-                        color: "#475569", fontSize: 13, fontWeight: 700, cursor: "pointer",
-                    }}>Cancel</button>
-                    <button style={{
-                        padding: "9px 24px", borderRadius: 8,
-                        background: "#1de2d1", color: "#0f172a",
-                        fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer",
-                        display: "flex", alignItems: "center", gap: 6,
-                        boxShadow: "0 4px 16px rgba(29,226,209,0.2)",
+                    <button type="submit" disabled={submitting} style={{
+                        flex: 1, height: 48, borderRadius: 8,
+                        background: submitting ? "#94a3b8" : "#1de2d1", color: "#0f172a",
+                        fontWeight: 700, fontSize: 14, border: "none",
+                        cursor: submitting ? "not-allowed" : "pointer",
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                     }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>save</span>
-                        Save Changes
+                        {submitting ? (
+                            <span className="material-symbols-outlined animate-spin" style={{ fontSize: 20 }}>progress_activity</span>
+                        ) : (
+                            <span className="material-symbols-outlined" style={{ fontSize: 20 }}>save</span>
+                        )}
+                        {submitting ? "Saving..." : "Save Changes"}
                     </button>
+                    <button type="button" onClick={() => router.back()} style={{
+                        padding: "0 28px", height: 48, borderRadius: 8,
+                        background: "#e2e8f0", color: "#475569", fontWeight: 700,
+                        fontSize: 14, border: "none", cursor: "pointer",
+                    }}>Cancel</button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }

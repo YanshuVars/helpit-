@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import ToastProvider from "@/components/ToastProvider";
 
 export const metadata: Metadata = {
   title: "Helpit — Connecting India for Good",
@@ -35,6 +36,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <ToastProvider />
       </body>
     </html>
   );

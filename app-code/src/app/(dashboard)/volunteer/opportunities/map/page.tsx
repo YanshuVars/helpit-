@@ -1,20 +1,77 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { toast } from "react-toastify";
+
+interface MapOpportunity {
+    id: string;
+    title: string;
+    ngo_name: string;
+    urgency: string;
+    volunteers_needed: number;
+    volunteers_assigned: number;
+    location: string;
+    address: string;
+    city: string;
+}
 
 export default function OpportunitiesMapPage() {
+    const [opportunities, setOpportunities] = useState<MapOpportunity[]>([]);
     const [selectedOpportunity, setSelectedOpportunity] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [applying, setApplying] = useState(false);
 
-    const opportunities = [
-        { id: "1", title: "Food Distribution Drive", ngo: "Hope Foundation", distance: "0.8 km", urgency: "HIGH", volunteers: 3, lat: 19.0760, lng: 72.8777, address: "123 Main Street, Mumbai" },
-        { id: "2", title: "Teaching Session", ngo: "EduChild", distance: "2.1 km", urgency: "MEDIUM", volunteers: 1, lat: 19.0780, lng: 72.8790, address: "456 Education Lane, Mumbai" },
-        { id: "3", title: "Medical Camp Assistance", ngo: "HealthFirst", distance: "3.5 km", urgency: "HIGH", volunteers: 5, lat: 19.0720, lng: 72.8850, address: "789 Health Ave, Mumbai" },
-        { id: "4", title: "Elderly Care Visit", ngo: "Golden Years", distance: "1.2 km", urgency: "LOW", volunteers: 2, lat: 19.0790, lng: 72.8740, address: "321 Care Home Road, Mumbai" },
-        { id: "5", title: "Beach Cleanup", ngo: "Green Earth", distance: "5.0 km", urgency: "MEDIUM", volunteers: 10, lat: 19.0650, lng: 72.8900, address: "Marine Drive Beach, Mumbai" },
-    ];
+    useEffect(() => {
+        async function fetch_data() {
+            try {
+                const res = await fetch('/api/volunteer/requests?status=OPEN&limit=30');
+                const json = await res.json();
+                setOpportunities((json.data || []).map((r: any) => ({
+                    id: r.id,
+                    title: r.title,
+                    ngo_name: (r.ngo as any)?.name || 'Unknown NGO',
+                    urgency: r.urgency || 'MEDIUM',
+                    volunteers_needed: r.volunteers_needed || 1,
+                    volunteers_assigned: r.volunteers_assigned || 0,
+                    location: r.location || '',
+                    address: r.address || '',
+                    city: r.city || '',
+                })));
+            } catch (e) {
+                console.error('Failed to fetch:', e);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetch_data();
+    }, []);
 
-    const urgencyColor: Record<string, string> = { HIGH: '#E53935', MEDIUM: '#F9A825', LOW: '#2E7D32' };
+    const urgencyColor: Record<string, string> = { HIGH: '#E53935', CRITICAL: '#E53935', MEDIUM: '#F9A825', LOW: '#2E7D32' };
+
+    async function handleApply(requestId: string) {
+        setApplying(true);
+        try {
+            const res = await fetch('/api/volunteer/apply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ request_id: requestId }),
+            });
+            const json = await res.json();
+
+            if (res.status === 409) { toast.info('Already applied'); }
+            else if (!res.ok) { toast.error('Failed to apply'); console.error(json.error); }
+            else { toast.success('Application submitted!'); }
+        } finally { setApplying(false); }
+    }
+
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+            </div>
+        );
+    }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 180px)' }}>
@@ -26,48 +83,58 @@ export default function OpportunitiesMapPage() {
             </div>
 
             {/* Map Container */}
-            <div style={{ flex: 1, position: 'relative', borderRadius: 'var(--radius-xl)', overflow: 'hidden' }}>
+            <div style={{ flex: 1, position: 'relative', borderRadius: 'var(--radius-xl, 16px)', overflow: 'hidden' }}>
                 <div style={{
                     position: 'absolute', inset: 0,
                     background: 'linear-gradient(135deg, #E3F2FD, #E8F5E9)',
                     backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px)`,
                     backgroundSize: '40px 40px',
                 }}>
-                    {/* Map Markers */}
-                    {opportunities.map(opp => (
-                        <button key={opp.id} onClick={() => setSelectedOpportunity(opp.id)}
-                            style={{
-                                position: 'absolute', transform: 'translate(-50%, -50%)', border: 'none', cursor: 'pointer', background: 'none', padding: 0,
-                                left: `${((opp.lng - 72.87) / 0.03) * 20 + 50}%`,
-                                top: `${((19.08 - opp.lat) / 0.02) * 20 + 40}%`,
-                                transition: 'transform 0.2s',
-                                ...(selectedOpportunity === opp.id ? { transform: 'translate(-50%, -50%) scale(1.2)' } : {}),
-                            }}>
-                            <div style={{
-                                position: 'relative', width: 40, height: 40, borderRadius: '50%',
-                                background: urgencyColor[opp.urgency] || '#F9A825',
-                                boxShadow: 'var(--shadow-md)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            }}>
-                                <span className="material-symbols-outlined" style={{ color: '#fff', fontSize: 18 }}>location_on</span>
-                                <span style={{
-                                    position: 'absolute', top: -4, right: -4, width: 18, height: 18, borderRadius: '50%', background: '#fff',
-                                    fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                }}>{opp.volunteers}</span>
-                            </div>
-                        </button>
-                    ))}
+                    {/* Distribution of markers in a grid-like pattern */}
+                    {opportunities.map((opp, i) => {
+                        const col = i % 4;
+                        const row = Math.floor(i / 4);
+                        return (
+                            <button key={opp.id} onClick={() => setSelectedOpportunity(opp.id)}
+                                style={{
+                                    position: 'absolute', transform: 'translate(-50%, -50%)', border: 'none', cursor: 'pointer', background: 'none', padding: 0,
+                                    left: `${15 + col * 20 + (row % 2 ? 10 : 0)}%`,
+                                    top: `${15 + row * 25}%`,
+                                    transition: 'transform 0.2s',
+                                    ...(selectedOpportunity === opp.id ? { transform: 'translate(-50%, -50%) scale(1.2)' } : {}),
+                                }}>
+                                <div style={{
+                                    position: 'relative', width: 40, height: 40, borderRadius: '50%',
+                                    background: urgencyColor[opp.urgency] || '#F9A825',
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                }}>
+                                    <span className="material-symbols-outlined" style={{ color: '#fff', fontSize: 18 }}>location_on</span>
+                                    <span style={{
+                                        position: 'absolute', top: -4, right: -4, width: 18, height: 18, borderRadius: '50%', background: '#fff',
+                                        fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>{opp.volunteers_needed - opp.volunteers_assigned}</span>
+                                </div>
+                            </button>
+                        );
+                    })}
 
                     {/* Current Location */}
                     <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-                        <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#1565C0', border: '3px solid #fff', boxShadow: 'var(--shadow-md)' }} />
+                        <div style={{ width: 14, height: 14, borderRadius: '50%', background: '#1565C0', border: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }} />
                     </div>
+
+                    {opportunities.length === 0 && (
+                        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <p style={{ fontSize: 15, color: '#64748b', fontWeight: 600 }}>No open opportunities to display on map</p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Map Controls */}
                 <div style={{ position: 'absolute', top: 12, right: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {['add', 'remove', 'my_location'].map(icon => (
                         <button key={icon} style={{
-                            width: 36, height: 36, borderRadius: '50%', background: '#fff', border: 'none', boxShadow: 'var(--shadow-md)',
+                            width: 36, height: 36, borderRadius: '50%', background: '#fff', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
                         }}>
                             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>{icon}</span>
@@ -76,8 +143,8 @@ export default function OpportunitiesMapPage() {
                 </div>
 
                 {/* Legend */}
-                <div style={{ position: 'absolute', bottom: 12, left: 12, background: '#fff', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-md)', padding: 10 }}>
-                    <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--color-text-muted)', marginBottom: 6 }}>Urgency</p>
+                <div style={{ position: 'absolute', bottom: 12, left: 12, background: '#fff', borderRadius: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.1)', padding: 10 }}>
+                    <p style={{ fontSize: 11, fontWeight: 600, color: '#64748b', marginBottom: 6 }}>Urgency</p>
                     <div style={{ display: 'flex', gap: 8 }}>
                         {[{ label: 'High', color: '#E53935' }, { label: 'Medium', color: '#F9A825' }, { label: 'Low', color: '#2E7D32' }].map(l => (
                             <span key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
@@ -93,27 +160,39 @@ export default function OpportunitiesMapPage() {
                 const opp = opportunities.find(o => o.id === selectedOpportunity);
                 if (!opp) return null;
                 return (
-                    <div className="card" style={{ position: 'absolute', bottom: 16, left: 16, right: 16, padding: 16, boxShadow: 'var(--shadow-xl)', zIndex: 10 }}>
+                    <div style={{
+                        background: '#fff', borderRadius: 16, padding: 16,
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.12)', marginTop: 12,
+                        border: '1px solid #e2e8f0',
+                    }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 6 }}>
                             <div style={{ flex: 1 }}>
                                 <h3 style={{ fontWeight: 700, fontSize: 15 }}>{opp.title}</h3>
-                                <p style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{opp.ngo}</p>
+                                <p style={{ fontSize: 11, color: '#64748b' }}>{opp.ngo_name}</p>
                             </div>
                             <button onClick={() => setSelectedOpportunity(null)} style={{ padding: 4, borderRadius: '50%', border: 'none', background: 'none', cursor: 'pointer' }}>
-                                <span className="material-symbols-outlined" style={{ color: 'var(--color-text-disabled)' }}>close</span>
+                                <span className="material-symbols-outlined" style={{ color: '#94a3b8' }}>close</span>
                             </button>
                         </div>
-                        <div style={{ display: 'flex', gap: 12, fontSize: 11, color: 'var(--color-text-disabled)', marginBottom: 12 }}>
+                        <div style={{ display: 'flex', gap: 12, fontSize: 11, color: '#94a3b8', marginBottom: 12 }}>
                             <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>location_on</span> {opp.distance}
+                                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>location_on</span> {opp.location || opp.city || 'Not specified'}
                             </span>
                             <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>group</span> {opp.volunteers} needed
+                                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>group</span> {opp.volunteers_needed - opp.volunteers_assigned} needed
                             </span>
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                            <Link href="/volunteer/opportunities" className="btn btn-secondary" style={{ justifyContent: 'center', fontSize: 12, textDecoration: 'none' }}>List View</Link>
-                            <button className="btn btn-primary" style={{ justifyContent: 'center', fontSize: 12 }}>Apply Now</button>
+                            <Link href="/volunteer/opportunities" style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px 16px',
+                                borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff',
+                                color: '#0f172a', fontSize: 12, fontWeight: 600, textDecoration: 'none',
+                            }}>List View</Link>
+                            <button onClick={() => handleApply(opp.id)} disabled={applying} style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px 16px',
+                                borderRadius: 10, background: '#1de2d1', color: '#0f172a', border: 'none',
+                                fontSize: 12, fontWeight: 700, cursor: 'pointer', opacity: applying ? 0.6 : 1,
+                            }}>{applying ? 'Applying...' : 'Apply Now'}</button>
                         </div>
                     </div>
                 );

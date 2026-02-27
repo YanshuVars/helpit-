@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { formatDistanceToNow } from '@/lib/utils';
+import { useNgoContext } from '@/lib/hooks/use-ngo-context';
 
-interface Request {
+interface HelpRequest {
     id: string;
     title: string;
     description: string;
@@ -13,7 +14,8 @@ interface Request {
     urgency: string;
     status: string;
     location: string;
-    volunteers_count: number;
+    volunteers_needed: number;
+    volunteers_assigned: number;
     created_at: string;
 }
 
@@ -28,62 +30,67 @@ const categoryIcons: Record<string, string> = {
     FOOD: 'restaurant',
     MEDICAL: 'medical_services',
     EDUCATION: 'school',
-    DISASTER_RELIEF: 'flood',
+    SHELTER: 'house',
+    CLOTHING: 'checkroom',
+    EMERGENCY: 'emergency',
     ENVIRONMENT: 'eco',
-    ANIMAL_WELFARE: 'pets',
+    ELDERLY_CARE: 'elderly',
+    CHILD_CARE: 'child_care',
+    DISABILITY_SUPPORT: 'accessible',
     OTHER: 'category',
 };
 
-type TabType = 'ALL' | 'ACTIVE' | 'PENDING' | 'COMPLETED';
+type TabType = 'ALL' | 'OPEN' | 'IN_PROGRESS' | 'COMPLETED';
 
 export default function NGORequestsPage() {
-    const [requests, setRequests] = useState<Request[]>([]);
+    const { ngoId, loading: ctxLoading } = useNgoContext();
+    const [requests, setRequests] = useState<HelpRequest[]>([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<TabType>('ALL');
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         async function fetchRequests() {
-            const supabase = createClient();
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) { setLoading(false); return; }
+            if (ctxLoading) return;
+            if (!ngoId) { setLoading(false); return; }
+            setLoading(true);
 
-            const { data: membership } = await supabase
-                .from('ngo_members').select('ngo_id')
-                .eq('user_id', session.user.id).single();
+            try {
+                const res = await fetch(`/api/ngo/requests?ngo_id=${ngoId}`);
+                const json = await res.json();
 
-            if (!membership) { setLoading(false); return; }
-
-            let query = supabase
-                .from('requests')
-                .select('id, title, description, category, urgency, status, location, volunteers_count, created_at')
-                .eq('ngo_id', membership.ngo_id)
-                .order('created_at', { ascending: false });
-
-            if (activeTab !== 'ALL') {
-                query = query.eq('status', activeTab);
+                if (!res.ok) {
+                    console.error('Error fetching requests:', json.error);
+                    setRequests([]);
+                } else {
+                    setRequests(json.data || []);
+                }
+            } catch (err) {
+                console.error('Network error fetching requests:', err);
+                setRequests([]);
             }
-
-            const { data } = await query;
-            setRequests(data || []);
             setLoading(false);
         }
         fetchRequests();
-    }, [activeTab]);
+    }, [ngoId, ctxLoading]);
 
     const tabs: { label: string; value: TabType; count: number }[] = [
         { label: 'All', value: 'ALL', count: requests.length },
-        { label: 'Active', value: 'ACTIVE', count: requests.filter(r => r.status === 'ACTIVE').length },
-        { label: 'Pending', value: 'PENDING', count: requests.filter(r => r.status === 'PENDING').length },
+        { label: 'Open', value: 'OPEN', count: requests.filter(r => r.status === 'OPEN').length },
+        { label: 'In Progress', value: 'IN_PROGRESS', count: requests.filter(r => r.status === 'IN_PROGRESS').length },
         { label: 'Completed', value: 'COMPLETED', count: requests.filter(r => r.status === 'COMPLETED').length },
     ];
 
-    const filtered = requests.filter(r =>
-        !searchQuery || r.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filtered = requests.filter(r => {
+        // Filter by tab
+        if (activeTab !== 'ALL' && r.status !== activeTab) return false;
+        // Filter by search
+        if (searchQuery && !r.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !r.description?.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+        return true;
+    });
 
-    if (loading) {
+    if (loading || ctxLoading) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
                 <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
@@ -114,7 +121,6 @@ export default function NGORequestsPage() {
 
             {/* Tabs & Filters */}
             <div style={{ marginBottom: 20 }}>
-                {/* Tab bar */}
                 <div style={{
                     display: 'flex', borderBottom: '1px solid #e2e8f0',
                     overflowX: 'auto', marginBottom: 16,
@@ -136,7 +142,6 @@ export default function NGORequestsPage() {
                     ))}
                 </div>
 
-                {/* Search + Filters row */}
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, position: 'relative', minWidth: 240 }}>
                         <span className="material-symbols-outlined" style={{
@@ -155,24 +160,6 @@ export default function NGORequestsPage() {
                             }}
                         />
                     </div>
-                    <button style={{
-                        display: 'flex', alignItems: 'center', gap: 8,
-                        padding: '0 16px', height: 42, borderRadius: 12,
-                        border: '1px solid #e2e8f0', background: '#fff',
-                        fontSize: 13, fontWeight: 500, cursor: 'pointer', color: '#475569',
-                    }}>
-                        Category: All
-                        <span className="material-symbols-outlined" style={{ fontSize: 20 }}>expand_more</span>
-                    </button>
-                    <button style={{
-                        display: 'flex', alignItems: 'center', gap: 8,
-                        padding: '0 16px', height: 42, borderRadius: 12,
-                        border: '1px solid #e2e8f0', background: '#fff',
-                        fontSize: 13, fontWeight: 500, cursor: 'pointer', color: '#475569',
-                    }}>
-                        Urgency: All
-                        <span className="material-symbols-outlined" style={{ fontSize: 20 }}>expand_more</span>
-                    </button>
                 </div>
             </div>
 
@@ -210,7 +197,6 @@ export default function NGORequestsPage() {
                                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; }}
                                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; }}
                             >
-                                {/* Title + Urgency */}
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                         <h3 style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>{request.title}</h3>
@@ -228,7 +214,6 @@ export default function NGORequestsPage() {
                                     </span>
                                 </div>
 
-                                {/* Description */}
                                 {request.description && (
                                     <p style={{
                                         fontSize: 13, color: '#64748b', lineHeight: 1.5,
@@ -239,7 +224,6 @@ export default function NGORequestsPage() {
                                     </p>
                                 )}
 
-                                {/* Footer metadata */}
                                 <div style={{
                                     display: 'flex', flexWrap: 'wrap', alignItems: 'center',
                                     justifyContent: 'space-between', gap: 8,
@@ -268,7 +252,7 @@ export default function NGORequestsPage() {
                                         background: '#f1f5f9', padding: '4px 12px', borderRadius: 20,
                                     }}>
                                         <span className="material-symbols-outlined" style={{ fontSize: 16 }}>groups</span>
-                                        {request.volunteers_count || 0} Volunteers
+                                        {request.volunteers_assigned || 0}/{request.volunteers_needed || 0} Volunteers
                                     </div>
                                 </div>
                             </Link>
