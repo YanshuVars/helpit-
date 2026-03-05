@@ -147,7 +147,7 @@ export default function HomePage() {
             </p>
 
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              <Link href="/requests" style={{
+              <Link href="/login" style={{
                 display: "flex", alignItems: "center", justifyContent: "center",
                 height: 48, padding: "0 32px", borderRadius: 8,
                 background: "#fff", color: C.primary, fontSize: 15, fontWeight: 700,
