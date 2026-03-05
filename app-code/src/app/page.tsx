@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
 /* ── colour tokens ── */
@@ -26,6 +29,8 @@ const IMG = {
 };
 
 export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div style={{ fontFamily: "'Public Sans', sans-serif", color: C.textMain, background: C.bgLight, overflowX: "hidden" }}>
 
@@ -42,15 +47,15 @@ export default function HomePage() {
               <span className="material-symbols-outlined" style={{ fontSize: 32, color: C.primary }}>diversity_1</span>
               <span style={{ fontFamily: "'Merriweather', serif", fontSize: 22, fontWeight: 900, color: C.primary, letterSpacing: "-0.5px" }}>Helpit</span>
             </Link>
-            {/* Nav links */}
-            <nav style={{ display: "flex", gap: 32, alignItems: "center" }}>
+            {/* Nav links — hidden on mobile via CSS */}
+            <nav className="landing-nav-links">
               <Link href="/" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Home</Link>
               <Link href="/login" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Explore NGOs</Link>
               <Link href="/register/volunteer" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Volunteer</Link>
               <Link href="/donor/donate" style={{ fontSize: 14, fontWeight: 500, color: C.textMain, textDecoration: "none" }}>Donate</Link>
             </nav>
-            {/* Auth buttons */}
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {/* Auth buttons — hidden on mobile via CSS */}
+            <div className="landing-auth-btns">
               <Link href="/login" style={{
                 display: "flex", alignItems: "center", justifyContent: "center",
                 height: 40, padding: "0 20px", borderRadius: 8,
@@ -65,16 +70,58 @@ export default function HomePage() {
                 boxShadow: "0 1px 3px rgba(15,117,109,0.2)",
               }}>Sign Up</Link>
             </div>
+            {/* Mobile hamburger — shown on mobile via CSS */}
+            <button
+              className="landing-mobile-menu-btn"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 28 }}>menu</span>
+            </button>
           </div>
         </div>
       </header>
 
+      {/* ═══════ MOBILE MENU DRAWER ═══════ */}
+      {mobileMenuOpen && (
+        <>
+          <div className="landing-mobile-overlay" onClick={() => setMobileMenuOpen(false)} />
+          <div className="landing-mobile-drawer">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <span style={{ fontFamily: "'Merriweather', serif", fontSize: 20, fontWeight: 900, color: C.primary }}>Helpit</span>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                style={{ border: "none", background: "transparent", cursor: "pointer", padding: 4 }}
+                aria-label="Close menu"
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 24, color: C.textMain }}>close</span>
+              </button>
+            </div>
+            <Link href="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+            <Link href="/login" onClick={() => setMobileMenuOpen(false)}>Explore NGOs</Link>
+            <Link href="/register/volunteer" onClick={() => setMobileMenuOpen(false)}>Volunteer</Link>
+            <Link href="/donor/donate" onClick={() => setMobileMenuOpen(false)}>Donate</Link>
+            <div style={{ borderTop: "1px solid #e5e7eb", marginTop: 8, paddingTop: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)} style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                padding: "12px 16px", borderRadius: 8,
+                fontWeight: 700, color: C.primary, border: `1px solid ${C.primary}`,
+              }}>Login</Link>
+              <Link href="/register" onClick={() => setMobileMenuOpen(false)} style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                padding: "12px 16px", borderRadius: 8,
+                fontWeight: 700, color: "#fff", background: C.primary,
+              }}>Sign Up</Link>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* ═══════ HERO ═══════ */}
       <section style={{ position: "relative", width: "100%", color: "#fff", ...heroPattern }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(15,117,109,0.95), rgba(15,117,109,0.80))", pointerEvents: "none" }} />
-        <div style={{
+        <div className="landing-hero-grid" style={{
           position: "relative", maxWidth: 1280, margin: "0 auto", padding: "64px 24px 80px",
-          display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center",
         }}>
           {/* Left — content */}
           <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
@@ -90,7 +137,7 @@ export default function HomePage() {
               Verified &amp; Trusted Platform
             </div>
 
-            <h1 style={{ fontFamily: "'Merriweather', serif", fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-1px" }}>
+            <h1 style={{ fontFamily: "'Merriweather', serif", fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-1px" }}>
               Connecting India <br />
               <span style={{ color: "#86efac" }}>for Good.</span>
             </h1>
@@ -115,7 +162,7 @@ export default function HomePage() {
             </div>
 
             {/* Trust stats */}
-            <div style={{ display: "flex", gap: 36, paddingTop: 28, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+            <div style={{ display: "flex", gap: 36, paddingTop: 28, borderTop: "1px solid rgba(255,255,255,0.1)", flexWrap: "wrap" }}>
               {[
                 { num: "500+", label: "Verified NGOs" },
                 { num: "10k+", label: "Active Volunteers" },
@@ -129,8 +176,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right — hero image */}
-          <div style={{ position: "relative", minHeight: 480 }}>
+          {/* Right — hero image (hidden on mobile via CSS) */}
+          <div className="landing-hero-image">
             <div style={{
               position: "absolute", top: 0, right: 0, width: "100%", height: "100%",
               borderRadius: 16, overflow: "hidden",
@@ -181,7 +228,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 28 }}>
+          <div className="landing-cards-grid">
             {[
               {
                 icon: "corporate_fare", iconBg: "#dbeafe", iconColor: "#2563eb",
@@ -231,9 +278,9 @@ export default function HomePage() {
 
       {/* ═══════ HOW IT WORKS ═══════ */}
       <section style={{ padding: "80px 24px", background: C.bgLight, borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", gap: 56, alignItems: "center" }}>
+        <div className="landing-how-flex" style={{ maxWidth: 1280, margin: "0 auto" }}>
           {/* Left */}
-          <div style={{ flex: 1 }}>
+          <div>
             <h2 style={{ fontFamily: "'Merriweather', serif", fontSize: "clamp(26px, 3.5vw, 36px)", fontWeight: 700, marginBottom: 12 }}>
               How Helpit Works
             </h2>
@@ -262,7 +309,7 @@ export default function HomePage() {
             </div>
           </div>
           {/* Right — card preview */}
-          <div style={{ flex: 1, position: "relative" }}>
+          <div style={{ position: "relative" }}>
             <div style={{ position: "absolute", top: -40, right: -40, width: 256, height: 256, background: `${C.primary}1a`, borderRadius: "50%", filter: "blur(60px)" }} />
             <div style={{ position: "relative", background: "#fff", borderRadius: 16, boxShadow: "0 8px 32px rgba(0,0,0,0.08)", border: "1px solid #f1f1f1", overflow: "hidden" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -294,7 +341,7 @@ export default function HomePage() {
       {/* ═══════ LATEST REQUESTS ═══════ */}
       <section style={{ padding: "80px 24px", background: "#fff" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 40 }}>
+          <div className="landing-requests-header">
             <div>
               <h2 style={{ fontFamily: "'Merriweather', serif", fontSize: 28, fontWeight: 700 }}>Latest Requests</h2>
               <p style={{ color: C.textSubtle, marginTop: 8 }}>Urgent needs from verified communities near you.</p>
@@ -304,7 +351,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          <div className="landing-requests-grid">
             {[
               { img: IMG.card1, urgent: true, loc: "Bangalore, KA", title: "Weekend Teaching Volunteers Needed", desc: "Looking for math and science tutors for high school students in underprivileged areas for upcoming exams.", tag: "Education" },
               { img: IMG.card2, urgent: false, loc: "Delhi, NCR", title: "Food Drive Logistics Support", desc: "Need volunteers with vehicles to help transport food packets from central kitchen to distribution centers.", tag: "Logistics" },
@@ -362,7 +409,7 @@ export default function HomePage() {
       {/* ═══════ FOOTER ═══════ */}
       <footer style={{ background: C.bgDark, color: "#fff", padding: "64px 24px 32px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 40, marginBottom: 48 }}>
+          <div className="landing-footer-grid">
             {/* Brand */}
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
@@ -392,7 +439,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 28, display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 13, color: "#6B7280" }}>
+          <div className="landing-footer-bottom" style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 28, fontSize: 13, color: "#6B7280" }}>
             <p>&copy; {new Date().getFullYear()} Helpit Foundation. All rights reserved.</p>
             <div style={{ display: "flex", gap: 24 }}>
               <Link href="#" style={{ color: "#6B7280", textDecoration: "none" }}>Privacy Policy</Link>

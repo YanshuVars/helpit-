@@ -58,7 +58,7 @@ A connected application platform providing:
 - **For Donors:** Portal to discover NGOs, donate securely, and track fund utilization
 - **For Public:** Access to report emergencies, view NGO profiles, and find missing persons
 
-## 1.4 Business Model
+## 1.4 Business Model 
 
 | Revenue Stream | Description | Pricing |
 |----------------|-------------|---------|

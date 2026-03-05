@@ -2134,3 +2134,261 @@ a:hover {
     font-size: 20px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   LANDING PAGE — Responsive Overrides
+══════════════════════════════════════════════════════════════ */
+
+/* ── Hero Grid: 2-col → 1-col ── */
+.landing-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+/* ── Ecosystem / Feature Cards: 3-col → 1-col ── */
+.landing-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* ── How It Works: side-by-side → stacked ── */
+.landing-how-flex {
+  display: flex;
+  gap: 56px;
+  align-items: center;
+}
+
+.landing-how-flex > div {
+  flex: 1;
+}
+
+/* ── Request Cards: 3-col → 1-col ── */
+.landing-requests-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ── Footer Grid: 4-col → responsive ── */
+.landing-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+
+/* ── Footer Bottom Bar ── */
+.landing-footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ── Navbar: nav links hidden on mobile ── */
+.landing-nav-links {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+/* ── Navbar: auth buttons wrapper ── */
+.landing-auth-btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Mobile menu button (hamburger) ── */
+.landing-mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #0e1b1a;
+  border-radius: 8px;
+  transition: background 150ms ease;
+}
+
+.landing-mobile-menu-btn:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* ── Mobile drawer overlay ── */
+.landing-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+
+/* ── Mobile drawer ── */
+.landing-mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background: #fff;
+  z-index: 100;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+}
+
+.landing-mobile-drawer a {
+  display: block;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #0e1b1a;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 150ms ease;
+}
+
+.landing-mobile-drawer a:hover {
+  background: #f1f5f9;
+}
+
+/* ── Hero image container ── */
+.landing-hero-image {
+  position: relative;
+  min-height: 480px;
+}
+
+/* ── Latest Requests header ── */
+.landing-requests-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+}
+
+/* ── Auth layout ── */
+.auth-page-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.auth-brand-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 45%;
+  padding: 64px;
+  overflow: hidden;
+  color: #fff;
+}
+
+.auth-form-side {
+  display: flex;
+  width: 55%;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 32px 64px;
+}
+
+/* ═══ Tablet (≤1024px) ═══ */
+@media (max-width: 1024px) {
+  .landing-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .landing-requests-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .landing-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ═══ Mobile (≤768px) ═══ */
+@media (max-width: 768px) {
+  .landing-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .landing-hero-image {
+    display: none;
+  }
+
+  .landing-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-how-flex {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .landing-requests-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-requests-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .landing-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .landing-footer-bottom {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .landing-footer-bottom > div {
+    justify-content: center;
+  }
+
+  .landing-nav-links {
+    display: none;
+  }
+
+  .landing-auth-btns {
+    display: none;
+  }
+
+  .landing-mobile-menu-btn {
+    display: flex;
+  }
+
+  /* ── Auth layout mobile ── */
+  .auth-brand-panel {
+    display: none;
+  }
+
+  .auth-form-side {
+    width: 100%;
+    padding: 24px;
+  }
+}
+
+/* ═══ Small mobile (≤480px) ═══ */
+@media (max-width: 480px) {
+  .landing-hero-grid {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+}
