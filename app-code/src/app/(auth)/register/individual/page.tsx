@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/api/users";
+import { signUp, checkEmailExists } from "@/lib/api/users";
 
 /* ── shared styles ── */
 const inputStyle: React.CSSProperties = {
@@ -48,11 +48,38 @@ export default function IndividualRegisterPage() {
         setLoading(true);
 
         try {
-            await signUp(formData.email, formData.password, {
+            // Check if email already exists in another account
+            const existingRole = await checkEmailExists(formData.email);
+            if (existingRole) {
+                setError(`This email is already registered as a ${existingRole} account. Please use a different email or login with the existing account.`);
+                setLoading(false);
+                return;
+            }
+
+            const result = await signUp(formData.email, formData.password, {
                 full_name: formData.fullName,
                 phone: formData.phone || null,
                 role: 'DONOR',
             });
+
+            // Ensure user row exists via server API (bypasses RLS)
+            if (result.user) {
+                try {
+                    await fetch('/api/auth/ensure-user', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: result.user.id,
+                            email: formData.email,
+                            full_name: formData.fullName,
+                            phone: formData.phone || null,
+                            role: 'DONOR',
+                        }),
+                    });
+                } catch (e) {
+                    console.error('ensure-user error:', e);
+                }
+            }
 
             router.push('/verify-email');
         } catch (err: unknown) {

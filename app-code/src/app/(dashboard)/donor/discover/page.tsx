@@ -5,14 +5,15 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 
 interface NGO {
-    id: string; name: string; category: string;
-    followers_count: number; verification_status: string; logo_url: string | null;
+    id: string; name: string; categories: string[];
+    verification_status: string; logo_url: string | null;
     description?: string;
 }
 
 interface FollowCount {
     following_ngo_id: string;
     count: number;
+    followersCount?: number;
 }
 
 type CategoryType = 'ALL' | 'EDUCATION' | 'ENVIRONMENT' | 'MEDICAL' | 'COMMUNITY' | 'ANIMAL_CARE' | 'OTHER';
@@ -45,10 +46,10 @@ export default function DonorDiscoverPage() {
     useEffect(() => {
         async function fetchNgos() {
             const supabase = createClient();
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { user } } = await supabase.auth.getUser();
 
-            if (session) {
-                const { data: followed } = await supabase.from('follows').select('following_ngo_id').eq('follower_id', session.user.id);
+            if (user) {
+                const { data: followed } = await supabase.from('follows').select('following_ngo_id').eq('follower_id', user.id);
                 if (followed) setFollowedNgoIds(new Set(followed.map(f => f.following_ngo_id)));
             }
 
@@ -58,19 +59,10 @@ export default function DonorDiscoverPage() {
 
             const { data } = await query.limit(20);
             const ngosData = (data || []).map(n => ({
-                id: n.id, name: n.name, category: n.categories?.[0] || 'Other',
-                followers_count: 0, verification_status: n.verification_status,
+                id: n.id, name: n.name, categories: n.categories || [],
+                verification_status: n.verification_status,
                 logo_url: n.logo_url, description: n.description || '',
-            }));
-
-            // Fetch follower counts for these NGOs
-            if (ngosData.length > 0) {
-                const ngoIds = ngosData.map(n => n.id);
-                for (const ngo of ngosData) {
-                    const { count } = await supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following_ngo_id', ngo.id);
-                    ngo.followers_count = count || 0;
-                }
-            }
+            })) as NGO[];
 
             setNgos(ngosData);
             setLoading(false);
@@ -180,7 +172,7 @@ export default function DonorDiscoverPage() {
             ) : (
                 <div className="r-grid-cards" style={{ gap: 20 }}>
                     {ngos.map(ngo => {
-                        const cc = catColors[ngo.category] || catColors.OTHER;
+                        const cc = catColors[ngo.categories?.[0] || 'OTHER'] || catColors.OTHER;
                         return (
                             <div key={ngo.id} style={{
                                 background: '#fff', borderRadius: 16,
@@ -203,7 +195,7 @@ export default function DonorDiscoverPage() {
                                         padding: '4px 10px', borderRadius: 999,
                                         background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)',
                                         fontSize: 11, fontWeight: 600, color: cc.text,
-                                    }}>{ngo.category}</span>
+                                    }}>{ngo.categories?.[0] || 'Other'}</span>
                                     {ngo.verification_status === 'APPROVED' && (
                                         <span style={{
                                             position: 'absolute', top: 12, right: 12,
@@ -233,7 +225,7 @@ export default function DonorDiscoverPage() {
 
                                     <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginTop: 12 }}>{ngo.name}</h3>
                                     <p style={{ fontSize: 13, color: '#64748b', marginTop: 2 }}>
-                                        {ngo.followers_count.toLocaleString()} supporters
+                                        Verified NGO
                                     </p>
                                     {ngo.description && (
                                         <p style={{
@@ -245,7 +237,7 @@ export default function DonorDiscoverPage() {
 
                                     <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
                                         <Link
-                                            href={`/donor/donate/${ngo.id}`}
+                                            href={`/donor/donate?ngoId=${ngo.id}`}
                                             style={{
                                                 flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                                                 padding: '10px 16px', borderRadius: 10,

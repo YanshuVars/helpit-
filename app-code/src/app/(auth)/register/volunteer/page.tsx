@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/api/users";
+import { signUp, checkEmailExists } from "@/lib/api/users";
 
 const SKILLS = ["Teaching", "Medical Support", "Logistics", "Fundraising", "Tech Support", "Counseling", "Driving", "Cooking"];
 const CITIES = ["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune", "Ahmedabad", "Jaipur", "Lucknow"];
@@ -63,13 +63,41 @@ export default function VolunteerRegisterPage() {
         setLoading(true);
 
         try {
-            await signUp(formData.email, formData.password, {
+            // Check if email already exists in another account
+            const existingRole = await checkEmailExists(formData.email);
+            if (existingRole) {
+                setError(`This email is already registered as a ${existingRole} account. Please use a different email or login with the existing account.`);
+                setLoading(false);
+                return;
+            }
+
+            const result = await signUp(formData.email, formData.password, {
                 full_name: formData.fullName,
                 phone: formData.phone || null,
                 role: 'VOLUNTEER',
                 skills: selectedSkills,
                 availability: false,
             });
+
+            // Ensure user row exists via server API (bypasses RLS)
+            if (result.user) {
+                try {
+                    await fetch('/api/auth/ensure-user', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: result.user.id,
+                            email: formData.email,
+                            full_name: formData.fullName,
+                            phone: formData.phone || null,
+                            role: 'VOLUNTEER',
+                            skills: selectedSkills,
+                        }),
+                    });
+                } catch (e) {
+                    console.error('ensure-user error:', e);
+                }
+            }
 
             router.push('/verify-email');
         } catch (err: unknown) {

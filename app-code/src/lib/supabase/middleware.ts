@@ -37,60 +37,92 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser();
 
-    // Protected routes
-    const isAuthRoute = request.nextUrl.pathname.startsWith('/login') ||
-        request.nextUrl.pathname.startsWith('/register') ||
-        request.nextUrl.pathname.startsWith('/forgot-password') ||
-        request.nextUrl.pathname.startsWith('/reset-password');
+    const pathname = request.nextUrl.pathname;
 
-    const isDashboardRoute = request.nextUrl.pathname.startsWith('/ngo') ||
-        request.nextUrl.pathname.startsWith('/volunteer') ||
-        request.nextUrl.pathname.startsWith('/donor') ||
-        request.nextUrl.pathname.startsWith('/admin') ||
-        request.nextUrl.pathname.startsWith('/messages') ||
-        request.nextUrl.pathname.startsWith('/notifications') ||
-        request.nextUrl.pathname.startsWith('/settings');
+    // Route classification
+    const isAuthRoute = pathname.startsWith('/login') ||
+        pathname.startsWith('/register') ||
+        pathname.startsWith('/forgot-password') ||
+        pathname.startsWith('/reset-password');
 
+    const isDashboardRoute = pathname.startsWith('/ngo') ||
+        pathname.startsWith('/volunteer') ||
+        pathname.startsWith('/donor') ||
+        pathname.startsWith('/admin') ||
+        pathname.startsWith('/messages') ||
+        pathname.startsWith('/notifications') ||
+        pathname.startsWith('/settings');
+
+    // ── AUTH ROUTES: redirect logged-in users (except /register) ──
     if (isAuthRoute && user) {
-        // User is logged in, redirect to appropriate dashboard
-        const { data: profile } = await supabase
-            .from('users')
-            .select('role')
-            .eq('id', user.id)
-            .single();
+        // Allow logged-in users to access /register to create new accounts
+        if (pathname.startsWith('/register')) {
+            return supabaseResponse;
+        }
 
-        const role = profile?.role || 'INDIVIDUAL';
+        // Redirect to correct dashboard
+        const role = await getUserRole(supabase, user);
         const redirectPath = getDashboardPath(role);
-
         const url = request.nextUrl.clone();
         url.pathname = redirectPath;
         return NextResponse.redirect(url);
     }
 
+    // ── DASHBOARD ROUTES: require login ──
     if (isDashboardRoute && !user) {
-        // User is not logged in, redirect to login
         const url = request.nextUrl.clone();
         url.pathname = '/login';
-        url.searchParams.set('redirect', request.nextUrl.pathname);
+        url.searchParams.set('redirect', pathname);
         return NextResponse.redirect(url);
     }
 
-    // Role-based access control for admin routes
-    if (request.nextUrl.pathname.startsWith('/admin') && user) {
-        const { data: profile } = await supabase
-            .from('users')
-            .select('role')
-            .eq('id', user.id)
-            .single();
+    // ── ROLE-BASED ACCESS CONTROL on dashboard routes ──
+    if (isDashboardRoute && user) {
+        const role = await getUserRole(supabase, user);
 
-        if (profile?.role !== 'PLATFORM_ADMIN') {
+        // Admin routes: only PLATFORM_ADMIN
+        if (pathname.startsWith('/admin') && role !== 'PLATFORM_ADMIN') {
             const url = request.nextUrl.clone();
-            url.pathname = '/ngo';
+            url.pathname = getDashboardPath(role);
+            return NextResponse.redirect(url);
+        }
+
+        // NGO routes: only NGO_ADMIN / NGO_COORDINATOR / NGO_MEMBER
+        if (pathname.startsWith('/ngo') && !['NGO_ADMIN', 'NGO_COORDINATOR', 'NGO_MEMBER'].includes(role)) {
+            const url = request.nextUrl.clone();
+            url.pathname = getDashboardPath(role);
+            return NextResponse.redirect(url);
+        }
+
+        // Volunteer routes: only VOLUNTEER (and NGO roles for overlap)
+        if (pathname.startsWith('/volunteer') && !['VOLUNTEER', 'NGO_ADMIN', 'NGO_COORDINATOR', 'NGO_MEMBER'].includes(role)) {
+            const url = request.nextUrl.clone();
+            url.pathname = getDashboardPath(role);
+            return NextResponse.redirect(url);
+        }
+
+        // Donor routes: only DONOR / INDIVIDUAL
+        if (pathname.startsWith('/donor') && !['DONOR', 'INDIVIDUAL'].includes(role)) {
+            const url = request.nextUrl.clone();
+            url.pathname = getDashboardPath(role);
             return NextResponse.redirect(url);
         }
     }
 
     return supabaseResponse;
+}
+
+/**
+ * Get user role — single DB query with auth metadata fallback.
+ */
+async function getUserRole(supabase: any, user: any): Promise<string> {
+    const { data: profile } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+    return profile?.role || user.user_metadata?.role || 'INDIVIDUAL';
 }
 
 function getDashboardPath(role: string): string {

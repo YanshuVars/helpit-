@@ -69,7 +69,7 @@ export function NgoProvider({ children }: { children: ReactNode }) {
                     return;
                 }
 
-                // Fallback: match NGO by user email
+                // Fallback: match NGO by user email (read-only — no auto-insert)
                 if (user.email) {
                     const { data: ngoByEmail } = await supabase
                         .from('ngos')
@@ -78,11 +78,8 @@ export function NgoProvider({ children }: { children: ReactNode }) {
                         .limit(1);
 
                     if (ngoByEmail && ngoByEmail.length > 0) {
-                        await supabase.from('ngo_members').insert({
-                            ngo_id: ngoByEmail[0].id,
-                            user_id: user.id,
-                            role: 'NGO_ADMIN',
-                        });
+                        // Found an NGO matching this user's email, but don't auto-create membership.
+                        // The membership should only be created during the registration flow.
                         setState({
                             ngoId: ngoByEmail[0].id,
                             userId: user.id,

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { createAdminClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 
 // GET /api/ngo/requests?ngo_id=xxx
 // Uses admin client to bypass RLS infinite recursion on help_requests
@@ -85,7 +84,31 @@ export async function POST(req: NextRequest) {
         }
 
         const admin = createAdminClient();
-        const { error } = await admin.from('help_requests').insert(body);
+
+        // Whitelist allowed fields — prevent injection of ngo_id, status, etc.
+        const allowedFields = {
+            ngo_id: ngoId, // always use verified ngoId, not from body
+            created_by: user.id, // required NOT NULL column
+            title: body.title,
+            description: body.description || null,
+            category: body.category || null,
+            urgency: body.urgency || 'MEDIUM',
+            status: 'OPEN', // always start as OPEN
+            location: body.location || null,
+            address: body.address || null,
+            city: body.city || null,
+            state: body.state || null,
+            pincode: body.pincode || null,
+            volunteers_needed: body.volunteers_needed || 1,
+            visibility: body.visibility || 'PUBLIC',
+            deadline: body.deadline || null,
+        };
+
+        if (!allowedFields.title) {
+            return NextResponse.json({ error: 'title is required' }, { status: 400 });
+        }
+
+        const { error } = await admin.from('help_requests').insert(allowedFields);
 
         if (error) {
             console.error('Error creating request:', error);

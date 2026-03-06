@@ -6,6 +6,35 @@ import type { User, UserInsert, UserUpdate, UserRole } from '@/types/database';
 // AUTH FUNCTIONS
 // ============================================
 
+const ROLE_LABELS: Record<string, string> = {
+    PLATFORM_ADMIN: 'Admin',
+    NGO_ADMIN: 'NGO',
+    NGO_COORDINATOR: 'NGO',
+    NGO_MEMBER: 'NGO',
+    VOLUNTEER: 'Volunteer',
+    DONOR: 'Donor/Individual',
+    INDIVIDUAL: 'Donor/Individual',
+};
+
+/**
+ * Check if an email is already registered. Returns the role label if exists, null if not.
+ * Uses server API to bypass RLS — works for anon/signed-out users.
+ */
+export async function checkEmailExists(email: string): Promise<string | null> {
+    try {
+        const res = await fetch('/api/auth/check-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.exists ? data.roleLabel : null;
+    } catch {
+        return null;
+    }
+}
+
 export async function signUp(email: string, password: string, userData: Partial<UserInsert>) {
     const supabase = createClient();
 

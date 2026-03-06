@@ -98,7 +98,7 @@ function DonateDetailsContent() {
                                 fontSize: 24, fontWeight: 700, color: '#64748b',
                             }}>₹</span>
                             <input
-                                type="number" placeholder="Enter amount"
+                                type="number" min="1" placeholder="Enter amount"
                                 value={customAmount || amount}
                                 onChange={e => { setCustomAmount(e.target.value); }}
                                 style={{

@@ -24,27 +24,27 @@ export async function GET(request: NextRequest) {
                     .eq('id', user.id)
                     .single() as { data: { role: string } | null };
 
-                // Redirect based on role
-                if (userData?.role) {
-                    const roleRedirects: Record<string, string> = {
-                        'PLATFORM_ADMIN': '/admin',
-                        'NGO_ADMIN': '/ngo',
-                        'NGO_COORDINATOR': '/ngo',
-                        'NGO_MEMBER': '/ngo',
-                        'VOLUNTEER': '/volunteer',
-                        'DONOR': '/donor',
-                        'INDIVIDUAL': '/donor',
-                    };
+                // Redirect based on role (with metadata fallback)
+                const role = userData?.role || user.user_metadata?.role || 'INDIVIDUAL';
+                const roleRedirects: Record<string, string> = {
+                    'PLATFORM_ADMIN': '/admin',
+                    'NGO_ADMIN': '/ngo',
+                    'NGO_COORDINATOR': '/ngo',
+                    'NGO_MEMBER': '/ngo',
+                    'VOLUNTEER': '/volunteer',
+                    'DONOR': '/donor',
+                    'INDIVIDUAL': '/donor',
+                };
 
-                    const redirectPath = roleRedirects[userData.role] || next;
-                    return NextResponse.redirect(`${origin}${redirectPath}`);
-                }
+                const redirectPath = roleRedirects[role] || next;
+                return NextResponse.redirect(`${origin}${redirectPath}`);
             }
-
-            return NextResponse.redirect(`${origin}${next}`);
         }
+
+        // Return the user to an error page with instructions
+        return NextResponse.redirect(`${origin}/auth/auth-code-error`);
     }
 
-    // Return the user to an error page with instructions
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+    // No code provided — redirect to home
+    return NextResponse.redirect(`${origin}/`);
 }

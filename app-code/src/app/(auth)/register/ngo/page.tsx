@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { signUp } from "@/lib/api/users";
+import { signUp, checkEmailExists } from "@/lib/api/users";
 
 const ORG_TYPES = [
     { value: "EDUCATION", label: "Education" },
@@ -47,7 +47,7 @@ export default function NGORegisterPage() {
         description: '', websiteUrl: '',
         contactEmail: '', contactPhone: '',
         address: '', city: '', state: '',
-        password: '',
+        password: '', confirmPassword: '',
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -72,11 +72,31 @@ export default function NGORegisterPage() {
             setError('Password must be at least 8 characters');
             return;
         }
+        if (!/\d/.test(formData.password)) {
+            setError('Password must contain at least one number');
+            return;
+        }
+        if (formData.password !== formData.confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
 
         if (loading) return; // Prevent double-submit
         setLoading(true);
 
         try {
+            // 0. Check if email already exists BEFORE signing out (so auth state doesn't matter)
+            const existingRole = await checkEmailExists(formData.contactEmail);
+            if (existingRole) {
+                setError(`This email is already registered as a ${existingRole} account. Please use a different email or login with the existing account.`);
+                setLoading(false);
+                return;
+            }
+
+            // 0.5 Sign out any existing session so we can create a fresh account
+            const supabasePreAuth = createClient();
+            await supabasePreAuth.auth.signOut();
+
             // 1. Create admin user account
             const { user } = await signUp(formData.contactEmail, formData.password, {
                 full_name: `${formData.orgName} Admin`,
@@ -86,17 +106,14 @@ export default function NGORegisterPage() {
             if (!user) throw new Error('Failed to create admin account');
 
             // 2. Sign in immediately to get an active session
-            //    (signUp alone may not provide a session if email confirmation is enabled)
             const supabase = createClient();
             const { error: signInError } = await supabase.auth.signInWithPassword({
                 email: formData.contactEmail,
                 password: formData.password,
             });
 
-            // If sign-in fails (e.g. email confirmation required), create NGO without session
-            // by storing NGO data and redirecting to verify-email
+            // If sign-in fails (e.g. email confirmation required), store data and redirect
             if (signInError) {
-                // Store pending NGO data in localStorage so it can be created after email verification
                 localStorage.setItem('pending_ngo', JSON.stringify({
                     name: formData.orgName,
                     slug: generateSlug(formData.orgName),
@@ -113,8 +130,74 @@ export default function NGORegisterPage() {
                 return;
             }
 
-            // 3. Now we have a session — create NGO record
-            const slug = generateSlug(formData.orgName);
+            // 3. Now we have a session — get the real authenticated user ID
+            const { data: { user: authUser } } = await supabase.auth.getUser();
+            const userId = authUser?.id || user.id;
+
+            // 4. Ensure user row exists in public.users via server API (bypasses RLS)
+            let userCreated = false;
+            try {
+                const ensureRes = await fetch('/api/auth/ensure-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        id: userId,
+                        email: formData.contactEmail,
+                        full_name: `${formData.orgName} Admin`,
+                        role: 'NGO_ADMIN',
+                    }),
+                });
+                const ensureData = await ensureRes.json();
+                if (ensureRes.ok) {
+                    userCreated = true;
+                    console.log('[NGO Register] User row ensured:', ensureData);
+                } else {
+                    console.error('[NGO Register] ensure-user failed:', ensureRes.status, ensureData);
+                }
+            } catch (ensureErr) {
+                console.error('[NGO Register] ensure-user API error:', ensureErr);
+            }
+
+            // Fallback: try direct insert if server API failed
+            if (!userCreated) {
+                console.log('[NGO Register] Trying direct user insert as fallback...');
+                const { error: directInsertError } = await supabase.from('users').insert({
+                    id: userId,
+                    email: formData.contactEmail,
+                    full_name: `${formData.orgName} Admin`,
+                    role: 'NGO_ADMIN',
+                    status: 'ACTIVE',
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                });
+                if (directInsertError) {
+                    // If it's a duplicate key error, the user already exists — that's fine
+                    if (directInsertError.code === '23505') {
+                        console.log('[NGO Register] User already exists (duplicate), continuing...');
+                    } else {
+                        console.error('[NGO Register] Direct insert also failed:', directInsertError);
+                    }
+                } else {
+                    userCreated = true;
+                }
+            }
+
+            // 5. Generate unique slug (BUG-09 fix)
+            let slug = generateSlug(formData.orgName);
+            const { data: existingSlug } = await supabase.from('ngos').select('id').eq('slug', slug).limit(1);
+            if (existingSlug && existingSlug.length > 0) {
+                slug = `${slug}-${Date.now().toString(36)}`;
+            }
+
+            // 5.5. Check registration_number uniqueness (BUG-08 fix)
+            const { data: existingReg } = await supabase
+                .from('ngos').select('id').eq('registration_number', formData.registrationNumber).limit(1);
+            if (existingReg && existingReg.length > 0) {
+                throw new Error('An NGO with this registration number already exists. Please check your details.');
+            }
+
+            // 6. Create NGO record
             const { data: ngo, error: ngoError } = await supabase
                 .from('ngos')
                 .insert({
@@ -129,6 +212,7 @@ export default function NGORegisterPage() {
                     categories: formData.orgType ? [formData.orgType] : [],
                     tags: [],
                     status: 'PENDING',
+                    verification_status: 'APPROVED',
                     has_80g: false,
                     has_12a: false,
                     plan: 'FREE',
@@ -144,10 +228,10 @@ export default function NGORegisterPage() {
                 throw new Error(ngoError?.message || 'Failed to create NGO');
             }
 
-            // 4. Add user as NGO admin member
+            // 6. Add user as NGO admin member
             await supabase.from('ngo_members').insert({
                 ngo_id: ngo.id,
-                user_id: user.id,
+                user_id: userId,
                 role: 'NGO_ADMIN',
             });
 
@@ -259,7 +343,12 @@ export default function NGORegisterPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                     <label style={labelStyle}>Create Password<span style={reqStar}>*</span></label>
                     <input name="password" type="password" placeholder="••••••••" value={formData.password} onChange={handleChange} required minLength={8} style={inputStyle} />
-                    <span style={{ fontSize: 12, color: "#94a3b8" }}>Must be at least 8 characters with one number.</span>
+                    <span style={{ fontSize: 12, color: "#94a3b8" }}>At least 8 characters with at least one number.</span>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={labelStyle}>Confirm Password<span style={reqStar}>*</span></label>
+                    <input name="confirmPassword" type="password" placeholder="••••••••" value={formData.confirmPassword} onChange={handleChange} required minLength={8} style={inputStyle} />
                 </div>
 
                 {/* Submit */}

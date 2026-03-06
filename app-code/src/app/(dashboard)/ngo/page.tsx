@@ -67,6 +67,14 @@ export default function NGODashboardPage() {
                 .from('events').select('*', { count: 'exact', head: true })
                 .eq('ngo_id', ngoId).gte('start_date', new Date().toISOString());
 
+            // Compute total donations live from the donations table
+            const { data: completedDonations } = await supabase
+                .from('donations')
+                .select('amount')
+                .eq('ngo_id', ngoId)
+                .eq('status', 'COMPLETED');
+            const liveTotalDonations = (completedDonations || []).reduce((sum: number, d: any) => sum + (d.amount || 0), 0);
+
             const { data: recentDonations } = await supabase
                 .from('donations').select('id, amount, donor_name, created_at')
                 .eq('ngo_id', ngoId).order('created_at', { ascending: false }).limit(3);
@@ -85,7 +93,7 @@ export default function NGODashboardPage() {
                     id: ngoData.id, name: ngoData.name,
                     total_requests_resolved: ngoData.total_requests_resolved || 0,
                     total_volunteers: ngoData.total_volunteers || 0,
-                    total_donations: ngoData.total_donations || 0,
+                    total_donations: liveTotalDonations,
                 } : null,
                 stats: { activeRequests: activeRequests, pendingDonations: pendingDonations || 0, upcomingEvents: upcomingEvents || 0 },
                 recentActivity: activity.slice(0, 5),
@@ -134,7 +142,7 @@ export default function NGODashboardPage() {
     return (
         <div>
             <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1e293b', marginBottom: 24 }}>
-                Dashboard Overview
+                {ngo?.name ? `Welcome back, ${ngo.name}` : 'Dashboard Overview'}
             </h2>
 
             {/* Stats Grid */}

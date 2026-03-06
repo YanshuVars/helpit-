@@ -15,7 +15,6 @@ interface PendingNGO { id: string; name: string; email: string; submitted: strin
 interface TopNGO { id: string; name: string; donations: number; volunteers: number; rating: number; }
 
 export default function AdminDashboard() {
-    const supabase = createClient();
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState<PlatformStats>({
         totalUsers: 0, newUsersThisMonth: 0, totalNGOs: 0, activeNGOs: 0,
@@ -31,6 +30,7 @@ export default function AdminDashboard() {
 
     async function fetchDashboardData() {
         setLoading(true);
+        const supabase = createClient();
         try {
             const now = new Date();
             let startDate = new Date();
@@ -44,8 +44,8 @@ export default function AdminDashboard() {
             const { count: totalNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true });
             const { count: activeNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true }).eq("verification_status", "APPROVED");
             const { count: pendingNGOs } = await supabase.from("ngos").select("*", { count: "exact", head: true }).eq("verification_status", "PENDING");
-            const { count: totalVolunteers } = await supabase.from("user_roles").select("*", { count: "exact", head: true }).eq("role", "VOLUNTEER");
-            const { count: totalDonors } = await supabase.from("user_roles").select("*", { count: "exact", head: true }).eq("role", "INDIVIDUAL");
+            const { count: totalVolunteers } = await supabase.from("users").select("*", { count: "exact", head: true }).eq("role", "VOLUNTEER");
+            const { count: totalDonors } = await supabase.from("users").select("*", { count: "exact", head: true }).in("role", ["INDIVIDUAL", "DONOR"]);
             const { data: donationsData } = await supabase.from("donations").select("amount, created_at").gte("created_at", startDate.toISOString());
             const totalDonations = donationsData?.reduce((sum, d) => sum + (d.amount || 0), 0) || 0;
             const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);

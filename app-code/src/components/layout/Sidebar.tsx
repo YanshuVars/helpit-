@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "@/lib/api/users";
+import { createClient } from "@/lib/supabase/client";
 import { AnimatePresence, motion } from "framer-motion";
 
 /* ── Nav item types ── */
@@ -24,6 +25,7 @@ const ngoNav: NavGroup[] = [
     {
         items: [
             { icon: "dashboard", label: "Dashboard", href: "/ngo" },
+            { icon: "domain", label: "My Profile", href: "/ngo/profile" },
             { icon: "assignment", label: "Requests", href: "/ngo/requests" },
             { icon: "group", label: "Volunteers", href: "/ngo/volunteers" },
             { icon: "event", label: "Events", href: "/ngo/events" },
@@ -46,6 +48,7 @@ const donorNav: NavGroup[] = [
     {
         items: [
             { icon: "dashboard", label: "Dashboard", href: "/donor" },
+            { icon: "person", label: "My Profile", href: "/donor/profile" },
             { icon: "search", label: "Discover NGOs", href: "/donor/discover" },
             { icon: "credit_card", label: "Make a Donation", href: "/donor/donate" },
             { icon: "history", label: "Donation History", href: "/donor/history" },
@@ -107,6 +110,44 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
     const router = useRouter();
     const role = detectRole(pathname);
     const navGroups = roleNavMap[role] || ngoNav;
+
+    const [userName, setUserName] = useState('User');
+    const [userRole, setUserRole] = useState(role.charAt(0).toUpperCase() + role.slice(1));
+
+    const fetchIdRef = useRef(0);
+
+    useEffect(() => {
+        const fetchId = ++fetchIdRef.current;
+
+        async function fetchUserInfo() {
+            try {
+                const supabase = createClient();
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user || fetchId !== fetchIdRef.current) return;
+
+                const { data: profile } = await supabase.from('users').select('full_name, role').eq('id', user.id).single();
+                if (fetchId !== fetchIdRef.current) return;
+                if (profile?.full_name) setUserName(profile.full_name);
+
+                // For NGO users, show the NGO name as role label
+                if (role === 'ngo') {
+                    const { data: membership } = await supabase
+                        .from('ngo_members').select('ngo:ngos(name)').eq('user_id', user.id).limit(1);
+                    if (fetchId !== fetchIdRef.current) return;
+                    if (membership && membership.length > 0) {
+                        const ngoName = (membership[0] as any)?.ngo?.name;
+                        if (ngoName) setUserRole(ngoName);
+                    }
+                } else {
+                    const roleLabels: Record<string, string> = { PLATFORM_ADMIN: 'Admin', NGO_ADMIN: 'NGO Admin', VOLUNTEER: 'Volunteer', DONOR: 'Donor', INDIVIDUAL: 'Donor' };
+                    if (profile?.role) setUserRole(roleLabels[profile.role] || profile.role);
+                }
+            } catch (e) {
+                // Fail silently — keep defaults
+            }
+        }
+        fetchUserInfo();
+    }, [role]);
 
     const handleLogout = async () => {
         try {
@@ -179,18 +220,20 @@ export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Side
             </nav>
 
             {/* User profile at bottom */}
-            <div className="sidebar-user">
-                <div className="sidebar-user-avatar">
-                    <span className="sidebar-user-initial">U</span>
-                    <span className="sidebar-online-dot" />
-                </div>
-                {!collapsed && (
-                    <div className="sidebar-user-info">
-                        <span className="sidebar-user-name">User</span>
-                        <span className="sidebar-user-role">{role.charAt(0).toUpperCase() + role.slice(1)}</span>
+            <Link href={role === 'ngo' ? '/ngo/profile' : role === 'volunteer' ? '/volunteer/profile' : '/donor/profile'} style={{ textDecoration: 'none' }}>
+                <div className="sidebar-user" style={{ cursor: 'pointer' }}>
+                    <div className="sidebar-user-avatar">
+                        <span className="sidebar-user-initial">{userName.charAt(0).toUpperCase()}</span>
+                        <span className="sidebar-online-dot" />
                     </div>
-                )}
-            </div>
+                    {!collapsed && (
+                        <div className="sidebar-user-info">
+                            <span className="sidebar-user-name">{userName}</span>
+                            <span className="sidebar-user-role">{userRole}</span>
+                        </div>
+                    )}
+                </div>
+            </Link>
 
             {/* Logout button */}
             <button

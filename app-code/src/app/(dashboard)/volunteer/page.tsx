@@ -21,20 +21,20 @@ export default function VolunteerDashboardPage() {
     useEffect(() => {
         async function fetchDashboardData() {
             const supabase = createClient();
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) { setLoading(false); return; }
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) { setLoading(false); return; }
 
-            const { data: userData } = await supabase.from('users').select('full_name, availability').eq('id', session.user.id).single();
+            const { data: userData } = await supabase.from('users').select('full_name, availability').eq('id', user.id).single();
 
             const { data: completedAssignments } = await supabase.from('volunteer_assignments')
-                .select('hours_logged, request:help_requests(ngo_id)').eq('volunteer_id', session.user.id).eq('status', 'COMPLETED');
+                .select('hours_logged, request:help_requests(ngo_id)').eq('volunteer_id', user.id).eq('status', 'COMPLETED');
 
             const totalHours = (completedAssignments || []).reduce((a: number, c: any) => a + (c.hours_logged || 0), 0);
             const totalTasks = (completedAssignments || []).length;
             const uniqueNgos = new Set((completedAssignments || []).map((a: any) => a.request?.ngo_id).filter(Boolean));
 
             const { data: activeData } = await supabase.from('volunteer_assignments')
-                .select('id, status, request_id').eq('volunteer_id', session.user.id).in('status', ['ASSIGNED', 'IN_PROGRESS']).order('created_at', { ascending: false }).limit(5);
+                .select('id, status, request_id').eq('volunteer_id', user.id).in('status', ['ASSIGNED', 'IN_PROGRESS']).order('created_at', { ascending: false }).limit(5);
 
             // Fetch help_requests via API route to bypass RLS recursion
             let allRequests: any[] = [];
@@ -77,11 +77,11 @@ export default function VolunteerDashboardPage() {
 
     const toggleAvailability = async () => {
         const supabase = createClient();
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) return;
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
         const newVal = !availability;
         setAvailability(newVal);
-        await supabase.from('users').update({ availability: newVal }).eq('id', session.user.id);
+        await supabase.from('users').update({ availability: newVal }).eq('id', user.id);
     };
 
     if (loading) {

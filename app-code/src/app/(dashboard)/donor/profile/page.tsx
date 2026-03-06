@@ -1,46 +1,87 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { formatCurrency } from '@/lib/utils';
 
-interface VolunteerStats { hours: number; tasks: number; ngos: number; }
-interface Achievement { id: string; title: string; icon: string; description: string; }
+interface DonorProfile {
+    id: string;
+    full_name: string;
+    email: string;
+    phone: string | null;
+    avatar_url: string | null;
+    bio: string | null;
+    location: string | null;
+    pan_number: string | null;
+    role: string;
+    created_at: string;
+}
 
-export default function VolunteerProfilePage() {
-    const [user, setUser] = useState<any>(null);
-    const [stats, setStats] = useState<VolunteerStats>({ hours: 0, tasks: 0, ngos: 0 });
-    const [achievements, setAchievements] = useState<Achievement[]>([]);
+export default function DonorProfilePage() {
+    const [user, setUser] = useState<DonorProfile | null>(null);
+    const [stats, setStats] = useState({ totalDonated: 0, totalDonations: 0, monthlyDonated: 0, ngosSupported: 0 });
+    const [followedNgos, setFollowedNgos] = useState<{ id: string; name: string; logo_url: string | null }[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => { fetchProfile(); }, []);
+    useEffect(() => {
+        async function fetchProfile() {
+            try {
+                const supabase = createClient();
+                const { data: { user: authUser } } = await supabase.auth.getUser();
+                if (!authUser) { setLoading(false); return; }
 
-    async function fetchProfile() {
-        try {
-            const supabase = createClient();
-            const { data: { user: authUser } } = await supabase.auth.getUser();
-            if (!authUser) return;
+                // User data
+                const { data: userData } = await supabase.from('users').select('*').eq('id', authUser.id).single();
+                if (userData) setUser(userData as DonorProfile);
 
-            const { data: userData } = await supabase.from('users').select('*').eq('id', authUser.id).single();
-            setUser(userData);
+                // Donation stats
+                const { data: donations } = await supabase
+                    .from('donations')
+                    .select('amount, status, ngo_id, created_at')
+                    .eq('donor_id', authUser.id);
 
-            const { data: assignments } = await supabase.from('volunteer_assignments')
-                .select('hours_logged, request:help_requests(ngo_id)').eq('volunteer_id', authUser.id).eq('status', 'COMPLETED');
+                if (donations) {
+                    const completed = donations.filter(d => d.status === 'COMPLETED');
+                    const totalDonated = completed.reduce((sum, d) => sum + (d.amount || 0), 0);
+                    const uniqueNgos = new Set(completed.map(d => d.ngo_id).filter(Boolean));
 
-            if (assignments) {
-                const totalHours = assignments.reduce((acc, curr) => acc + (curr.hours_logged || 0), 0);
-                const uniqueNgos = new Set(assignments.map((a: any) => a.request?.ngo_id).filter(Boolean));
-                setStats({ hours: totalHours, tasks: assignments.length, ngos: uniqueNgos.size });
+                    const now = new Date();
+                    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                    const monthlyDonated = completed
+                        .filter(d => new Date(d.created_at) >= monthStart)
+                        .reduce((sum, d) => sum + (d.amount || 0), 0);
+
+                    setStats({
+                        totalDonated,
+                        totalDonations: completed.length,
+                        monthlyDonated,
+                        ngosSupported: uniqueNgos.size,
+                    });
+                }
+
+                // Followed NGOs
+                const { data: follows } = await supabase
+                    .from('follows')
+                    .select('ngo:ngos(id, name, logo_url)')
+                    .eq('follower_id', authUser.id)
+                    .limit(8);
+
+                if (follows) {
+                    setFollowedNgos(follows.map((f: any) => ({
+                        id: f.ngo?.id || '',
+                        name: f.ngo?.name || 'Unknown',
+                        logo_url: f.ngo?.logo_url || null,
+                    })).filter(n => n.id));
+                }
+            } catch (error) {
+                console.error('Error fetching donor profile:', error);
+            } finally {
+                setLoading(false);
             }
-
-            const { data: achievementsData } = await supabase.from('achievements').select('*').eq('user_id', authUser.id);
-            if (achievementsData) setAchievements(achievementsData as any[]);
-        } catch (error) {
-            console.error('Error fetching profile:', error);
-        } finally {
-            setLoading(false);
         }
-    }
+        fetchProfile();
+    }, []);
 
     if (loading) {
         return (
@@ -50,7 +91,15 @@ export default function VolunteerProfilePage() {
         );
     }
 
-    if (!user) return null;
+    if (!user) {
+        return (
+            <div style={{ textAlign: 'center', padding: 80 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 56, color: '#cbd5e1' }}>person_off</span>
+                <h3 style={{ marginTop: 16, fontWeight: 700, color: '#0f172a' }}>Profile Not Found</h3>
+                <p style={{ color: '#94a3b8', marginTop: 4 }}>Unable to load your profile.</p>
+            </div>
+        );
+    }
 
     const joinDate = new Date(user.created_at).toLocaleDateString('en-IN', {
         year: 'numeric', month: 'long', day: 'numeric',
@@ -70,21 +119,22 @@ export default function VolunteerProfilePage() {
             }}>
                 <div style={{
                     position: 'absolute', inset: 0, opacity: 0.08,
-                    backgroundImage: 'radial-gradient(circle at 20% 50%, #8b5cf6 0%, transparent 50%), radial-gradient(circle at 80% 50%, #1de2d1 0%, transparent 50%)',
+                    backgroundImage: 'radial-gradient(circle at 20% 50%, #f43f5e 0%, transparent 50%), radial-gradient(circle at 80% 50%, #1de2d1 0%, transparent 50%)',
                 }} />
 
                 <div style={{ position: 'relative', zIndex: 1, padding: '36px 40px', display: 'flex', alignItems: 'center', gap: 28 }}>
+                    {/* Avatar */}
                     <div style={{
                         width: 100, height: 100, borderRadius: '50%', flexShrink: 0,
                         background: user.avatar_url
                             ? `url("${user.avatar_url}") center/cover`
-                            : 'linear-gradient(135deg, #8b5cf6, #1de2d1)',
+                            : 'linear-gradient(135deg, #f43f5e, #ec4899)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         color: '#fff', fontSize: 40, fontWeight: 900,
                         border: '3px solid rgba(255,255,255,0.15)',
                         boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                     }}>
-                        {!user.avatar_url && (user.full_name?.charAt(0) || 'V')}
+                        {!user.avatar_url && (user.full_name?.charAt(0) || 'D')}
                     </div>
 
                     <div style={{ flex: 1 }}>
@@ -95,24 +145,12 @@ export default function VolunteerProfilePage() {
                         <div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
                             <span style={{
                                 padding: '4px 12px', borderRadius: 999,
-                                background: 'rgba(139,92,246,0.15)', color: '#a78bfa',
+                                background: 'rgba(244,63,94,0.15)', color: '#fb7185',
                                 fontSize: 12, fontWeight: 600,
                                 display: 'inline-flex', alignItems: 'center', gap: 4,
                             }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>volunteer_activism</span>
-                                Volunteer
-                            </span>
-                            <span style={{
-                                padding: '4px 12px', borderRadius: 999,
-                                background: user.availability ? 'rgba(22,163,106,0.15)' : 'rgba(148,163,184,0.15)',
-                                color: user.availability ? '#16a34a' : '#94a3b8',
-                                fontSize: 12, fontWeight: 600,
-                                display: 'inline-flex', alignItems: 'center', gap: 4,
-                            }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
-                                    {user.availability ? 'check_circle' : 'do_not_disturb'}
-                                </span>
-                                {user.availability ? 'Available' : 'Unavailable'}
+                                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>favorite</span>
+                                Donor
                             </span>
                             <span style={{
                                 padding: '4px 12px', borderRadius: 999,
@@ -121,31 +159,20 @@ export default function VolunteerProfilePage() {
                                 display: 'inline-flex', alignItems: 'center', gap: 4,
                             }}>
                                 <span className="material-symbols-outlined" style={{ fontSize: 14 }}>calendar_today</span>
-                                Since {joinDate}
+                                Member since {joinDate}
                             </span>
                         </div>
                     </div>
-
-                    <Link href="/volunteer/profile/edit" style={{
-                        padding: '10px 20px', borderRadius: 10,
-                        background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)',
-                        border: '1px solid rgba(255,255,255,0.15)',
-                        color: '#fff', fontSize: 13, fontWeight: 700,
-                        textDecoration: 'none', display: 'inline-flex',
-                        alignItems: 'center', gap: 6, flexShrink: 0,
-                    }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>edit</span>
-                        Edit Profile
-                    </Link>
                 </div>
             </div>
 
-            {/* ── Stats ── */}
-            <div className="r-grid-3">
+            {/* ── Stats Cards ── */}
+            <div className="r-grid-4">
                 {[
-                    { icon: 'schedule', label: 'Hours Contributed', value: stats.hours.toString(), color: '#1de2d1', sub: 'Total volunteering time' },
-                    { icon: 'task_alt', label: 'Tasks Completed', value: stats.tasks.toString(), color: '#f59e0b', sub: 'Resolved requests' },
-                    { icon: 'apartment', label: 'NGOs Helped', value: stats.ngos.toString(), color: '#8b5cf6', sub: 'Unique organizations' },
+                    { icon: 'payments', label: 'Total Donated', value: formatCurrency(stats.totalDonated), color: '#16a34a', sub: `${stats.totalDonations} donations` },
+                    { icon: 'trending_up', label: 'This Month', value: formatCurrency(stats.monthlyDonated), color: '#1de2d1', sub: 'Current month' },
+                    { icon: 'domain', label: 'NGOs Supported', value: stats.ngosSupported.toString(), color: '#3b82f6', sub: 'Unique organizations' },
+                    { icon: 'savings', label: 'Tax Saved (Est.)', value: formatCurrency(Math.floor(stats.totalDonated * 0.5)), color: '#f59e0b', sub: 'Under 80G benefit' },
                 ].map(s => (
                     <div key={s.label} style={cardStyle}>
                         <div style={{
@@ -155,7 +182,7 @@ export default function VolunteerProfilePage() {
                         }}>
                             <span className="material-symbols-outlined" style={{ fontSize: 22, color: s.color }}>{s.icon}</span>
                         </div>
-                        <p style={{ fontSize: 28, fontWeight: 800, color: '#0f172a' }}>{s.value}</p>
+                        <p style={{ fontSize: 26, fontWeight: 800, color: '#0f172a' }}>{s.value}</p>
                         <p style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8', marginTop: 2 }}>{s.label}</p>
                         <p style={{ fontSize: 11, color: '#cbd5e1', marginTop: 4 }}>{s.sub}</p>
                     </div>
@@ -164,9 +191,8 @@ export default function VolunteerProfilePage() {
 
             {/* ── Two Columns ── */}
             <div className="r-two-col">
-                {/* Left: Personal Info + Skills */}
+                {/* Left: Personal Info */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                    {/* Personal Info */}
                     <div style={cardStyle}>
                         <h3 style={{
                             fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
@@ -182,6 +208,7 @@ export default function VolunteerProfilePage() {
                                 { icon: 'mail', label: 'Email', value: user.email },
                                 { icon: 'phone', label: 'Phone', value: user.phone },
                                 { icon: 'location_on', label: 'Location', value: user.location },
+                                { icon: 'description', label: 'PAN Number', value: user.pan_number ? `${user.pan_number.substring(0, 3)}****${user.pan_number.slice(-2)}` : null },
                             ].filter(r => r.value).map(r => (
                                 <div key={r.label} style={{
                                     display: 'flex', alignItems: 'center', gap: 12,
@@ -202,75 +229,56 @@ export default function VolunteerProfilePage() {
                             </div>
                         )}
                     </div>
-
-                    {/* Skills */}
-                    <div style={cardStyle}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                            <h3 style={{
-                                fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
-                                letterSpacing: '0.08em', color: '#94a3b8',
-                                display: 'flex', alignItems: 'center', gap: 8,
-                            }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>construction</span>
-                                Skills
-                            </h3>
-                            <Link href="/volunteer/profile/edit" style={{ fontSize: 12, fontWeight: 600, color: '#1de2d1', textDecoration: 'none' }}>+ Add</Link>
-                        </div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                            {user.skills && user.skills.length > 0 ? (
-                                user.skills.map((skill: string) => (
-                                    <span key={skill} style={{
-                                        padding: '6px 14px', borderRadius: 999,
-                                        background: 'rgba(29,226,209,0.08)',
-                                        color: '#0d9488', fontSize: 13, fontWeight: 600,
-                                        border: '1px solid rgba(29,226,209,0.2)',
-                                    }}>{skill}</span>
-                                ))
-                            ) : (
-                                <p style={{ fontSize: 13, color: '#94a3b8' }}>No skills added yet.</p>
-                            )}
-                        </div>
-                    </div>
                 </div>
 
-                {/* Right: Achievements + Quick Actions */}
+                {/* Right: Followed NGOs + Quick Links */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                    {/* Achievements */}
+                    {/* Followed NGOs */}
                     <div style={cardStyle}>
                         <h3 style={{
                             fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
                             letterSpacing: '0.08em', color: '#94a3b8', marginBottom: 16,
                             display: 'flex', alignItems: 'center', gap: 8,
                         }}>
-                            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>emoji_events</span>
-                            Achievements
+                            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>favorite</span>
+                            NGOs You Follow ({followedNgos.length})
                         </h3>
-                        {achievements.length > 0 ? (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 12 }}>
-                                {achievements.map(a => (
-                                    <div key={a.id} style={{
-                                        display: 'flex', flexDirection: 'column', alignItems: 'center',
-                                        padding: 16, borderRadius: 12, background: '#fafbfc',
+                        {followedNgos.length > 0 ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                {followedNgos.map(ngo => (
+                                    <div key={ngo.id} style={{
+                                        display: 'flex', alignItems: 'center', gap: 12,
+                                        padding: 12, borderRadius: 12, background: '#fafbfc',
                                     }}>
                                         <div style={{
-                                            width: 52, height: 52, borderRadius: '50%',
-                                            background: '#fef3c7', display: 'flex',
-                                            alignItems: 'center', justifyContent: 'center',
-                                            fontSize: 22, marginBottom: 8,
-                                        }}>{a.icon || '🏆'}</div>
-                                        <span style={{ fontSize: 12, fontWeight: 600, textAlign: 'center', lineHeight: 1.3, color: '#0f172a' }}>{a.title}</span>
+                                            width: 40, height: 40, borderRadius: 10,
+                                            background: ngo.logo_url
+                                                ? `url("${ngo.logo_url}") center/cover`
+                                                : 'linear-gradient(135deg, #1de2d1, #0ea5e9)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            color: '#fff', fontWeight: 800, fontSize: 16, flexShrink: 0,
+                                        }}>
+                                            {!ngo.logo_url && ngo.name.charAt(0)}
+                                        </div>
+                                        <span style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{ngo.name}</span>
                                     </div>
                                 ))}
                             </div>
                         ) : (
                             <div style={{ textAlign: 'center', padding: 24 }}>
-                                <span className="material-symbols-outlined" style={{ fontSize: 36, color: '#fef3c7' }}>emoji_events</span>
-                                <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 8 }}>No achievements yet. Keep volunteering!</p>
+                                <span className="material-symbols-outlined" style={{ fontSize: 36, color: '#cbd5e1' }}>search</span>
+                                <p style={{ fontSize: 13, color: '#94a3b8', marginTop: 8 }}>You haven&apos;t followed any NGOs yet.</p>
+                                <Link href="/donor/discover" style={{
+                                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                                    marginTop: 12, padding: '8px 16px', borderRadius: 8,
+                                    background: '#1de2d1', color: '#0f172a',
+                                    fontSize: 12, fontWeight: 700, textDecoration: 'none',
+                                }}>Discover NGOs</Link>
                             </div>
                         )}
                     </div>
 
-                    {/* Quick Actions */}
+                    {/* Quick Links */}
                     <div style={cardStyle}>
                         <h3 style={{
                             fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
@@ -282,10 +290,10 @@ export default function VolunteerProfilePage() {
                         </h3>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                             {[
-                                { icon: 'explore', label: 'Find Opportunities', href: '/volunteer/opportunities', color: '#1de2d1' },
-                                { icon: 'assignment_turned_in', label: 'My Assignments', href: '/volunteer/assignments', color: '#3b82f6' },
-                                { icon: 'map', label: 'Map View', href: '/volunteer/opportunities/map', color: '#f59e0b' },
-                                { icon: 'edit', label: 'Edit Profile', href: '/volunteer/profile/edit', color: '#8b5cf6' },
+                                { icon: 'credit_card', label: 'Make a Donation', href: '/donor/donate', color: '#16a34a' },
+                                { icon: 'history', label: 'View Donation History', href: '/donor/history', color: '#3b82f6' },
+                                { icon: 'receipt_long', label: 'Download Receipts', href: '/donor/receipts', color: '#f59e0b' },
+                                { icon: 'search', label: 'Discover NGOs', href: '/donor/discover', color: '#8b5cf6' },
                             ].map(link => (
                                 <Link key={link.href} href={link.href} style={{
                                     display: 'flex', alignItems: 'center', gap: 12,

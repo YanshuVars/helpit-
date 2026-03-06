@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 interface NGOOption {
@@ -13,7 +13,20 @@ interface NGOOption {
 }
 
 export default function DonatePage() {
+    return (
+        <Suspense fallback={
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+                <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, color: '#1de2d1' }}>progress_activity</span>
+            </div>
+        }>
+            <DonatePageContent />
+        </Suspense>
+    );
+}
+
+function DonatePageContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [ngos, setNgos] = useState<NGOOption[]>([]);
     const [selectedNgo, setSelectedNgo] = useState("");
     const [amount, setAmount] = useState<number | null>(1000);
@@ -33,6 +46,15 @@ export default function DonatePage() {
         }
         fetchNgos();
     }, []);
+
+    // Auto-select NGO from query parameter (e.g. from Discover page)
+    useEffect(() => {
+        const ngoId = searchParams.get('ngoId');
+        if (ngoId && ngos.length > 0 && !selectedNgo) {
+            const found = ngos.find(n => n.id === ngoId);
+            if (found) setSelectedNgo(ngoId);
+        }
+    }, [ngos, searchParams, selectedNgo]);
 
     const displayAmount = customAmount ? parseInt(customAmount) || 0 : (amount || 0);
 
@@ -86,7 +108,7 @@ export default function DonatePage() {
                 </div>
                 <div style={{ position: 'relative' }}>
                     <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)', fontWeight: 600 }}>₹</span>
-                    <input type="number" placeholder="Enter custom amount" value={customAmount}
+                    <input type="number" min="1" placeholder="Enter custom amount" value={customAmount}
                         onChange={e => { setCustomAmount(e.target.value); setAmount(null); }}
                         className="field-input" style={{ paddingLeft: 28 }}
                     />

@@ -131,12 +131,23 @@ export async function GET(
     }
 }
 
+function escapeHtml(str: string): string {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function generateReceiptHtml(donation: DonationWithDetails) {
-    const donorName = donation.is_anonymous
-        ? 'Anonymous'
-        : donation.donor?.full_name || donation.donor_name || 'Anonymous';
-    const donorEmail = donation.donor?.email || donation.donor_email || '';
-    const donorPan = donation.donor_pan || 'N/A';
+    const donorName = escapeHtml(
+        donation.is_anonymous
+            ? 'Anonymous'
+            : donation.donor?.full_name || donation.donor_name || 'Anonymous'
+    );
+    const donorEmail = escapeHtml(donation.donor?.email || donation.donor_email || '');
+    const donorPan = escapeHtml(donation.donor_pan || 'N/A');
     const donationDate = new Date(donation.completed_at || donation.created_at).toLocaleDateString('en-IN', {
         day: '2-digit',
         month: 'long',
