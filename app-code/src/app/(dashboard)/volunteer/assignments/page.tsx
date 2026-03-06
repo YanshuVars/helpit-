@@ -24,21 +24,30 @@ export default function VolunteerAssignmentsPage() {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) { setLoading(false); return; }
 
-            const { data: assignmentsData } = await supabase.from('volunteer_assignments')
-                .select('id, status, hours_logged, request_id').eq('volunteer_id', session.user.id)
-                .in('status', activeTab === 'ACTIVE' ? ['ASSIGNED', 'IN_PROGRESS'] : ['COMPLETED'])
-                .order('created_at', { ascending: false });
+            // Fetch assignments via API route to bypass RLS recursion
+            const statusParam = activeTab === 'ACTIVE' ? 'ASSIGNED,IN_PROGRESS' : 'COMPLETED';
+            let assignmentsData: any[] = [];
+            try {
+                const res = await fetch(`/api/volunteer/assignments?status=${statusParam}&limit=50`);
+                const json = await res.json();
+                assignmentsData = json.data || [];
+            } catch (e) { console.error('Failed to fetch assignments:', e); }
 
-            const requestIds = (assignmentsData || []).map(a => a.request_id).filter(Boolean);
+            // Fetch help_requests via API route to bypass RLS recursion
+            const requestIds = assignmentsData.map(a => a.request_id).filter(Boolean);
             let requestsData: Record<string, any> = {};
             if (requestIds.length > 0) {
-                const { data: requests } = await supabase.from('help_requests').select('id, title, description, ngo:ngos(name), deadline, location').in('id', requestIds);
-                (requests || []).forEach(r => {
-                    requestsData[r.id] = { title: r.title, description: r.description, ngo_name: (r.ngo as unknown as { name: string })?.name || 'Unknown NGO', deadline: r.deadline, location: r.location };
-                });
+                try {
+                    const res = await fetch('/api/volunteer/requests?status=ALL&limit=100');
+                    const json = await res.json();
+                    const requests = json.data || [];
+                    requests.forEach((r: any) => {
+                        requestsData[r.id] = { title: r.title, description: r.description, ngo_name: (r.ngo as any)?.name || 'Unknown NGO', deadline: r.deadline, location: r.location };
+                    });
+                } catch (e) { console.error('Failed to fetch requests:', e); }
             }
 
-            const formatted: Assignment[] = (assignmentsData || []).map(a => ({
+            const formatted: Assignment[] = assignmentsData.map(a => ({
                 id: a.id, status: a.status, hours_logged: a.hours_logged,
                 request: {
                     id: a.request_id, title: requestsData[a.request_id]?.title || 'Unknown Request',

@@ -53,6 +53,13 @@ export function PageHeader({ onMenuClick, actionButton }: PageHeaderProps) {
     const breadcrumbs = generateBreadcrumbs(pathname);
     const pageTitle = getPageTitle(pathname);
 
+    // Derive role prefix from current path for role-aware navigation
+    const rolePrefix = pathname.startsWith('/volunteer') ? '/volunteer'
+        : pathname.startsWith('/donor') ? '/donor'
+            : pathname.startsWith('/ngo') ? '/ngo'
+                : pathname.startsWith('/admin') ? '/admin'
+                    : '';
+
     const [searchFocused, setSearchFocused] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const [userName, setUserName] = useState("");
@@ -148,14 +155,14 @@ export function PageHeader({ onMenuClick, actionButton }: PageHeaderProps) {
                 </div>
 
                 {/* Notifications */}
-                <Link href="/notifications" className="page-header-icon-btn" aria-label="Notifications">
+                <Link href={`${rolePrefix}/notifications`} className="page-header-icon-btn" aria-label="Notifications">
                     <span className="material-symbols-outlined">notifications</span>
                     {/* Unread dot — toggle with data */}
                     <span className="notification-dot" />
                 </Link>
 
                 {/* Messages */}
-                <Link href="/messages" className="page-header-icon-btn" aria-label="Messages">
+                <Link href={`${rolePrefix}/messages`} className="page-header-icon-btn" aria-label="Messages">
                     <span className="material-symbols-outlined">chat_bubble</span>
                 </Link>
 
@@ -174,11 +181,11 @@ export function PageHeader({ onMenuClick, actionButton }: PageHeaderProps) {
                     {/* Dropdown menu */}
                     {userMenuOpen && (
                         <div className="page-header-dropdown animate-dropdown-in">
-                            <Link href="/profile" className="dropdown-item" onClick={() => setUserMenuOpen(false)}>
+                            <Link href={`${rolePrefix}/profile`} className="dropdown-item" onClick={() => setUserMenuOpen(false)}>
                                 <span className="material-symbols-outlined">person</span>
                                 My Profile
                             </Link>
-                            <Link href="/settings" className="dropdown-item" onClick={() => setUserMenuOpen(false)}>
+                            <Link href={`${rolePrefix}/settings`} className="dropdown-item" onClick={() => setUserMenuOpen(false)}>
                                 <span className="material-symbols-outlined">settings</span>
                                 Settings
                             </Link>

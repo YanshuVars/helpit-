@@ -56,6 +56,11 @@ export default function IndividualRegisterPage() {
                 return;
             }
 
+            // Sign out any stale session before creating a new account
+            const { createClient } = await import('@/lib/supabase/client');
+            const supabase = createClient();
+            await supabase.auth.signOut();
+
             const result = await signUp(formData.email, formData.password, {
                 full_name: formData.fullName,
                 phone: formData.phone || null,
@@ -64,10 +69,12 @@ export default function IndividualRegisterPage() {
 
             // Ensure user row exists via server API (bypasses RLS)
             if (result.user) {
+                let userCreated = false;
                 try {
-                    await fetch('/api/auth/ensure-user', {
+                    const ensureRes = await fetch('/api/auth/ensure-user', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
                         body: JSON.stringify({
                             id: result.user.id,
                             email: formData.email,
@@ -76,8 +83,24 @@ export default function IndividualRegisterPage() {
                             role: 'DONOR',
                         }),
                     });
+                    if (ensureRes.ok) userCreated = true;
                 } catch (e) {
-                    console.error('ensure-user error:', e);
+                    console.error('[Register] ensure-user error:', e);
+                }
+
+                // Fallback: direct insert
+                if (!userCreated) {
+                    const freshSupabase = createClient();
+                    await freshSupabase.from('users').insert({
+                        id: result.user.id,
+                        email: formData.email,
+                        full_name: formData.fullName,
+                        phone: formData.phone || null,
+                        role: 'DONOR',
+                        status: 'ACTIVE',
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString(),
+                    });
                 }
             }
 

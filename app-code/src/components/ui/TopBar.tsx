@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CommandPalette } from "./CommandPalette";
 
 interface TopBarProps {
@@ -22,6 +23,15 @@ export function TopBar({
     onBack,
     rightAction,
 }: TopBarProps) {
+    const pathname = usePathname();
+
+    // Derive role prefix from current path for role-aware navigation
+    const rolePrefix = pathname.startsWith('/volunteer') ? '/volunteer'
+        : pathname.startsWith('/donor') ? '/donor'
+            : pathname.startsWith('/ngo') ? '/ngo'
+                : pathname.startsWith('/admin') ? '/admin'
+                    : '';
+
     return (
         <>
             <header className="sticky top-0 z-40 glass-panel border-b-0 rounded-b-2xl mx-2 mt-2 shadow-sm">
@@ -61,7 +71,7 @@ export function TopBar({
 
                         {showNotifications && (
                             <Link
-                                href="/notifications"
+                                href={`${rolePrefix}/notifications`}
                                 className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-[var(--background-subtle)] active:bg-gray-200 transition-colors relative text-[var(--foreground-muted)] hover:text-[var(--foreground)]"
                             >
                                 <span className="material-symbols-outlined text-2xl">notifications</span>

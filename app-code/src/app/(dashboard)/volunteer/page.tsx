@@ -26,15 +26,25 @@ export default function VolunteerDashboardPage() {
 
             const { data: userData } = await supabase.from('users').select('full_name, availability').eq('id', user.id).single();
 
-            const { data: completedAssignments } = await supabase.from('volunteer_assignments')
-                .select('hours_logged, request:help_requests(ngo_id)').eq('volunteer_id', user.id).eq('status', 'COMPLETED');
+            // Fetch completed assignments via API route to bypass RLS recursion
+            let completedAssignments: any[] = [];
+            try {
+                const compRes = await fetch('/api/volunteer/assignments?type=completed&limit=100');
+                const compJson = await compRes.json();
+                completedAssignments = compJson.data || [];
+            } catch (e) { console.error('Failed to fetch completed assignments:', e); }
 
-            const totalHours = (completedAssignments || []).reduce((a: number, c: any) => a + (c.hours_logged || 0), 0);
-            const totalTasks = (completedAssignments || []).length;
-            const uniqueNgos = new Set((completedAssignments || []).map((a: any) => a.request?.ngo_id).filter(Boolean));
+            const totalHours = completedAssignments.reduce((a: number, c: any) => a + (c.hours_logged || 0), 0);
+            const totalTasks = completedAssignments.length;
+            const uniqueNgos = new Set(completedAssignments.map((a: any) => a.request_id).filter(Boolean));
 
-            const { data: activeData } = await supabase.from('volunteer_assignments')
-                .select('id, status, request_id').eq('volunteer_id', user.id).in('status', ['ASSIGNED', 'IN_PROGRESS']).order('created_at', { ascending: false }).limit(5);
+            // Fetch active assignments via API route to bypass RLS recursion
+            let activeData: any[] = [];
+            try {
+                const actRes = await fetch('/api/volunteer/assignments?status=ASSIGNED,IN_PROGRESS&limit=5');
+                const actJson = await actRes.json();
+                activeData = actJson.data || [];
+            } catch (e) { console.error('Failed to fetch active assignments:', e); }
 
             // Fetch help_requests via API route to bypass RLS recursion
             let allRequests: any[] = [];
@@ -48,7 +58,7 @@ export default function VolunteerDashboardPage() {
             const requestMap: Record<string, any> = {};
             allRequests.forEach(r => { requestMap[r.id] = r; });
 
-            const activeAssignments = (activeData || []).map(a => ({
+            const activeAssignments = (activeData || []).map((a: any) => ({
                 id: a.id, status: a.status,
                 request_title: requestMap[a.request_id]?.title || 'Unknown',
                 ngo_name: (requestMap[a.request_id]?.ngo as any)?.name || 'Unknown NGO',

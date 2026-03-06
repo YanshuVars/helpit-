@@ -28,27 +28,34 @@ export default function AssignmentDetailPage() {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) { setLoading(false); return; }
 
-            const { data: assignmentData } = await supabase.from('volunteer_assignments').select('id, status, hours_logged, request_id').eq('id', assignmentId).single();
+            // Fetch assignment via API route to bypass RLS recursion
+            let assignmentData: any = null;
+            try {
+                const res = await fetch(`/api/volunteer/assignments?status=ALL&limit=100`);
+                const json = await res.json();
+                assignmentData = (json.data || []).find((a: any) => a.id === assignmentId);
+            } catch (e) { console.error('Failed to fetch assignment:', e); }
             if (!assignmentData) { setLoading(false); return; }
 
-            const { data: requestData } = await supabase.from('help_requests').select('id, title, description, ngo_id, deadline, location, volunteers_needed').eq('id', assignmentData.request_id).single();
+            // Fetch request details via API route
+            let requestData: any = null;
+            try {
+                const res = await fetch('/api/volunteer/requests?status=ALL&limit=100');
+                const json = await res.json();
+                requestData = (json.data || []).find((r: any) => r.id === assignmentData.request_id);
+            } catch (e) { console.error('Failed to fetch request:', e); }
 
-            let ngoName = 'Unknown NGO';
-            if (requestData?.ngo_id) {
-                const { data: ngoData } = await supabase.from('ngos').select('id, name').eq('id', requestData.ngo_id).single();
-                ngoName = ngoData?.name || 'Unknown NGO';
-            }
-
-            const { count: assignedCount } = await supabase.from('volunteer_assignments').select('*', { count: 'exact', head: true }).eq('request_id', assignmentData.request_id);
+            const ngoName = (requestData?.ngo as any)?.name || 'Unknown NGO';
+            const ngoId = (requestData?.ngo as any)?.id || '';
 
             setAssignment({
                 id: assignmentData.id, status: assignmentData.status, hours_logged: assignmentData.hours_logged,
                 request: {
-                    id: requestData?.id, title: requestData?.title || 'Unknown Request',
+                    id: requestData?.id || '', title: requestData?.title || 'Unknown Request',
                     description: requestData?.description || '',
-                    ngo: { id: requestData?.ngo_id || '', name: ngoName },
+                    ngo: { id: ngoId, name: ngoName },
                     deadline: requestData?.deadline || '', location: requestData?.location || '',
-                    volunteers_needed: requestData?.volunteers_needed || 0, assigned_volunteers: assignedCount || 0,
+                    volunteers_needed: requestData?.volunteers_needed || 0, assigned_volunteers: requestData?.volunteers_assigned || 0,
                 },
             });
             setLoading(false);

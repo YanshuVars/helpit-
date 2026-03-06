@@ -24,12 +24,17 @@ export default function VolunteerProfilePage() {
             const { data: userData } = await supabase.from('users').select('*').eq('id', authUser.id).single();
             setUser(userData);
 
-            const { data: assignments } = await supabase.from('volunteer_assignments')
-                .select('hours_logged, request:help_requests(ngo_id)').eq('volunteer_id', authUser.id).eq('status', 'COMPLETED');
+            // Fetch completed assignments via API route to bypass RLS recursion
+            let assignments: any[] = [];
+            try {
+                const res = await fetch('/api/volunteer/assignments?type=completed&limit=100');
+                const json = await res.json();
+                assignments = json.data || [];
+            } catch (e) { console.error('Failed to fetch assignments:', e); }
 
-            if (assignments) {
-                const totalHours = assignments.reduce((acc, curr) => acc + (curr.hours_logged || 0), 0);
-                const uniqueNgos = new Set(assignments.map((a: any) => a.request?.ngo_id).filter(Boolean));
+            if (assignments.length > 0) {
+                const totalHours = assignments.reduce((acc: number, curr: any) => acc + (curr.hours_logged || 0), 0);
+                const uniqueNgos = new Set(assignments.map((a: any) => a.request_id).filter(Boolean));
                 setStats({ hours: totalHours, tasks: assignments.length, ngos: uniqueNgos.size });
             }
 
